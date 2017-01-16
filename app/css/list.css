@@ -1,0 +1,252 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, dl, dt, dd, ol, nav ul, nav li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+ol, ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+/* start editing from here */
+
+body {
+    background-color: #f3f3f3;
+}
+
+
+/*头部分*/
+
+#head {
+    margin-top: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    height: 35px;
+    line-height: 35px;
+    min-width: 950px;
+    /*position: fixed;*/
+}
+
+
+/*下拉框*/
+
+#dropBox {
+    float: left;
+    height: 32px;
+    line-height: 32px;
+    text-align: left;
+    width: 102px;
+    font-size: 12px;
+    position: relative;
+    background: #fff;
+    margin-right: 10px;
+    z-index: 9999;
+}
+
+#dropBox .dropBox_wrp {
+    overflow: hidden;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+}
+
+#dropBox .dropBox_inp {
+    color: #666666;
+    padding-left: 13px;
+    height: 32px;
+    line-height: 32px;
+    width: 52px;
+    border-right: none;
+    float: left;
+}
+
+#dropBox a.dropBox_tri:link, #dropBox a.dropBox_tri:visited {
+    width: 32px;
+    height: 32px;
+    float: left;
+    background: transparent url('../images/triangle.png') no-repeat center center;
+}
+
+#dropBox .dropBox_drop {
+    background: #fff;
+    width: 100px;
+    border: 1px solid #cccccc;
+    color: #666666;
+    border-radius: 3px;
+}
+
+#dropBox .dropBox_drop li {
+    padding-left: 13px;
+    width: 85px;
+}
+
+#dropBox .dropBox_drop li:hover {
+    background: #1ABC9C;
+    color: #fff;
+    cursor: pointer;
+}
+
+#newButton a {
+    text-decoration: none;
+    border: 1px solid #1ABC9C;
+    border-radius: 3px;
+    background-color: #1ABC9C;
+    font-size: 14px;
+    color: #fff;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    float: left;
+    padding-left: 30px;
+    padding-right: 30px;
+    cursor: pointer;
+}
+
+#newButton a:hover {
+    background-color: #17a085;
+    border-color: #17a085;
+}
+
+#searchBar {
+    float: right;
+    background-color: #fff;
+}
+
+
+/*搜索框部分*/
+
+.tab_search {
+    border-bottom: #cccccc 1px solid;
+    border-left: #cccccc 1px solid;
+    height: 35px;
+    line-height: 35px;
+    border-top: #cccccc 1px solid;
+    border-right: #cccccc 1px solid;
+}
+
+.searchinput {
+    padding-left: 3px;
+    padding-top: 8px;
+    width: 200px;
+    font-family: arial;
+    float: left;
+    border: 0px;
+    color: #666666;
+    margin-left: 4px;
+    font-size: 14px;
+    vertical-align: middle;
+    margin-right: 3px;
+}
+
+.searchaction {
+    width: 20px;
+    float: left;
+    height: 20px;
+    padding-right: 3px;
+}
+
+
+/*主要列表部分*/
+
+#middle {
+    margin-top: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#tree {
+    position: absolute;
+    /*float: left;*/
+    width: 300px;
+    height: 80%;
+    background-color: #fff;
+    min-height: 400px;
+    overflow: auto;
+    /*margin-right: 10px;*/
+}
+
+#list {
+    margin-left: 310px;
+    background-color: #fff;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 15px;
+    border-radius: 5px;
+    min-width: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#headTable {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: transparent;
+}
+
+#headTable tr {
+    border-bottom: 1px solid #cccccc;
+    height: 50px;
+    line-height: 50px;
+    border-left: 3px solid #fff;
+}
+
+#headTable tr:hover {
+    background-color: #f8fefd;
+    border-left: 3px solid #1ABC9C;
+}
+
+#headTable td {
+    font-size: 14px;
+    color: #666666;
+}
+
+#titleTd {
+    padding-left: 10px;
+    width: 30%;
+    min-width: 120px;
+}
+
+#codeTd {
+    text-align: center;
+    width: 25%;
+    min-width: 100px;
+}
+
+#syncTd {
+    text-align: center;
+    width: 20%;
+    min-width: 80px;
+}
+
+#editTd {
+    width: 25%;
+    min-width: 100px;
+}
+
+#operTd {
+    width: 200px;
+    min-width: 100px;
+}

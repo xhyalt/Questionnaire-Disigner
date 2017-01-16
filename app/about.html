@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="css/about.css" rel="stylesheet" type="text/css" media="all" />
+    <title>关于</title>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
+
+</head>
+
+<body>
+  <!-- 菜单设置 -->
+  <script>
+    var Menu = require('electron').remote.Menu;
+
+    var template = [{
+        label: '文件',
+        submenu: [{
+            label: "注销",
+            enabled: false,
+            click: function() {
+              window.location.href = "./index.html";
+            }
+          },
+          {
+            label: '退出',
+            enabled: true,
+            accelerator: "CmdOrCtrl+E",
+            role: "close"
+          }
+        ]
+      },
+      {
+        label: '编辑',
+        submenu: [{
+            label: '撤销',
+            enabled: true,
+            accelerator: 'CmdOrCtrl+Z',
+            role: 'undo'
+          },
+          {
+            label: '重复',
+            enabled: true,
+            accelerator: 'Shift+CmdOrCtrl+Z',
+            role: 'redo'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: '剪切',
+            enabled: true,
+            accelerator: "CmdOrCtrl+X",
+            role: "cut"
+          },
+          {
+            label: '复制',
+            enabled: true,
+            role: "copy",
+            accelerator: "CmdOrCtrl+C"
+          },
+          {
+            label: '粘贴',
+            enabled: true,
+            role: "paste",
+            accelerator: "CmdOrCtrl+V"
+          },
+          {
+            label: '全选',
+            enabled: true,
+            role: "selectall",
+            accelerator: "CmdOrCtrl+A"
+          }
+        ]
+      },
+      {
+        label: '查看',
+        submenu: [{
+            label: '重新加载',
+            enabled: true,
+            accelerator: 'CmdOrCtrl+R',
+            // click: function(item, focusedWindow) {
+            // 	if (focusedWindow)
+            // 		focusedWindow.reload();
+            // }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: '默认大小',
+            enabled: true
+          },
+          {
+            label: '放大',
+            enabled: true
+          },
+          {
+            label: '缩小',
+            enabled: true
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: '切换全屏',
+            enabled: true,
+            accelerator: (function() {
+              if (process.platform == 'darwin')
+                return 'Ctrl+Command+F';
+              else
+                return 'F11';
+            })(),
+            click: function(item, focusedWindow) {
+              if (focusedWindow)
+                focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+            }
+          }
+        ]
+      },
+      {
+        label: '窗口',
+        submenu: [{
+            label: '最小化',
+            enabled: true,
+            accelerator: 'CmdOrCtrl+M',
+            role: 'minimize'
+          },
+          {
+            label: '关闭',
+            enabled: true,
+            accelerator: "CmdOrCtrl+E",
+            role: "close"
+          }
+        ]
+      },
+      {
+        label: '帮助',
+        role: "help",
+        submenu: [{
+            label: '了解更多',
+            enabled: true,
+            click: function() {
+              window.location.href = "./404.html";
+            }
+          },
+          {
+            label: '文档',
+            enabled: true,
+            click: function() {
+              window.location.href = "./404.html";
+            }
+          },
+          {
+            label: '社区讨论',
+            enabled: true,
+            click: function() {
+              window.location.href = "./404.html";
+            }
+          },
+          {
+            label: '关于我们',
+            enabled: false,
+            click: function() {
+              window.location.href = "./about.html";
+            }
+          }
+        ]
+      }
+    ];
+    var menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
+  </script>
+    <div id="Content">
+        <div id="dituContent">
+            <script type="text/javascript">
+                //创建和初始化地图函数：
+                function initMap() {
+                    createMap(); //创建地图
+                    setMapEvent(); //设置地图事件
+                    addMapControl(); //向地图添加控件
+                    addMarker(); //向地图中添加marker
+                }
+
+                //创建地图函数：
+                function createMap() {
+                    var map = new BMap.Map("dituContent"); //在百度地图容器中创建一个地图
+                    var point = new BMap.Point(116.512989, 39.783506); //定义一个中心点坐标
+                    map.centerAndZoom(point, 13); //设定地图的中心点和坐标并将地图显示在地图容器中
+                    window.map = map; //将map变量存储在全局
+                }
+
+                //地图事件设置函数：
+                function setMapEvent() {
+                    map.enableDragging(); //启用地图拖拽事件，默认启用(可不写)
+                    map.enableScrollWheelZoom(); //启用地图滚轮放大缩小
+                    map.enableDoubleClickZoom(); //启用鼠标双击放大，默认启用(可不写)
+                    map.enableKeyboard(); //启用键盘上下左右键移动地图
+                }
+
+                //地图控件添加函数：
+                function addMapControl() {
+                    //向地图中添加缩放控件
+                    var ctrl_nav = new BMap.NavigationControl({
+                        anchor: BMAP_ANCHOR_TOP_LEFT,
+                        type: BMAP_NAVIGATION_CONTROL_LARGE
+                    });
+                    map.addControl(ctrl_nav);
+                    //向地图中添加缩略图控件
+                    var ctrl_ove = new BMap.OverviewMapControl({
+                        anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
+                        isOpen: 1
+                    });
+                    map.addControl(ctrl_ove);
+                    //向地图中添加比例尺控件
+                    var ctrl_sca = new BMap.ScaleControl({
+                        anchor: BMAP_ANCHOR_BOTTOM_LEFT
+                    });
+                    map.addControl(ctrl_sca);
+                }
+
+                //标注点数组
+                var markerArr = [{
+                    title: "北京久其软件股份有限公司总部",
+                    content: "北京经济技术开发区西环中路6号",
+                    point: "116.505811|39.785682",
+                    isOpen: 0,
+                    icon: {
+                        w: 21,
+                        h: 21,
+                        l: 0,
+                        t: 0,
+                        x: 6,
+                        lb: 5
+                    }
+                }, {
+                    title: "北京久其软件股份有限公司分部",
+                    content: "北京市海淀区文慧园甲12号",
+                    point: "116.372466|39.958025",
+                    isOpen: 0,
+                    icon: {
+                        w: 21,
+                        h: 21,
+                        l: 0,
+                        t: 0,
+                        x: 6,
+                        lb: 5
+                    }
+                }];
+                //创建marker
+                function addMarker() {
+                    for (var i = 0; i < markerArr.length; i++) {
+                        var json = markerArr[i];
+                        var p0 = json.point.split("|")[0];
+                        var p1 = json.point.split("|")[1];
+                        var point = new BMap.Point(p0, p1);
+                        var iconImg = createIcon(json.icon);
+                        var marker = new BMap.Marker(point, {
+                            icon: iconImg
+                        });
+                        var iw = createInfoWindow(i);
+                        var label = new BMap.Label(json.title, {
+                            "offset": new BMap.Size(json.icon.lb - json.icon.x + 10, -20)
+                        });
+                        marker.setLabel(label);
+                        map.addOverlay(marker);
+                        label.setStyle({
+                            borderColor: "#808080",
+                            color: "#333",
+                            cursor: "pointer"
+                        });
+
+                        (function() {
+                            var index = i;
+                            var _iw = createInfoWindow(i);
+                            var _marker = marker;
+                            _marker.addEventListener("click", function() {
+                                this.openInfoWindow(_iw);
+                            });
+                            _iw.addEventListener("open", function() {
+                                _marker.getLabel().hide();
+                            })
+                            _iw.addEventListener("close", function() {
+                                _marker.getLabel().show();
+                            })
+                            label.addEventListener("click", function() {
+                                _marker.openInfoWindow(_iw);
+                            })
+                            if (!!json.isOpen) {
+                                label.hide();
+                                _marker.openInfoWindow(_iw);
+                            }
+                        })()
+                    }
+                }
+                //创建InfoWindow
+                function createInfoWindow(i) {
+                    var json = markerArr[i];
+                    var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>" + json.content + "</div>");
+                    return iw;
+                }
+                //创建一个Icon
+                function createIcon(json) {
+                    var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w, json.h), {
+                        imageOffset: new BMap.Size(-json.l, -json.t),
+                        infoWindowOffset: new BMap.Size(json.lb + 5, 1),
+                        offset: new BMap.Size(json.x, json.h)
+                    })
+                    return icon;
+                }
+
+                initMap(); //创建和初始化地图
+            </script>
+
+            <div id="infoBackground">
+                <div id="info">
+                    <p class="front">公司总部 : 北京经济技术开发区</p>
+                    <p class="unfront">西环中路6号(100176)</p>
+                    <p class="front">公司分部 : 北京市海淀区</p>
+                    <p class="unfront">文慧园甲12号(100091)</p>
+                    <p class="front">总　　机 : 010-58561199 /</p>
+                    <p class="unfront">010-88551199</p>
+                    <p class="front">传　　真 : 010-58561196</p>
+                    <p class="front">邮　　箱 : jiuqi@jiuqi.com.cn</p>
+                    <p class="front">网　　址 : www.jiuqi.com.cn</p>
+
+                    <div id="login_click">
+                        <a id="back" href="./list.html">返 回</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+</html>

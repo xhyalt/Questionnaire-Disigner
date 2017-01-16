@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="css/list.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="js/jquery.min.js"></script>
+    <title>问卷列表</title>
+</head>
+
+<body>
+    <div id="head">
+        <div id="dropBox">
+            <div class="dropBox_wrp">
+                <div class="dropBox_inp dropBox_tri">由新到旧</div>
+                <a href="#" class="dropBox_tri"></a>
+            </div>
+            <div class="dropBox_drop" style="display:none">
+                <ul>
+                    <li>由新到旧</li>
+                    <li>由旧到新</li>
+                </ul>
+            </div>
+        </div>
+        <div id="newButton"><a id="back" href="./design.html">新建 +</a></div>
+        <div id="searchBar">
+            <form action="#" name="search">
+                <table border="0" align="center" cellpadding="0" cellspacing="0" class="tab_search">
+                    <tr>
+                        <td>
+                            <input type="text" name="q" title="Search" class="searchinput" id="searchinput" onkeydown="if (event.keyCode==13) {}" onblur="if(this.value=='')value='请输入关键字搜索';" onfocus="if(this.value=='请输入关键字搜索')value='';" value="请输入关键字搜索" size="10" />
+                        </td>
+                        <td>
+                            <input type="image" width="21" height="17" class="searchaction" onclick="if(document.forms['search'].searchinput.value=='请输入关键字搜索')document.forms['search'].searchinput.value='';" alt="Search" src="./images/search.png" border="0" hspace="2" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div id="middle">
+        <div id="tree"></div>
+        <div id="list">
+            <table id="headTable">
+                <tr id="headTr">
+                    <td id="titleTd">标题</td>
+                    <td id="codeTd">编码</td>
+                    <td id="syncTd">同步状态</td>
+                    <td id="editTd">编辑时间</td>
+                    <td id="operTd">操作</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    // 下拉列表js
+    (function($) {
+        var $dropBox = $('#dropBox'),
+            $tri = $('.dropBox_tri', $dropBox),
+            $drop = $('div.dropBox_drop', $dropBox),
+            $inp = $('div.dropBox_inp', $dropBox);
+
+        $tri.on('click', function(event) {
+            var $el = $(this);
+            if ($el.data('active') !== 'on') {
+                $drop[0].style.display = 'block';
+                $el.data('active', 'on');
+            } else {
+                $drop[0].style.display = 'none';
+                $el.data('active', 'off')
+            }
+        });
+
+        $drop.on('mouseover', 'li', function(event) {
+            $inp[0].innerHTML = this.innerHTML;
+        }).on('click', 'li', function(event) {
+            // do something
+            $drop[0].style.display = 'none';
+            $tri.data('active', 'off');
+        });
+    }(jQuery));
+</script>
+
+</html>

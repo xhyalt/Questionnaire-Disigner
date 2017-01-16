@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="css/design.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="js/jquery.min.js"></script>
+    <title>问卷设计</title>
+
+    <script type="text/javascript">
+        function load() {
+            MM_preloadImages(
+                'images/button_01_radio_on.png', 'images/button_02_multiple_on.png', 'images/button_04_completion_on.png', 'images/button_05_multiterm_completion_on.png',
+                'images/button_11_describe_on.png',
+                'images/button_15_page_on.png',
+                'images/button_16_form_on.png', 'images/button_17_shortanswer_on.png',
+                'images/button_18_halvingline_on.png', 'images/button_19_formula_on.png'
+            )
+        }
+
+        function MM_swapImgRestore() { //v3.0
+            var i, x, a = document.MM_sr;
+            for (i = 0; a && i < a.length && (x = a[i]) && x.oSrc; i++) x.src = x.oSrc;
+        }
+
+        function MM_preloadImages() { //v3.0
+            var d = document;
+            if (d.images) {
+                if (!d.MM_p) d.MM_p = new Array();
+                var i, j = d.MM_p.length,
+                    a = MM_preloadImages.arguments;
+                for (i = 0; i < a.length; i++)
+                    if (a[i].indexOf("#") != 0) {
+                        d.MM_p[j] = new Image;
+                        d.MM_p[j++].src = a[i];
+                    }
+            }
+        }
+
+        function MM_findObj(n, d) { //v4.01
+            var p, i, x;
+            if (!d) d = document;
+            if ((p = n.indexOf("?")) > 0 && parent.frames.length) {
+                d = parent.frames[n.substring(p + 1)].document;
+                n = n.substring(0, p);
+            }
+            if (!(x = d[n]) && d.all) x = d.all[n];
+            for (i = 0; !x && i < d.forms.length; i++) x = d.forms[i][n];
+            for (i = 0; !x && d.layers && i < d.layers.length; i++) x = MM_findObj(n, d.layers[i].document);
+            if (!x && d.getElementById) x = d.getElementById(n);
+            return x;
+        }
+
+        function MM_swapImage() { //v3.0
+            var i, j = 0,
+                x, a = MM_swapImage.arguments;
+            document.MM_sr = new Array;
+            for (i = 0; i < (a.length - 2); i += 3)
+                if ((x = MM_findObj(a[i])) != null) {
+                    document.MM_sr[j++] = x;
+                    if (!x.oSrc) x.oSrc = x.src;
+                    x.src = a[i + 2];
+                }
+        }
+    </script>
+</head>
+
+<body onLoad="load()">
+    <div id="parent">
+        <div id="left">
+            <div class="menuBox">
+                <div id="cytx" class="menuTitleBox">
+                    <div class="imgTitleBox"></div>
+                    <p>常用题型</p>
+                </div>
+                <div class="menuItemBox">
+                    <ul>
+                        <li>
+                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Radio','','images/button_01_radio_on.png',1)">
+                                <div id="imgRadio" class="imgSubjectBox">
+                                    <img src="images/button_01_radio_off.png" id="Radio" />
+                                </div>
+                                <p>单选题</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Multiple','','images/button_02_multiple_on.png',1)">
+                                <div class="imgSubjectBox">
+                                    <img src="./images/button_02_multiple_off.png" id="Multiple">
+                                </div>
+                                <p>多选题</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Completion','','images/button_04_completion_on.png',1)">
+                                <div class="imgSubjectBox">
+                                    <img src="./images/button_04_completion_off.png" id="Completion">
+                                </div>
+                                <p>填空题</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Multiterm_completion','','images/button_05_multiterm_completion_on.png',1)">
+                                <div class="imgSubjectBox">
+                                    <img src="./images/button_05_multiterm_completion_off.png" id="Multiterm_completion">
+                                </div>
+                                <p>多项填空题</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Form','','images/button_16_form_on.png',1)">
+                                <div class="imgSubjectBox">
+                                    <img src="./images/button_16_form_off.png" id="Form">
+                                </div>
+                                <p>表格题</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Shortanswer','','images/button_17_shortanswer_on.png',1)">
+                                <div class="imgSubjectBox">
+                                    <img src="./images/button_17_shortanswer_off.png" id="Shortanswer">
+                                </div>
+                                <p>简答题</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Describe','','images/button_11_describe_on.png',1)">
+                                <div class="imgSubjectBox">
+                                    <img src="./images/button_11_describe_off.png" id="Describe">
+                                </div>
+                                <p>描述说明</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Halvingline','','images/button_18_halvingline_on.png',1)">
+                                <div class="imgSubjectBox">
+                                    <img src="./images/button_18_halvingline_off.png" id="Halvingline">
+                                </div>
+                                <p>分割线</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Page','','images/button_15_page_on.png',1)">
+                                <div class="imgSubjectBox">
+                                    <img src="./images/button_15_page_off.png" id="Page">
+                                </div>
+                                <p>分页</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="gdtx" class="menuTitleBox">
+                    <div class="imgTitleBox"></div>
+                    <p>更多题型</p>
+                </div>
+                <div class="menuItemBox">
+                    <ul>
+                        <li>
+                            <p>某题型</p>
+                        </li>
+                        <li>
+                            <p>某题型</p>
+                        </li>
+                        <li>
+                            <p>某题型</p>
+                        </li>
+                    </ul>
+                </div>
+                <div id="zb" class="menuTitleBox">
+                    <div class="imgTitleBox"></div>
+                    <p>指标</p>
+                </div>
+                <div class="menuItemBox">
+                    <ul>
+                        <li>
+                            <div class="imgSubjectBox">
+                                <img src="./images/button_20_target_off.png" alt="" />
+                            </div>
+                            <p>指标映射</p>
+                        </li>
+                        <li>
+                            <div class="imgSubjectBox">
+                                <img src="./images/button_19_formula_off.png" alt="" />
+                            </div>
+                            <p>公式映射</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="middle">
+            <div id="titleBox">
+                <div id="titleName">空问卷</div>
+                <table id="headTable">
+                    <tr>
+                        <td class="Blank">&nbsp</td>
+                        <td>欢迎参加本次答题</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="tailBox">
+                <table id="headTable">
+                    <tr>
+                        <td class="Blank">&nbsp</td>
+                        <td class="tailPage">页码1/1</td>
+                    </tr>
+                </table>
+                <div id="tailDown">您已完成本次问卷，感谢您的帮助与支持</div>
+            </div>
+        </div>
+        <div id="right">
+            <div class="lightButton">
+                <a href="./list.html">返 回</a>
+            </div>
+            <div class="lightButton">
+                <a href="#" target="_blank">预 览</a>
+            </div>
+            <div class="darkButton">
+                <a href="#">发 布</a>
+            </div>
+        </div>
+    </div>
+    <!-- 菜单切换滑动效果 -->
+    <script>
+        var img_cytx = 0; /*关闭*/
+        var img_gdtx = 0; /*关闭*/
+        var img_zb = 0; /*关闭*/
+        $(function() {
+            $(".menuTitleBox").click(function() {
+                var x = document.getElementsByClassName("imgTitleBox");
+
+                if ($(this).attr('id') == "cytx") {
+                    if (img_cytx == 0) {
+                        x[0].style.backgroundImage = "url(./images/list_02_minus_on.png)";
+                        x[1].style.backgroundImage = "url(./images/list_01_plus_on.png)";
+                        x[2].style.backgroundImage = "url(./images/list_01_plus_on.png)";
+                        img_cytx = 1;
+                        img_gdtx = 0;
+                        img_zb = 0;
+                    } else {
+                        x[0].style.backgroundImage = "url(./images/list_01_plus_on.png)";
+                        img_cytx = 0;
+                    }
+                }
+                if ($(this).attr('id') == "gdtx") {
+                    if (img_gdtx == 0) {
+                        x[0].style.backgroundImage = "url(./images/list_01_plus_on.png)";
+                        x[1].style.backgroundImage = "url(./images/list_02_minus_on.png)";
+                        x[2].style.backgroundImage = "url(./images/list_01_plus_on.png)";
+                        img_cytx = 0;
+                        img_gdtx = 1;
+                        img_zb = 0;
+                    } else {
+                        x[1].style.backgroundImage = "url(./images/list_01_plus_on.png)";
+                        img_gdtx = 0;
+                    }
+                }
+                if ($(this).attr('id') == "zb") {
+                    if (img_zb == 0) {
+                        x[0].style.backgroundImage = "url(./images/list_01_plus_on.png)";
+                        x[1].style.backgroundImage = "url(./images/list_01_plus_on.png)";
+                        x[2].style.backgroundImage = "url(./images/list_02_minus_on.png)";
+                        img_cytx = 0;
+                        img_gdtx = 0;
+                        img_zb = 1;
+                    } else {
+                        x[2].style.backgroundImage = "url(./images/list_01_plus_on.png)";
+                        img_zb = 0;
+                    }
+                }
+                $(this).next("div").slideToggle("slow").siblings(".menuItemBox:visible").slideUp("slow");
+            });
+        });
+    </script>
+
+</body>
+
+</html>

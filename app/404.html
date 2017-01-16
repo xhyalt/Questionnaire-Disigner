@@ -1,0 +1,211 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>404 error page</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link href="./css/404.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+
+<body>
+	<!-- 菜单设置 -->
+	<script>
+		var Menu = require('electron').remote.Menu;
+
+		var template = [{
+				label: '文件',
+				submenu: [{
+						label: "注销",
+						enabled: true,
+						click: function() {
+							window.location.href = "./index.html";
+						}
+					},
+					{
+						label: '退出',
+						enabled: true,
+						accelerator: "CmdOrCtrl+E",
+						role: "close"
+					}
+				]
+			},
+			{
+				label: '编辑',
+				submenu: [{
+						label: '撤销',
+						enabled: true,
+						accelerator: 'CmdOrCtrl+Z',
+						role: 'undo'
+					},
+					{
+						label: '重复',
+						enabled: true,
+						accelerator: 'Shift+CmdOrCtrl+Z',
+						role: 'redo'
+					},
+					{
+						type: 'separator'
+					},
+					{
+						label: '剪切',
+						enabled: true,
+						accelerator: "CmdOrCtrl+X",
+						role: "cut"
+					},
+					{
+						label: '复制',
+						enabled: true,
+						role: "copy",
+						accelerator: "CmdOrCtrl+C"
+					},
+					{
+						label: '粘贴',
+						enabled: true,
+						role: "paste",
+						accelerator: "CmdOrCtrl+V"
+					},
+					{
+						label: '全选',
+						enabled: true,
+						role: "selectall",
+						accelerator: "CmdOrCtrl+A"
+					}
+				]
+			},
+			{
+				label: '查看',
+				submenu: [{
+						label: '重新加载',
+						enabled: true,
+						accelerator: 'CmdOrCtrl+R',
+						// click: function(item, focusedWindow) {
+						// 	if (focusedWindow)
+						// 		focusedWindow.reload();
+						// }
+					},
+					{
+						type: 'separator'
+					},
+					{
+						label: '默认大小',
+						enabled: true
+					},
+					{
+						label: '放大',
+						enabled: true
+					},
+					{
+						label: '缩小',
+						enabled: true
+					},
+					{
+						type: 'separator'
+					},
+					{
+						label: '切换全屏',
+						enabled: true,
+						accelerator: (function() {
+							if (process.platform == 'darwin')
+								return 'Ctrl+Command+F';
+							else
+								return 'F11';
+						})(),
+						click: function(item, focusedWindow) {
+							if (focusedWindow)
+								focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+						}
+					}
+				]
+			},
+			{
+				label: '窗口',
+				submenu: [{
+						label: '最小化',
+						enabled: true,
+						accelerator: 'CmdOrCtrl+M',
+						role: 'minimize'
+					},
+					{
+						label: '关闭',
+						enabled: true,
+						accelerator: "CmdOrCtrl+E",
+						role: "close"
+					}
+				]
+			},
+			{
+				label: '帮助',
+				role: "help",
+				submenu: [{
+						label: '了解更多',
+						enabled: true,
+						click: function() {
+							window.location.href = "./404.html";
+						}
+					},
+					{
+						label: '文档',
+						enabled: true,
+						click: function() {
+							window.location.href = "./404.html";
+						}
+					},
+					{
+						label: '社区讨论',
+						enabled: true,
+						click: function() {
+							window.location.href = "./404.html";
+						}
+					},
+					{
+            label: '关于我们',
+            enabled: true,
+            click: function() {
+              window.location.href = "./about.html";
+            }
+          }
+				]
+			}
+		];
+		var menu = Menu.buildFromTemplate(template);
+		Menu.setApplicationMenu(menu);
+	</script>
+	<div class="wrap">
+		<div class="content">
+			<div class="logo">
+				<h1>
+					<a href="#">
+						<img src="./images/404.png"/>
+					</a>
+				</h1>
+				<span>
+					<img src="./images/warning.png"/>
+					Oops! The Page you requested was not found!
+				</span>
+			</div>
+
+			<div class="buttom">
+				<div class="seach_bar">
+					<p>you can go to
+						<span>
+							<a href="list.html">
+								home
+							</a>
+						</span> page or search here
+					</p>
+					<div class="search_box">
+						<form>
+							<input type="text" value="Search" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search';}"><input type="submit" value="">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<p class="copy_right">copyright &#169; Developed by<a href="#">&nbsp;Yao</a> </p>
+	</div>
+
+</body>
+
+</html>
