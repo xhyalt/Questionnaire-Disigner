@@ -27,7 +27,7 @@ app.on('ready', function() {
     });
 
     //加载index.html
-    mainWindow.loadURL('file://' + __dirname + './app/index.html');
+    mainWindow.loadURL('file://' + __dirname + './app/login.html');
 
     //当关闭该window时，这个事件被发出
     mainWindow.on('closed', function() {
