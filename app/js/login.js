@@ -27,6 +27,11 @@ function validateForm() {
  */
 function signIn() {
     if (validateForm()) {
+        var urlValue = document.forms["login"]["url"].value;
+        var adminValue = document.forms["login"]["username"].value;
+        var passwordValue = document.forms["login"]["password"].value;
+        //restFul请求
+        
         alert("hehe");
     }
 }
