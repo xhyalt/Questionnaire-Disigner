@@ -1,4 +1,5 @@
-var restfulUtil = require("./restfulUtil.js");
+const restfulUtil = require('./js/restfulUtil.js');
+const quesSqlite = require('./js/quesSqlite.js');
 
 /**
  * 表单验证函数
@@ -30,9 +31,7 @@ function validateForm() {
  */
 function signIn() {
     // if (validateForm()) {
-
     if (true) {
-      alert("miaolegemi");
         var urlValue = document.forms["login"]["url"].value;
         var adminValue = document.forms["login"]["username"].value;
         var passwordValue = document.forms["login"]["password"].value;
@@ -49,14 +48,29 @@ function signIn() {
             "devid": "CE2E-2A7C-3F8C-C6F5",
             "src": "000001399FCE11FEA057EFDF592FE408"
         };
-        alert("miaolegemi2");
-        //restFul请求
-        //处理url
+
+        /*处理url，获得完成GET请求URL*/
         var url = restfulUtil.getUrl(GlobalData);
-        alert("miaolegemi3");
-        restfulUtil.getToken(url);
-        alert("miaolegemi4");
-        alert("hehe");
+        var body;
+        /*获得choken，其中包含token*/
+        var info = restfulUtil.getToken(url, function(statusCode, chunk) {
+            body = eval('(' + chunk + ')');
+            if (statusCode == 200) {
+                alert("登陆成功啦");
+                GlobalData.username = body.username;
+                GlobalData.token = body.token;
+                /*初始化数据库*/
+                quesSqlite.initDB(GlobalData, function(res) {
+                    alert("login.js = " + res.success);
+                });
+                alert("token = " + body.token);
+                window.location.href = "./list.html";
+            } else if (statusCode == 401) {
+                alert(body.error_msg, "提示");
+            } else {
+                alert("无法登录，请重新登录！", "提示");
+            }
+        });
     }
 }
 
