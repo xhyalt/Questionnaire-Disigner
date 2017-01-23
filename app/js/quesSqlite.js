@@ -1,89 +1,131 @@
-const fs = require("fs");
+/**
+ * 数据库系统
+ * 使用文件类型的数据库Sqlite
+ */
+const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
-//新增数据文件库
-const dbFile = "./quesSqlite.db";
+const dbFile = "./app/quesSqlite/quesSqlite.db";
 const db = new sqlite3.Database(dbFile);
 
 /**
- * 检查用户表是否存在
+ * 登录时初始化数据库
+ * @public
+ * @param  GlobalData
+ * @param  cb
+ * @return
+ */
+function initDB(GlobalData, cb) {
+
+    checkTable(function(res1) {
+        alert("res1" + res1.data);
+        if (res1.success == false) {
+            /*不存在数据库，调用建表函数*/
+            createTable(function(res2) {
+                alert("res2" + res2.success);
+                /*插入该条数据*/
+                if (res2.success == true) {
+                    insertUser(GlobalData, function(res3) {
+                        if (res3.success == false)
+                            alert("res3" + res3.data);
+                        else alert("res3" + res3.success);
+                    });
+                }
+            });
+        } else {
+            /*已存在建表函数，调用查找函数*/
+            alert("已存在表表");
+        }
+    });
+}
+
+/**
+ * 检查表是否存在
  * 若不存在建表
+ * @private
+ * @param  cb
+ * @return
  */
 function checkTable(cb) {
     if (db) {
-        db.get("select * from USER", function(err, row) {
+        db.get("select 1 from USER", function(err, row) {
             if (err) {
-                // 表单不存在 重新创建表单
-                createUserTable(cb);
+                cb({
+                    success: false,
+                    data: err.message
+                });
             } else {
-                return cb({
+                cb({
                     success: true
                 });
             }
-        })
+        });
     }
 }
 
 /**
- * 创建用户表的函数
+ * 创建表的函数
  */
-function createUserTable() {
-    try {
-        console.log("sqlite3 " + sqlite3);
-        console.log("miaomiao");
-        db.serialize(function() {
-
-            /*创建用户信息表*/
-            db.run("create table if not exists USER (URL TEXT, user TEXT, userName TEXT, pwd TEXT, token TEXT)");
-        });
-        console.log("hehemiaomiao");
-        /*表单创建成功*/
-        return {
-            success: true
-        };
-    } catch (err) {
-        console.log(err.message);
-        // alert(err.description);
-        // alert(err.number);
-        // alert(err.name);
-        /*表单创建失败*/
-        return {
-            success: false,
-            data: err.description
-        };
-    }
-
+function createTable(cb) {
+    alert("sqlite3 " + sqlite3);
+    /*创建用户信息表*/
+    db.get("create table USER(URL TEXT, user TEXT, userName TEXT, pwd TEXT, token TEXT)", function(err, row) {
+        console.log("hehehehe");
+        if (err) {
+            console.log("There is something wrong");
+        } else {
+            console.log("I get it");
+        }
+    });
+    // db.run("create table USER(URL TEXT, user TEXT, userName TEXT, pwd TEXT, token TEXT)", function(err) {
+    //     if (err) {
+    //         alert(err.message);
+    //         cb({
+    //             success: false,
+    //             data: err.message
+    //         });
+    //     } else {
+    //         cb({
+    //             success: true,
+    //             // data: row
+    //         });
+    //     }
+    // });
 }
 
 /**
  * 检查当前用户表中是否存在该用户
  */
-function checkUser(GlobalData) {
+function checkUser(GlobalData, GlobalData) {
     db.get("select count(1) from USER where user = ? and URL = ?", [GlobalData.user, GlobalData.URL], function(err, row) {
         if (err) {
-            return cb({
+            cb({
                 success: false,
                 data: err
             });
+        } else {
+            cb({
+                success: true,
+                data: row
+            });
         }
-        return cb({
-            success: true,
-            data: row
-        });
     });
 }
 
-function insertUser(GlobalData) {
-    db.get("insert into USER values(?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, GlobalData.userName, GlobalData.pwd, GlobalData.token], function(err, row) {
+function insertUser(GlobalData, cb) {
+    alert("GlobalData.token = " + GlobalData.token);
+    db.run("insert into USER(URL, user, userName, pwd, token) values(?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, GlobalData.userName, GlobalData.pwd, GlobalData.token], function(err) {
         if (err) {
-            return cb({
+            alert(err.message);
+            cb({
                 success: false,
-                data: err
+                data: err.message
+            });
+        } else {
+            cb({
+                success: true,
+                data: row
             });
         }
-        return cb({
-            success: true,
-            data: row
-        });
     });
 }
 
@@ -102,4 +144,5 @@ function updateUser(GlobalData) {
     });
 }
 
-exports.createUserTable = createUserTable;
+exports.initDB = initDB;
+exports.checkUser = checkUser;
