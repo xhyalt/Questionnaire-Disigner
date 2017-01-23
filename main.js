@@ -5,15 +5,29 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const glob = require('glob');
-const ipc = require('electron').ipcMain;
+/*与渲染进程通信的模块*/
+const ipcMain = require('electron').ipcMain;
 /*保持其全局引用，不然JS被GC，windows自动关闭*/
 var mainWindow = null;
 
-// const quesSqlite = require('./app/js/quesSqlite.js');
+const __restfulUtil = require('./app/js/restfulUtil.js');
+const __quesSqlite = require('./app/js/quesSqlite.js');
 
-ipc.on('get-app-path', function(event) {
+/*监听渲染进程里发出的message*/
+ipcMain.on('asynchronous-message', (event, arg) => {
+    // console.log("mian1" + GlobalData); // prints "ping"
+    // event.sender.send('asynchronous-reply', __restfulUtil.getUrl(GlobalData));
+});
+
+/*在main process里向web page发出message*/
+ipcMain.on('synchronous-message', (event, arg) => {
+    console.log("mian2" + arg); // prints "ping"
+    event.returnValue = 'pong';
+});
+
+ipcMain.on('get-app-path', function(event) {
     event.sender.send('got-app-path', app.getAppPath())
-})
+});
 
 /*当所有窗口关闭了，退出*/
 app.on('window-all-closed', function() {

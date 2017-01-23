@@ -1,5 +1,20 @@
 const restfulUtil = require('./js/restfulUtil.js');
 const quesSqlite = require('./js/quesSqlite.js');
+/*与主进程通信的模块*/
+const ipcRenderer = require('electron').ipcRenderer;
+
+const GlobalData = {
+    "urlRoot": "",
+    "user": "",
+    "pwd": "",
+    "userName": "",
+    "token": "",
+    // "urlRoot": urlValue,
+    // "admin": adminValue,
+    // "pwd": passwordValue,
+    "devid": "CE2E-2A7C-3F8C-C6F5",
+    "src": "000001399FCE11FEA057EFDF592FE408"
+};
 
 /**
  * 表单验证函数
@@ -27,6 +42,14 @@ function validateForm() {
 }
 
 /**
+ * 规范登录URL
+ */
+function getUrl() {
+    var url = `http://` + GlobalData.urlRoot + `/jqrapi/auth/login/${GlobalData.user}?pwd=${GlobalData.pwd}&src=${GlobalData.src}&devid=${GlobalData.devid}`;
+    return url;
+}
+
+/**
  * 登录按钮点击事件
  */
 function signIn() {
@@ -36,21 +59,13 @@ function signIn() {
         var adminValue = document.forms["login"]["username"].value;
         var passwordValue = document.forms["login"]["password"].value;
         urlValue = doWithRootURL(urlValue);
-        var GlobalData = {
-            "urlRoot": "10.2.20.74:9797",
-            "user": "xuheyao",
-            "pwd": "xuheyao",
-            "userName": "",
-            "token": "",
-            // "urlRoot": urlValue,
-            // "admin": adminValue,
-            // "pwd": passwordValue,
-            "devid": "CE2E-2A7C-3F8C-C6F5",
-            "src": "000001399FCE11FEA057EFDF592FE408"
-        };
+
+        GlobalData.urlRoot = "10.2.20.74:9797";
+        GlobalData.user = "xuheyao";
+        GlobalData.pwd = "xuheyao";
 
         /*处理url，获得完成GET请求URL*/
-        var url = restfulUtil.getUrl(GlobalData);
+        var url = getUrl();
         var body;
         /*获得choken，其中包含token*/
         var info = restfulUtil.getToken(url, function(statusCode, chunk) {
@@ -73,6 +88,17 @@ function signIn() {
         });
     }
 }
+
+// function signIn() {
+//     var hehe = {
+//         "xu1": "he",
+//         "xu2": "yao"
+//     };
+//     ipcRenderer.send('asynchronous-message', hehe);
+//     ipcRenderer.on('asynchronous-reply', (event, arg) => {
+//         alert("web2" + arg); // prints "pong"
+//     })
+// }
 
 /**
  * 回车自动登录

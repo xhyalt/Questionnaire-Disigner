@@ -2,9 +2,11 @@
  * 数据库系统
  * 使用文件类型的数据库Sqlite
  */
+const fs = require("fs");
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
-const dbFile = "./app/quesSqlite/quesSqlite.db";
+// const dbFile = "./app/quesSqlite/quesSqlite.db";
+const dbFile = "./quesSqlite.db";
 const db = new sqlite3.Database(dbFile);
 
 /**
@@ -18,6 +20,7 @@ function initDB(GlobalData, cb) {
 
     checkTable(function(res1) {
         alert("res1" + res1.data);
+        // console.log("res1" + res1.data);
         if (res1.success == false) {
             /*不存在数据库，调用建表函数*/
             createTable(function(res2) {
@@ -33,6 +36,10 @@ function initDB(GlobalData, cb) {
             });
         } else {
             /*已存在建表函数，调用查找函数*/
+            /*判断表中是否存在该数据*/
+            checkUser(GlobalData, function(res2) {
+                alert(res2.success);
+            });
             alert("已存在表表");
         }
     });
@@ -67,48 +74,35 @@ function checkTable(cb) {
  */
 function createTable(cb) {
     alert("sqlite3 " + sqlite3);
+    alert("db = " + db);
     /*创建用户信息表*/
-    db.get("create table USER(URL TEXT, user TEXT, userName TEXT, pwd TEXT, token TEXT)", function(err, row) {
-        console.log("hehehehe");
-        if (err) {
-            console.log("There is something wrong");
-        } else {
-            console.log("I get it");
-        }
+    db.serialize(function() {
+        db.get("create table USER(URL TEXT, user TEXT, userName TEXT, pwd TEXT, token TEXT)", function(err, row) {
+            alert("hehehehe");
+            if (err) {
+                alert("There is something wrong");
+                cb({
+                    success: false,
+                    data: err.message
+                });
+            } else {
+                alert("You got it");
+                cb({
+                    success: true
+                });
+            }
+        });
     });
-    // db.run("create table USER(URL TEXT, user TEXT, userName TEXT, pwd TEXT, token TEXT)", function(err) {
-    //     if (err) {
-    //         alert(err.message);
-    //         cb({
-    //             success: false,
-    //             data: err.message
-    //         });
-    //     } else {
-    //         cb({
-    //             success: true,
-    //             // data: row
-    //         });
-    //     }
-    // });
 }
 
 /**
  * 检查当前用户表中是否存在该用户
  */
-function checkUser(GlobalData, GlobalData) {
-    db.get("select count(1) from USER where user = ? and URL = ?", [GlobalData.user, GlobalData.URL], function(err, row) {
-        if (err) {
-            cb({
-                success: false,
-                data: err
-            });
-        } else {
-            cb({
-                success: true,
-                data: row
-            });
-        }
-    });
+function checkUser(GlobalData, cb) {
+    alert("checkUser1");
+    db.each("select rowid AS id,user,URL from USER where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
+        alert(row.id + ": " + row.URL + " " + row.user + " " + row.pwd);
+});
 }
 
 function insertUser(GlobalData, cb) {
