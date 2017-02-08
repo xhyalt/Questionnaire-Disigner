@@ -72,8 +72,11 @@ function signIn() {
             body = eval('(' + chunk + ')');
             if (statusCode == 200) {
                 console.log("登陆成功");
+                alert(body.token);
                 GlobalData.username = body.username;
                 GlobalData.token = body.token;
+                /*与主进程通信，发送GlobalData*/
+                sendGlobalData();
                 /*初始化数据库*/
                 quesSqlite.initDB(GlobalData, function(res) {
                     console.log("login.js = " + res.success);
@@ -88,16 +91,12 @@ function signIn() {
     }
 }
 
-// function signIn() {
-//     var hehe = {
-//         "xu1": "he",
-//         "xu2": "yao"
-//     };
-//     ipcRenderer.send('asynchronous-message', hehe);
-//     ipcRenderer.on('asynchronous-reply', (event, arg) => {
-//         alert("web2" + arg); // prints "pong"
-//     })
-// }
+function sendGlobalData() {
+    ipcRenderer.send('asynchronous-set-GlobalData-message', GlobalData);
+    ipcRenderer.on('asynchronous-set-GlobalData-reply', (event, arg) => {
+        console.log("主进程收到GlobalData是否成功 " + arg);
+    })
+}
 
 /**
  * 回车自动登录

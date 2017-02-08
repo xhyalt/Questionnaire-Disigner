@@ -9,19 +9,31 @@ const glob = require('glob');
 const ipcMain = require('electron').ipcMain;
 /*保持其全局引用，不然JS被GC，windows自动关闭*/
 var mainWindow = null;
+/*用户基本数据的全局引用*/
+var GlobalData = null;
 
 const __restfulUtil = require('./app/js/restfulUtil.js');
 const __quesSqlite = require('./app/js/quesSqlite.js');
 
-/*监听渲染进程里发出的message*/
-ipcMain.on('asynchronous-message', (event, arg) => {
-    // console.log("mian1" + GlobalData); // prints "ping"
-    // event.sender.send('asynchronous-reply', __restfulUtil.getUrl(GlobalData));
+/*监听渲染进程里发出的message，获取GlobalData*/
+ipcMain.on('asynchronous-set-GlobalData-message', (event, arg) => {
+    GlobalData = arg;
+    event.sender.send('asynchronous-set-GlobalData-reply', true);
 });
 
-/*在main process里向web page发出message*/
-ipcMain.on('synchronous-message', (event, arg) => {
-    console.log("mian2" + arg); // prints "ping"
+/*监听渲染进程里发出的message，发送GlobalData*/
+ipcMain.on('asynchronous-get-GlobalData-message', (event, arg) => {
+    event.sender.send('asynchronous-get-GlobalData-reply', GlobalData);
+});
+
+/*监听渲染进程里发出的message，发送当前应用目录*/
+ipcMain.on('asynchronous-get-DirName-message', (event, arg) => {
+    event.sender.send('asynchronous-get-DirName-reply', `file://${__dirname}`);
+});
+
+/*在主进程里向渲染进程发出message，发送GlobalData*/
+ipcMain.on('synchronous-GlobalData-message', (event, arg) => {
+    console.log("主进程发送GlobalData");
     event.returnValue = 'pong';
 });
 

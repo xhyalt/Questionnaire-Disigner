@@ -22,7 +22,6 @@ function initDB(GlobalData, cb) {
     checkTable(function(res1) {
         console.log("检查表是否存在" + res1.success);
         if (res1.success == false) {
-
             /*不存在数据库，调用建表函数*/
             console.log("表不存在，建表");
             createTable(function(res2) {
