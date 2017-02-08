@@ -131,6 +131,19 @@
 							if (focusedWindow)
 								focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
 						}
+					},
+					{
+						label: '开发者工具',
+						accelerator: (function() {
+							if (process.platform == 'darwin')
+								return 'Alt+Command+I';
+							else
+								return 'Ctrl+Shift+I';
+						})(),
+						click: function(item, focusedWindow) {
+							if (focusedWindow)
+								focusedWindow.toggleDevTools();
+						}
 					}
 				]
 			},
