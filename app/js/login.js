@@ -42,14 +42,6 @@ function validateForm() {
 }
 
 /**
- * 规范登录URL
- */
-function getUrl() {
-    var url = `http://` + GlobalData.urlRoot + `/jqrapi/auth/login/${GlobalData.user}?pwd=${GlobalData.pwd}&src=${GlobalData.src}&devid=${GlobalData.devid}`;
-    return url;
-}
-
-/**
  * 登录按钮点击事件
  */
 function signIn() {
@@ -65,10 +57,9 @@ function signIn() {
         GlobalData.pwd = "xuheyao";
 
         /*处理url，获得完成GET请求URL*/
-        var url = getUrl();
         var body;
         /*获得choken，其中包含token*/
-        var info = restfulUtil.getToken(url, function(statusCode, chunk) {
+        var info = restfulUtil.getToken(GlobalData, function(statusCode, chunk) {
             body = eval('(' + chunk + ')');
             if (statusCode == 200) {
                 console.log("登陆成功");
@@ -80,7 +71,11 @@ function signIn() {
                 /*初始化数据库*/
                 quesSqlite.initDB(GlobalData, function(res) {
                     console.log("login.js = " + res.success);
-                    window.location.href = "./list.html";
+                    if (res.success == true) {
+                        window.location.href = "./list.html";
+                    } else {
+                        alert("后台处理有错，error：" + res.data, "提示");
+                    }
                 });
             } else if (statusCode == 401) {
                 alert(body.error_msg, "提示");

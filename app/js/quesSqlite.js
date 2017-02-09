@@ -18,19 +18,18 @@ const db = new sqlite3.Database(dbFile);
  */
 function initDB(GlobalData, cb) {
 
-    console.log("正在初始化数据库 initDB")
-    checkTable(function(res1) {
+    console.log("正在初始化数据库 initDB");
+    __checkTable(function(res1) {
         console.log("检查表是否存在" + res1.success);
         if (res1.success == false) {
             /*不存在数据库，调用建表函数*/
             console.log("表不存在，建表");
-            createTable(function(res2) {
-                console.log("建表是否成功 " + res2.success);
+            __createTable(function(res2) {
                 if (res2.success == true) {
                     /*建表成功*/
                     console.log("建表成功");
                     /*插入该条数据*/
-                    insertUser(GlobalData, function(res3) {
+                    __insertUser(GlobalData, function(res3) {
                         if (res3.success == false) {
                             /*插入数据失败*/
                             console.log("插入数据失败");
@@ -51,24 +50,24 @@ function initDB(GlobalData, cb) {
                     });
                 } else {
                     /*建表不成功*/
+                    console.log("建表失败");
                     if (cb) {
                         cb({
                             success: false,
-                            data: "建表不成功"
+                            data: "建表失败"
                         });
                     }
                 }
             });
         } else {
-            /*已存在建表函数，调用查找函数*/
+            /*已存在数据库，调用查找函数*/
             console.log("表已存在");
             /*判断表中是否存在该用户数据*/
-            checkUser(GlobalData, function(res2) {
-                console.log("该用户是否存在 " + res2.success);
+            __checkUser(GlobalData, function(res2) {
                 if (res2.success == true) {
                     /*该用户存在，更新用户数据*/
-                    updateUser(GlobalData, function(res3) {
-                        console.log("更新用户数据是否成功" + res3.success);
+                    console.log("该用户已经存在于数据库");
+                    __updateUser(GlobalData, function(res3) {
                         if (res3.success == true) {
                             console.log("更新用户数据成功");
                             if (cb) {
@@ -89,7 +88,8 @@ function initDB(GlobalData, cb) {
 
                 } else {
                     /*该用户不存在，插入用户数据*/
-                    insertUser(GlobalData, function(res3) {
+                    console.log("该用户不存在于数据库中");
+                    __insertUser(GlobalData, function(res3) {
                         if (res3.success == false) {
                             /*插入数据失败*/
                             console.log("插入数据失败");
@@ -121,8 +121,8 @@ function initDB(GlobalData, cb) {
  * @param  cb callback
  * @return
  */
-function checkTable(cb) {
-    console.log("正在检查是否存在表 checkTable");
+function __checkTable(cb) {
+    console.log("正在检查是否存在表 __checkTable");
     if (db) {
         db.get("select 1 from USER", function(err, row) {
             if (err) {
@@ -145,8 +145,8 @@ function checkTable(cb) {
  * @param cb callback
  * @return
  */
-function createTable(cb) {
-    console.log("正在创建表 createTable");
+function __createTable(cb) {
+    console.log("正在创建表 __createTable");
     /*创建用户信息表*/
     db.serialize(function() {
         try {
@@ -176,8 +176,8 @@ function createTable(cb) {
  * @param  cb 回调函数
  * @return
  */
-function checkUser(GlobalData, cb) {
-    console.log("正在检查该用户是否存在 checkUser");
+function __checkUser(GlobalData, cb) {
+    console.log("正在检查该用户是否存在 __checkUser");
     db.each("select 1 from USER where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
             cb({
@@ -199,8 +199,8 @@ function checkUser(GlobalData, cb) {
  * @param  cb callback
  * @return
  */
-function insertUser(GlobalData, cb) {
-    console.log("正在插入该用户数据 insertUser");
+function __insertUser(GlobalData, cb) {
+    console.log("正在插入该用户数据 __insertUser");
     db.run("insert into USER(URL, user, userName, pwd, token) values(?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, GlobalData.userName, GlobalData.pwd, GlobalData.token], function(err) {
         if (err) {
             console.log(err.message);
@@ -223,8 +223,8 @@ function insertUser(GlobalData, cb) {
  * @param cb callback
  * @return
  */
-function updateUser(GlobalData, cb) {
-    console.log("正在更新该用户数据 updateUser");
+function __updateUser(GlobalData, cb) {
+    console.log("正在更新该用户数据 __updateUser");
     db.get("update USER set token = ?, userName = ?, pwd = ? where URL = ? and user = ?", [GlobalData.token, GlobalData.userName, GlobalData.pwd, GlobalData.urlRoot, GlobalData.user], function(err) {
         if (err) {
             cb({
@@ -239,4 +239,3 @@ function updateUser(GlobalData, cb) {
 }
 
 exports.initDB = initDB;
-exports.checkUser = checkUser;
