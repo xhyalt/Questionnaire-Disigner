@@ -37,7 +37,7 @@ function signIn() {
 
         /*处理url，获得完成GET请求URL*/
         var body;
-        /*获得choken，其中包含token*/
+        /*获得choken，其中包含token restfulUtil.js*/
         var info = restfulUtil.getToken(GlobalData, function(statusCode, chunk) {
             body = eval('(' + chunk + ')');
             if (statusCode == 200) {
@@ -46,8 +46,8 @@ function signIn() {
                 GlobalData.username = body.username;
                 GlobalData.token = body.token;
                 /*与主进程通信，发送GlobalData*/
-                __sendGlobalData();
-                /*初始化数据库*/
+                __setGlobalData();
+                /*初始化数据库 quesSqlite.js*/
                 quesSqlite.initDB(GlobalData, function(res) {
                     console.log("login.js = " + res.success);
                     if (res.success == true) {
@@ -70,11 +70,11 @@ function signIn() {
  * @private
  * @return
  */
-function __sendGlobalData() {
+function __setGlobalData() {
     ipcRenderer.send('asynchronous-set-GlobalData-message', GlobalData);
     ipcRenderer.on('asynchronous-set-GlobalData-reply', (event, arg) => {
         console.log("主进程收到GlobalData是否成功 " + arg);
-    })
+    });
 }
 
 /**
