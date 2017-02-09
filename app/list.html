@@ -11,6 +11,182 @@
 </head>
 
 <body>
+    <!-- 菜单设置 -->
+    <script>
+        var Menu = require('electron').remote.Menu;
+
+        var template = [{
+                label: '文件',
+                submenu: [{
+                        label: "注销",
+                        enabled: true,
+                        click: function() {
+                            window.location.href = "./login.html";
+                        }
+                    },
+                    {
+                        label: '退出',
+                        enabled: true,
+                        accelerator: "CmdOrCtrl+E",
+                        role: "close"
+                    }
+                ]
+            },
+            {
+                label: '编辑',
+                submenu: [{
+                        label: '撤销',
+                        enabled: true,
+                        accelerator: 'CmdOrCtrl+Z',
+                        role: 'undo'
+                    },
+                    {
+                        label: '重复',
+                        enabled: true,
+                        accelerator: 'Shift+CmdOrCtrl+Z',
+                        role: 'redo'
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: '剪切',
+                        enabled: true,
+                        accelerator: "CmdOrCtrl+X",
+                        role: "cut"
+                    },
+                    {
+                        label: '复制',
+                        enabled: true,
+                        role: "copy",
+                        accelerator: "CmdOrCtrl+C"
+                    },
+                    {
+                        label: '粘贴',
+                        enabled: true,
+                        role: "paste",
+                        accelerator: "CmdOrCtrl+V"
+                    },
+                    {
+                        label: '全选',
+                        enabled: true,
+                        role: "selectall",
+                        accelerator: "CmdOrCtrl+A"
+                    }
+                ]
+            },
+            {
+                label: '查看',
+                submenu: [{
+                        label: '重新加载',
+                        enabled: true,
+                        accelerator: 'CmdOrCtrl+R',
+                        // click: function(item, focusedWindow) {
+                        // 	if (focusedWindow)
+                        // 		focusedWindow.reload();
+                        // }
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: '默认大小',
+                        enabled: true
+                    },
+                    {
+                        label: '放大',
+                        enabled: true
+                    },
+                    {
+                        label: '缩小',
+                        enabled: true
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: '切换全屏',
+                        enabled: true,
+                        accelerator: (function() {
+                            if (process.platform == 'darwin')
+                                return 'Ctrl+Command+F';
+                            else
+                                return 'F11';
+                        })(),
+                        click: function(item, focusedWindow) {
+                            if (focusedWindow)
+                                focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+                        }
+                    },
+                    {
+                        label: '开发者工具',
+                        accelerator: (function() {
+                            if (process.platform == 'darwin')
+                                return 'Alt+Command+I';
+                            else
+                                return 'Ctrl+Shift+I';
+                        })(),
+                        click: function(item, focusedWindow) {
+                            if (focusedWindow)
+                                focusedWindow.toggleDevTools();
+                        }
+                    }
+                ]
+            },
+            {
+                label: '窗口',
+                submenu: [{
+                        label: '最小化',
+                        enabled: true,
+                        accelerator: 'CmdOrCtrl+M',
+                        role: 'minimize'
+                    },
+                    {
+                        label: '关闭',
+                        enabled: true,
+                        accelerator: "CmdOrCtrl+E",
+                        role: "close"
+                    }
+                ]
+            },
+            {
+                label: '帮助',
+                role: "help",
+                submenu: [{
+                        label: '了解更多',
+                        enabled: true,
+                        click: function() {
+                            window.location.href = "./404.html";
+                        }
+                    },
+                    {
+                        label: '文档',
+                        enabled: true,
+                        click: function() {
+                            window.location.href = "./404.html";
+                        }
+                    },
+                    {
+                        label: '社区讨论',
+                        enabled: true,
+                        click: function() {
+                            window.location.href = "./404.html";
+                        }
+                    },
+                    {
+                        label: '关于我们',
+                        enabled: true,
+                        click: function() {
+                            window.location.href = "./about.html";
+                        }
+                    }
+                ]
+            }
+        ];
+        var menu = Menu.buildFromTemplate(template);
+        Menu.setApplicationMenu(menu);
+    </script>
+
     <div id="head">
         <div id="dropBox">
             <div class="dropBox_wrp">
@@ -71,16 +247,15 @@
                 $el.data('active', 'on');
             } else {
                 $drop[0].style.display = 'none';
-                $el.data('active', 'off')
+                $el.data('active', 'off');
             }
         });
 
-        $drop.on('mouseover', 'li', function(event) {
+        $drop.on('mouseover', 'li').on('click', 'li', function(event) {
             $inp[0].innerHTML = this.innerHTML;
-        }).on('click', 'li', function(event) {
-            // do something
             $drop[0].style.display = 'none';
             $tri.data('active', 'off');
+            /*局部刷新*/
         });
     }(jQuery));
 </script>

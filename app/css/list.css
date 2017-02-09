@@ -71,6 +71,7 @@ body {
     overflow: hidden;
     border: 1px solid #cccccc;
     border-radius: 3px;
+    cursor: pointer;
 }
 
 #dropBox .dropBox_inp {
@@ -109,6 +110,9 @@ body {
     cursor: pointer;
 }
 
+
+/*新建调差问卷按钮*/
+
 #newButton a {
     text-decoration: none;
     border: 1px solid #1ABC9C;
@@ -130,13 +134,13 @@ body {
     border-color: #17a085;
 }
 
+
+/*搜索框部分*/
+
 #searchBar {
     float: right;
     background-color: #fff;
 }
-
-
-/*搜索框部分*/
 
 .tab_search {
     border-bottom: #cccccc 1px solid;
