@@ -6,6 +6,8 @@ const ipcRenderer = require('electron').ipcRenderer;
 /*用户基础数据*/
 var GlobalData = {
     "urlRoot": "",
+    "host": "",
+    "post": "",
     "user": "",
     "pwd": "",
     "userName": "",
@@ -31,15 +33,20 @@ function signIn() {
         var passwordValue = document.forms["login"]["password"].value;
         urlValue = doWithRootURL(urlValue);
 
+        // var i = urlValue.lastIndexOf(':');
+        // GlobalData.host = urlValue.substring(0, i);
+        // GlobalData.post = urlValue.substr(i);
         GlobalData.urlRoot = "10.2.20.74:9797";
+        GlobalData.host = "10.2.20.74";
+        GlobalData.post = 9797;
         GlobalData.user = "xuheyao";
         GlobalData.pwd = "xuheyao";
 
         /*处理url，获得完成GET请求URL*/
-        var body;
-        /*获得choken，其中包含token restfulUtil.js*/
-        var info = restfulUtil.getToken(GlobalData, function(statusCode, chunk) {
-            body = eval('(' + chunk + ')');
+
+        /*get请求token restfulUtil.js*/
+        restfulUtil.getToken(GlobalData, function(statusCode, chunk) {
+            var body = eval('(' + chunk + ')');
             if (statusCode == 200) {
                 console.log("登录成功");
                 alert(body.token);
