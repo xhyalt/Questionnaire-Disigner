@@ -22,7 +22,7 @@ ipcMain.on('asynchronous-set-GlobalData-message', (event, arg) => {
 });
 
 /*监听渲染进程里发出的message，发送GlobalData*/
-ipcMain.on('asynchronous-get-GlobalData-message', (event, arg) => {
+ipcMain.on('asynchronous-get-GlobalData-message', (event) => {
     event.sender.send('asynchronous-get-GlobalData-reply', GlobalData);
 });
 
