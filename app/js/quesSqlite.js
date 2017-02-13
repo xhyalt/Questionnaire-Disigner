@@ -115,76 +115,201 @@ function initDB(GlobalData, cb) {
 }
 
 /**
- * 获取业务方案后数据库的处理逻辑，更新业务方案时调用
+ * 某条业务方案在数据库中的处理逻辑
  * @public
- * @param  GlobalData   [用户基础数据]
- * @param  solutionInfo [所有业务方案的JSON对象]
- * @param  {Function} cb           [回调函数]
+ * @param  GlobalData      [用户基础数据]
+ * @param  solutionInfo    [某一业务方案]
+ * @param  {Function} cb   [回调函数]
  * @return
  */
 function initSolutions(GlobalData, solutionInfo, cb) {
-    console.log("正在处理更新业务方案的逻辑");
-    /*获取业务方案的数量*/
-    var solutionsLength = __getJsonLength(solutionInfo);
-    __updateSolutions(GlobalData, solutionInfo, solutionsLength, 0, function(res) {
-        /*处理业务方案*/
-        console.log("业务方案逻辑完成，进入最后一层回调函数");
-    });
-}
-
-/**
- * 处理每一条业务方案在数据库中的逻辑 递归函数
- * @private
- * @param  GlobalData      [用户基础数据]
- * @param  solutionInfo    [某一业务方案]
- * @param  solutionsLength [所有业务方案的个数]
- * @param  i               [回调递增参数]
- * @param  {Function} cb   [回调函数]
- * @return __updateSolutions    [递归函数]
- */
-function __updateSolutions(GlobalData, solutionInfo, solutionsLength, i, cb) {
-    console.log(JSON.stringify(solutionInfo));
-    __checkSolution(GlobalData, solutionInfo[i], function(res) {
+    __checkSolution(GlobalData, solutionInfo, function(res) {
         if (res.success == true) {
             // console.log(res.data["count(1)"]);
             if (res.data["count(1)"] == 0) {
-                console.log("不存在该业务方案，添加业务方案");
+                console.log("不存在该业务方案 添加业务方案");
 
-                __insertSolution(GlobalData, solutionInfo[i], function(res2) {
+                __insertSolution(GlobalData, solutionInfo, function(res2) {
                     if (res2.success == true) {
                         console.log("添加业务方案成功");
+                        cb({
+                            success: true
+                        });
                     } else {
                         console.log("添加业务方案失败");
+                        cb({
+                            success: false,
+                            data: "添加业务方案失败"
+                        });
                     }
                 });
 
             } else {
-                console.log("已存在该业务方案，更新业务方案");
-                __updateSolution(GlobalData, solutionInfo[i], function(res2) {
+                console.log("已存在该业务方案 更新业务方案");
+                __updateSolution(GlobalData, solutionInfo, function(res2) {
                     if (res2.success == true) {
                         console.log("更新业务方案成功");
+                        cb({
+                            success: true
+                        });
                     } else {
                         console.log("更新业务方案失败");
+                        cb({
+                            success: true,
+                            data: "更新业务方案失败"
+                        });
                     }
                 });
             }
 
         } else {
             /*查询出错*/
-            console.log("查询出错");
-        }
-        if (++i < solutionsLength) {
-            return updateSolutions(GlobalData, solutionInfo, solutionsLength, i, cb);
-        } else {
-            return;
+            console.log("查询业务方案出错");
+            cb({
+                success: false,
+                data: "查询业务方案出错"
+            });
         }
     });
-    // }
+}
 
+/**
+ * 某条调查问卷基本信息在数据库中的处理逻辑
+ * @public
+ * @param  GlobalData        [用户基本信息]
+ * @param  solutionRecid     [业务方案ID]
+ * @param  questionnaireJson [调查问卷基本信息]
+ * @param  {Function} cb                [回调函数]
+ * @return
+ */
+function initQuestionnairesList(GlobalData, solutionRecid, questionnaireJson, cb) {
+    __checkQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res) {
+        if (res.success == true) {
+            // console.log("res.data['count(1)']" + res.data["count(1)"]);
+            if (res.data["count(1)"] == 0) {
+                console.log("不存在该调查问卷 添加调查问卷");
+                __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res2) {
+                    if (res2.success == true) {
+                        console.log("添加调查问卷成功");
+                        cb({
+                            success: true
+                        });
+                    } else {
+                        console.log("添加调查问卷失败");
+                        cb({
+                            success: false,
+                            data: "添加调查问卷失败"
+                        });
+                    }
+                });
+            } else {
+                console.log("存在该调查问卷 更新调查问卷");
+                __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res2) {
+                    if (res2.success == true) {
+                        console.log("更新调查问卷成功");
+                        cb({
+                            success: true
+                        });
+                    } else {
+                        console.log("更新调查问卷失败");
+                        console.log(res2.data);
+                        cb({
+                            success: false,
+                            data: "更新调差问卷失败"
+                        });
+                    }
+                });
+            }
+        } else {
+            console.log("查询调查问卷出错");
+            cb({
+                success: false,
+                data: "查询调查问卷出错"
+            });
+        }
+    });
+}
+
+/**
+ * 更新调查问卷基本信息
+ * @private
+ * @param  GlobalData        [用户基本数据]
+ * @param  solutionRecid     [业务方案ID]
+ * @param  questionnaireJson [调查问卷基本信息]
+ * @param  {Function} cb                [回调函数]
+ * @return
+ */
+function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
+    console.log("正在更新调查问卷 __updateQuestionnaire");
+    db.get("update QUESTIONNAIRES set title = ?, name = ? where URL = ? and user = ? and recid = ? and solutionRecid = ?", [questionnaireJson.title, questionnaireJson.name, GlobalData.urlRoot, GlobalData.user, questionnaireJson.recid, solutionRecid], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
+/**
+ * 添加某调查问卷
+ * 回调函数传回添加是否成功
+ * @private
+ * @param  GlobalData        [用户基础数据]
+ * @param  solutionRecid     [业务方案的ID]
+ * @param  questionnaireJson [调查问卷基本信息]
+ * @param  {Function} cb                [回调函数]
+ * @return
+ */
+function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
+    console.log("正在添加调查问卷 __insertQuestionnaire");
+    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecid, name,  title, recid) values(?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.title, questionnaireJson.recid], function(err) {
+        if (err) {
+            console.log(err.message);
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true,
+        });
+
+    });
+}
+
+/**
+ * 检查是否存在该调查问卷
+ * 回调函数传回select出的行数
+ * @private
+ * @param  GlobalData        [用户基础数据]
+ * @param  solutionRecid     [业务方案的recid]
+ * @param  questionnaireJson [调查问卷基础数据]
+ * @param  {Function} cb                [回调函数]
+ * @return
+ */
+function __checkQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
+    console.log("正在检查是否存在该问卷 __checkQuestionnaire");
+    db.get("select count(1) from QUESTIONNAIRES where user = ? and URL = ? and recid = ? and solutionRecid = ?", [GlobalData.user, GlobalData.urlRoot, questionnaireJson.recid, solutionRecid], function(err, row) {
+        if (err) {
+            cb({
+                success: false,
+                data: err
+            });
+        }
+        cb({
+            success: true,
+            data: row
+        });
+    });
 }
 
 /**
  * 添加某业务方案
+ * 回调函数传回添加是否成功
  * @private
  * @param  GlobalData   [用户基础数据]
  * @param  solutionJson [某一具体业务方案]
@@ -219,7 +344,7 @@ function __insertSolution(GlobalData, solutionJson, cb) {
  */
 function __updateSolution(GlobalData, solutionJson, cb) {
     console.log("正在更新该业务方案 __updateSolution");
-    db.get("update SOLUTIONS set periodType = ?, minPeriod = ?, maxPeriod = ?, title = ?, recid = ? where URL = ? and user = ? and name = ?", [solutionJson.periodType, solutionJson.periodRange.minPeriod, solutionJson.periodRange.maxPeriod, solutionJson.title, solutionJson.recid, GlobalData.urlRoot, GlobalData.user, solutionJson.name], function(err) {
+    db.get("update SOLUTIONS set periodType = ?, minPeriod = ?, maxPeriod = ?, title = ?, name = ? where URL = ? and user = ? and recid = ?", [solutionJson.periodType, solutionJson.periodRange.minPeriod, solutionJson.periodRange.maxPeriod, solutionJson.title, solutionJson.name, GlobalData.urlRoot, GlobalData.user, solutionJson.recid], function(err) {
         if (err) {
             cb({
                 success: false,
@@ -234,7 +359,7 @@ function __updateSolution(GlobalData, solutionJson, cb) {
 
 /**
  * 检查是否存在该业务方案
- * 回调函数传回select出的函数
+ * 回调函数传回select出的行数
  * @private
  * @param  GlobalData   [用户基础数据]
  * @param  solutionJson [某一具体业务方案]
@@ -243,7 +368,7 @@ function __updateSolution(GlobalData, solutionJson, cb) {
  */
 function __checkSolution(GlobalData, solutionJson, cb) {
     console.log("正在检查是否存在该业务方案 __checkSolution");
-    db.get("select count(1) from SOLUTIONS where user = ? and URL = ? and name = ?", [GlobalData.user, GlobalData.urlRoot, solutionJson.name], function(err, row) {
+    db.get("select count(1) from SOLUTIONS where user = ? and URL = ? and recid = ?", [GlobalData.user, GlobalData.urlRoot, solutionJson.recid], function(err, row) {
         if (err) {
             cb({
                 success: false,
@@ -255,20 +380,6 @@ function __checkSolution(GlobalData, solutionJson, cb) {
             data: row
         });
     });
-}
-
-/**
- * 获取JSON某元素的长度
- * @private
- * @param  jsonData 某JSON
- * @return 返回该JSON的长度
- */
-function __getJsonLength(jsonData) {
-    var jsonLength = 0;
-    for (var item in jsonData) {
-        jsonLength++;
-    }
-    return jsonLength;
 }
 
 /**
@@ -310,6 +421,8 @@ function __createTable(cb) {
             db.run("create table USERS(URL TEXT, user TEXT, userName TEXT, pwd TEXT, token TEXT)");
 
             db.run("create table SOLUTIONS(URL TEXT, user TEXT, periodType TEXT, name TEXT, minPeriod TEXT, maxPeriod TEXT, title TEXT, recid TEXT)");
+
+            db.run("create table QUESTIONNAIRES(URL TEXT, user TEXT, solutionRecid TEXT, name TEXT, title TEXT, recid TEXT)");
             /*表单创建成功*/
             if (cb) {
                 cb({
@@ -400,3 +513,4 @@ function __updateUser(GlobalData, cb) {
 
 exports.initDB = initDB;
 exports.initSolutions = initSolutions;
+exports.initQuestionnairesList = initQuestionnairesList;
