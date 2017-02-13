@@ -7,17 +7,47 @@ const ipcRenderer = require('electron').ipcRenderer;
 var GlobalData = null;
 
 function initQuestionnaire() {
+    var solutionsLength = null;
+    var questionnairesLength = null;
     /*获取用户基础数据*/
     __getGlobalData(function(res) {
         if (res.success == true) {
             console.log("GlobalData传输成功");
             /*向服务器请求获取业务方案 restfulUtil.js*/
             restfulUtil.getSolutions(GlobalData, function(res) {
-                console.log(JSON.stringify(res.resJson));
-                /*更新数据库里的业务方案 quesSqlite.js*/
-                quesSqlite.initSolutions(GlobalData, res.resJson.solutionInfo, function(){
-                    alert("业务方案逻辑完成");
-                });
+                var solutionsInfo = res.resJson.solutionInfo;
+                var solutionsLength = __getJsonLength(res.resJson.solutionInfo);
+                console.log("业务方案的长度 " + solutionsLength);
+                for (var i = 0; i < solutionsLength; i++) {
+                    /*更新某业务方案 quesSqlite.js*/
+                    quesSqlite.initSolutions(GlobalData, solutionsInfo[i], (function(index) {
+                        return function(res) {
+                            /*处理业务方案*/
+                            if (res.success == true) {
+                                /*向服务器请求获取调查问卷 restfulUtil.js*/
+                                console.log("向服务器请求获取调查问卷");
+                                restfulUtil.getQuestionnaires(GlobalData, solutionsInfo[index].recid, function(res2) {
+                                    var questionnairesInfo;
+                                    var questionnairesLength = __getJsonLength(res2.resJson.questionnairelist);
+                                    if (questionnairesLength > 0)
+                                        questionnairesInfo = res2.resJson.questionnairelist;
+                                    console.log("该方案包含的问卷个数为" + questionnairesLength);
+                                    for (var j = 0; j < questionnairesLength; j++) {
+                                        /*更新某业务方案的调查问卷 quesSqlite.js*/
+                                        quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[index].recid, questionnairesInfo[j], function(res3) {
+                                            if(res3.success == true){
+                                                console.log("调查问卷逻辑已跳出  ");
+                                            }
+                                            else{
+                                              console.log("此调查问卷失败")
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    })(i));
+                }
             });
         } else {
             console.log("GlobalData传输错误");
@@ -46,4 +76,18 @@ function __getGlobalData(cb) {
             data: err.message
         });
     }
+}
+
+/**
+ * 获取JSON某元素的长度
+ * @private
+ * @param  jsonData 某JSON
+ * @return 返回该JSON的长度
+ */
+function __getJsonLength(jsonData) {
+    var jsonLength = 0;
+    for (var item in jsonData) {
+        jsonLength++;
+    }
+    return jsonLength;
 }
