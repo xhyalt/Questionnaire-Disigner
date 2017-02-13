@@ -34,10 +34,10 @@ function getToken(GlobalData, cb) {
  * @param obj 请求参数
  * @param cb 回调函数
  */
-function getData(type, obj, cb) {
-    console.log("getData " + JSON.stringify(obj));
+function __getData(type, obj, cb) {
+    console.log("__getData " + JSON.stringify(obj));
     /**
-     * type 1方案 2 yewu 3 ques 4 save
+     * type 1 业务方案 2 调查问卷 3 ques 4 save
      */
     fetch(obj.url, obj.body)
         .then(function(res) {
@@ -68,7 +68,7 @@ function getData(type, obj, cb) {
 }
 
 /**
- * 方案请求
+ * 业务方案请求
  * @public
  * @param  GlobalData 用户基础数据
  * @param  cb callback
@@ -76,11 +76,29 @@ function getData(type, obj, cb) {
  * @return 请求不成功返回error信息
  */
 function getSolutions(GlobalData, cb) {
-    getData(1, {
+    __getData(1, {
         url: __getSolutionsURL(GlobalData),
         body: {
             method: "POST",
             timeout: 3000
+        }
+    }, cb);
+}
+
+/**
+ * 调查问卷请求
+ * @param  GlobalData [用户基础数据]
+ * @param  obj        [业务方案的recid]
+ * @param  {Function} cb         [回调函数]
+ * @return
+ */
+function getQuestionnaires(GlobalData, obj, cb) {
+    __getData(2, {
+        url: __getQuestionnairesURL(GlobalData),
+        body: {
+            method: "POST",
+            timeout: 3000,
+            body: `data={solutionId:${obj}}`
         }
     }, cb);
 }
@@ -97,6 +115,17 @@ function __getSolutionsURL(GlobalData) {
 }
 
 /**
+ * 合成获取问卷的URL函数
+ * @private
+ * @param  GlobalData [用户基础数据]
+ * @return 获取问卷的URL
+ */
+function __getQuestionnairesURL(GlobalData) {
+    var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/getQuestionnaires?user=${GlobalData.user}src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
+    return url;
+}
+
+/**
  * 获取Token的URL
  * @private
  * @param GlobalData
@@ -109,3 +138,4 @@ function __getTokenUrl(GlobalData) {
 
 exports.getToken = getToken;
 exports.getSolutions = getSolutions;
+exports.getQuestionnaires = getQuestionnaires;
