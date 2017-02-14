@@ -183,8 +183,9 @@ body {
 
 #tree {
     position: absolute;
+    padding: 15px;
     /*float: left;*/
-    width: 300px;
+    width: 270px;
     height: 80%;
     background-color: #fff;
     min-height: 400px;

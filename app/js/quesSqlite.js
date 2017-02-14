@@ -231,6 +231,59 @@ function initQuestionnairesList(GlobalData, solutionRecid, questionnaireJson, cb
 }
 
 /**
+ * 选出所有业务方案
+ * @public
+ * @param  GlobalData [用户基础数据]
+ * @param  {Function} cb         [回调函数]
+ * @return
+ */
+function getSolutions(GlobalData, cb) {
+    /*选出所有业务方案*/
+    __selectSolutions(GlobalData, function(res) {
+        if (res.success == true) {
+            /*选出业务方案成功*/
+            console.log(res.row);
+            cb({
+                success: true,
+                data: res.row
+            });
+        } else {
+            /*选出业务方案失败*/
+            cb({
+                success: false,
+                data: "选出业务方案失败"
+            });
+        }
+    });
+}
+
+/**
+ * 选出所有调查问卷
+ * @public
+ * @param  GlobalData [用户基础数据]
+ * @param  {Function} cb         [回调函数]
+ * @return
+ */
+function getQuestionnaires(GlobalData, cb) {
+    /*选出所有调查问卷*/
+    __selectQuestionnaires(GlobalData, function(res) {
+        if (res.success == true) {
+            dtree.js /*选出调查问卷成功*/
+            console.log(res.row);
+            cb({
+                success: true,
+                data: res.row
+            });
+        } else {
+            cb({
+                success: false,
+                data: "选出调查问卷失败"
+            })；
+        }
+    })
+}
+
+/**
  * 更新调查问卷基本信息
  * @private
  * @param  GlobalData        [用户基本数据]
@@ -278,6 +331,29 @@ function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
             success: true,
         });
 
+    });
+}
+
+/**
+ * 选出该用户的所有调查问卷
+ * @private
+ * @param  GlobalData [用户基础数据]
+ * @param  {Function} cb         [回调函数]
+ * @return
+ */
+function __selectQuestionnaires(GlobalData, cb) {
+    console.log("正在获取该用户的所有问卷");
+    db.run("select * from QUESTIONNAIRES where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
+        if (err) {
+            cb({
+                success: false,
+                data: err
+            });
+        }
+        cb({
+            success: true,
+            data: row
+        });
     });
 }
 
@@ -353,6 +429,29 @@ function __updateSolution(GlobalData, solutionJson, cb) {
         }
         cb({
             success: true
+        });
+    });
+}
+
+/**
+ * 选出该用户的所有业务方案
+ * @private
+ * @param  GlobalData [用户基础数据]
+ * @param  {Function} cb         [回调函数]
+ * @return
+ */
+function __selectSolutions(GlobalData, cb) {
+    console.log("正在选出该用户的所有业务方案 __selectSolution");
+    db.run("select * from SOLUTIONS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
+        if (err) {
+            cb({
+                success: false,
+                data: err
+            });
+        }
+        cb({
+            success: true,
+            data: row
         });
     });
 }
@@ -514,3 +613,5 @@ function __updateUser(GlobalData, cb) {
 exports.initDB = initDB;
 exports.initSolutions = initSolutions;
 exports.initQuestionnairesList = initQuestionnairesList;
+exports.getSolutions = getSolutions;
+exports.getQuestionnaires = getQuestionnaires;
