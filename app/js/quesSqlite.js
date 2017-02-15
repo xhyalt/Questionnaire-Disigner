@@ -18,21 +18,21 @@ const db = new sqlite3.Database(dbFile);
  */
 function initDB(GlobalData, cb) {
 
-    console.log("正在初始化数据库 initDB");
+    // console.log("正在初始化数据库 initDB");
     __checkTable(function(res1) {
-        console.log("检查表是否存在" + res1.success);
+        // console.log("检查表是否存在" + res1.success);
         if (res1.success == false) {
             /*不存在数据库，调用建表函数*/
-            console.log("表不存在，建表");
+            // console.log("表不存在，建表");
             __createTable(function(res2) {
                 if (res2.success == true) {
                     /*建表成功*/
-                    console.log("建表成功");
+                    // console.log("建表成功");
                     /*插入该条数据*/
                     __insertUser(GlobalData, function(res3) {
                         if (res3.success == false) {
                             /*插入数据失败*/
-                            console.log("插入数据失败");
+                            // console.log("插入数据失败");
                             if (cb) {
                                 cb({
                                     success: false,
@@ -40,7 +40,7 @@ function initDB(GlobalData, cb) {
                                 });
                             }
                         } else {
-                            console.log("插入数据成功");
+                            // console.log("插入数据成功");
                             if (cb) {
                                 cb({
                                     success: true
@@ -50,7 +50,7 @@ function initDB(GlobalData, cb) {
                     });
                 } else {
                     /*建表不成功*/
-                    console.log("建表失败");
+                    // console.log("建表失败");
                     if (cb) {
                         cb({
                             success: false,
@@ -61,18 +61,18 @@ function initDB(GlobalData, cb) {
             });
         } else {
             /*已存在数据库，调用查找函数*/
-            console.log("表已存在");
+            // console.log("表已存在");
             /*判断表中是否存在该用户数据*/
             __checkUser(GlobalData, function(res2) {
                 if (res2.success == true) {
                     /*查询用户成功*/
                     if (res2.data["count(1)"] == 0) {
                         /*该用户不存在，插入用户数据*/
-                        console.log("该用户不存在于数据库中");
+                        // console.log("该用户不存在于数据库中");
                         __insertUser(GlobalData, function(res3) {
                             if (res3.success == false) {
                                 /*插入数据失败*/
-                                console.log("插入数据失败");
+                                // console.log("插入数据失败");
                                 if (cb) {
                                     cb({
                                         success: false,
@@ -80,7 +80,7 @@ function initDB(GlobalData, cb) {
                                     });
                                 }
                             } else {
-                                console.log("插入数据成功");
+                                // console.log("插入数据成功");
                                 if (cb) {
                                     cb({
                                         success: true
@@ -90,17 +90,17 @@ function initDB(GlobalData, cb) {
                         });
                     } else {
                         /*该用户存在，更新用户数据*/
-                        console.log("该用户已经存在于数据库");
+                        // console.log("该用户已经存在于数据库");
                         __updateUser(GlobalData, function(res3) {
                             if (res3.success == true) {
-                                console.log("更新用户数据成功");
+                                // console.log("更新用户数据成功");
                                 if (cb) {
                                     cb({
                                         success: true
                                     });
                                 }
                             } else {
-                                console.log("更新用户数据失败");
+                                // console.log("更新用户数据失败");
                                 if (cb) {
                                     cb({
                                         success: false,
@@ -111,7 +111,7 @@ function initDB(GlobalData, cb) {
                         });
                     }
                 } else {
-                    console.log("查询用户失败");
+                    // console.log("查询用户失败");
                     cb({
                         success: false,
                         data: "查询用户失败"
@@ -135,16 +135,16 @@ function initSolutions(GlobalData, solutionInfo, cb) {
         if (res.success == true) {
             // console.log(res.data["count(1)"]);
             if (res.data["count(1)"] == 0) {
-                console.log("不存在该业务方案 添加业务方案");
+                // console.log("不存在该业务方案 添加业务方案");
 
                 __insertSolution(GlobalData, solutionInfo, function(res2) {
                     if (res2.success == true) {
-                        console.log("添加业务方案成功");
+                        // console.log("添加业务方案成功");
                         cb({
                             success: true
                         });
                     } else {
-                        console.log("添加业务方案失败");
+                        // console.log("添加业务方案失败");
                         cb({
                             success: false,
                             data: "添加业务方案失败"
@@ -153,15 +153,15 @@ function initSolutions(GlobalData, solutionInfo, cb) {
                 });
 
             } else {
-                console.log("已存在该业务方案 更新业务方案");
+                // console.log("已存在该业务方案 更新业务方案");
                 __updateSolution(GlobalData, solutionInfo, function(res2) {
                     if (res2.success == true) {
-                        console.log("更新业务方案成功");
+                        // console.log("更新业务方案成功");
                         cb({
                             success: true
                         });
                     } else {
-                        console.log("更新业务方案失败");
+                        // console.log("更新业务方案失败");
                         cb({
                             success: true,
                             data: "更新业务方案失败"
@@ -172,7 +172,7 @@ function initSolutions(GlobalData, solutionInfo, cb) {
 
         } else {
             /*查询出错*/
-            console.log("查询业务方案出错");
+            // console.log("查询业务方案出错");
             cb({
                 success: false,
                 data: "查询业务方案出错"
@@ -195,15 +195,15 @@ function initQuestionnairesList(GlobalData, solutionRecid, questionnaireJson, cb
         if (res.success == true) {
             // console.log("res.data['count(1)']" + res.data["count(1)"]);
             if (res.data["count(1)"] == 0) {
-                console.log("不存在该调查问卷 添加调查问卷");
+                // console.log("不存在该调查问卷 添加调查问卷");
                 __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res2) {
                     if (res2.success == true) {
-                        console.log("添加调查问卷成功");
+                        // console.log("添加调查问卷成功");
                         cb({
                             success: true
                         });
                     } else {
-                        console.log("添加调查问卷失败");
+                        // console.log("添加调查问卷失败");
                         cb({
                             success: false,
                             data: "添加调查问卷失败"
@@ -214,13 +214,13 @@ function initQuestionnairesList(GlobalData, solutionRecid, questionnaireJson, cb
                 console.log("存在该调查问卷 更新调查问卷");
                 __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res2) {
                     if (res2.success == true) {
-                        console.log("更新调查问卷成功");
+                        // console.log("更新调查问卷成功");
                         cb({
                             success: true
                         });
                     } else {
-                        console.log("更新调查问卷失败");
-                        console.log(res2.data);
+                        // console.log("更新调查问卷失败");
+                        // console.log(res2.data);
                         cb({
                             success: false,
                             data: "更新调差问卷失败"
@@ -229,7 +229,7 @@ function initQuestionnairesList(GlobalData, solutionRecid, questionnaireJson, cb
                 });
             }
         } else {
-            console.log("查询调查问卷出错");
+            // console.log("查询调查问卷出错");
             cb({
                 success: false,
                 data: "查询调查问卷出错"
@@ -301,7 +301,7 @@ function getQuestionnaires(GlobalData, cb) {
  * @return
  */
 function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
-    console.log("正在更新调查问卷 __updateQuestionnaire");
+    // console.log("正在更新调查问卷 __updateQuestionnaire");
     db.get("update QUESTIONNAIRES set title = ?, name = ? where URL = ? and user = ? and recid = ? and solutionRecid = ?", [questionnaireJson.title, questionnaireJson.name, GlobalData.urlRoot, GlobalData.user, questionnaireJson.recid, solutionRecid], function(err) {
         if (err) {
             cb({
@@ -326,7 +326,7 @@ function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
  * @return
  */
 function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
-    console.log("正在添加调查问卷 __insertQuestionnaire");
+    // console.log("正在添加调查问卷 __insertQuestionnaire");
     db.run("insert into QUESTIONNAIRES(URL, user, solutionRecid, name,  title, recid) values(?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.title, questionnaireJson.recid], function(err) {
         if (err) {
             console.log(err.message);
@@ -376,7 +376,7 @@ function __selectQuestionnaires(GlobalData, cb) {
  * @return
  */
 function __checkQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
-    console.log("正在检查是否存在该问卷 __checkQuestionnaire");
+    // console.log("正在检查是否存在该问卷 __checkQuestionnaire");
     db.get("select count(1) from QUESTIONNAIRES where user = ? and URL = ? and recid = ? and solutionRecid = ?", [GlobalData.user, GlobalData.urlRoot, questionnaireJson.recid, solutionRecid], function(err, row) {
         if (err) {
             cb({
@@ -401,7 +401,7 @@ function __checkQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) 
  * @return
  */
 function __insertSolution(GlobalData, solutionJson, cb) {
-    console.log("正在添加业务方案 __insertSolution");
+    // console.log("正在添加业务方案 __insertSolution");
     db.run("insert into SOLUTIONS(URL, user, periodType, name, minPeriod, maxPeriod, title, recid) values(?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionJson.periodType, solutionJson.name, solutionJson.minPeriod, solutionJson.maxPeriod, solutionJson.title, solutionJson.recid], function(err) {
         if (err) {
             console.log(err.message);
@@ -427,7 +427,7 @@ function __insertSolution(GlobalData, solutionJson, cb) {
  * @return
  */
 function __updateSolution(GlobalData, solutionJson, cb) {
-    console.log("正在更新该业务方案 __updateSolution");
+    // console.log("正在更新该业务方案 __updateSolution");
     db.get("update SOLUTIONS set periodType = ?, minPeriod = ?, maxPeriod = ?, title = ?, name = ? where URL = ? and user = ? and recid = ?", [solutionJson.periodType, solutionJson.periodRange.minPeriod, solutionJson.periodRange.maxPeriod, solutionJson.title, solutionJson.name, GlobalData.urlRoot, GlobalData.user, solutionJson.recid], function(err) {
         if (err) {
             cb({
@@ -475,7 +475,7 @@ function __selectSolutions(GlobalData, cb) {
  * @return
  */
 function __checkSolution(GlobalData, solutionJson, cb) {
-    console.log("正在检查是否存在该业务方案 __checkSolution");
+    // console.log("正在检查是否存在该业务方案 __checkSolution");
     db.get("select count(1) from SOLUTIONS where user = ? and URL = ? and recid = ?", [GlobalData.user, GlobalData.urlRoot, solutionJson.recid], function(err, row) {
         if (err) {
             cb({
@@ -498,7 +498,7 @@ function __checkSolution(GlobalData, solutionJson, cb) {
  * @return
  */
 function __checkTable(cb) {
-    console.log("正在检查是否存在表 __checkTable");
+    // console.log("正在检查是否存在表 __checkTable");
     if (db) {
         db.get("select 1 from USERS", function(err, row) {
             if (err) {
@@ -522,7 +522,7 @@ function __checkTable(cb) {
  * @return
  */
 function __createTable(cb) {
-    console.log("正在创建表 __createTable");
+    // console.log("正在创建表 __createTable");
     /*创建用户信息表*/
     db.serialize(function() {
         try {
@@ -556,7 +556,7 @@ function __createTable(cb) {
  * @return
  */
 function __checkUser(GlobalData, cb) {
-    console.log("正在检查该用户是否存在 __checkUser");
+    // console.log("正在检查该用户是否存在 __checkUser");
     db.get("select count(1) from USERS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
             console.log("不存在该用户");
@@ -581,7 +581,7 @@ function __checkUser(GlobalData, cb) {
  * @return
  */
 function __insertUser(GlobalData, cb) {
-    console.log("正在插入该用户数据 __insertUser");
+    // console.log("正在插入该用户数据 __insertUser");
     db.run("insert into USERS(URL, user, userName, pwd, token) values(?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, GlobalData.userName, GlobalData.pwd, GlobalData.token], function(err) {
         if (err) {
             console.log(err.message);
@@ -605,7 +605,7 @@ function __insertUser(GlobalData, cb) {
  * @return
  */
 function __updateUser(GlobalData, cb) {
-    console.log("正在更新该用户数据 __updateUser");
+    // console.log("正在更新该用户数据 __updateUser");
     db.get("update USERS set token = ?, userName = ?, pwd = ? where URL = ? and user = ?", [GlobalData.token, GlobalData.userName, GlobalData.pwd, GlobalData.urlRoot, GlobalData.user], function(err) {
         if (err) {
             cb({

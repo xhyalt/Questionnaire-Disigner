@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="css/design.css" rel="stylesheet" type="text/css" media="all" />
-    <script src="js/jquery.min.js"></script>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/design.js">
+    </script>
     <title>问卷设计</title>
 
     <script type="text/javascript">
@@ -77,8 +79,8 @@
                 </div>
                 <div class="menuItemBox">
                     <ul>
-                        <li draggable="true" title="拖拽至中间" class="dragMenuItem">
-                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Radio','','images/button_01_radio_on.png',1)">
+                        <li>
+                            <a  draggable="true" title="拖拽至中间" id="MenuItemRadio" href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Radio','','images/button_01_radio_on.png',1)">
                                 <div id="imgRadio" class="imgSubjectBox">
                                     <img src="images/button_01_radio_off.png" id="Radio" />
                                 </div>
@@ -200,7 +202,21 @@
                     </tr>
                 </table>
             </div>
-
+            <div class = "radioDiv">
+                <div class = "leftSetup">
+                    <h4>Q1</h4>
+                    <img src="./images/main_01_up_off.png" alt="">
+                    <img src="./images/main_02_down_off.png" alt="">
+                    <img src="./images/main_06_more_off.png" alt="">
+                    <img src="./images/main_03_garbage_off.png" alt="">
+                </div>
+                <div class = "radioSubject">
+                    <div class = "radioTitle">单选题</div>
+                </div>
+            </div>
+            <div id="emptyBox">
+                可单击或拖拽左侧题型，以添加题目到此处区域
+            </div>
             <div id="tailBox">
                 <table id="headTable">
                     <tr>
@@ -277,17 +293,31 @@
     </script>
     <!-- 拖拽菜单项 -->
     <script type="text/javascript">
-        $(function(){
-            $(".dragMenuItem")[0].ondragstart = function(event){
+        var brightTempDiv = `<div id="brightTempDiv" style="background-color: #1ABC9C; margin-bottom: 5px; width: 800px; height: 10px;"></div>`;
+        $(function() {
+            $("#MenuItemRadio")[0].ondragstart = function(event) {
                 console.log("drapStart");
                 event.dataTransfer.setData("Text", event.target.id);
-            }
-            $(".dragMenuItem")[0].ondrop = function(event){
+            };
+            $("#emptyBox")[0].ondrop = function(event) {
                 console.log("onDrop");
-                var id = event.dataTransfer.getData("Text");
-                $(this).append($("#" + id).clone().text($(this).find("div").length));
+                $("#brightTempDiv").remove();
+                $("#emptyBox").remove();
                 event.preventDefault();
-            }
+            };
+            $("#emptyBox")[0].ondragover = function(event) {
+                console.log("onDrop over");
+                event.preventDefault();
+            };
+            $("#emptyBox")[0].ondragenter = function(event) {
+                console.log("onDrop enter");
+                /*在titleBox下添加亮色div*/
+                $("#titleBox").after(brightTempDiv);
+            };
+            $("#emptyBox")[0].ondragleave = function(event) {
+                console.log("onDrop leave");
+                $("#brightTempDiv").remove();
+            };
         });
     </script>
 </body>

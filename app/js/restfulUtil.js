@@ -36,7 +36,6 @@ function getToken(GlobalData, cb) {
  * @return 请求不成功返回error信息
  */
 function getSolutions(GlobalData, cb) {
-    console.log("__getSolutions");
     __getData(1, {
         url: __getSolutionsURL(GlobalData),
         body: {
@@ -72,14 +71,11 @@ function getQuestionnaires(GlobalData, obj, cb) {
  * @param cb 回调函数
  */
 function __getData(type, obj, cb) {
-    console.log("__getData " + JSON.stringify(obj));
+    // console.log("__getData " + JSON.stringify(obj));
     /**
      * type 1 业务方案 2 调查问卷 3 ques 4 save
      */
-    console.log("obj.url " + obj.url);
-    console.log("obj.body " + JSON.stringify(obj.body));
     fetch(obj.url, obj.body).then(function(res) {
-        console.log("res.json() " + JSON.stringify(res.json()));
         return res.json();
     }).then(function(resJson) {
         if (cb) {
@@ -93,7 +89,6 @@ function __getData(type, obj, cb) {
         }
     }).catch(function(err) {
         // 异常返回
-        console.log("err " + err);
         cb({
             success: false,
             type: type,

@@ -72,47 +72,51 @@ function initQuestionnaire() {
     __getGlobalData(function(res0) {
         /*向服务器请求获取业务方案 restfulUtil.js*/
         restfulUtil.getSolutions(GlobalData, function(res) {
-            console.log(JSON.stringify(res));
-            if(res.success == false){
-                console.log("请求失败");
+            console.log(JSON.stringify(res.resJson.solutionInfo));
+            if (res.success == true) {
+                console.log("业务方案列表请求成功");
+                var solutionsInfo = res.resJson.solutionInfo;
+                var solutionsLength = __getJsonLength(res.resJson.solutionInfo);
+                console.log("业务方案的长度 " + solutionsLength);
+                for (var i = 0; i < solutionsLength; i++) {
+                    /*更新某业务方案 quesSqlite.js*/
+                    quesSqlite.initSolutions(GlobalData, solutionsInfo[i], (function(index) {
+                        return function(res) {
+                            /*处理业务方案*/
+                            if (res.success == true) {
+                                console.log("业务方案列表写入数据库成功");
+                                /*向服务器请求获取调查问卷 restfulUtil.js*/
+                                restfulUtil.getQuestionnaires(GlobalData, solutionsInfo[index].recid, function(res2) {
+                                    if (res2.success == true) {
+                                        console.log("调查问卷列表请求成功");
+                                        questionnairesInfo = res2.resJson.questionnairelist;
+                                        var questionnairesLength = __getJsonLength(questionnairesInfo);
+                                        // console.log("该方案包含的问卷个数为" + questionnairesLength);
+                                        for (var j = 0; j < questionnairesLength; j++) {
+                                            /*更新某业务方案的调查问卷 quesSqlite.js*/
+                                            quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[index].recid, questionnairesInfo[j], function(res3) {
+                                                if (res3.success == true) {
+                                                    console.log("调查问卷列表写入数据库成功");
+                                                } else {
+                                                    console.log("调查问卷列表写入数据库失败")
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        console.log("调查问卷列表请求失败");
+                                    }
+                                });
+                            } else {
+                                console.log("业务方案列表写入数据库失败");
+                            }
+                        }
+                    })(i));
+                }
+            } else {
+                console.log("业务方案列表请求失败");
             }
-            // var solutionsInfo = res.resJson.solutionInfo;
-            // var solutionsLength = __getJsonLength(res.resJson.solutionInfo);
-            // console.log("业务方案的长度 " + solutionsLength);
-            // for (var i = 0; i < solutionsLength; i++) {
-            //     /*更新某业务方案 quesSqlite.js*/
-            //     quesSqlite.initSolutions(GlobalData, solutionsInfo[i], (function(index) {
-            //         return function(res) {
-            //             /*处理业务方案*/
-            //             if (res.success == true) {
-            //                 /*向服务器请求获取调查问卷 restfulUtil.js*/
-            //                 console.log("向服务器请求获取调查问卷");
-            //                 restfulUtil.getQuestionnaires(GlobalData, solutionsInfo[index].recid, function(res2) {
-            //                     var questionnairesInfo;
-            //                     var questionnairesLength = __getJsonLength(res2.resJson.questionnairelist);
-            //                     if (questionnairesLength > 0)
-            //                         questionnairesInfo = res2.resJson.questionnairelist;
-            //                     console.log("该方案包含的问卷个数为" + questionnairesLength);
-            //                     for (var j = 0; j < questionnairesLength; j++) {
-            //                         /*更新某业务方案的调查问卷 quesSqlite.js*/
-            //                         quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[index].recid, questionnairesInfo[j], function(res3) {
-            //                             if (res3.success == true) {
-            //                                 console.log("调查问卷逻辑已跳出  ");
-            //                             } else {
-            //                                 console.log("此调查问卷失败")
-            //                             }
-            //                         });
-            //                     }
-            //                 });
-            //             }
-            //         }
-            //     })(i));
-            // }
+
         });
-        // restfulUtil.getQuestionnaires(GlobalData, "0B2F04FCF96E119BAD227FC275BA7F97", function(res) {
-        //     if (res.success == true)
-        //         console.log("node-fetch没问题");
-        // });
     });
 }
 

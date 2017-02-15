@@ -158,6 +158,7 @@ body {
 #titleBox {
     width: 100%;
     background-color: #fff;
+    margin-bottom: 8px;
 }
 
 #titleName {
@@ -178,6 +179,40 @@ body {
     border-right: 1px solid #f3f3f3;
 }
 
+/*中间空白部分*/
+#emptyBox{
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    color: #888888;
+    font-size: 20px;
+}
+
+/*单选题 临时*/
+.radioDiv{
+    height: 200px;
+    width: 800px;
+    background-color: #fff;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+.leftSetup{
+    height: 200px;
+    width: 35px;
+    border-right: 1px solid #f3f3f3;
+    padding: 16px;
+    text-align: center;
+    color: #666666;
+}
+.leftSetup img{
+    margin-top: 10px;
+}
+.radioSubject{
+    padding: 16px;
+}
+.radioTitle{
+
+}
 
 /*主要部分的尾部分*/
 
@@ -185,7 +220,7 @@ body {
     width: 100%;
     height: auto;
     background-color: #fff;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 #tailUp {
