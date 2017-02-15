@@ -8,12 +8,16 @@
     <link href="css/list.css" rel="stylesheet" type="text/css" media="all" />
     <script src="js/jquery.min.js"></script>
     <script src="js/list.js"></script>
+    <link rel="StyleSheet" href="css/dtree.css" type="text/css" />
+    <script type="text/javascript" src="js/dtree.js"></script>
+    <script type="text/javascript">
+    </script>
     <title>问卷列表</title>
 </head>
 
 <body onLoad="initQuestionnaire()">
-    <!-- 菜单设置 -->
     <script>
+        /*菜单设置*/
         var Menu = require('electron').remote.Menu;
 
         var template = [{
@@ -218,7 +222,16 @@
         </div>
     </div>
     <div id="middle">
-        <div id="tree"></div>
+        <div id="tree">
+            <div class="dtree">
+
+                <p><a href="javascript: d.openAll();">全部展开</a> | <a href="javascript: d.closeAll();">全部收起</a></p>
+                <script type="text/javascript">
+                    // initTree();
+                </script>
+
+            </div>
+        </div>
         <div id="list">
             <table id="headTable">
                 <tr id="headTr">

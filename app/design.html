@@ -77,7 +77,7 @@
                 </div>
                 <div class="menuItemBox">
                     <ul>
-                        <li>
+                        <li draggable="true" title="拖拽至中间" class="dragMenuItem">
                             <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Radio','','images/button_01_radio_on.png',1)">
                                 <div id="imgRadio" class="imgSubjectBox">
                                     <img src="images/button_01_radio_off.png" id="Radio" />
@@ -219,7 +219,7 @@
                 <a href="#" target="_blank">预 览</a>
             </div>
             <div class="darkButton">
-                <a href="#">发 布</a>
+                <a href="#">保 存</a>
             </div>
         </div>
     </div>
@@ -275,7 +275,21 @@
             });
         });
     </script>
-
+    <!-- 拖拽菜单项 -->
+    <script type="text/javascript">
+        $(function(){
+            $(".dragMenuItem")[0].ondragstart = function(event){
+                console.log("drapStart");
+                event.dataTransfer.setData("Text", event.target.id);
+            }
+            $(".dragMenuItem")[0].ondrop = function(event){
+                console.log("onDrop");
+                var id = event.dataTransfer.getData("Text");
+                $(this).append($("#" + id).clone().text($(this).find("div").length));
+                event.preventDefault();
+            }
+        });
+    </script>
 </body>
 
 </html>

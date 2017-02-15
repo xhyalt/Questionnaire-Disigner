@@ -65,48 +65,56 @@ function initDB(GlobalData, cb) {
             /*判断表中是否存在该用户数据*/
             __checkUser(GlobalData, function(res2) {
                 if (res2.success == true) {
-                    /*该用户存在，更新用户数据*/
-                    console.log("该用户已经存在于数据库");
-                    __updateUser(GlobalData, function(res3) {
-                        if (res3.success == true) {
-                            console.log("更新用户数据成功");
-                            if (cb) {
-                                cb({
-                                    success: true
-                                });
+                    /*查询用户成功*/
+                    if (res2.data["count(1)"] == 0) {
+                        /*该用户不存在，插入用户数据*/
+                        console.log("该用户不存在于数据库中");
+                        __insertUser(GlobalData, function(res3) {
+                            if (res3.success == false) {
+                                /*插入数据失败*/
+                                console.log("插入数据失败");
+                                if (cb) {
+                                    cb({
+                                        success: false,
+                                        data: "插入数据失败"
+                                    });
+                                }
+                            } else {
+                                console.log("插入数据成功");
+                                if (cb) {
+                                    cb({
+                                        success: true
+                                    });
+                                }
                             }
-                        } else {
-                            console.log("更新用户数据失败");
-                            if (cb) {
-                                cb({
-                                    success: false,
-                                    data: "更新用户数据失败"
-                                });
+                        });
+                    } else {
+                        /*该用户存在，更新用户数据*/
+                        console.log("该用户已经存在于数据库");
+                        __updateUser(GlobalData, function(res3) {
+                            if (res3.success == true) {
+                                console.log("更新用户数据成功");
+                                if (cb) {
+                                    cb({
+                                        success: true
+                                    });
+                                }
+                            } else {
+                                console.log("更新用户数据失败");
+                                if (cb) {
+                                    cb({
+                                        success: false,
+                                        data: "更新用户数据失败"
+                                    });
+                                }
                             }
-                        }
-                    });
-
+                        });
+                    }
                 } else {
-                    /*该用户不存在，插入用户数据*/
-                    console.log("该用户不存在于数据库中");
-                    __insertUser(GlobalData, function(res3) {
-                        if (res3.success == false) {
-                            /*插入数据失败*/
-                            console.log("插入数据失败");
-                            if (cb) {
-                                cb({
-                                    success: false,
-                                    data: "插入数据失败"
-                                });
-                            }
-                        } else {
-                            console.log("插入数据成功");
-                            if (cb) {
-                                cb({
-                                    success: true
-                                });
-                            }
-                        }
+                    console.log("查询用户失败");
+                    cb({
+                        success: false,
+                        data: "查询用户失败"
                     });
                 }
             });
@@ -242,7 +250,7 @@ function getSolutions(GlobalData, cb) {
     __selectSolutions(GlobalData, function(res) {
         if (res.success == true) {
             /*选出业务方案成功*/
-            console.log(res.row);
+            console.log("res.row " + res.row);
             cb({
                 success: true,
                 data: res.row
@@ -268,7 +276,7 @@ function getQuestionnaires(GlobalData, cb) {
     /*选出所有调查问卷*/
     __selectQuestionnaires(GlobalData, function(res) {
         if (res.success == true) {
-            dtree.js /*选出调查问卷成功*/
+            /*选出调查问卷成功*/
             console.log(res.row);
             cb({
                 success: true,
@@ -278,9 +286,9 @@ function getQuestionnaires(GlobalData, cb) {
             cb({
                 success: false,
                 data: "选出调查问卷失败"
-            })；
+            });
         }
-    })
+    });
 }
 
 /**
@@ -343,7 +351,7 @@ function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
  */
 function __selectQuestionnaires(GlobalData, cb) {
     console.log("正在获取该用户的所有问卷");
-    db.run("select * from QUESTIONNAIRES where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
+    db.all("select * from QUESTIONNAIRES where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
             cb({
                 success: false,
@@ -441,8 +449,9 @@ function __updateSolution(GlobalData, solutionJson, cb) {
  * @return
  */
 function __selectSolutions(GlobalData, cb) {
-    console.log("正在选出该用户的所有业务方案 __selectSolution");
-    db.run("select * from SOLUTIONS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
+    console.log("正在获取该用户的所有业务方案 __selectSolution");
+    console.log(GlobalData.urlRoot + " " + GlobalData.user);
+    db.get("select * from SOLUTIONS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
             cb({
                 success: false,
@@ -548,7 +557,7 @@ function __createTable(cb) {
  */
 function __checkUser(GlobalData, cb) {
     console.log("正在检查该用户是否存在 __checkUser");
-    db.each("select 1 from USERS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
+    db.get("select count(1) from USERS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
             console.log("不存在该用户");
             cb({

@@ -3,7 +3,6 @@ var fetch = require("node-fetch");
 var http = require('http');
 var url = require('url');
 var fetch = require("node-fetch");
-// const quesSqlite = require("./quesSqlite.js");
 
 /**
  * 登录token请求
@@ -29,45 +28,6 @@ function getToken(GlobalData, cb) {
 }
 
 /**
- * restful请求核心方法
- * @param type 请求type和请求的内容对应
- * @param obj 请求参数
- * @param cb 回调函数
- */
-function __getData(type, obj, cb) {
-    console.log("__getData " + JSON.stringify(obj));
-    /**
-     * type 1 业务方案 2 调查问卷 3 ques 4 save
-     */
-    fetch(obj.url, obj.body)
-        .then(function(res) {
-            // console.log(res.json());
-            return res.json();
-        })
-        .then(function(resJson) {
-            if (cb) {
-                // 请求成功调用回调函数将数据传回
-                // console.log("resJson " + JSON.stringify(resJson));
-                cb({
-                    success: true,
-                    type: type,
-                    resJson: resJson,
-                    data: obj.data
-                });
-            }
-        })
-        .catch(function(err) {
-            // 异常返回
-            console.log(err);
-            cb({
-                success: false,
-                type: type,
-                data: err
-            });
-        });
-}
-
-/**
  * 业务方案请求
  * @public
  * @param  GlobalData 用户基础数据
@@ -76,6 +36,7 @@ function __getData(type, obj, cb) {
  * @return 请求不成功返回error信息
  */
 function getSolutions(GlobalData, cb) {
+    console.log("__getSolutions");
     __getData(1, {
         url: __getSolutionsURL(GlobalData),
         body: {
@@ -104,13 +65,52 @@ function getQuestionnaires(GlobalData, obj, cb) {
 }
 
 /**
+ * restful请求核心方法
+ * @private
+ * @param type 请求type和请求的内容对应
+ * @param obj 请求参数
+ * @param cb 回调函数
+ */
+function __getData(type, obj, cb) {
+    console.log("__getData " + JSON.stringify(obj));
+    /**
+     * type 1 业务方案 2 调查问卷 3 ques 4 save
+     */
+    console.log("obj.url " + obj.url);
+    console.log("obj.body " + JSON.stringify(obj.body));
+    fetch(obj.url, obj.body).then(function(res) {
+        console.log("res.json() " + JSON.stringify(res.json()));
+        return res.json();
+    }).then(function(resJson) {
+        if (cb) {
+            // 请求成功调用回调函数将数据传回
+            cb({
+                success: true,
+                type: type,
+                resJson: resJson,
+                data: obj.data
+            });
+        }
+    }).catch(function(err) {
+        // 异常返回
+        console.log("err " + err);
+        cb({
+            success: false,
+            type: type,
+            data: err.message
+        });
+    });
+}
+
+/**
  * 合成获取方案的URL的函数
  * @private
  * @param  GlobalData 用户基础数据
  * @return 获取方案的URL
  */
 function __getSolutionsURL(GlobalData) {
-    var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/getSolutions?user=${GlobalData.user}src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
+    console.log("loginContext = " + GlobalData.loginContext);
+    var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/getSolutions?user=${GlobalData.user}&src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
     return url;
 }
 
@@ -121,7 +121,7 @@ function __getSolutionsURL(GlobalData) {
  * @return 获取问卷的URL
  */
 function __getQuestionnairesURL(GlobalData) {
-    var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/getQuestionnaires?user=${GlobalData.user}src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
+    var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/getQuestionnaires?user=${GlobalData.user}&src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
     return url;
 }
 

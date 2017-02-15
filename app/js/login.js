@@ -39,10 +39,8 @@ function signIn() {
         GlobalData.urlRoot = "10.2.20.74:9797";
         GlobalData.host = "10.2.20.74";
         GlobalData.post = 9797;
-        GlobalData.user = "xuheyao";
-        GlobalData.pwd = "xuheyao";
-
-        /*处理url，获得完成GET请求URL*/
+        GlobalData.user = "heyedong";
+        GlobalData.pwd = "1";
 
         /*get请求token restfulUtil.js*/
         restfulUtil.getToken(GlobalData, function(statusCode, chunk) {
