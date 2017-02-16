@@ -104,7 +104,6 @@ function __getData(type, obj, cb) {
  * @return 获取方案的URL
  */
 function __getSolutionsURL(GlobalData) {
-    console.log("loginContext = " + GlobalData.loginContext);
     var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/getSolutions?user=${GlobalData.user}&src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
     return url;
 }

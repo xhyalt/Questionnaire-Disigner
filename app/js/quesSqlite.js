@@ -250,10 +250,9 @@ function getSolutions(GlobalData, cb) {
     __selectSolutions(GlobalData, function(res) {
         if (res.success == true) {
             /*选出业务方案成功*/
-            console.log("res.row " + res.row);
             cb({
                 success: true,
-                data: res.row
+                data: res.data
             });
         } else {
             /*选出业务方案失败*/
@@ -277,10 +276,9 @@ function getQuestionnaires(GlobalData, cb) {
     __selectQuestionnaires(GlobalData, function(res) {
         if (res.success == true) {
             /*选出调查问卷成功*/
-            console.log(res.row);
             cb({
                 success: true,
-                data: res.row
+                data: res.data
             });
         } else {
             cb({
@@ -449,9 +447,8 @@ function __updateSolution(GlobalData, solutionJson, cb) {
  * @return
  */
 function __selectSolutions(GlobalData, cb) {
-    console.log("正在获取该用户的所有业务方案 __selectSolution");
-    console.log(GlobalData.urlRoot + " " + GlobalData.user);
-    db.get("select * from SOLUTIONS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
+    console.log("正在获取该用户的所有业务方案 __selectSolution");``
+    db.all("select * from SOLUTIONS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
             cb({
                 success: false,
