@@ -1,7 +1,7 @@
 /*--------------------------------------------------|
 | dTree 2.05 | www.destroydrop.com/javascript/tree/ |
 |---------------------------------------------------|
-| Copyright (c) 2002-2003 Geir Landrö               |
+| Copyright (c) 2002-2003 Geir Landrï¿½               |
 |                                                   |
 | This script can be used freely as long as all     |
 | copyright messages are intact.                    |
@@ -200,6 +200,7 @@ dTree.prototype.s = function(id) {
 		this.selectedNode = id;
 		if (this.config.useCookies) this.setCookie('cs' + this.obj, cn.id);
 	}
+	// console.log(this.aNodes[id].target);
 };
 
 // Toggle Open or close
@@ -209,6 +210,7 @@ dTree.prototype.o = function(id) {
 	cn._io = !cn._io;
 	if (this.config.closeSameLevel) this.closeLevel(cn);
 	if (this.config.useCookies) this.updateCookie();
+	//console.log(this.aNodes[id].target);
 };
 
 // Open or close all nodes
@@ -259,7 +261,7 @@ dTree.prototype.closeAllChildren = function(node) {
 		if (this.aNodes[n].pid == node.id && this.aNodes[n]._hc) {
 			if (this.aNodes[n]._io) this.nodeStatus(false, n, this.aNodes[n]._ls);
 			this.aNodes[n]._io = false;
-			this.closeAllChildren(this.aNodes[n]);		
+			this.closeAllChildren(this.aNodes[n]);
 		}
 	}
 }

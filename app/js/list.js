@@ -15,6 +15,10 @@ var solutionsLength = 0;
 var questionnairesLength = 0;
 /*树节点个数*/
 var dTreeItemNum = 0;
+/*树*/
+var d = null;
+/*被选中的业务方案下的所有调查问卷*/
+var questionnairesBySolutionsRecid = null;
 
 /**
  * 初始化树
@@ -22,9 +26,10 @@ var dTreeItemNum = 0;
  */
 function initTree() {
     /*处理树*/
-    var d = new dTree('d');
+    d = new dTree('d');
     /*设置根节点*/
-    d.add(0, -1, '业务方案');
+    d.add(0, -1, '业务方案组');
+
     /*获取用户基础数据*/
     __getGlobalData(function(res0) {
         /*获取所有业务方案 quesSqlite.js*/
@@ -34,15 +39,44 @@ function initTree() {
                 // console.log(JSON.stringify(res.data));
                 solutionsLength = res.data.length;
                 solutionsInfo = res.data;
-                /*获取所有调查问卷 quesSqlite.js*/
-                quesSqlite.getQuestionnaires(GlobalData, function(res2) {
-                    if (res2.success == true) {
-                        console.log("获取所有调查问卷成功");
-                        // console.log(JSON.stringify(res2.data));
-                        questionnairesLength = res2.data.length;
-                        questionnairesInfo = res2.data;
-                    }else{
-                        console.log("获取所有调查问卷失败");
+                __addSolutionTreeItem(function(res) {
+                    if (res.success == true) {
+                        console.log("添加业务方案树节点成功");
+                        document.getElementById('treeDemo').innerHTML = d;
+                        /*获取所有调查问卷 quesSqlite.js*/
+                        quesSqlite.getQuestionnaires(GlobalData, function(res2) {
+                            if (res2.success == true) {
+                                console.log("获取所有调查问卷成功");
+                                // console.log(JSON.stringify(res2.data));
+                                questionnairesLength = res2.data.length;
+                                questionnairesInfo = res2.data;
+                                __addQuestionnaireTreeItem(function(res) {
+                                    if (res.success == true) {
+                                        console.log("添加调查问卷树节点成功");
+                                        d.s = (function(questionnairesInfo,questionnairesLength){
+                                          return function(nodeId) {
+                                              //添加节点点击事件
+                                              var solutionRecidIndex = this.aNodes[nodeId].target;
+                                              var quesNum = 0;
+                                              console.log(solutionRecidIndex);
+                                              for (var i = 0; i < questionnairesLength; i++) {
+                                                  if (questionnairesInfo[i].solutionRecid == solutionRecidIndex) {
+                                                      console.log(questionnairesInfo[i].title);
+                                                      /*在右边显示出点击的业务方案所包含的所有调查问卷*/
+                                                  }
+                                              }
+                                          };
+                                        }(questionnairesInfo,questionnairesLength));
+
+                                        document.getElementById('treeDemo').innerHTML = d;
+                                    }
+                                });
+                            } else {
+                                console.log("获取所有调查问卷失败");
+                            }
+                        });
+                    } else {
+                        console.log("添加业务方案节点失败");
                     }
                 });
             } else {
@@ -50,22 +84,8 @@ function initTree() {
             }
         });
     });
-    /*获取所有业务方案，并设置为1层节点*/
-
-    d.add(1, 0, 'Node 1', 'example01.html');
-    d.add(2, 0, 'Node 2', 'example01.html');
-    d.add(3, 1, 'Node 1.1', 'example01.html');
-    d.add(4, 0, 'Node 3', 'example01.html');
-    d.add(5, 3, 'Node 1.1.1', 'example01.html');
-    d.add(6, 5, 'Node 1.1.1.1', 'example01.html');
-    d.add(7, 0, 'Node 4', 'example01.html');
-    d.add(8, 1, 'Node 1.2', 'example01.html');
-    d.add(9, 0, 'My Pictures', 'example01.html', 'Pictures I\'ve taken over the years', '', '', 'img/imgfolder.gif');
-    d.add(10, 9, 'The trip to Iceland', 'example01.html', 'Pictures of Gullfoss and Geysir');
-    d.add(11, 9, 'Mom\'s birthday', 'example01.html');
-    d.add(12, 0, 'Recycle Bin', 'example01.html', '', '', 'img/trash.gif');
-
     document.write(d);
+
 }
 
 /**
@@ -126,6 +146,10 @@ function initQuestionnaire() {
     });
 }
 
+function clickQ() {
+    alert("qqq");
+}
+
 /**
  * 与主进程通信获取用户基础数据GlobalData
  * @private
@@ -152,22 +176,40 @@ function __getGlobalData(cb) {
 /**
  * 添加业务方案界定啊
  * @private
- * @param solutionsInfo [业务方案数据]
- * @param d             [树对象]
  * @param {Function} cb            [回调函数]
  */
-function __addSolutionItem(solutionsInfo, d, cb) {
-    console.log("正在添加业务方案节点");
+function __addSolutionTreeItem(cb) {
+    console.log("正在添加业务方案树节点");
+    for (var i = 0; i < solutionsLength; i++) {
+        d.add(++dTreeItemNum, 0, solutionsInfo[i].title, 'javascript: ', '', solutionsInfo[i].recid);
+        solutionsInfo[i].rowID = dTreeItemNum;
+    }
+    cb({
+        success: true
+    });
 }
 /**
  * 添加调查问卷节点
  * @private
- * @param questionnairesInfo [问卷调查数据]
- * @param d                  [树对象]
  * @param {Function} cb                 [回调函数]
  */
-function __addQuestionnaireItem(questionnairesInfo, d, cb) {
-    console.log("正在添加调查问卷节点");
+function __addQuestionnaireTreeItem(cb) {
+    console.log("正在添加调查问卷树节点");
+    console.log("miaolegemi" + JSON.stringify(questionnairesInfo));
+    for (var i = 0; i < questionnairesLength; i++) {
+        /*遍历业务方案找到父节点*/
+        for (var j = 0; j < solutionsLength; j++) {
+            if (questionnairesInfo[i].solutionRecid == solutionsInfo[j].recid) {
+                questionnairesInfo[i].parentID = solutionsInfo[j].rowID;
+                d.add(++dTreeItemNum, questionnairesInfo[i].parentID, questionnairesInfo[i].title, "javascript: clickQ();");
+                questionnairesInfo[i].rowID = dTreeItemNum;
+                break;
+            }
+        }
+    }
+    cb({
+        success: true
+    });
 }
 
 /**
