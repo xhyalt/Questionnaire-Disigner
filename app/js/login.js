@@ -47,7 +47,7 @@ function signIn() {
             var body = eval('(' + chunk + ')');
             if (statusCode == 200) {
                 console.log("登录成功");
-                alert(body.token);
+                // alert(body.token);
                 GlobalData.username = body.username;
                 GlobalData.token = body.token;
                 /*与主进程通信，发送GlobalData*/

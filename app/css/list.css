@@ -205,10 +205,8 @@ body {
 }
 
 #main{
-    /*position: absolute;*/
     max-height: 80%;
     overflow-y: auto;
-    background-color: #999999;
 }
 
 #list {
