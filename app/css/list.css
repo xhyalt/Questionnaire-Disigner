@@ -181,6 +181,17 @@ body {
     margin-right: 50px;
 }
 
+#tree p {
+    padding: 10px;
+    width: 200px;
+    font-size: 14px;
+}
+
+#tree p a {
+    color: #666666;
+    text-decoration: none;
+}
+
 #tree {
     position: absolute;
     padding: 15px;
@@ -193,6 +204,13 @@ body {
     /*margin-right: 10px;*/
 }
 
+#main{
+    /*position: absolute;*/
+    max-height: 80%;
+    overflow-y: auto;
+    background-color: #999999;
+}
+
 #list {
     margin-left: 310px;
     background-color: #fff;
@@ -201,57 +219,70 @@ body {
     padding-bottom: 15px;
     border-radius: 5px;
     min-width: 600px;
-    overflow-y: auto;
+    max-height: 80%;
     overflow-x: hidden;
 }
 
-#headTable {
+#listTable {
     border-collapse: collapse;
     width: 100%;
     background-color: transparent;
 }
 
-#headTable tr {
+#listHead {
     border-bottom: 1px solid #cccccc;
     height: 50px;
     line-height: 50px;
     border-left: 3px solid #fff;
 }
 
-#headTable tr:hover {
+.listBody {
+    border-bottom: 1px solid #cccccc;
+    height: 50px;
+    line-height: 50px;
+    border-left: 3px solid #fff;
+}
+
+.listBody:hover {
     background-color: #f8fefd;
     border-left: 3px solid #1ABC9C;
 }
 
-#headTable td {
+#listTable td {
     font-size: 14px;
     color: #666666;
 }
 
-#titleTd {
+.titleTd {
     padding-left: 10px;
     width: 30%;
     min-width: 120px;
 }
 
-#codeTd {
-    text-align: center;
+.codeTd {
+    text-align: left;
     width: 25%;
-    min-width: 100px;
-}
-
-#syncTd {
-    text-align: center;
-    width: 20%;
     min-width: 80px;
 }
 
-#editTd {
-    width: 25%;
-    min-width: 100px;
+.syncTd {
+    text-align: left;
+    width: 15%;
+    min-width: 80px;
 }
 
-#operTd {
+.editTd {
+    width: 15%;
+    min-width: 80px;
+}
+
+.operTd {
     width: 200px;
-    min-width: 100px;
+    min-width: 120px;
+}
+
+.operTd a{
+    margin-right: 12px;
+    text-decoration: none;
+    color: #666666;
 }

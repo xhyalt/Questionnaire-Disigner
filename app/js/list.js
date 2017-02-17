@@ -53,21 +53,35 @@ function initTree() {
                                 __addQuestionnaireTreeItem(function(res) {
                                     if (res.success == true) {
                                         console.log("添加调查问卷树节点成功");
-                                        d.s = (function(questionnairesInfo,questionnairesLength){
-                                          return function(nodeId) {
-                                              //添加节点点击事件
-                                              var solutionRecidIndex = this.aNodes[nodeId].target;
-                                              var quesNum = 0;
-                                              console.log(solutionRecidIndex);
-                                              for (var i = 0; i < questionnairesLength; i++) {
-                                                  if (questionnairesInfo[i].solutionRecid == solutionRecidIndex) {
-                                                      console.log(questionnairesInfo[i].title);
-                                                      /*在右边显示出点击的业务方案所包含的所有调查问卷*/
-                                                  }
-                                              }
-                                          };
-                                        }(questionnairesInfo,questionnairesLength));
-
+                                        d.s = (function(questionnairesInfo, questionnairesLength) {
+                                            return function(nodeId) {
+                                                //添加节点点击事件
+                                                var solutionRecidIndex = this.aNodes[nodeId].target;
+                                                var quesNum = 0;
+                                                console.log($(".listBody"));
+                                                console.log("长度"+$(".listBody").length);
+                                                if ($(".listBody").length && $(".listBody").length > 0)
+                                                    $(".listBody").remove();
+                                                for (var i = 0; i < questionnairesLength; i++) {
+                                                    if (questionnairesInfo[i].solutionRecid == solutionRecidIndex) {
+                                                        console.log(questionnairesInfo[i].title);
+                                                        /*在右边显示出点击的业务方案所包含的所有调查问卷*/
+                                                        $("#listHead").after(`
+                                                          <tr class="listBody">
+                                                              <td class="titleTd">${questionnairesInfo[i].title}</td>
+                                                              <td class="codeTd">${questionnairesInfo[i].recid}</td>
+                                                              <td class="syncTd"></td>
+                                                              <td class="editTd"></td>
+                                                              <td class="operTd">
+                                                                  <a href="javascript: ;">编辑</a>
+                                                                  <a href="javascript: ;">预览</a>
+                                                                  <a href="javascript: ;">删除</a>
+                                                              </td>
+                                                          </tr>`);
+                                                    }
+                                                }
+                                            };
+                                        }(questionnairesInfo, questionnairesLength));
                                         document.getElementById('treeDemo').innerHTML = d;
                                     }
                                 });

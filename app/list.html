@@ -5,13 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="css/list.css" rel="stylesheet" type="text/css" media="all" />
-    <script src="js/jquery.min.js"></script>
-    <script src="js/list.js"></script>
-    <link rel="StyleSheet" href="css/dtree.css" type="text/css" />
-    <script type="text/javascript" src="js/dtree.js"></script>
-    <script type="text/javascript">
-    </script>
+    <link href="./css/list.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/list.js"></script>
+    <link rel="StyleSheet" href="./css/dtree.css" type="text/css" />
+    <script type="text/javascript" src="./js/dtree.js"></script>
     <title>问卷列表</title>
 </head>
 
@@ -223,26 +221,26 @@
     </div>
     <div id="middle">
         <div id="tree">
-            <div class="dtree">
-
-                <p><a href="javascript: d.openAll();">全部展开</a> | <a href="javascript: d.closeAll();">全部收起</a></p>
+            <p><a href="javascript: d.openAll();">展开所有</a> | <a href="javascript: d.closeAll();">折叠所有</a></p>
+            <div class="dtree" id="treeDemo">
                 <script type="text/javascript">
-                    /*加载与显示树*/
                     initTree();
                 </script>
-
             </div>
         </div>
-        <div id="list">
-            <table id="headTable">
-                <tr id="headTr">
-                    <td id="titleTd">标题</td>
-                    <td id="codeTd">编码</td>
-                    <td id="syncTd">同步状态</td>
-                    <td id="editTd">编辑时间</td>
-                    <td id="operTd">操作</td>
-                </tr>
-            </table>
+        <div id="main">
+            <div id="list">
+                <table id="listTable">
+                    <tr id="listHead">
+                        <td class="titleTd">标题</td>
+                        <td class="codeTd">编码</td>
+                        <td class="syncTd">同步状态</td>
+                        <td class="editTd">编辑时间</td>
+                        <td class="operTd">操作</td>
+                    </tr>
+
+                </table>
+            </div>
         </div>
     </div>
 </body>
