@@ -100,11 +100,15 @@ body {
     background-repeat: no-repeat;
 }
 
-#imgTitleBoxOpen {
+#imgTitleBoxCYTX {
     background-image: url(../images/list_02_minus_on.png);
 }
 
-#imgTitleBoxClose {
+#imgTitleBoxGDTX {
+    background-image: url(../images/list_01_plus_on.png);
+}
+
+#imgTitleBoxZB {
     background-image: url(../images/list_01_plus_on.png);
 }
 
