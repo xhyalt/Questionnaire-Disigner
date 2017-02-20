@@ -251,10 +251,10 @@
         <div id="left">
             <div class="menuBox">
                 <div id="cytx" class="menuTitleBox">
-                    <div class="imgTitleBox"></div>
+                    <div class="imgTitleBox" id="imgTitleBoxCYTX"></div>
                     <p>常用题型</p>
                 </div>
-                <div class="menuItemBox">
+                <div class="menuItemBox" id="cytxItem">
                     <ul>
                         <li>
                             <a draggable="true" title="拖拽至中间" id="MenuItemRadio" href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Radio','','images/button_01_radio_on.png',1)">
@@ -331,7 +331,7 @@
                     </ul>
                 </div>
                 <div id="gdtx" class="menuTitleBox">
-                    <div class="imgTitleBox"></div>
+                    <div class="imgTitleBox" id = "imgTitleBoxClose"></div>
                     <p>更多题型</p>
                 </div>
                 <div class="menuItemBox">
@@ -348,7 +348,7 @@
                     </ul>
                 </div>
                 <div id="zb" class="menuTitleBox">
-                    <div class="imgTitleBox"></div>
+                    <div class="imgTitleBox" id="imgTitleBoxClose"></div>
                     <p>指标</p>
                 </div>
                 <div class="menuItemBox">
@@ -418,10 +418,11 @@
     </div>
     <!-- 菜单切换滑动效果 -->
     <script>
-        var img_cytx = 0; /*关闭*/
+        var img_cytx = 1; /*打开*/
         var img_gdtx = 0; /*关闭*/
         var img_zb = 0; /*关闭*/
         $(function() {
+            $("#cytxItem").show();
             $(".menuTitleBox").click(function() {
                 var x = document.getElementsByClassName("imgTitleBox");
 

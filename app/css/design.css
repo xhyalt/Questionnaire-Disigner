@@ -40,6 +40,15 @@ body {
     background-color: #f3f3f3;
 }
 
+* {
+    webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 
 /*问卷设计左侧菜单部分*/
 
@@ -88,8 +97,15 @@ body {
     width: 15px;
     left: 100px;
     top: 12px;
-    background-image: url(../images/list_01_plus_on.png);
     background-repeat: no-repeat;
+}
+
+#imgTitleBoxOpen {
+    background-image: url(../images/list_02_minus_on.png);
+}
+
+#imgTitleBoxClose {
+    background-image: url(../images/list_01_plus_on.png);
 }
 
 .menuItemBox {
@@ -179,8 +195,10 @@ body {
     border-right: 1px solid #f3f3f3;
 }
 
+
 /*中间空白部分*/
-#emptyBox{
+
+#emptyBox {
     height: 100px;
     text-align: center;
     line-height: 100px;
@@ -188,15 +206,18 @@ body {
     font-size: 20px;
 }
 
+
 /*单选题 临时*/
-.radioDiv{
+
+.radioDiv {
     height: 200px;
     width: 800px;
     background-color: #fff;
     margin-top: 8px;
     margin-bottom: 8px;
 }
-.leftSetup{
+
+.leftSetup {
     height: 200px;
     width: 35px;
     border-right: 1px solid #f3f3f3;
@@ -204,15 +225,17 @@ body {
     text-align: center;
     color: #666666;
 }
-.leftSetup img{
+
+.leftSetup img {
     margin-top: 10px;
 }
-.radioSubject{
+
+.radioSubject {
     padding: 16px;
 }
-.radioTitle{
 
-}
+.radioTitle {}
+
 
 /*主要部分的尾部分*/
 
