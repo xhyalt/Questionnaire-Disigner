@@ -191,12 +191,32 @@ body {
 
 #headTable td {
     color: #666666;
+}
+
+.blank {
+    width: 35px;
     padding: 16px;
 }
 
-.Blank {
-    width: 35px;
-    border-right: 1px solid #f3f3f3;
+#detail {
+    margin-left: 65px;
+    border-left: 1px solid #f3f3f3;
+    padding: 10px;
+    width: 650px;
+}
+
+#detailTextBox {
+    line-height: 2;
+}
+
+.detailText {
+    background-color: #b4fbef;
+    width: 650px;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #666666;
+    border: none;
+    outline: none;
 }
 
 
@@ -208,37 +228,63 @@ body {
     line-height: 100px;
     color: #888888;
     font-size: 20px;
+    /*background-color: #f0f;*/
 }
 
 
 /*单选题 临时*/
 
 .radioDiv {
-    height: 200px;
-    width: 800px;
+    width: 100%;
     background-color: #fff;
     margin-top: 8px;
     margin-bottom: 8px;
-}
-
-.leftSetup {
-    height: 200px;
-    width: 35px;
-    border-right: 1px solid #f3f3f3;
-    padding: 16px;
-    text-align: center;
     color: #666666;
 }
 
-.leftSetup img {
-    margin-top: 10px;
+.leftSetup {
+    position: absolute;
+    /*height: 200px;*/
+    width: 35px;
+    /*border-right: 1px solid #f3f3f3;*/
+    padding: 16px;
+    text-align: center;
+}
+
+.leftSetup h4{
+   margin-bottom: 10px;
+}
+
+.radioDiv img {
+    margin-top: 5px;
 }
 
 .radioSubject {
-    padding: 16px;
+    margin-left: 65px;
+    border-left: 1px solid #f3f3f3;
+    padding: 10px;
+    min-height: 160px;
+    /*background-color: #000;*/
 }
 
-.radioTitle {}
+.RadioStem {
+    width: 650px;
+    line-height: 2;
+}
+
+.RadioItem{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.RadioItem li{
+    width: 650px;
+}
+
+.RadioItem label{
+    line-height: 2;
+    padding: 10px;
+}
 
 
 /*主要部分的尾部分*/
