@@ -53,13 +53,15 @@ function initTree() {
                                 __addQuestionnaireTreeItem(function(res) {
                                     if (res.success == true) {
                                         console.log("添加调查问卷树节点成功");
+                                        document.getElementById('treeDemo').innerHTML = d;
+                                        console.log("d = " + d);
                                         d.s = (function(questionnairesInfo, questionnairesLength) {
                                             return function(nodeId) {
                                                 //添加节点点击事件
                                                 var solutionRecidIndex = this.aNodes[nodeId].target;
                                                 var quesNum = 0;
                                                 console.log($(".listBody"));
-                                                console.log("长度"+$(".listBody").length);
+                                                console.log("长度" + $(".listBody").length);
                                                 if ($(".listBody").length && $(".listBody").length > 0)
                                                     $(".listBody").remove();
                                                 for (var i = 0; i < questionnairesLength; i++) {
@@ -82,7 +84,6 @@ function initTree() {
                                                 }
                                             };
                                         }(questionnairesInfo, questionnairesLength));
-                                        document.getElementById('treeDemo').innerHTML = d;
                                     }
                                 });
                             } else {
@@ -98,8 +99,7 @@ function initTree() {
             }
         });
     });
-    document.write(d);
-
+    // document.write(d);
 }
 
 /**
@@ -138,6 +138,11 @@ function initQuestionnaire() {
                                         quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[index].recid, questionnairesInfo[j], function(res3) {
                                             if (res3.success == true) {
                                                 console.log("调查问卷列表写入数据库成功");
+                                                if (i == solutionsLength - 1 && j == questionnairesLength - 1) {
+                                                    d = null;
+                                                    dTreeItemNum = 0;
+                                                    initTree();
+                                                }
                                             } else {
                                                 console.log("调查问卷列表写入数据库失败")
                                             }
@@ -153,6 +158,7 @@ function initQuestionnaire() {
                     }
                 })(i));
             }
+
         } else {
             console.log("业务方案列表请求失败");
         }
