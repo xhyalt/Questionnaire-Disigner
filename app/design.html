@@ -375,8 +375,8 @@
                 <table id="headTable">
                     <tr>
                         <td class="blank">&nbsp;</td>
-                        <td id="detail">
-                            <div class="textBox" id="detailTextBox">欢迎参加本次答题</div>
+                        <td id="headDetail">
+                            <div id="headDetailID">欢迎参加本次答题</div>
                         </td>
                     </tr>
                 </table>
@@ -384,24 +384,47 @@
             <div class="radioDiv subject">
                 <div class="leftSetup">
                     <h4>Q1</h4>
-                    <img id="up" src="./images/main_01_up_off.png" alt="">
+                    <img id="up" src="./images/main_01_up_off.png" alt="" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('up','','./images/main_01_up_on.png',1)">
                     <img id="down" src="./images/main_02_down_off.png" alt="">
-                    <img id="more" src="./images/main_06_more_off.png" alt="">
-                    <img id="garbage" src="./images/main_03_garbage_off.png" alt="">
+                    <img id="copy" src="./images/main_06_more_off.png" alt="">
+                    <img id="delete" src="./images/main_03_garbage_off.png" alt="">
                 </div>
                 <div class="radioSubject">
-                    <div class="RadioStem textBox">单选题</div>
-                    <ul class="RadioItem">
+                    <div class="radioStemText textBox" id="radioStemTextID">单选题</div>
+                    <ul class="radioItem">
                         <li>
-                            <input type="radio" name="radio1" id="Num1"/>
-                            <label for="Num1">选项1</label>
+                            <input type="radio" name="radio1" id="Num1" />
+                            <label class="textBox radioItemText">选项1</label>
                         </li>
                         <li>
-                            <input type="radio" name="radio1" id="Num2"/>
-                            <label for="Num2">选项2</label>
+                            <input type="radio" name="radio1" id="Num2" />
+                            <label class="textBox radioItemText">选项2</label>
                         </li>
                     </ul>
-                    <img src="./images/main_04_add_off.png" alt="">
+                    <img id="addItem" src="./images/main_04_add_off.png" alt="">
+                </div>
+            </div>
+            <div class="radioDiv subject">
+                <div class="leftSetup">
+                    <h4>Q1</h4>
+                    <img id="up" src="./images/main_01_up_off.png" alt="" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('up','','./images/main_01_up_on.png',1)">
+                    <img id="down" src="./images/main_02_down_off.png" alt="">
+                    <img id="copy" src="./images/main_06_more_off.png" alt="">
+                    <img id="delete" src="./images/main_03_garbage_off.png" alt="">
+                </div>
+                <div class="radioSubject">
+                    <div class="radioStemText textBox" id="radioStemTextID">单选题</div>
+                    <ul class="radioItem">
+                        <li>
+                            <input type="radio" name="radio1" id="Num1" />
+                            <label class="textBox radioItemText">选项1</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="radio1" id="Num2" />
+                            <label class="textBox radioItemText">选项2</label>
+                        </li>
+                    </ul>
+                    <img id="addItem" src="./images/main_04_add_off.png" alt="">
                 </div>
             </div>
             <div id="emptyBox">
@@ -410,11 +433,11 @@
             <div id="tailBox">
                 <table id="headTable">
                     <tr>
-                        <td class="Blank">&nbsp</td>
+                        <td class="blank">&nbsp</td>
                         <td class="tailPage">页码1/1</td>
                     </tr>
                 </table>
-                <div id="tailDown">您已完成本次问卷，感谢您的帮助与支持</div>
+                <div id="tailDetail">您已完成本次问卷，感谢您的帮助与支持</div>
             </div>
         </div>
         <div id="right">
@@ -484,6 +507,7 @@
     </script>
     <!-- 拖拽菜单项 -->
     <script type="text/javascript">
+        getSubjectNum();
         var brightTempDiv = `<div id="brightTempDiv" style="background-color: #1ABC9C; margin-bottom: 5px; width: 800px; height: 10px;"></div>`;
         $(function() {
             $("#MenuItemRadio")[0].ondragstart = function(event) {

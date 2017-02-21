@@ -198,18 +198,21 @@ body {
     padding: 16px;
 }
 
-#detail {
+#headDetail {
     margin-left: 65px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     width: 650px;
 }
 
-#detailTextBox {
+#headDetailID {
     line-height: 2;
 }
 
-.detailText {
+
+/*题头详述编辑框*/
+
+#detailTextInput {
     background-color: #b4fbef;
     width: 650px;
     line-height: 1.8;
@@ -231,16 +234,16 @@ body {
     /*background-color: #f0f;*/
 }
 
-
-/*单选题 临时*/
-
-.radioDiv {
-    width: 100%;
-    background-color: #fff;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    color: #666666;
+/*所有题型公有*/
+.subject{
+  width: 100%;
+  background-color: #fff;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  color: #666666;
 }
+
+/*单选题*/
 
 .leftSetup {
     position: absolute;
@@ -251,8 +254,8 @@ body {
     text-align: center;
 }
 
-.leftSetup h4{
-   margin-bottom: 10px;
+.leftSetup h4 {
+    margin-bottom: 10px;
 }
 
 .radioDiv img {
@@ -264,26 +267,49 @@ body {
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     min-height: 160px;
-    /*background-color: #000;*/
 }
 
-.RadioStem {
+.radioStemText {
     width: 650px;
     line-height: 2;
 }
 
-.RadioItem{
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.RadioItem li{
+.radioItem li {
     width: 650px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
-.RadioItem label{
+.radioItem label {
     line-height: 2;
-    padding: 10px;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+
+/*单选题干编辑框*/
+
+.radioStemTextInput {
+    background-color: #b4fbef;
+    width: 650px;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #666666;
+    border: none;
+    outline: none;
+}
+
+
+/*单选题选项编辑框*/
+
+.radioItemTextInput {
+    background-color: #b4fbef;
+    width: 620px;
+    line-height: 1.8;
+    font-size: 14px;
+    color: #666666;
+    border: none;
+    outline: none;
 }
 
 
@@ -305,11 +331,10 @@ body {
 .tailPage {
     width: 680px;
     text-align: right;
-    /*padding: 15px;*/
     font-size: 14px;
 }
 
-#tailDown {
+#tailDetail {
     border-top: #f3f3f3 1px solid;
     padding: 20px;
     text-align: center;
