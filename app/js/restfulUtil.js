@@ -47,6 +47,7 @@ function getSolutions(GlobalData, cb) {
 
 /**
  * 调查问卷请求
+ * @public
  * @param  GlobalData [用户基础数据]
  * @param  obj        [业务方案的recid]
  * @param  {Function} cb         [回调函数]
@@ -55,6 +56,25 @@ function getSolutions(GlobalData, cb) {
 function getQuestionnaires(GlobalData, obj, cb) {
     __getData(2, {
         url: __getQuestionnairesURL(GlobalData),
+        body: {
+            method: "POST",
+            timeout: 3000,
+            body: `data={solutionId:${obj}}`
+        }
+    }, cb);
+}
+
+/**
+ * 调查问卷表样请求
+ * @public
+ * @param  GlobalData [用户基础数据]
+ * @param  obj        [业务方案的recid]
+ * @param  {Function} cb         [回调函数]
+ * @return
+ */
+function getQuestionnairesData(GlobalData, obj, cb) {
+    __getData(3, {
+        url: __getQuestionnairesDataURL(GlobalData),
         body: {
             method: "POST",
             timeout: 3000,
@@ -73,7 +93,7 @@ function getQuestionnaires(GlobalData, obj, cb) {
 function __getData(type, obj, cb) {
     // console.log("__getData " + JSON.stringify(obj));
     /**
-     * type 1 业务方案 2 调查问卷 3 ques 4 save
+     * type 1 业务方案 2 调查问卷 3 表样 4 save
      */
     fetch(obj.url, obj.body).then(function(res) {
         return res.json();
@@ -120,6 +140,17 @@ function __getQuestionnairesURL(GlobalData) {
 }
 
 /**
+ * 合成获取问卷列表以及问卷样式的URL函数
+ * @private
+ * @param  GlobalData [用户基础数据]
+ * @return 获取问卷列表以及问卷样式的URL
+ */
+function __getQuestionnairesDataURL(GlobalData) {
+    var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/getQuestionnairesData?user=${GlobalData.user}&src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
+    return url;
+}
+
+/**
  * 获取Token的URL
  * @private
  * @param GlobalData
@@ -133,3 +164,4 @@ function __getTokenUrl(GlobalData) {
 exports.getToken = getToken;
 exports.getSolutions = getSolutions;
 exports.getQuestionnaires = getQuestionnaires;
+exports.getQuestionnairesData = getQuestionnairesData;
