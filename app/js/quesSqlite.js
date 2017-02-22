@@ -136,7 +136,6 @@ function initSolutions(GlobalData, solutionInfo, cb) {
             // console.log(res.data["count(1)"]);
             if (res.data["count(1)"] == 0) {
                 // console.log("不存在该业务方案 添加业务方案");
-
                 __insertSolution(GlobalData, solutionInfo, function(res2) {
                     if (res2.success == true) {
                         // console.log("添加业务方案成功");
@@ -415,6 +414,21 @@ function __insertSolution(GlobalData, solutionJson, cb) {
     });
 }
 
+function __deleteSolutionAll(GlobalData, cb) {
+    db.get("delete from SOLUTIONS where URL=?, user=?", [GlobalData.urlRoot, GlobalData.user], function(err) {
+        if (err) {
+            console.log(err.message);
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true,
+        });
+    });
+}
+
 /**
  * 更新某业务方案
  * 回调函数传回更新是否成功
@@ -447,7 +461,8 @@ function __updateSolution(GlobalData, solutionJson, cb) {
  * @return
  */
 function __selectSolutions(GlobalData, cb) {
-    console.log("正在获取该用户的所有业务方案 __selectSolution");``
+    console.log("正在获取该用户的所有业务方案 __selectSolution");
+    ``
     db.all("select * from SOLUTIONS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
             cb({

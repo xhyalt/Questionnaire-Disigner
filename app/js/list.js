@@ -25,50 +25,52 @@ var questionnairesBySolutionsRecid = null;
  * @return
  */
 function initTree() {
+    d = null;
+    dTreeItemNum = 0;
     /*处理树*/
     d = new dTree('d');
     /*设置根节点*/
     d.add(0, -1, '业务方案组');
-
-    /*获取用户基础数据*/
-    __getGlobalData(function(res0) {
-        /*获取所有业务方案 quesSqlite.js*/
-        quesSqlite.getSolutions(GlobalData, function(res) {
-            if (res.success == true) {
-                console.log("获取所有业务方案成功");
-                // console.log(JSON.stringify(res.data));
-                solutionsLength = res.data.length;
-                solutionsInfo = res.data;
-                __addSolutionTreeItem(function(res) {
-                    if (res.success == true) {
-                        console.log("添加业务方案树节点成功");
-                        document.getElementById('treeDemo').innerHTML = d;
-                        /*获取所有调查问卷 quesSqlite.js*/
-                        quesSqlite.getQuestionnaires(GlobalData, function(res2) {
-                            if (res2.success == true) {
-                                console.log("获取所有调查问卷成功");
-                                // console.log(JSON.stringify(res2.data));
-                                questionnairesLength = res2.data.length;
-                                questionnairesInfo = res2.data;
-                                __addQuestionnaireTreeItem(function(res) {
-                                    if (res.success == true) {
-                                        console.log("添加调查问卷树节点成功");
-                                        document.getElementById('treeDemo').innerHTML = d;
-                                        console.log("d = " + d);
-                                        d.s = (function(questionnairesInfo, questionnairesLength) {
-                                            return function(nodeId) {
-                                                //添加节点点击事件
-                                                var solutionRecidIndex = this.aNodes[nodeId].target;
-                                                var quesNum = 0;
-                                                console.log($(".listBody"));
-                                                console.log("长度" + $(".listBody").length);
-                                                if ($(".listBody").length && $(".listBody").length > 0)
-                                                    $(".listBody").remove();
-                                                for (var i = 0; i < questionnairesLength; i++) {
-                                                    if (questionnairesInfo[i].solutionRecid == solutionRecidIndex) {
-                                                        console.log(questionnairesInfo[i].title);
-                                                        /*在右边显示出点击的业务方案所包含的所有调查问卷*/
-                                                        $("#listHead").after(`
+    console.log("为啥不走这个函数捏");
+    /*获取所有业务方案 quesSqlite.js*/
+    quesSqlite.getSolutions(GlobalData, function(res) {
+        if (res.success == true) {
+            console.log("获取所有业务方案成功");
+            // console.log(JSON.stringify(res.data));
+            solutionsLength = res.data.length;
+            solutionsInfo = res.data;
+            /*添加业务方案的树结点*/
+            __addSolutionTreeItem(function(res) {
+                if (res.success == true) {
+                    console.log("添加业务方案树节点成功");
+                    document.getElementById('treeDemo').innerHTML = d;
+                    /*获取所有调查问卷 quesSqlite.js*/
+                    quesSqlite.getQuestionnaires(GlobalData, function(res2) {
+                        if (res2.success == true) {
+                            console.log("获取所有调查问卷成功");
+                            // console.log(JSON.stringify(res2.data));
+                            questionnairesLength = res2.data.length;
+                            questionnairesInfo = res2.data;
+                            /*添加调查问卷的树结点*/
+                            __addQuestionnaireTreeItem(function(res) {
+                                if (res.success == true) {
+                                    console.log("添加调查问卷树节点成功");
+                                    document.getElementById('treeDemo').innerHTML = d;
+                                    /*树节点业务方案的点击事件*/
+                                    d.s = (function(questionnairesInfo, questionnairesLength) {
+                                        return function(nodeId) {
+                                            //添加节点点击事件
+                                            var solutionRecidIndex = this.aNodes[nodeId].target;
+                                            var quesNum = 0;
+                                            console.log($(".listBody"));
+                                            console.log("长度" + $(".listBody").length);
+                                            if ($(".listBody").length && $(".listBody").length > 0)
+                                                $(".listBody").remove();
+                                            for (var i = 0; i < questionnairesLength; i++) {
+                                                if (questionnairesInfo[i].solutionRecid == solutionRecidIndex) {
+                                                    console.log(questionnairesInfo[i].title);
+                                                    /*在右边显示出点击的业务方案所包含的所有调查问卷*/
+                                                    $("#listHead").after(`
                                                           <tr class="listBody">
                                                               <td class="titleTd">${questionnairesInfo[i].title}</td>
                                                               <td class="codeTd">${questionnairesInfo[i].recid}</td>
@@ -80,26 +82,24 @@ function initTree() {
                                                                   <a href="javascript: ;">删除</a>
                                                               </td>
                                                           </tr>`);
-                                                    }
                                                 }
-                                            };
-                                        }(questionnairesInfo, questionnairesLength));
-                                    }
-                                });
-                            } else {
-                                console.log("获取所有调查问卷失败");
-                            }
-                        });
-                    } else {
-                        console.log("添加业务方案节点失败");
-                    }
-                });
-            } else {
-                console.log("获取所有业务方案失败");
-            }
-        });
+                                            }
+                                        };
+                                    }(questionnairesInfo, questionnairesLength));
+                                }
+                            });
+                        } else {
+                            console.log("获取所有调查问卷失败");
+                        }
+                    });
+                } else {
+                    console.log("添加业务方案节点失败");
+                }
+            });
+        } else {
+            console.log("获取所有业务方案失败");
+        }
     });
-    // document.write(d);
 }
 
 /**
@@ -108,61 +108,70 @@ function initTree() {
  * @return
  */
 function initQuestionnaire() {
+    d = null;
+    dTreeItemNum = 0;
     var solutionsLength = null;
     var questionnairesLength = null;
+    /*获取用户基础数据*/
+    __getGlobalData(function(res0) {
+        /*向服务器请求获取业务方案 restfulUtil.js*/
+        restfulUtil.getSolutions(GlobalData, function(res) {
+            // console.log(JSON.stringify(res.resJson.solutionInfo));
+            if (res.success == true) {
+                console.log("业务方案列表请求成功");
+                solutionsInfo = res.resJson.solutionInfo;
+                solutionsLength = __getJsonLength(res.resJson.solutionInfo);
+                console.log("业务方案的长度 " + solutionsLength);
+                for (var i = 0; i < solutionsLength; i++) {
+                    /*更新某业务方案 quesSqlite.js*/
+                    quesSqlite.initSolutions(GlobalData, solutionsInfo[i], (function(ii) {
+                        return function(res2) {
+                            /*处理业务方案*/
+                            if (res2.success == true) {
+                                console.log("业务方案列表写入数据库成功");
+                                /*向服务器请求获取调查问卷 restfulUtil.js*/
+                                restfulUtil.getQuestionnaires(GlobalData, solutionsInfo[ii].recid, function(res3) {
+                                    if (res3.success == true) {
+                                        console.log("调查问卷列表请求成功");
+                                        questionnairesInfo = res3.resJson.questionnairelist;
+                                        var questionnairesLength = __getJsonLength(questionnairesInfo);
+                                        // console.log("该方案包含的问卷个数为" + questionnairesLength);
+                                        for (var j = 0; j < questionnairesLength; j++) {
+                                            /*更新某业务方案的调查问卷 quesSqlite.js*/
+                                            quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[ii].recid, questionnairesInfo[j], (function(jj) {
+                                                return function(res4) {
+                                                    if (res4.success == true) {
+                                                        console.log("调查问卷列表写入数据库成功");
+                                                        // console.log("ii = " + ii + ", jj = " + jj);
+                                                        // console.log("solutionsLength = " + solutionsLength + ", questionnairesLength = " + questionnairesLength);
+                                                        // if (ii == solutionsLength - 1 && jj == questionnairesLength - 1) {
+                                                        // d = null;
+                                                        // dTreeItemNum = 0;
 
-    /*向服务器请求获取业务方案 restfulUtil.js*/
-    restfulUtil.getSolutions(GlobalData, function(res) {
-        console.log(JSON.stringify(res.resJson.solutionInfo));
-        if (res.success == true) {
-            console.log("业务方案列表请求成功");
-            solutionsInfo = res.resJson.solutionInfo;
-            solutionsLength = __getJsonLength(res.resJson.solutionInfo);
-            console.log("业务方案的长度 " + solutionsLength);
-            for (var i = 0; i < solutionsLength; i++) {
-                /*更新某业务方案 quesSqlite.js*/
-                quesSqlite.initSolutions(GlobalData, solutionsInfo[i], (function(index) {
-                    return function(res) {
-                        /*处理业务方案*/
-                        if (res.success == true) {
-                            console.log("业务方案列表写入数据库成功");
-                            /*向服务器请求获取调查问卷 restfulUtil.js*/
-                            restfulUtil.getQuestionnaires(GlobalData, solutionsInfo[index].recid, function(res2) {
-                                if (res2.success == true) {
-                                    console.log("调查问卷列表请求成功");
-                                    questionnairesInfo = res2.resJson.questionnairelist;
-                                    var questionnairesLength = __getJsonLength(questionnairesInfo);
-                                    // console.log("该方案包含的问卷个数为" + questionnairesLength);
-                                    for (var j = 0; j < questionnairesLength; j++) {
-                                        /*更新某业务方案的调查问卷 quesSqlite.js*/
-                                        quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[index].recid, questionnairesInfo[j], function(res3) {
-                                            if (res3.success == true) {
-                                                console.log("调查问卷列表写入数据库成功");
-                                                if (i == solutionsLength - 1 && j == questionnairesLength - 1) {
-                                                    d = null;
-                                                    dTreeItemNum = 0;
-                                                    initTree();
+                                                        initTree();
+                                                        // }
+                                                    } else {
+                                                        console.log("调查问卷列表写入数据库失败")
+                                                    }
                                                 }
-                                            } else {
-                                                console.log("调查问卷列表写入数据库失败")
-                                            }
-                                        });
+                                            })(j));
+                                        }
+                                    } else {
+                                        console.log("调查问卷列表请求失败");
                                     }
-                                } else {
-                                    console.log("调查问卷列表请求失败");
-                                }
-                            });
-                        } else {
-                            console.log("业务方案列表写入数据库失败");
+                                });
+                            } else {
+                                console.log("业务方案列表写入数据库失败");
+                            }
                         }
-                    }
-                })(i));
+                    })(i));
+                }
+
+            } else {
+                console.log("业务方案列表请求失败");
             }
 
-        } else {
-            console.log("业务方案列表请求失败");
-        }
-
+        });
     });
 }
 
@@ -215,7 +224,6 @@ function __addSolutionTreeItem(cb) {
  */
 function __addQuestionnaireTreeItem(cb) {
     console.log("正在添加调查问卷树节点");
-    console.log("miaolegemi" + JSON.stringify(questionnairesInfo));
     for (var i = 0; i < questionnairesLength; i++) {
         /*遍历业务方案找到父节点*/
         for (var j = 0; j < solutionsLength; j++) {
