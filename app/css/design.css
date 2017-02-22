@@ -35,9 +35,10 @@ table {
 /* start editing from here */
 
 body {
-    margin: 0;
+    margin: 0 auto;
     font-family: 微软雅黑;
     background-color: #f3f3f3;
+    overflow-y: scroll;
 }
 
 * {
@@ -55,14 +56,13 @@ body {
 #parent {
     width: 1200px;
     height: 100%;
-    /*background-color: #fff;*/
-    position: fixed;
     margin: auto;
     left: 0;
     right: 0;
 }
 
 #left {
+    position: fixed;
     width: 140px;
     /*border: 1px solid #ccc;*/
     font-size: 14px;
@@ -170,9 +170,10 @@ body {
 
 #middle {
     width: 800px;
-    height: auto;
+    height: 90%;;
     margin: 10px auto;
     float: left;
+    margin-left: 160px;
 }
 
 #titleBox {
@@ -226,17 +227,21 @@ body {
 /*中间空白部分*/
 
 #emptyBox {
-    height: 100px;
+    height: 250px;
     text-align: center;
-    line-height: 100px;
+    line-height: 250px;
     color: #888888;
     font-size: 20px;
-    /*background-color: #f0f;*/
+}
+
+/*中间部分*/
+#target{
+  background-color: #f3f3f3;
 }
 
 /*所有题型公有*/
 .subject{
-  width: 100%;
+  width: 800px;
   background-color: #fff;
   margin-top: 8px;
   margin-bottom: 8px;
@@ -249,7 +254,6 @@ body {
     position: absolute;
     /*height: 200px;*/
     width: 35px;
-    /*border-right: 1px solid #f3f3f3;*/
     padding: 16px;
     text-align: center;
 }
@@ -319,7 +323,7 @@ body {
     width: 100%;
     height: auto;
     background-color: #fff;
-    margin-top: 20px;
+    margin-top: 8px;
 }
 
 #tailUp {
@@ -345,11 +349,12 @@ body {
 /*问卷设计右侧按钮部分*/
 
 #right {
+    position:fixed;
     margin: 10px;
     width: 180px;
     height: 200px;
     float: left;
-    /*background-color: #fff;*/
+    margin-left: 970px;
 }
 
 .lightButton {
