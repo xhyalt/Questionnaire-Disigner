@@ -148,7 +148,7 @@ function initQuestionnaire() {
                                                         // d = null;
                                                         // dTreeItemNum = 0;
 
-                                                        initTree();
+                                                        // initTree();
                                                         // }
                                                     } else {
                                                         console.log("调查问卷列表写入数据库失败")
@@ -167,6 +167,7 @@ function initQuestionnaire() {
                     })(i));
                 }
 
+                initTree();
             } else {
                 console.log("业务方案列表请求失败");
             }
