@@ -8,8 +8,8 @@
     <link href="css/design.css" rel="stylesheet" type="text/css" media="all" />
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
-    <script src="./js/design.js">
-    </script>
+    <script src="./js/design.js"></script>
+    <script src="./js/xdrag.js"></script>
     <title>问卷设计</title>
 
     <script type="text/javascript">
@@ -21,51 +21,6 @@
                 'images/button_16_form_on.png', 'images/button_17_shortanswer_on.png',
                 'images/button_18_halvingline_on.png', 'images/button_19_formula_on.png'
             )
-        }
-
-        function MM_swapImgRestore() { //v3.0
-            var i, x, a = document.MM_sr;
-            for (i = 0; a && i < a.length && (x = a[i]) && x.oSrc; i++) x.src = x.oSrc;
-        }
-
-        function MM_preloadImages() { //v3.0
-            var d = document;
-            if (d.images) {
-                if (!d.MM_p) d.MM_p = new Array();
-                var i, j = d.MM_p.length,
-                    a = MM_preloadImages.arguments;
-                for (i = 0; i < a.length; i++)
-                    if (a[i].indexOf("#") != 0) {
-                        d.MM_p[j] = new Image;
-                        d.MM_p[j++].src = a[i];
-                    }
-            }
-        }
-
-        function MM_findObj(n, d) { //v4.01
-            var p, i, x;
-            if (!d) d = document;
-            if ((p = n.indexOf("?")) > 0 && parent.frames.length) {
-                d = parent.frames[n.substring(p + 1)].document;
-                n = n.substring(0, p);
-            }
-            if (!(x = d[n]) && d.all) x = d.all[n];
-            for (i = 0; !x && i < d.forms.length; i++) x = d.forms[i][n];
-            for (i = 0; !x && d.layers && i < d.layers.length; i++) x = MM_findObj(n, d.layers[i].document);
-            if (!x && d.getElementById) x = d.getElementById(n);
-            return x;
-        }
-
-        function MM_swapImage() { //v3.0
-            var i, j = 0,
-                x, a = MM_swapImage.arguments;
-            document.MM_sr = new Array;
-            for (i = 0; i < (a.length - 2); i += 3)
-                if ((x = MM_findObj(a[i])) != null) {
-                    document.MM_sr[j++] = x;
-                    if (!x.oSrc) x.oSrc = x.src;
-                    x.src = a[i + 2];
-                }
         }
     </script>
 </head>
@@ -258,7 +213,7 @@
                 <div class="menuItemBox" id="cytxItem">
                     <ul>
                         <li>
-                            <a draggable="true" class="subType" rel="popover" title="拖拽至中间" id="MenuItemRadio" href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Radio','','images/button_01_radio_on.png',1)">
+                            <a class="subType" id="MenuItemRadio" href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Radio','','images/button_01_radio_on.png',1)">
                                 <div id="imgRadio" class="imgSubjectBox">
                                     <img src="images/button_01_radio_off.png" id="Radio" />
                                 </div>
@@ -266,7 +221,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Multiple','','images/button_02_multiple_on.png',1)">
+                            <a class="subType" id="MenuItemMultiple" href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Multiple','','images/button_02_multiple_on.png',1)">
                                 <div class="imgSubjectBox">
                                     <img src="./images/button_02_multiple_off.png" id="Multiple">
                                 </div>
@@ -274,7 +229,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Completion','','images/button_04_completion_on.png',1)">
+                            <a class="subType" id="MenuItemCompletion" href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Completion','','images/button_04_completion_on.png',1)">
                                 <div class="imgSubjectBox">
                                     <img src="./images/button_04_completion_off.png" id="Completion">
                                 </div>
@@ -377,59 +332,12 @@
                     <tr>
                         <td class="blank">&nbsp;</td>
                         <td id="headDetail">
-                            <div id="headDetailID">欢迎参加本次答题</div>
+                            <div id="headDetailID" class="textBox">欢迎参加本次答题</div>
                         </td>
                     </tr>
                 </table>
             </div>
             <div id="target">
-                <!-- <div class="radioDiv subject">
-                    <div class="leftSetup">
-                        <h4>Q1</h4>
-                        <img id="up" src="./images/main_01_up_off.png" alt="" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('up','','./images/main_01_up_on.png',1)">
-                        <img id="down" src="./images/main_02_down_off.png" alt="">
-                        <img id="copy" src="./images/main_06_more_off.png" alt="">
-                        <img id="delete" src="./images/main_03_garbage_off.png" alt="">
-                    </div>
-                    <div class="radioSubject">
-                        <div class="radioStemText textBox" id="radioStemTextID">单选题</div>
-                        <ul class="radioItem">
-                            <li>
-                                <input type="radio" name="radio1" id="Num1" />
-                                <label class="textBox radioItemText">选项1</label>
-                            </li>
-                            <li>
-                                <input type="radio" name="radio1" id="Num2" />
-                                <label class="textBox radioItemText">选项2</label>
-                            </li>
-                        </ul>
-                        <img id="addItem" src="./images/main_04_add_off.png" alt="">
-                    </div>
-                </div>
-                <div class="radioDiv subject">
-                    <div class="leftSetup">
-                        <h4>Q1</h4>
-                        <img id="up" src="./images/main_01_up_off.png" alt="" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('up','','./images/main_01_up_on.png',1)">
-                        <img id="down" src="./images/main_02_down_off.png" alt="">
-                        <img id="copy" src="./images/main_06_more_off.png" alt="">
-                        <img id="delete" src="./images/main_03_garbage_off.png" alt="">
-                    </div>
-                    <div class="radioSubject">
-                        <div class="radioStemText textBox" id="radioStemTextID">单选题</div>
-                        <ul class="radioItem">
-                            <li>
-                                <input type="radio" name="radio1" id="Num1" />
-                                <label class="textBox radioItemText">选项1</label>
-                            </li>
-                            <li>
-                                <input type="radio" name="radio1" id="Num2" />
-                                <label class="textBox radioItemText">选项2</label>
-                            </li>
-                        </ul>
-                        <img id="addItem" src="./images/main_04_add_off.png" alt="">
-                    </div>
-                </div> -->
-
                 <div id="emptyBox">
                     可单击或拖拽左侧题型，以添加题目到此处区域
                 </div>
@@ -449,7 +357,7 @@
                 <a href="./list.html">返 回</a>
             </div>
             <div class="lightButton">
-                <a href="javascript: getQuestionnairesData();" target="_blank">预 览</a>
+                <a href="javascript: setOrder();" target="_blank">预 览</a>
             </div>
             <div class="darkButton">
                 <a href="#">保 存</a>

@@ -248,6 +248,11 @@ body {
   color: #666666;
 }
 
+.subject img {
+    margin-top: 5px;
+    visibility: hidden;
+}
+
 /*单选题*/
 
 .leftSetup {
@@ -260,10 +265,6 @@ body {
 
 .leftSetup h4 {
     margin-bottom: 10px;
-}
-
-.radioDiv img {
-    margin-top: 5px;
 }
 
 .radioSubject {
