@@ -57,7 +57,6 @@
                 btn: btnType.ok
             }
         };
-        var returnType = "";
         var itype = type ? type instanceof Object ? type : popType[type] || {} : {}; //格式化输入的参数:弹窗类型
         var config = $.extend(true, {
             //属性
@@ -106,7 +105,6 @@
 
             creatDom();
             bind();
-            return returnType;
         }
 
         function creatDom() {
@@ -155,6 +153,7 @@
                 config.onOk();
             $("#" + popId).remove();
             config.onClose(eventType.ok);
+            /*移除扩展参数传来的div参数*/
             options.remove();
         }
 
@@ -164,7 +163,6 @@
             config.onCancel();
             $("#" + popId).remove();
             config.onClose(eventType.cancel);
-            returnType = 0;
         }
 
         //关闭按钮事件
@@ -172,7 +170,6 @@
             $("#" + popId).remove();
             config.onClose(eventType.close);
             $(window).unbind("keydown");
-            returnType = 0;
         }
 
         //生成按钮组
