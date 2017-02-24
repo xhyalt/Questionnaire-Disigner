@@ -27,8 +27,23 @@ $(document).ready(function() {
     $(".menuItemBox").delegate(".subType", "click", function(md) {
         md.preventDefault();
 
-        $("#target").append(radioDiv);
+        $this = $(this);
+        var type;
+        if ($this.attr("id") === "MenuItemRadio") {
+            type = "radio";
+        } else if ($this.attr("id") === "MenuItemMultiple") {
+            type = "multiple";
+        } else if ($this.attr("id") === "MenuItemCompletion") {
+            type = "completion";
+        }
+
         $("#emptyBox").remove();
+        if (type == "radio") {
+            $("#target").append(radioDiv);
+        } else if (type == "multiple") {
+            $("#target").append(multipleDiv);
+        }
+
         setOrder();
 
         $("#target .subject").css({
@@ -69,7 +84,11 @@ $(document).ready(function() {
 
         var delayed = setTimeout(function() {
             console.log("var delayed = setTimeout");
-            $temp = $(`<div class="cloth"></div>`).append(radioDiv);
+            if (type == "radio") {
+                $temp = $(`<div class="cloth"></div>`).append(radioDiv);
+            } else if (type == "multiple") {
+                $temp = $(`<div class="cloth"></div>`).append(multipleDiv);
+            }
             $("body").append($temp);
 
             $temp.css({
@@ -213,7 +232,7 @@ function getSubjectNum() {
     return $td.length;
 }
 
-const emptyBox=`
+const emptyBox = `
 <div id="emptyBox">
     可单击或拖拽左侧题型，以添加题目到此处区域
 </div>`;
@@ -228,15 +247,15 @@ const radioDiv = `
         <img class="delete" src="./images/main_03_garbage_off.png" alt="">
     </div>
     <div class="radioMain">
-        <div class="radioStemText textBox" id="radioStemTextID">单选题</div>
+        <div class="radioStemText textBox stemText" id="radioStemTextID">单选题</div>
         <ul class="radioItem">
             <li>
                 <input type="radio" name="radio1" id="Num1" />
-                <label class="textBox radioItemText">选项1</label>
+                <label class="textBox radioItemText ItemText">选项1</label>
             </li>
             <li>
                 <input type="radio" name="radio1" id="Num2" />
-                <label class="textBox radioItemText">选项2</label>
+                <label class="textBox radioItemText ItemText">选项2</label>
             </li>
         </ul>
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
@@ -246,5 +265,36 @@ const radioDiv = `
 const radioItemLabel = `
 <li>
     <input type="radio" name="radio1" id="Num1" />
-    <label class="textBox radioItemText">选项</label>
+    <label class="textBox radioItemText ItemText">选项</label>
+</li>`;
+
+const multipleDiv = `
+<div class="multipleDiv subject">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_more_off.png" alt="">
+        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+    </div>
+    <div class="multipleMain">
+        <div class="multipleStemText textBox stemText" id="multipleStemTextID">多选题</div>
+        <ul class="multipleItem">
+            <li>
+                <input type="checkbox" name="radio1" id="Num1" />
+                <label class="textBox multipleItemText ItemText">选项1</label>
+            </li>
+            <li>
+                <input type="checkbox" name="radio1" id="Num2" />
+                <label class="textBox multipleItemText ItemText">选项2</label>
+            </li>
+        </ul>
+        <img class="addItem" src="./images/main_04_add_off.png" alt="">
+    </div>
+</div>`;
+
+const multipleItemLabel = `
+<li>
+    <input type="checkbox" name="radio1" id="Num1" />
+    <label class="textBox multipleItemText ItemText">选项</label>
 </li>`;

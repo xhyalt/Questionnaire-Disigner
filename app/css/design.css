@@ -253,8 +253,6 @@ body {
     visibility: hidden;
 }
 
-/*单选题*/
-
 .leftSetup {
     position: absolute;
     /*height: 200px;*/
@@ -266,6 +264,9 @@ body {
 .leftSetup h4 {
     margin-bottom: 10px;
 }
+
+
+/*单选题*/
 
 .radioMain {
     margin-left: 65px;
@@ -292,9 +293,9 @@ body {
 }
 
 
-/*单选题干编辑框*/
+/*题干编辑框*/
 
-.radioStemTextInput {
+.StemTextInput {
     background-color: #b4fbef;
     width: 650px;
     line-height: 1.8;
@@ -307,7 +308,7 @@ body {
 
 /*单选题选项编辑框*/
 
-.radioItemTextInput {
+.ItemTextInput {
     background-color: #b4fbef;
     width: 620px;
     line-height: 1.8;
@@ -317,6 +318,31 @@ body {
     outline: none;
 }
 
+/*多选题*/
+
+.multipleMain {
+    margin-left: 65px;
+    border-left: 1px solid #f3f3f3;
+    padding: 10px;
+    min-height: 160px;
+}
+
+.multipleStemText {
+    width: 650px;
+    line-height: 2;
+}
+
+.multipleItem li {
+    width: 650px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.multipleItem label {
+    line-height: 2;
+    margin-top: 5px;
+    font-size: 14px;
+}
 
 /*主要部分的尾部分*/
 

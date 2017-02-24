@@ -116,9 +116,16 @@ $(function() {
     /*复制题目按钮点击事件*/
     $("#target").on("click", ".copy", function() {
         /*复制题目*/
+        $tdP = $(this).parent().parent();
+        var type = getType($tdP);
+
         console.log("进入复制题目");
         $tdP = $(this).parent().parent();
-        $tdP.after(`<div class="radioDiv subject">` + $tdP.html() + `</div>`);
+        if (type == "radio") {
+            $tdP.after(`<div class="radioDiv subject">` + $tdP.html() + `</div>`);
+        } else if (type == "multiple") {
+            $tdP.after(`<div class="multipleDiv subject">` + $tdP.html() + `</div>`);
+        }
         setOrder();
     });
 
@@ -131,9 +138,13 @@ $(function() {
 
     /*添加选项按钮点击事件*/
     $("#target").on("click", ".addItem", function() {
-        console.log("开始添加选项");
         $tdP = $(this).parent().parent();
-        $tdP.find(".radioItem").append(radioItemLabel);
+        var type = getType($tdP);
+        if(type=="radio"){
+        $tdP.find(".radioItem").append(radioItemLabel);}
+        else if(type=="multiple"){
+          $tdP.find(".multipleItem").append(multipleItemLabel);
+        }
     });
 
     /*题头详述 点击编辑*/
@@ -169,11 +180,15 @@ $(function() {
         });
     });
 
-    /*单选题题干 点击编辑*/
-    $("#target").on("click", ".radioStemText", function() {
+    /*所有题干 点击编辑*/
+    $("#target").on("click", ".stemText", function() {
+
         var td = $(this);
+        var type = getType(td);
+        /*确定题目种类*/
+
         var txt = td.text();
-        var input = $(`<input class='radioStemTextInput' type='text' value='` + txt + `'/>`);
+        var input = $(`<input class='StemTextInput' type='text' value='` + txt + `'/>`);
         td.html(input);
         input.select();
         input.click(function() {
@@ -189,7 +204,11 @@ $(function() {
         input.blur(function() {
             var newtxt = $(this).val();
             if (newtxt == "") {
-                td.html("单选题");
+                if (type == "radio") {
+                    td.html("单选题");
+                } else if (type == "multiple") {
+                    td.html("多选题");
+                }
             } else if (newtxt != txt) {
                 /*数据库操作*/
                 td.html(newtxt);
@@ -199,12 +218,11 @@ $(function() {
         });
     });
 
-
-    /*单选题选项 点击编辑*/
-    $("#target").on("click", ".radioItemText", function() {
+    /*所以题目选项 点击编辑*/
+    $("#target").on("click", ".ItemText", function() {
         var td = $(this);
         var txt = td.text();
-        var input = $(`<input class='radioItemTextInput' type='text' value='` + txt + `'/>`);
+        var input = $(`<input class='ItemTextInput' type='text' value='` + txt + `'/>`);
         td.html(input);
         input.select();
         input.click(function() {
@@ -231,20 +249,6 @@ $(function() {
     });
 });
 
-function getSubjectNum() {
-    var oDiv = document.getElementsByClassName("subject");
-    console.log(oDiv.length);
-    for (var i = 0; i < oDiv.length; i++) {
-        (function(i) {
-            oDiv[i].attr('id', 'subject_' + i);
-            oDiv[i]
-            // oDiv[i].onclick = function() {
-            //     alert(i);
-            // }
-        })(i)
-    }
-}
-
 /**
  * 与主进程通信获取用户基础数据GlobalData
  * @private
@@ -266,6 +270,21 @@ function __getGlobalData(cb) {
             data: err.message
         });
     }
+}
+
+/**
+ * 获取题目类型
+ * @param  td [div]
+ * @return [题目类型]
+ */
+function getType(td) {
+    var type;
+    if (td.attr("class").indexOf("radio") >= 0) {
+        type = "radio";
+    } else if (td.attr("class").indexOf("multiple") >= 0) {
+        type = "multiple";
+    }
+    return type;
 }
 
 function MM_swapImgRestore() {
