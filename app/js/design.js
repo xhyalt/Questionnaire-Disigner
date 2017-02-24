@@ -78,7 +78,7 @@ $(function() {
     /*上移题目按钮点击事件*/
     $("#target").on("click", ".up", function() {
         $tdP = $(this).parent().parent();
-        $preTdP=$tdP.prev();
+        $preTdP = $tdP.prev();
         if ($tdP.attr("num") == 1) {
             console.log("已经是第一个题目，无法再向上移动");
         } else {
@@ -89,7 +89,7 @@ $(function() {
             $tdP.append($preTempSubject);
             $preTdP.empty();
             $preTdP.append($tempSubject);
-            __setOrder();
+            setOrder();
         }
     });
 
@@ -97,9 +97,9 @@ $(function() {
     $("#target").on("click", ".down", function() {
         console.log("执行down点击事件");
         $tdP = $(this).parent().parent();
-        $nextTdP=$tdP.next();
+        $nextTdP = $tdP.next();
         console.log($tdP.attr("num"));
-        if ($tdP.attr("num") == __getSubjectNum()) {
+        if ($tdP.attr("num") == getSubjectNum()) {
             console.log("已经是最后一个题目，无法再向下移动");
         } else {
             /*非第一题，向上移动*/
@@ -109,21 +109,31 @@ $(function() {
             $tdP.append($nextTempSubject);
             $nextTdP.empty();
             $nextTdP.append($tempSubject);
-            __setOrder();
+            setOrder();
         }
     });
 
     /*复制题目按钮点击事件*/
-    $("#target").on("click", ".copy", function(){
+    $("#target").on("click", ".copy", function() {
         /*复制题目*/
+        console.log("进入复制题目");
+        $tdP = $(this).parent().parent();
+        $tdP.after(`<div class="radioDiv subject">` + $tdP.html() + `</div>`);
+        setOrder();
     });
 
     /*删除题目按钮点击事件*/
-    $("#target").on("click", ".delete", function(){
+    $("#target").on("click", ".delete", function() {
         $tdP = $(this).parent().parent();
+        /*弹出提示框*/
         window.wxc.xcConfirm("是否确认删除", window.wxc.xcConfirm.typeEnum.confirm, $tdP);
+    });
 
-        
+    /*添加选项按钮点击事件*/
+    $("#target").on("click", ".addItem", function() {
+        console.log("开始添加选项");
+        $tdP = $(this).parent().parent();
+        $tdP.find(".radioItem").append(radioItemLabel);
     });
 
     /*题头详述 点击编辑*/

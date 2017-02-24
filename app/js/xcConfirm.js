@@ -155,6 +155,10 @@
             config.onClose(eventType.ok);
             /*移除扩展参数传来的div参数*/
             options.remove();
+            setOrder();
+            if (!getSubjectNum()) {
+                $("#target").append(emptyBox);
+            }
         }
 
         //取消按钮事件

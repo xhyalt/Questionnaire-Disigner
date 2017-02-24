@@ -29,7 +29,7 @@ $(document).ready(function() {
 
         $("#target").append(radioDiv);
         $("#emptyBox").remove();
-        __setOrder();
+        setOrder();
 
         $("#target .subject").css({
             "border-top": "none",
@@ -155,10 +155,10 @@ $(document).ready(function() {
 
                     if (tops.length > 0) {
                         $($temp.html()).insertBefore(tops[0]);
-                        __setOrder();
+                        setOrder();
                     } else {
                         $("#target").append($temp.html());
-                        __setOrder();
+                        setOrder();
                         $("#emptyBox").remove();
                     }
                 } else {
@@ -196,7 +196,7 @@ $(document).ready(function() {
 /**
  * 每次修改target时重置题目的题号
  */
-function __setOrder() {
+function setOrder() {
     var index = 1;
     $td = $("#target h4");
     for (var i = 0; i < $td.length; i++) {
@@ -208,10 +208,15 @@ function __setOrder() {
     });
 }
 
-function __getSubjectNum() {
+function getSubjectNum() {
     $td = $("#target h4");
     return $td.length;
 }
+
+const emptyBox=`
+<div id="emptyBox">
+    可单击或拖拽左侧题型，以添加题目到此处区域
+</div>`;
 
 const radioDiv = `
 <div class="radioDiv subject">
@@ -222,7 +227,7 @@ const radioDiv = `
         <img class="copy" src="./images/main_06_more_off.png" alt="">
         <img class="delete" src="./images/main_03_garbage_off.png" alt="">
     </div>
-    <div class="radioSubject">
+    <div class="radioMain">
         <div class="radioStemText textBox" id="radioStemTextID">单选题</div>
         <ul class="radioItem">
             <li>
@@ -237,3 +242,9 @@ const radioDiv = `
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
     </div>
 </div>`;
+
+const radioItemLabel = `
+<li>
+    <input type="radio" name="radio1" id="Num1" />
+    <label class="textBox radioItemText">选项</label>
+</li>`;
