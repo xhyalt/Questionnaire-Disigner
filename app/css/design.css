@@ -170,7 +170,8 @@ body {
 
 #middle {
     width: 800px;
-    height: 90%;;
+    height: 90%;
+    ;
     margin: 10px auto;
     float: left;
     margin-left: 160px;
@@ -234,18 +235,22 @@ body {
     font-size: 20px;
 }
 
+
 /*中间部分*/
-#target{
-  background-color: #f3f3f3;
+
+#target {
+    background-color: #f3f3f3;
 }
 
+
 /*所有题型公有*/
-.subject{
-  width: 800px;
-  background-color: #fff;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  color: #666666;
+
+.subject {
+    width: 800px;
+    background-color: #fff;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    color: #666666;
 }
 
 .subject img {
@@ -265,6 +270,19 @@ body {
     margin-bottom: 10px;
 }
 
+.stemText {
+    width: 650px;
+    line-height: 2;
+}
+
+.descriptionText {
+    width: 650px;
+    line-height: 2;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 
 /*单选题*/
 
@@ -273,11 +291,6 @@ body {
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     min-height: 160px;
-}
-
-.radioStemText {
-    width: 650px;
-    line-height: 2;
 }
 
 .radioItem li {
@@ -295,7 +308,7 @@ body {
 
 /*题干编辑框*/
 
-.StemTextInput {
+.stemTextInput {
     background-color: #b4fbef;
     width: 650px;
     line-height: 1.8;
@@ -306,9 +319,9 @@ body {
 }
 
 
-/*单选题选项编辑框*/
+/*题目描述编辑框*/
 
-.ItemTextInput {
+.descriptionTextInput {
     background-color: #b4fbef;
     width: 620px;
     line-height: 1.8;
@@ -318,6 +331,20 @@ body {
     outline: none;
 }
 
+
+/*选项编辑框*/
+
+.itemTextInput {
+    background-color: #b4fbef;
+    width: 620px;
+    line-height: 1.8;
+    font-size: 14px;
+    color: #666666;
+    border: none;
+    outline: none;
+}
+
+
 /*多选题*/
 
 .multipleMain {
@@ -325,11 +352,6 @@ body {
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     min-height: 160px;
-}
-
-.multipleStemText {
-    width: 650px;
-    line-height: 2;
 }
 
 .multipleItem li {
@@ -343,6 +365,7 @@ body {
     margin-top: 5px;
     font-size: 14px;
 }
+
 
 /*主要部分的尾部分*/
 
@@ -376,7 +399,7 @@ body {
 /*问卷设计右侧按钮部分*/
 
 #right {
-    position:fixed;
+    position: fixed;
     margin: 10px;
     width: 180px;
     height: 200px;

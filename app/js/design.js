@@ -133,41 +133,31 @@ $(function() {
     $("#target").on("click", ".delete", function() {
         $tdP = $(this).parent().parent();
         /*弹出提示框*/
-        window.wxc.xcConfirm("是否确认删除", window.wxc.xcConfirm.typeEnum.confirm, $tdP);
+        window.wxc.xcConfirm("确认删除该题目？", window.wxc.xcConfirm.typeEnum.confirm, $tdP);
     });
 
     /*添加选项按钮点击事件*/
     $("#target").on("click", ".addItem", function() {
         $tdP = $(this).parent().parent();
         var type = getType($tdP);
-        if(type=="radio"){
-        $tdP.find(".radioItem").append(radioItemLabel);}
-        else if(type=="multiple"){
-          $tdP.find(".multipleItem").append(multipleItemLabel);
+        if (type == "radio") {
+            $tdP.find(".radioItem").append(radioItemLabel);
+        } else if (type == "multiple") {
+            $tdP.find(".multipleItem").append(multipleItemLabel);
         }
     });
 
     /*题头详述 点击编辑*/
     $("#titleBox").on("click", "#headDetailID", function() {
         var td = $(this);
-        var txt = td.text();
-        var input = $(`<input id='detailTextInput' type='text' value='` + txt + `'/>`);
+        var txt = td.html();
+        var input = $(`<div id="detailTextInput" contenteditable="true">` + txt + `</div>`);
         td.html(input);
-        input.select();
-        input.click(function() {
-            $(this).select();
-            return false;
-        });
-        /*回车自动保存*/
-        input.keydown(function() {
-            if (event.keyCode == "13") {
-                input.blur();
-            }
-        });
+
         input.trigger("focus");
         /*文本框失去焦点后提交内容 重新变为文本*/
         input.blur(function() {
-            var newtxt = $(this).val();
+            var newtxt = $("#detailTextInput").html();
             /*判断文本有没有修改*/
             if (newtxt == "") {
                 td.html("欢迎参加本次答题");
@@ -188,7 +178,7 @@ $(function() {
         /*确定题目种类*/
 
         var txt = td.text();
-        var input = $(`<input class='StemTextInput' type='text' value='` + txt + `'/>`);
+        var input = $(`<input class='stemTextInput' type='text' value='` + txt + `'/>`);
         td.html(input);
         input.select();
         input.click(function() {
@@ -218,11 +208,49 @@ $(function() {
         });
     });
 
+    /*所有题目描述 点击编辑*/
+    $("#target").on("click", ".descriptionText", function() {
+
+        var td = $(this);
+        var type = getType(td);
+        /*确定题目种类*/
+
+        var txt = td.text();
+        var input = $(`<input class='descriptionTextInput' type='text' value='` + txt + `'/>`);
+        td.html(input);
+        input.select();
+        input.click(function() {
+            $(this).select();
+            return false;
+        });
+        input.keydown(function() {
+            if (event.keyCode == "13") {
+                input.blur();
+            }
+        });
+        input.trigger("focus");
+        input.blur(function() {
+            var newtxt = $(this).val();
+            if (newtxt == "") {
+                if (type == "radio") {
+                    td.html("单选题描述");
+                } else if (type == "multiple") {
+                    td.html("多选题描述");
+                }
+            } else if (newtxt != txt) {
+                /*数据库操作*/
+                td.html(newtxt);
+            } else {
+                td.html(newtxt);
+            }
+        });
+    });
+
     /*所以题目选项 点击编辑*/
     $("#target").on("click", ".ItemText", function() {
         var td = $(this);
         var txt = td.text();
-        var input = $(`<input class='ItemTextInput' type='text' value='` + txt + `'/>`);
+        var input = $(`<input class='itemTextInput' type='text' value='` + txt + `'/>`);
         td.html(input);
         input.select();
         input.click(function() {
@@ -298,11 +326,12 @@ function MM_preloadImages() {
         if (!d.MM_p) d.MM_p = new Array();
         var i, j = d.MM_p.length,
             a = MM_preloadImages.arguments;
-        for (i = 0; i < a.length; i++)
+        for (i = 0; i < a.length; i++) {
             if (a[i].indexOf("#") != 0) {
                 d.MM_p[j] = new Image;
                 d.MM_p[j++].src = a[i];
             }
+        }
     }
 }
 

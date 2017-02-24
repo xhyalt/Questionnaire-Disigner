@@ -248,6 +248,7 @@ const radioDiv = `
     </div>
     <div class="radioMain">
         <div class="radioStemText textBox stemText" id="radioStemTextID">单选题</div>
+        <div class="radioDescriptionText textBox descriptionText">单选题描述</div>
         <ul class="radioItem">
             <li>
                 <input type="radio" name="radio1" id="Num1" />
@@ -279,6 +280,7 @@ const multipleDiv = `
     </div>
     <div class="multipleMain">
         <div class="multipleStemText textBox stemText" id="multipleStemTextID">多选题</div>
+        <div class="multipleDescriptionText textBox descriptionText">多选题描述</div>
         <ul class="multipleItem">
             <li>
                 <input type="checkbox" name="radio1" id="Num1" />
