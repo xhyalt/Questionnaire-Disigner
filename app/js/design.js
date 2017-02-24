@@ -26,7 +26,7 @@ $(function() {
         td.css("background-color", "#fff");
     });
 
-    /*题目中的小图 鼠标移入显示移出隐藏*/
+    /*题目中的小图 鼠标移入题目显示移出隐藏*/
     $("#target").on("mouseover", ".subject", function() {
         var td = $(this);
         $(this).find("img").css({
@@ -38,16 +38,92 @@ $(function() {
             "visibility": "hidden"
         });
     });
+    /*题目中的小图 鼠标移入小图显示高亮图*/
+    $("#target").on("mouseover", ".up", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_01_up_on.png");
+    }).on("mouseout", ".up", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_01_up_off.png");
+    });
+    $("#target").on("mouseover", ".down", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_02_down_on.png");
+    }).on("mouseout", ".down", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_02_down_off.png");
+    });
+    $("#target").on("mouseover", ".copy", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_06_more_on.png");
+    }).on("mouseout", ".copy", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_06_more_off.png");
+    });
+    $("#target").on("mouseover", ".delete", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_03_garbage_on.png");
+    }).on("mouseout", ".delete", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_03_garbage_off.png");
+    });
+    $("#target").on("mouseover", ".addItem", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_04_add_on.png");
+    }).on("mouseout", ".addItem", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_04_add_off.png");
+    });
 
-    // $(".subject").on("mouseover", "#up", function(){
-    //     console.log("识别出替换的img");
-    //     MM_swapImage('up','','./images/main_01_up_on.png',1)
-    // }).on("mouseout", "#up", function(){
-    //     MM_swapImgRestore();
-    // });
+    /*上移题目按钮点击事件*/
+    $("#target").on("click", ".up", function() {
+        $tdP = $(this).parent().parent();
+        $preTdP=$tdP.prev();
+        if ($tdP.attr("num") == 1) {
+            console.log("已经是第一个题目，无法再向上移动");
+        } else {
+            /*非第一题，向上移动*/
+            $preTempSubject = $preTdP.html();
+            $tempSubject = $tdP.html();
+            $tdP.empty();
+            $tdP.append($preTempSubject);
+            $preTdP.empty();
+            $preTdP.append($tempSubject);
+            __setOrder();
+        }
+    });
 
-    $("#target").on("click", "#up", function() {
-        console.log("执行up点击事件");
+    /*下移题目按钮点击事件*/
+    $("#target").on("click", ".down", function() {
+        console.log("执行down点击事件");
+        $tdP = $(this).parent().parent();
+        $nextTdP=$tdP.next();
+        console.log($tdP.attr("num"));
+        if ($tdP.attr("num") == __getSubjectNum()) {
+            console.log("已经是最后一个题目，无法再向下移动");
+        } else {
+            /*非第一题，向上移动*/
+            $nextTempSubject = $nextTdP.html();
+            $tempSubject = $tdP.html();
+            $tdP.empty();
+            $tdP.append($nextTempSubject);
+            $nextTdP.empty();
+            $nextTdP.append($tempSubject);
+            __setOrder();
+        }
+    });
+
+    /*复制题目按钮点击事件*/
+    $("#target").on("click", ".copy", function(){
+        /*复制题目*/
+    });
+
+    /*删除题目按钮点击事件*/
+    $("#target").on("click", ".delete", function(){
+        $tdP = $(this).parent().parent();
+        window.wxc.xcConfirm("是否确认删除", window.wxc.xcConfirm.typeEnum.confirm, $tdP);
+
+        
     });
 
     /*题头详述 点击编辑*/

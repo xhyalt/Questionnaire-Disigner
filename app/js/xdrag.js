@@ -35,7 +35,7 @@ $(document).ready(function() {
             "border-top": "none",
             "border-bottom": "none"
         });
-        
+
         tops = [];
         $(document).undelegate("body", "mousemove");
         $("body").undelegate(".subject", "mouseup");
@@ -202,6 +202,10 @@ function __setOrder() {
     for (var i = 0; i < $td.length; i++) {
         $td[i].innerHTML = "Q" + (index++).toString();
     }
+    index = 1;
+    $('.subject').each(function(i) {
+        $(this).attr("num", index++);
+    });
 }
 
 function __getSubjectNum() {
@@ -213,10 +217,10 @@ const radioDiv = `
 <div class="radioDiv subject">
     <div class="leftSetup">
         <h4>Q</h4>
-        <img id="up" src="./images/main_01_up_off.png" alt="">
-        <img id="down" src="./images/main_02_down_off.png" alt="">
-        <img id="copy" src="./images/main_06_more_off.png" alt="">
-        <img id="delete" src="./images/main_03_garbage_off.png" alt="">
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_more_off.png" alt="">
+        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
     </div>
     <div class="radioSubject">
         <div class="radioStemText textBox" id="radioStemTextID">单选题</div>
@@ -230,6 +234,6 @@ const radioDiv = `
                 <label class="textBox radioItemText">选项2</label>
             </li>
         </ul>
-        <img id="addItem" src="./images/main_04_add_off.png" alt="">
+        <img class="addItem" src="./images/main_04_add_off.png" alt="">
     </div>
 </div>`;
