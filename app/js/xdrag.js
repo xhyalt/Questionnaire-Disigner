@@ -28,16 +28,7 @@ $(document).ready(function() {
         md.preventDefault();
 
         $this = $(this);
-        var type;
-        if ($this.attr("id") === "MenuItemRadio") {
-            type = "radio";
-        } else if ($this.attr("id") === "MenuItemMultiple") {
-            type = "multiple";
-        } else if ($this.attr("id") === "MenuItemCompletion") {
-            type = "completion";
-        } else if ($this.attr("id") === "MenuItemMultitermCompletion") {
-            type = "multitermCompletion";
-        }
+        var type = getSubjectType($this);
 
         $("#emptyBox").remove();
         if (type == "radio") {
@@ -48,6 +39,8 @@ $(document).ready(function() {
             $("#target").append(completionDiv);
         } else if (type == "multitermCompletion") {
             $("#target").append(multitermCompletionDiv);
+        } else if (type == "shortAnswer") {
+            $("#target").append(shortAnswerDiv);
         }
 
         setOrder();
@@ -78,17 +71,7 @@ $(document).ready(function() {
             main: 0,
             form: 120
         };
-        var type;
-
-        if ($this.attr("id") === "MenuItemRadio") {
-            type = "radio";
-        } else if ($this.attr("id") === "MenuItemMultiple") {
-            type = "multiple";
-        } else if ($this.attr("id") === "MenuItemCompletion") {
-            type = "completion";
-        } else if ($this.attr("id") === "MenuItemMultitermCompletion") {
-            type = "multitermCompletion";
-        }
+        var type = getSubjectType($this);
 
         var delayed = setTimeout(function() {
             console.log("var delayed = setTimeout");
@@ -100,6 +83,8 @@ $(document).ready(function() {
                 $temp = $(`<div class="cloth"></div>`).append(completionDiv);
             } else if (type == "multitermCompletion") {
                 $temp = $(`<div class="cloth"></div>`).append(multitermCompletionDiv);
+            } else if (type == "shortAnswer") {
+                $temp = $(`<div class="cloth"></div>`).append(shortAnswerDiv);
             }
 
             $("body").append($temp);
@@ -245,6 +230,27 @@ function getSubjectNum() {
     return $td.length;
 }
 
+/**
+ * 拖拽或点击时 获取题目类型
+ * @param  $this [当前拖拽的题型html题型]
+ * @return type  [判断出该html段的题型]
+ */
+function getSubjectType($this) {
+    var type;
+    if ($this.attr("id") === "MenuItemRadio") {
+        type = "radio";
+    } else if ($this.attr("id") === "MenuItemMultiple") {
+        type = "multiple";
+    } else if ($this.attr("id") === "MenuItemCompletion") {
+        type = "completion";
+    } else if ($this.attr("id") === "MenuItemMultitermCompletion") {
+        type = "multitermCompletion";
+    } else if ($this.attr("id") === "MenuItemShortAnswer") {
+        type = "shortAnswer";
+    }
+    return type;
+}
+
 const emptyBox = `
 <div id="emptyBox">
     可单击或拖拽左侧题型，以添加题目到此处区域
@@ -365,3 +371,23 @@ const multitermCompletionItemLabel = `
   <label class="textBox multitermCompletionItemText ItemText">选项</label>
   <input type="text" name="multitermCompletion1" id="Num1" />
 </li>`;
+
+const shortAnswerDiv = `
+<div class="shortAnswerDiv subject">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_more_off.png" alt="">
+        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+    </div>
+    <div class="shortAnswerMain">
+        <div class="shortAnswerStemText textBox stemText" id="shortAnswerStemTextID">简答题</div>
+        <div class="shortAnswerDescriptionText textBox descriptionText">简答题描述</div>
+        <ul class="shortAnswerItem">
+            <li>
+                <textarea name="shortAnswer1" id="Num1" ></textarea>
+            </li>
+        </ul>
+    </div>
+</div>`;

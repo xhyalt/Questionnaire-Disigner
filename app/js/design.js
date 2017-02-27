@@ -128,6 +128,8 @@ $(function() {
             $tdP.after(`<div class="completionDiv subject">` + $tdP.html() + `</div>`);
         } else if(type=="multitermCompletion"){
           $tdP.after(`<div class="multitermCompletionDiv subject">` + $tdP.html() + `</div>`);
+        } else if(type=="shortAnswer"){
+          $tdP.after(`<div class="shortAnswerDiv subject">` + $tdP.html() + `</div>`);
         }
         setOrder();
     });
@@ -386,6 +388,8 @@ function getType(td) {
         type = "multitermCompletion";
     } else if (td.attr("class").indexOf("completion") >= 0) {
         type = "completion";
+    } else if (td.attr("class").indexOf("shortAnswer") >= 0) {
+        type = "shortAnswer";
     }
     return type;
 }
