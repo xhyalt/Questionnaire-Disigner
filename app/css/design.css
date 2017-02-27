@@ -184,11 +184,17 @@ body {
 }
 
 #titleName {
-    text-align: center;
-    padding: 15px;
+    padding: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
     font-size: 18px;
     color: #666666;
     border-bottom: #f3f3f3 1px solid;
+}
+
+#titleNameTextID {
+    text-align: center;
+    line-height: 2;
 }
 
 #headTable td {
@@ -207,17 +213,43 @@ body {
     width: 650px;
 }
 
-#headDetailID {
+#headDetailTextID {
     line-height: 2;
+}
+
+
+/*问卷头编辑框*/
+
+#titleNameTextInput {
+    background-color: #b4fbef;
+    width: 700px;
+    line-height: 2;
+    font-size: 18px;
+    color: #666666;
+    border: none;
+    outline: none;
 }
 
 
 /*题头详述编辑框*/
 
-#detailTextInput {
+#headDetailTextInput {
     background-color: #b4fbef;
     width: 650px;
-    line-height: 1.8;
+    line-height: 2;
+    font-size: 16px;
+    color: #666666;
+    border: none;
+    outline: none;
+}
+
+
+/*题尾详述编辑框*/
+
+#tailDetailTextInput {
+    background-color: #b4fbef;
+    width: 700px;
+    line-height: 2;
     font-size: 16px;
     color: #666666;
     border: none;
@@ -382,17 +414,26 @@ body {
     border-bottom: #f3f3f3 1px solid;
 }
 
-.tailPage {
-    width: 680px;
+#tailPage {
+    width: 700px;
     text-align: right;
     font-size: 14px;
+    margin-left: 65px;
+    border-left: 1px solid #f3f3f3;
+    padding: 10px;
 }
 
 #tailDetail {
     border-top: #f3f3f3 1px solid;
-    padding: 20px;
     text-align: center;
     color: #666666;
+    padding: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+#tailDetailTextID {
+    line-height: 2;
 }
 
 

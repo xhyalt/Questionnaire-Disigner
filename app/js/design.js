@@ -147,20 +147,82 @@ $(function() {
         }
     });
 
-    /*题头详述 点击编辑*/
-    $("#titleBox").on("click", "#headDetailID", function() {
+    /*标题 点击编辑*/
+    $("#titleBox").on("click", "#titleNameTextID", function() {
         var td = $(this);
         var txt = td.html();
-        var input = $(`<div id="detailTextInput" contenteditable="true">` + txt + `</div>`);
+        var input = $(`<div id="titleNameTextInput" contenteditable="true">` + txt + `</div>`);
         td.html(input);
+
+        input.click(function() {
+            /*防止二次嵌套临时idv*/
+            return false;
+        });
 
         input.trigger("focus");
         /*文本框失去焦点后提交内容 重新变为文本*/
         input.blur(function() {
-            var newtxt = $("#detailTextInput").html();
+            var newtxt = $("#titleNameTextInput").html();
+            /*判断文本有没有修改*/
+            if (newtxt == "") {
+                /*文本为空*/
+                td.html("空问卷");
+            } else if (newtxt == txt) {
+                /*文本与原来相同*/
+                td.html(newtxt);
+            } else {
+                /*文本与原来不同*/
+                /*数据库操作*/
+                td.html(newtxt);
+            }
+        });
+    });
+
+    /*题头详述 点击编辑*/
+    $("#titleBox").on("click", "#headDetailTextID", function() {
+        var td = $(this);
+        var txt = td.html();
+        var input = $(`<div id="headDetailTextInput" contenteditable="true">` + txt + `</div>`);
+        td.html(input);
+
+        input.click(function() {
+            return false;
+        });
+
+        input.trigger("focus");
+        /*文本框失去焦点后提交内容 重新变为文本*/
+        input.blur(function() {
+            var newtxt = $("#headDetailTextInput").html();
             /*判断文本有没有修改*/
             if (newtxt == "") {
                 td.html("欢迎参加本次答题");
+            } else if (newtxt != txt) {
+                /*数据库操作*/
+                td.html(newtxt);
+            } else {
+                td.html(newtxt);
+            }
+        });
+    });
+
+    /*题尾详述 点击编辑*/
+    $("#tailBox").on("click", "#tailDetailTextID", function() {
+        var td = $(this);
+        var txt = td.html();
+        var input = $(`<div id="tailDetailTextInput" contenteditable="true">` + txt + `</div>`);
+        td.html(input);
+
+        input.click(function() {
+            return false;
+        });
+
+        input.trigger("focus");
+        /*文本框失去焦点后提交内容 重新变为文本*/
+        input.blur(function() {
+            var newtxt = $("#tailDetailTextInput").html();
+            /*判断文本有没有修改*/
+            if (newtxt == "") {
+                td.html("您已完成本次问卷，感谢您的帮助与支持");
             } else if (newtxt != txt) {
                 /*数据库操作*/
                 td.html(newtxt);
