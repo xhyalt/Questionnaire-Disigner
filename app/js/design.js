@@ -120,11 +120,12 @@ $(function() {
         var type = getType($tdP);
 
         console.log("进入复制题目");
-        $tdP = $(this).parent().parent();
         if (type == "radio") {
             $tdP.after(`<div class="radioDiv subject">` + $tdP.html() + `</div>`);
         } else if (type == "multiple") {
             $tdP.after(`<div class="multipleDiv subject">` + $tdP.html() + `</div>`);
+        } else if (type == "completion") {
+            $tdP.after(`<div class="completionDiv subject">` + $tdP.html() + `</div>`);
         }
         setOrder();
     });
@@ -260,6 +261,8 @@ $(function() {
                     td.html("单选题");
                 } else if (type == "multiple") {
                     td.html("多选题");
+                } else if (type == "completion") {
+                    td.html("填空题");
                 }
             } else if (newtxt != txt) {
                 /*数据库操作*/
@@ -298,6 +301,8 @@ $(function() {
                     td.html("单选题描述");
                 } else if (type == "multiple") {
                     td.html("多选题描述");
+                } else if (type == "completion") {
+                    td.html("填空题描述");
                 }
             } else if (newtxt != txt) {
                 /*数据库操作*/
@@ -373,6 +378,8 @@ function getType(td) {
         type = "radio";
     } else if (td.attr("class").indexOf("multiple") >= 0) {
         type = "multiple";
+    } else if (td.attr("class").indexOf("completion") >= 0) {
+        type = "completion";
     }
     return type;
 }

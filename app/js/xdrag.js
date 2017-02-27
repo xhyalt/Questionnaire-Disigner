@@ -42,6 +42,8 @@ $(document).ready(function() {
             $("#target").append(radioDiv);
         } else if (type == "multiple") {
             $("#target").append(multipleDiv);
+        } else if (type == "completion") {
+            $("#target").append(completionDiv);
         }
 
         setOrder();
@@ -88,7 +90,10 @@ $(document).ready(function() {
                 $temp = $(`<div class="cloth"></div>`).append(radioDiv);
             } else if (type == "multiple") {
                 $temp = $(`<div class="cloth"></div>`).append(multipleDiv);
+            } else if (type == "completion") {
+                $temp = $(`<div class="cloth"></div>`).append(completionDiv);
             }
+
             $("body").append($temp);
 
             $temp.css({
@@ -283,11 +288,11 @@ const multipleDiv = `
         <div class="multipleDescriptionText textBox descriptionText">多选题描述</div>
         <ul class="multipleItem">
             <li>
-                <input type="checkbox" name="radio1" id="Num1" />
+                <input type="checkbox" name="checkbox1" id="Num1" />
                 <label class="textBox multipleItemText ItemText">选项1</label>
             </li>
             <li>
-                <input type="checkbox" name="radio1" id="Num2" />
+                <input type="checkbox" name="checkbox1" id="Num2" />
                 <label class="textBox multipleItemText ItemText">选项2</label>
             </li>
         </ul>
@@ -300,3 +305,23 @@ const multipleItemLabel = `
     <input type="checkbox" name="radio1" id="Num1" />
     <label class="textBox multipleItemText ItemText">选项</label>
 </li>`;
+
+const completionDiv = `
+<div class="completionDiv subject">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_more_off.png" alt="">
+        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+    </div>
+    <div class="completionMain">
+        <div class="completionStemText textBox stemText" id="completionStemTextID">填空题</div>
+        <div class="completionDescriptionText textBox descriptionText">填空题描述</div>
+        <ul class="completionItem">
+            <li>
+                <input type="text" name="completion1" id="Num1" />
+            </li>
+        </ul>
+    </div>
+</div>`;

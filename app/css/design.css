@@ -316,28 +316,6 @@ body {
 }
 
 
-/*单选题*/
-
-.radioMain {
-    margin-left: 65px;
-    border-left: 1px solid #f3f3f3;
-    padding: 10px;
-    min-height: 160px;
-}
-
-.radioItem li {
-    width: 650px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
-.radioItem label {
-    line-height: 2;
-    margin-top: 5px;
-    font-size: 14px;
-}
-
-
 /*题干编辑框*/
 
 .stemTextInput {
@@ -377,6 +355,28 @@ body {
 }
 
 
+/*单选题*/
+
+.radioMain {
+    margin-left: 65px;
+    border-left: 1px solid #f3f3f3;
+    padding: 10px;
+    min-height: 160px;
+}
+
+.radioItem li {
+    width: 650px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.radioItem label {
+    line-height: 2;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+
 /*多选题*/
 
 .multipleMain {
@@ -396,6 +396,28 @@ body {
     line-height: 2;
     margin-top: 5px;
     font-size: 14px;
+}
+
+/*填空题*/
+
+.completionMain {
+    margin-left: 65px;
+    border-left: 1px solid #f3f3f3;
+    padding: 10px;
+    min-height: 160px;
+}
+
+.completionItem li {
+    width: 650px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.completionItem li input{
+    font-size: 14px;
+    color: #666666;
+    /*border: none;*/
+    outline: none;
 }
 
 
