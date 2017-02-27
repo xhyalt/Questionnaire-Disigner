@@ -12,7 +12,7 @@
  */
 (function($) {
     window.wxc = window.wxc || {};
-    window.wxc.xcConfirm = function(popHtml, type, options) {
+    window.wxc.xcConfirm = function(popHtml, type, cb) {
         var btnType = window.wxc.xcConfirm.btnEnum;
         var eventType = window.wxc.xcConfirm.eventEnum;
         var popType = {
@@ -44,7 +44,7 @@
             warning: {
                 title: "警告",
                 icon: "0 -96px",
-                btn: btnType.okcancel
+                btn: btnType.ok
             },
             input: {
                 title: "输入",
@@ -67,7 +67,7 @@
             onOk: $.noop, //点击确定的按钮回调
             onCancel: $.noop, //点击取消的按钮回调
             onClose: $.noop //弹窗关闭的回调,返回触发事件
-        }, itype, options);
+        }, itype, cb);
 
         var $txt = $("<p>").html(popHtml); //弹窗文本dom
         var $tt = $("<span>").addClass("tt").text(config.title); //标题
@@ -154,11 +154,10 @@
             $("#" + popId).remove();
             config.onClose(eventType.ok);
             /*移除扩展参数传来的div参数*/
-            options.remove();
-            setOrder();
-            if (!getSubjectNum()) {
-                $("#target").append(emptyBox);
-            }
+            cb({
+                success: true,
+                data: true
+            });
         }
 
         //取消按钮事件
@@ -167,6 +166,10 @@
             config.onCancel();
             $("#" + popId).remove();
             config.onClose(eventType.cancel);
+            cb({
+                success: true,
+                data: false
+            });
         }
 
         //关闭按钮事件
@@ -174,6 +177,10 @@
             $("#" + popId).remove();
             config.onClose(eventType.close);
             $(window).unbind("keydown");
+            cb({
+                success: false,
+                data: false
+            });
         }
 
         //生成按钮组
