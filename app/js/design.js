@@ -26,7 +26,7 @@ $(function() {
         td.css("background-color", "#fff");
     });
 
-    /*题目中的小图 鼠标移入题目显示移出隐藏*/
+    /*题目中的小图 鼠标移入题目显示 移出隐藏*/
     $("#target").on("mouseover", ".subject", function() {
         var td = $(this);
         $(this).find("img").css({
@@ -38,7 +38,7 @@ $(function() {
             "visibility": "hidden"
         });
     });
-    /*题目中的小图 鼠标移入小图显示高亮图*/
+    /*题目中的小图 鼠标移入小图替换为高亮图*/
     $("#target").on("mouseover", ".up", function() {
         var td = $(this);
         td.attr('src', "./images/main_01_up_on.png");
@@ -126,6 +126,8 @@ $(function() {
             $tdP.after(`<div class="multipleDiv subject">` + $tdP.html() + `</div>`);
         } else if (type == "completion") {
             $tdP.after(`<div class="completionDiv subject">` + $tdP.html() + `</div>`);
+        } else if(type=="multitermCompletion"){
+          $tdP.after(`<div class="multitermCompletionDiv subject">` + $tdP.html() + `</div>`);
         }
         setOrder();
     });
@@ -145,6 +147,8 @@ $(function() {
             $tdP.find(".radioItem").append(radioItemLabel);
         } else if (type == "multiple") {
             $tdP.find(".multipleItem").append(multipleItemLabel);
+        } else if(type=="multitermCompletion"){
+            $tdP.find(".multitermCompletionItem").append(multitermCompletionItemLabel);
         }
     });
 
@@ -378,6 +382,8 @@ function getType(td) {
         type = "radio";
     } else if (td.attr("class").indexOf("multiple") >= 0) {
         type = "multiple";
+    } else if (td.attr("class").indexOf("multitermCompletion") >= 0) {
+        type = "multitermCompletion";
     } else if (td.attr("class").indexOf("completion") >= 0) {
         type = "completion";
     }

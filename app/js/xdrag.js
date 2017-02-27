@@ -35,6 +35,8 @@ $(document).ready(function() {
             type = "multiple";
         } else if ($this.attr("id") === "MenuItemCompletion") {
             type = "completion";
+        } else if ($this.attr("id") === "MenuItemMultitermCompletion") {
+            type = "multitermCompletion";
         }
 
         $("#emptyBox").remove();
@@ -44,6 +46,8 @@ $(document).ready(function() {
             $("#target").append(multipleDiv);
         } else if (type == "completion") {
             $("#target").append(completionDiv);
+        } else if (type == "multitermCompletion") {
+            $("#target").append(multitermCompletionDiv);
         }
 
         setOrder();
@@ -82,6 +86,8 @@ $(document).ready(function() {
             type = "multiple";
         } else if ($this.attr("id") === "MenuItemCompletion") {
             type = "completion";
+        } else if ($this.attr("id") === "MenuItemMultitermCompletion") {
+            type = "multitermCompletion";
         }
 
         var delayed = setTimeout(function() {
@@ -92,6 +98,8 @@ $(document).ready(function() {
                 $temp = $(`<div class="cloth"></div>`).append(multipleDiv);
             } else if (type == "completion") {
                 $temp = $(`<div class="cloth"></div>`).append(completionDiv);
+            } else if (type == "multitermCompletion") {
+                $temp = $(`<div class="cloth"></div>`).append(multitermCompletionDiv);
             }
 
             $("body").append($temp);
@@ -325,3 +333,35 @@ const completionDiv = `
         </ul>
     </div>
 </div>`;
+
+const multitermCompletionDiv = `
+<div class="multitermCompletionDiv subject">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_more_off.png" alt="">
+        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+    </div>
+    <div class="multitermCompletionMain">
+        <div class="multitermCompletionStemText textBox stemText" id="multitermCompletionStemTextID">多项填空题</div>
+        <div class="multitermCompletionDescriptionText textBox descriptionText">多项填空题描述</div>
+        <ul class="multitermCompletionItem">
+            <li>
+              <label class="textBox multitermCompletionItemText ItemText">选项1</label>
+              <input type="text" name="multitermCompletion1" id="Num1" />
+            </li>
+            <li>
+              <label class="textBox multitermCompletionItemText ItemText">选项2</label>
+              <input type="text" name="multitermCompletion1" id="Num2" />
+            </li>
+        </ul>
+        <img class="addItem" src="./images/main_04_add_off.png" alt="">
+    </div>
+</div>`;
+
+const multitermCompletionItemLabel = `
+<li>
+  <label class="textBox multitermCompletionItemText ItemText">选项</label>
+  <input type="text" name="multitermCompletion1" id="Num1" />
+</li>`;

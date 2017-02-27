@@ -346,7 +346,6 @@ body {
 
 .itemTextInput {
     background-color: #b4fbef;
-    width: 620px;
     line-height: 1.8;
     font-size: 14px;
     color: #666666;
@@ -417,6 +416,28 @@ body {
     font-size: 14px;
     color: #666666;
     /*border: none;*/
+    outline: none;
+}
+
+/*多项填空题*/
+
+.multitermCompletionMain {
+    margin-left: 65px;
+    border-left: 1px solid #f3f3f3;
+    padding: 10px;
+    min-height: 160px;
+}
+
+.multitermCompletionItem li {
+    width: 650px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
+}
+
+.multitermCompletionItem li input{
+    font-size: 14px;
+    color: #666666;
     outline: none;
 }
 
