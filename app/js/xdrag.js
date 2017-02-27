@@ -41,6 +41,8 @@ $(document).ready(function() {
             $("#target").append(multitermCompletionDiv);
         } else if (type == "shortAnswer") {
             $("#target").append(shortAnswerDiv);
+        } else if (type == "sort") {
+            $("#target").append(sortDiv);
         }
 
         setOrder();
@@ -85,6 +87,8 @@ $(document).ready(function() {
                 $temp = $(`<div class="cloth"></div>`).append(multitermCompletionDiv);
             } else if (type == "shortAnswer") {
                 $temp = $(`<div class="cloth"></div>`).append(shortAnswerDiv);
+            } else if (type == "sort") {
+                $temp = $(`<div class="cloth"></div>`).append(sortDiv);
             }
 
             $("body").append($temp);
@@ -247,6 +251,8 @@ function getSubjectType($this) {
         type = "multitermCompletion";
     } else if ($this.attr("id") === "MenuItemShortAnswer") {
         type = "shortAnswer";
+    } else if ($this.addt("id") === "MenuItemSort") {
+        type = "sort";
     }
     return type;
 }
@@ -391,3 +397,35 @@ const shortAnswerDiv = `
         </ul>
     </div>
 </div>`;
+
+const sortDiv = `
+<div class="sortDiv subject">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_more_off.png" alt="">
+        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+    </div>
+    <div class="sortMain">
+        <div class="sortStemText textBox stemText" id="sortStemTextID">排序题</div>
+        <div class="sortDescriptionText textBox descriptionText">排序题描述</div>
+        <ul class="sortItem">
+            <li>
+                <label class="textBox sortItemText ItemText">选项1</label>
+                <input type="text" name="sort1" id="Num1" />
+            </li>
+            <li>
+                <label class="textBox sortItemText ItemText">选项2</label>
+                <input type="text" name="sort1" id="Num2" />
+            </li>
+        </ul>
+        <img class="addItem" src="./images/main_04_add_off.png" alt="">
+    </div>
+</div>`;
+
+const sortItemLabel = `
+<li>
+    <label class="textBox sortItemText ItemText">选项</label>
+    <input type="text" name="sort1" id="Num1" />
+</li>`;
