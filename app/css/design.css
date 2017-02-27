@@ -465,28 +465,6 @@ body {
     outline: none;
 }
 
-/*排序题*/
-
-.sortMain {
-    margin-left: 65px;
-    border-left: 1px solid #f3f3f3;
-    padding: 10px;
-    min-height: 160px;
-}
-
-.sortItem li {
-    width: 650px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 14px;
-}
-
-.sortItem li input{
-    font-size: 14px;
-    color: #666666;
-    outline: none;
-}
-
 
 /*主要部分的尾部分*/
 
