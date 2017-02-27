@@ -80,7 +80,8 @@ $(function() {
         $tdP = $(this).parent().parent();
         $preTdP = $tdP.prev();
         if ($tdP.attr("num") == 1) {
-            console.log("已经是第一个题目，无法再向上移动");
+            txt = "已是第一个题目，无法再向上移动";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else {
             /*非第一题，向上移动*/
             $preTempSubject = $preTdP.html();
@@ -100,7 +101,8 @@ $(function() {
         $nextTdP = $tdP.next();
         console.log($tdP.attr("num"));
         if ($tdP.attr("num") == getSubjectNum()) {
-            console.log("已经是最后一个题目，无法再向下移动");
+            txt = "已是最后一个题目，无法再向下移动";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else {
             /*非第一题，向上移动*/
             $nextTempSubject = $nextTdP.html();
@@ -126,10 +128,12 @@ $(function() {
             $tdP.after(`<div class="multipleDiv subject">` + $tdP.html() + `</div>`);
         } else if (type == "completion") {
             $tdP.after(`<div class="completionDiv subject">` + $tdP.html() + `</div>`);
-        } else if(type=="multitermCompletion"){
-          $tdP.after(`<div class="multitermCompletionDiv subject">` + $tdP.html() + `</div>`);
-        } else if(type=="shortAnswer"){
-          $tdP.after(`<div class="shortAnswerDiv subject">` + $tdP.html() + `</div>`);
+        } else if (type == "multitermCompletion") {
+            $tdP.after(`<div class="multitermCompletionDiv subject">` + $tdP.html() + `</div>`);
+        } else if (type == "shortAnswer") {
+            $tdP.after(`<div class="shortAnswerDiv subject">` + $tdP.html() + `</div>`);
+        } else if (type == "sort") {
+            $tdP.after(`<div class="sortDiv subject">` + $tdP.html() + `</div>`);
         }
         setOrder();
     });
@@ -138,7 +142,15 @@ $(function() {
     $("#target").on("click", ".delete", function() {
         $tdP = $(this).parent().parent();
         /*弹出提示框*/
-        window.wxc.xcConfirm("确认删除该题目？", window.wxc.xcConfirm.typeEnum.confirm, $tdP);
+        window.wxc.xcConfirm("确定删除该题目？", window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+            if (res.data == true) {
+                $tdP.remove();
+                setOrder();
+                if (!getSubjectNum()) {
+                    $("#target").append(emptyBox);
+                }
+            }
+        });
     });
 
     /*添加选项按钮点击事件*/
@@ -149,8 +161,10 @@ $(function() {
             $tdP.find(".radioItem").append(radioItemLabel);
         } else if (type == "multiple") {
             $tdP.find(".multipleItem").append(multipleItemLabel);
-        } else if(type=="multitermCompletion"){
+        } else if (type == "multitermCompletion") {
             $tdP.find(".multitermCompletionItem").append(multitermCompletionItemLabel);
+        } else if (type == "sort") {
+            $tdP.find(".sortItem").append(sortItemLabel);
         }
     });
 
@@ -269,6 +283,12 @@ $(function() {
                     td.html("多选题");
                 } else if (type == "completion") {
                     td.html("填空题");
+                } else if (type == "multitermCompletion") {
+                    td.html("多项填空题");
+                } else if (type == "shortAnswer") {
+                    td.html("简答题");
+                } else if (type == "sort") {
+                    td.html("排序题");
                 }
             } else if (newtxt != txt) {
                 /*数据库操作*/
@@ -309,6 +329,12 @@ $(function() {
                     td.html("多选题描述");
                 } else if (type == "completion") {
                     td.html("填空题描述");
+                } else if (type == "multitermCompletion") {
+                    td.html("多项填空题描述");
+                } else if (type == "shortAnswer") {
+                    td.html("简答题描述");
+                } else if (type == "sort") {
+                    td.html("排序题描述");
                 }
             } else if (newtxt != txt) {
                 /*数据库操作*/
@@ -390,6 +416,8 @@ function getType(td) {
         type = "completion";
     } else if (td.attr("class").indexOf("shortAnswer") >= 0) {
         type = "shortAnswer";
+    } else if (td.attr("class").indexOf("sort") >= 0) {
+        type = "sort";
     }
     return type;
 }
