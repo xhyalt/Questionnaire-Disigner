@@ -251,7 +251,7 @@ function getSubjectType($this) {
         type = "multitermCompletion";
     } else if ($this.attr("id") === "MenuItemShortAnswer") {
         type = "shortAnswer";
-    } else if ($this.addt("id") === "MenuItemSort") {
+    } else if ($this.attr("id") === "MenuItemSort") {
         type = "sort";
     }
     return type;
