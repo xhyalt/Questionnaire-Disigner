@@ -43,6 +43,8 @@ $(document).ready(function() {
             $("#target").append(shortAnswerDiv);
         } else if (type == "sort") {
             $("#target").append(sortDiv);
+        } else if (type == "description") {
+            $("#target").append(descriptionDiv);
         }
 
         setOrder();
@@ -89,6 +91,8 @@ $(document).ready(function() {
                 $temp = $(`<div class="cloth"></div>`).append(shortAnswerDiv);
             } else if (type == "sort") {
                 $temp = $(`<div class="cloth"></div>`).append(sortDiv);
+            } else if (type == "description") {
+                $temp = $(`<div class="cloth"></div>`).append(descriptionDiv);
             }
 
             $("body").append($temp);
@@ -253,6 +257,8 @@ function getSubjectType($this) {
         type = "shortAnswer";
     } else if ($this.attr("id") === "MenuItemSort") {
         type = "sort";
+    } else if ($this.attr("id") === "MenuItemDescription") {
+        type = "description";
     }
     return type;
 }
@@ -429,3 +435,17 @@ const sortItemLabel = `
     <label class="textBox sortItemText ItemText">选项</label>
     <input type="text" name="sort1" id="Num1" />
 </li>`;
+
+const descriptionDiv = `
+<div class="descriptionDiv subject">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_more_off.png" alt="">
+        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+    </div>
+    <div class="descriptionMain">
+        <div class="descriptionStemText textBox stemText" id="descriptionStemTextID">描述说明</div>
+    </div>
+</div>`;

@@ -134,6 +134,8 @@ $(function() {
             $tdP.after(`<div class="shortAnswerDiv subject">` + $tdP.html() + `</div>`);
         } else if (type == "sort") {
             $tdP.after(`<div class="sortDiv subject">` + $tdP.html() + `</div>`);
+        } else if (type == "description") {
+            $tdP.after(`<div class="descriptionDiv subject">` + $tdP.html() + `</div>`);
         }
         setOrder();
     });
@@ -261,21 +263,16 @@ $(function() {
         /*确定题目种类*/
 
         var txt = td.text();
-        var input = $(`<input class='stemTextInput' type='text' value='` + txt + `'/>`);
+        var input = $(`<div class="stemTextInput" contenteditable="true">` + txt + `</div>`);
         td.html(input);
-        input.select();
+
         input.click(function() {
-            $(this).select();
             return false;
         });
-        input.keydown(function() {
-            if (event.keyCode == "13") {
-                input.blur();
-            }
-        });
+
         input.trigger("focus");
         input.blur(function() {
-            var newtxt = $(this).val();
+            var newtxt = $(".stemTextInput").html();
             if (newtxt == "") {
                 if (type == "radio") {
                     td.html("单选题");
@@ -289,6 +286,8 @@ $(function() {
                     td.html("简答题");
                 } else if (type == "sort") {
                     td.html("排序题");
+                } else if (type == "description") {
+                    td.html("描述说明");
                 }
             } else if (newtxt != txt) {
                 /*数据库操作*/
@@ -418,6 +417,8 @@ function getType(td) {
         type = "shortAnswer";
     } else if (td.attr("class").indexOf("sort") >= 0) {
         type = "sort";
+    } else if (td.attr("class").indexOf("description") >= 0) {
+        type = "description";
     }
     return type;
 }

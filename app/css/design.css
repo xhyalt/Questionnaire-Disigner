@@ -321,7 +321,7 @@ body {
 .stemTextInput {
     background-color: #b4fbef;
     width: 650px;
-    line-height: 1.8;
+    line-height: 2;
     font-size: 16px;
     color: #666666;
     border: none;
@@ -485,6 +485,15 @@ body {
     font-size: 14px;
     color: #666666;
     outline: none;
+}
+
+/*描述说明*/
+
+.descriptionMain {
+    margin-left: 65px;
+    border-left: 1px solid #f3f3f3;
+    padding: 10px;
+    min-height: 160px;
 }
 
 
