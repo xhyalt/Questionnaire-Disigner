@@ -278,7 +278,7 @@ body {
 /*所有题型公有*/
 
 .subject {
-    width: 800px;
+    width: 100%;
     background-color: #fff;
     margin-top: 8px;
     margin-bottom: 8px;
@@ -299,16 +299,16 @@ body {
 }
 
 .leftSetup h4 {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .stemText {
-    width: 650px;
+    width: 100%;
     line-height: 2;
 }
 
 .descriptionText {
-    width: 650px;
+    width: 100%;
     line-height: 2;
     font-size: 14px;
     margin-top: 5px;
@@ -320,7 +320,7 @@ body {
 
 .stemTextInput {
     background-color: #b4fbef;
-    width: 650px;
+    width: 100%;
     line-height: 2;
     font-size: 16px;
     color: #666666;
@@ -333,7 +333,7 @@ body {
 
 .descriptionTextInput {
     background-color: #b4fbef;
-    width: 620px;
+    width: 100%;
     line-height: 1.8;
     font-size: 14px;
     color: #666666;
@@ -360,11 +360,16 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 160px;
+    min-height: 185px;
+}
+
+.radioItem {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .radioItem li {
-    width: 650px;
+    width: 90%;
     padding-top: 5px;
     padding-bottom: 5px;
 }
@@ -382,11 +387,16 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 160px;
+    min-height: 185px;
+}
+
+.multipleItem {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .multipleItem li {
-    width: 650px;
+    width: 90%;
     padding-top: 5px;
     padding-bottom: 5px;
 }
@@ -397,27 +407,29 @@ body {
     font-size: 14px;
 }
 
+
 /*填空题*/
 
 .completionMain {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 160px;
+    min-height: 185px;
 }
 
 .completionItem li {
-    width: 650px;
+    width: 90%;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
-.completionItem li input{
+.completionItem li input {
     font-size: 14px;
     color: #666666;
     /*border: none;*/
     outline: none;
 }
+
 
 /*多项填空题*/
 
@@ -425,21 +437,27 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 160px;
+    min-height: 185px;
+}
+
+.multitermCompletionItem {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .multitermCompletionItem li {
-    width: 650px;
+    width: 90%;
     padding-top: 5px;
     padding-bottom: 5px;
     font-size: 14px;
 }
 
-.multitermCompletionItem li input{
+.multitermCompletionItem li input {
     font-size: 14px;
     color: #666666;
     outline: none;
 }
+
 
 /*简答题*/
 
@@ -447,16 +465,16 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 160px;
+    min-height: 185px;
 }
 
 .shortAnswerItem li {
-    width: 650px;
+    width: 90%;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
-.shortAnswerItem li textarea{
+.shortAnswerItem li textarea {
     width: 100%;
     height: 70px;
     font-size: 14px;
@@ -465,27 +483,34 @@ body {
     outline: none;
 }
 
+
 /*排序题*/
 
 .sortMain {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 160px;
+    min-height: 185px;
+}
+
+.sortItem {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .sortItem li {
-    width: 650px;
+    width: 90%;
     padding-top: 5px;
     padding-bottom: 5px;
     font-size: 14px;
 }
 
-.sortItem li input{
+.sortItem li input {
     font-size: 14px;
     color: #666666;
     outline: none;
 }
+
 
 /*描述说明*/
 
@@ -496,6 +521,7 @@ body {
     min-height: 30px;
 }
 
+
 /*分割线*/
 
 .dividingLineMain {
@@ -505,6 +531,19 @@ body {
     padding-left: 10px;
     padding-right: 10px;
     min-height: 10px;
+}
+
+/*合并题*/
+
+.mergeMain {
+    margin-left: 55px;
+    border-left: 1px solid #f3f3f3;
+    padding: 10px;
+    min-height: 185px;
+}
+
+.mergeItem {
+    background-color: #f3f3f3;
 }
 
 

@@ -78,18 +78,18 @@ $(function() {
     /*上移题目按钮点击事件*/
     $("#target").on("click", ".up", function() {
         $tdP = $(this).parent().parent();
-        $preTdP = $tdP.prev();
+        $prevTdP = $tdP.prev();
         if ($tdP.attr("num") == 1) {
             txt = "已是第一个题目，无法再向上移动";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else {
             /*非第一题，向上移动*/
-            $preTempSubject = $preTdP.html();
+            $preTempSubject = $prevTdP.html();
             $tempSubject = $tdP.html();
             $tdP.empty();
             $tdP.append($preTempSubject);
-            $preTdP.empty();
-            $preTdP.append($tempSubject);
+            $prevTdP.empty();
+            $prevTdP.append($tempSubject);
             setOrder();
         }
     });
@@ -119,24 +119,7 @@ $(function() {
     $("#target").on("click", ".copy", function() {
         /*复制题目*/
         $tdP = $(this).parent().parent();
-        var type = getType($tdP);
-
-        console.log("进入复制题目");
-        if (type == "radio") {
-            $tdP.after(`<div class="radioDiv subject">` + $tdP.html() + `</div>`);
-        } else if (type == "multiple") {
-            $tdP.after(`<div class="multipleDiv subject">` + $tdP.html() + `</div>`);
-        } else if (type == "completion") {
-            $tdP.after(`<div class="completionDiv subject">` + $tdP.html() + `</div>`);
-        } else if (type == "multitermCompletion") {
-            $tdP.after(`<div class="multitermCompletionDiv subject">` + $tdP.html() + `</div>`);
-        } else if (type == "shortAnswer") {
-            $tdP.after(`<div class="shortAnswerDiv subject">` + $tdP.html() + `</div>`);
-        } else if (type == "sort") {
-            $tdP.after(`<div class="sortDiv subject">` + $tdP.html() + `</div>`);
-        } else if (type == "description") {
-            $tdP.after(`<div class="descriptionDiv subject">` + $tdP.html() + `</div>`);
-        }
+        $tdP.after($tdP.prop("outerHTML"));
         setOrder();
     });
 
@@ -153,6 +136,20 @@ $(function() {
                 }
             }
         });
+    });
+
+    /*合并题目按钮点击事件*/
+    $("#target").on("click", ".merge", function() {
+        $tdP = $(this).parent().parent();
+        $prevTdP = $tdP.prev();
+
+        /*两题同级*/
+        $tdP.after(mergeDiv);
+        $mergeDiv = $tdP.next();
+        $mergeDiv.find(".mergeItem").append($prevTdP.prop("outerHTML") + $tdP.prop("outerHTML"));
+        $tdP.remove();
+        $prevTdP.remove();
+        setOrder();
     });
 
     /*添加选项按钮点击事件*/
