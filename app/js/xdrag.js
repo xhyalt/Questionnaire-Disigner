@@ -279,8 +279,8 @@ const radioDiv = `
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
-        <img class="copy" src="./images/main_06_more_off.png" alt="">
-        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
     <div class="radioMain">
         <div class="radioStemText textBox stemText" id="radioStemTextID">单选题</div>
@@ -311,8 +311,8 @@ const multipleDiv = `
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
-        <img class="copy" src="./images/main_06_more_off.png" alt="">
-        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
     <div class="multipleMain">
         <div class="multipleStemText textBox stemText" id="multipleStemTextID">多选题</div>
@@ -343,8 +343,8 @@ const completionDiv = `
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
-        <img class="copy" src="./images/main_06_more_off.png" alt="">
-        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
     <div class="completionMain">
         <div class="completionStemText textBox stemText" id="completionStemTextID">填空题</div>
@@ -363,8 +363,8 @@ const multitermCompletionDiv = `
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
-        <img class="copy" src="./images/main_06_more_off.png" alt="">
-        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
     <div class="multitermCompletionMain">
         <div class="multitermCompletionStemText textBox stemText" id="multitermCompletionStemTextID">多项填空题</div>
@@ -395,8 +395,8 @@ const shortAnswerDiv = `
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
-        <img class="copy" src="./images/main_06_more_off.png" alt="">
-        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
     <div class="shortAnswerMain">
         <div class="shortAnswerStemText textBox stemText" id="shortAnswerStemTextID">简答题</div>
@@ -415,8 +415,8 @@ const sortDiv = `
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
-        <img class="copy" src="./images/main_06_more_off.png" alt="">
-        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
     <div class="sortMain">
         <div class="sortStemText textBox stemText" id="sortStemTextID">排序题</div>
@@ -444,7 +444,7 @@ const sortItemLabel = `
 const descriptionDiv = `
 <div class="descriptionDiv subject">
     <div class="leftSetup">
-        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
     <div class="descriptionMain">
         <div class="descriptionStemText textBox stemText" id="descriptionStemTextID">描述说明</div>
@@ -454,7 +454,7 @@ const descriptionDiv = `
 const dividingLineDiv = `
 <div class="dividingLineDiv subject">
     <div class="leftSetup">
-        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
     <div class="dividingLineMain">
         <hr width="650" color="#f3f3f3" noshade="noshade" align="left" border="none"/>

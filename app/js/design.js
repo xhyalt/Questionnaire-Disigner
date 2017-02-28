@@ -55,17 +55,17 @@ $(function() {
     });
     $("#target").on("mouseover", ".copy", function() {
         var td = $(this);
-        td.attr('src', "./images/main_06_more_on.png");
+        td.attr('src', "./images/main_06_copy_on.png");
     }).on("mouseout", ".copy", function() {
         var td = $(this);
-        td.attr('src', "./images/main_06_more_off.png");
+        td.attr('src', "./images/main_06_copy_off.png");
     });
     $("#target").on("mouseover", ".delete", function() {
         var td = $(this);
-        td.attr('src', "./images/main_03_garbage_on.png");
+        td.attr('src', "./images/main_03_delete_on.png");
     }).on("mouseout", ".delete", function() {
         var td = $(this);
-        td.attr('src', "./images/main_03_garbage_off.png");
+        td.attr('src', "./images/main_03_delete_off.png");
     });
     $("#target").on("mouseover", ".addItem", function() {
         var td = $(this);

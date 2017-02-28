@@ -203,11 +203,11 @@ body {
 
 .blank {
     width: 35px;
-    padding: 16px;
+    padding: 10px;
 }
 
 #headDetail {
-    margin-left: 65px;
+    margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     width: 650px;
@@ -286,15 +286,15 @@ body {
 }
 
 .subject img {
-    margin-bottom: 5px;
+    margin-bottom: 2px;
     visibility: hidden;
 }
 
 .leftSetup {
     position: absolute;
-    /*height: 200px;*/
     width: 35px;
-    padding: 16px;
+    padding: 10px;
+    padding-top: 16px;
     text-align: center;
 }
 
@@ -357,7 +357,7 @@ body {
 /*单选题*/
 
 .radioMain {
-    margin-left: 65px;
+    margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     min-height: 160px;
@@ -379,7 +379,7 @@ body {
 /*多选题*/
 
 .multipleMain {
-    margin-left: 65px;
+    margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     min-height: 160px;
@@ -400,7 +400,7 @@ body {
 /*填空题*/
 
 .completionMain {
-    margin-left: 65px;
+    margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     min-height: 160px;
@@ -422,7 +422,7 @@ body {
 /*多项填空题*/
 
 .multitermCompletionMain {
-    margin-left: 65px;
+    margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     min-height: 160px;
@@ -444,7 +444,7 @@ body {
 /*简答题*/
 
 .shortAnswerMain {
-    margin-left: 65px;
+    margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     min-height: 160px;
@@ -468,7 +468,7 @@ body {
 /*排序题*/
 
 .sortMain {
-    margin-left: 65px;
+    margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     min-height: 160px;
@@ -490,7 +490,7 @@ body {
 /*描述说明*/
 
 .descriptionMain {
-    margin-left: 65px;
+    margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
     min-height: 30px;
@@ -499,7 +499,7 @@ body {
 /*分割线*/
 
 .dividingLineMain {
-    margin-left: 65px;
+    margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 15px;
     padding-left: 10px;
