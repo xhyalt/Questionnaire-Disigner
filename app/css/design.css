@@ -286,7 +286,7 @@ body {
 }
 
 .subject img {
-    margin-top: 5px;
+    margin-bottom: 5px;
     visibility: hidden;
 }
 
@@ -493,7 +493,18 @@ body {
     margin-left: 65px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 160px;
+    min-height: 30px;
+}
+
+/*分割线*/
+
+.dividingLineMain {
+    margin-left: 65px;
+    border-left: 1px solid #f3f3f3;
+    padding: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 10px;
 }
 
 

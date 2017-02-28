@@ -144,11 +144,11 @@ $(function() {
     $("#target").on("click", ".delete", function() {
         $tdP = $(this).parent().parent();
         /*弹出提示框*/
-        window.wxc.xcConfirm("确定删除该题目？", window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+        window.wxc.xcConfirm("确定删除？", window.wxc.xcConfirm.typeEnum.confirm, function(res) {
             if (res.data == true) {
                 $tdP.remove();
                 setOrder();
-                if (!getSubjectNum()) {
+                if (getSubjectNum() == 0) {
                     $("#target").append(emptyBox);
                 }
             }

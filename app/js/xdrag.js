@@ -45,6 +45,8 @@ $(document).ready(function() {
             $("#target").append(sortDiv);
         } else if (type == "description") {
             $("#target").append(descriptionDiv);
+        } else if (type == "dividingLine") {
+            $("#target").append(dividingLineDiv);
         }
 
         setOrder();
@@ -93,6 +95,8 @@ $(document).ready(function() {
                 $temp = $(`<div class="cloth"></div>`).append(sortDiv);
             } else if (type == "description") {
                 $temp = $(`<div class="cloth"></div>`).append(descriptionDiv);
+            } else if (type == "dividingLine") {
+                $temp = $(`<div class="cloth"></div>`).append(dividingLineDiv);
             }
 
             $("body").append($temp);
@@ -206,12 +210,11 @@ $(document).ready(function() {
 
 
         $(document).mouseup(function() {
-            console.log("$(document).mouseup");
+            $(".cloth").remove();
             clearInterval(delayed);
             return false;
         });
         $(this).mouseout(function() {
-            console.log("$(this).mouseout");
             clearInterval(delayed);
             return false;
         });
@@ -234,7 +237,7 @@ function setOrder() {
 }
 
 function getSubjectNum() {
-    $td = $("#target h4");
+    $td = $(".subject");
     return $td.length;
 }
 
@@ -259,6 +262,8 @@ function getSubjectType($this) {
         type = "sort";
     } else if ($this.attr("id") === "MenuItemDescription") {
         type = "description";
+    } else if ($this.attr("id") === "MenuItemDividingLine") {
+        type = "dividingLine";
     }
     return type;
 }
@@ -439,13 +444,19 @@ const sortItemLabel = `
 const descriptionDiv = `
 <div class="descriptionDiv subject">
     <div class="leftSetup">
-        <h4>Q</h4>
-        <img class="up" src="./images/main_01_up_off.png" alt="">
-        <img class="down" src="./images/main_02_down_off.png" alt="">
-        <img class="copy" src="./images/main_06_more_off.png" alt="">
         <img class="delete" src="./images/main_03_garbage_off.png" alt="">
     </div>
     <div class="descriptionMain">
         <div class="descriptionStemText textBox stemText" id="descriptionStemTextID">描述说明</div>
+    </div>
+</div>`;
+
+const dividingLineDiv = `
+<div class="dividingLineDiv subject">
+    <div class="leftSetup">
+        <img class="delete" src="./images/main_03_garbage_off.png" alt="">
+    </div>
+    <div class="dividingLineMain">
+        <hr width="650" color="#f3f3f3" noshade="noshade" align="left" border="none"/>
     </div>
 </div>`;
