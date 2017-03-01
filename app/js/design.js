@@ -34,11 +34,12 @@ $(function() {
         });
     }).on("mouseout", ".subject", function() {
         var td = $(this);
-        $(this).find("img").css({
+        $(this).children().children("img").css({
             "visibility": "hidden"
         });
     });
-    /*题目中的小图 鼠标移入小图替换为高亮图*/
+
+    /*上移小图 鼠标移入替换为高亮*/
     $("#target").on("mouseover", ".up", function() {
         var td = $(this);
         td.attr('src', "./images/main_01_up_on.png");
@@ -46,6 +47,8 @@ $(function() {
         var td = $(this);
         td.attr('src', "./images/main_01_up_off.png");
     });
+
+    /*下移小图 鼠标移入替换为高亮*/
     $("#target").on("mouseover", ".down", function() {
         var td = $(this);
         td.attr('src', "./images/main_02_down_on.png");
@@ -53,6 +56,8 @@ $(function() {
         var td = $(this);
         td.attr('src', "./images/main_02_down_off.png");
     });
+
+    /*复制小图 鼠标移入替换为高亮*/
     $("#target").on("mouseover", ".copy", function() {
         var td = $(this);
         td.attr('src', "./images/main_06_copy_on.png");
@@ -60,6 +65,8 @@ $(function() {
         var td = $(this);
         td.attr('src', "./images/main_06_copy_off.png");
     });
+
+    /*删除小图 鼠标移入替换为高亮*/
     $("#target").on("mouseover", ".delete", function() {
         var td = $(this);
         td.attr('src', "./images/main_03_delete_on.png");
@@ -67,6 +74,26 @@ $(function() {
         var td = $(this);
         td.attr('src', "./images/main_03_delete_off.png");
     });
+
+    /*合并小图 鼠标移入替换为高亮*/
+    $("#target").on("mouseover", ".merge", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_07_merge_on.png");
+    }).on("mouseout", ".merge", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_07_merge_off.png");
+    });
+
+    /*拆解小图 鼠标移入替换为高亮*/
+    $("#target").on("mouseover", ".unmerge", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_08_unmerge_on.png");
+    }).on("mouseout", ".unmerge", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_08_unmerge_off.png");
+    });
+
+    /*添加选项小图 鼠标移入替换为高亮*/
     $("#target").on("mouseover", ".addItem", function() {
         var td = $(this);
         td.attr('src', "./images/main_04_add_on.png");
@@ -143,7 +170,7 @@ $(function() {
         $prevTdP = $tdP.prev();
 
         if ($tdP.attr("num") == 1) {
-            /*第一题不能合并*/
+            /*第一个题无法合并*/
             txt = "第一个题无法合并";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else if (getLevelSubjectNum($tdP) < 3 && $tdP.attr("level") > 1) {
