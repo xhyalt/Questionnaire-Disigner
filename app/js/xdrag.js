@@ -226,18 +226,60 @@ $(document).ready(function() {
  */
 function setOrder() {
     var index = 1;
-    $td = $("#target h4");
+    var flag = 1;
+    var $td = $("#target .subject");
+    var $prevTd;
     for (var i = 0; i < $td.length; i++) {
-        $td[i].innerHTML = "Q" + (index++).toString();
+        // $td[i].innerHTML = "Q" + (index++).toString();
+        if (flag) {
+            /*第一题，只走一遍*/
+            console.log("老子是第一节点");
+            $td.eq(i).find("h4").html("Q1");
+            $td.eq(i).attr("num", "1");
+            flag = 0;
+        } else {
+            /*非第一题*/
+            var $prevTd = $td.eq(i).prev();
+            if ($prevTd.length && $td.eq(i).attr("father") == $prevTd.attr("father") && $td.eq(i).attr("level") == $prevTd.attr("level")) {
+                /*非第一个 同胞节点 前节点存在 父节点相同 层数相同*/
+                console.log("非第一个同胞节点");
+                $td.eq(i).attr("num", parseInt($prevTd.attr("num")) + 1);
+                $td.eq(i).find("h4").html("Q" + $td.eq(i).attr("num"));
+            } else if ($prevTd.length == 0) {
+                /*该层第一个节点*/
+                console.log("该层第一个节点");
+                $td.eq(i).attr("num", "1");
+                $td.eq(i).find("h4").html("Q1");
+            }
+        }
     }
-    index = 1;
-    $('.subject').each(function(i) {
-        $(this).attr("num", index++);
-    });
+    // index = 1;
+    // $('.subject').each(function(i) {
+    //     $(this).attr("num", index++);
+    // });
 }
 
+/**
+ * 获取所有题目的数量 包括合并题型
+ * @return [题目数量]
+ */
 function getSubjectNum() {
     $td = $(".subject");
+    return $td.length;
+}
+
+/**
+ * 获取与某题目同等级同父亲的题目数量
+ * @public
+ * @param  $tdP [某题目]
+ * @return [符合条件的题目数量]
+ */
+function getLevelSubjectNum($tdP) {
+    var index = 0;
+    var father = $tdP.attr("father");
+    var level = $tdP.attr("level");
+    $td = $('div').filter(`[level=${level}]`).filter(`[father=${father}]`);
+    console.log($td.length);
     return $td.length;
 }
 
@@ -274,7 +316,7 @@ const emptyBox = `
 </div>`;
 
 const radioDiv = `
-<div class="radioDiv subject">
+<div class="radioDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -473,7 +515,7 @@ const dividingLineDiv = `
     </div>
 </div>`;
 
-const mergeDiv=`
+const mergeDiv = `
 <div class="mergeDiv subject">
     <div class="leftSetup">
         <h4>Q</h4>

@@ -29,7 +29,7 @@ $(function() {
     /*题目中的小图 鼠标移入题目显示 移出隐藏*/
     $("#target").on("mouseover", ".subject", function() {
         var td = $(this);
-        $(this).find("img").css({
+        $(this).children().children("img").css({
             "visibility": "visible"
         });
     }).on("mouseout", ".subject", function() {
@@ -96,11 +96,10 @@ $(function() {
 
     /*下移题目按钮点击事件*/
     $("#target").on("click", ".down", function() {
-        console.log("执行down点击事件");
         $tdP = $(this).parent().parent();
         $nextTdP = $tdP.next();
-        console.log($tdP.attr("num"));
-        if ($tdP.attr("num") == getSubjectNum()) {
+        // console.log($tdP.attr("num"));
+        if ($tdP.attr("num") == getLevelSubjectNum($tdP)) {
             txt = "已是最后一个题目，无法再向下移动";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else {
@@ -143,12 +142,28 @@ $(function() {
         $tdP = $(this).parent().parent();
         $prevTdP = $tdP.prev();
 
-        /*两题同级*/
-        $tdP.after(mergeDiv);
-        $mergeDiv = $tdP.next();
-        $mergeDiv.find(".mergeItem").append($prevTdP.prop("outerHTML") + $tdP.prop("outerHTML"));
-        $tdP.remove();
-        $prevTdP.remove();
+        if ($tdP.attr("num") == 1) {
+            /*第一题不能合并*/
+            txt = "第一个题无法合并";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        } else if (getLevelSubjectNum($tdP) < 3 && $tdP.attr("level") > 1) {
+            /*分组内至少三题才允许合并*/
+            txt = "分组内至少三题才允许合并";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        } else if ($tdP.attr("level") == $prevTdP.attr("level") && $tdP.attr("father") == $prevTdP.attr("father")) {
+            /*两题同级*/
+            $tdP.after(mergeDiv);
+            $mergeDiv = $tdP.next();
+            $mergeDiv.attr("level", parseInt($tdP.attr("level")));
+            $mergeDiv.attr("father", parseInt($tdP.attr("father")));
+            $tdP.attr("level", parseInt($mergeDiv.attr("level")) + 1);
+            $prevTdP.attr("level", parseInt($mergeDiv.attr("level")) + 1);
+            $tdP.attr("father", parseInt($mergeDiv.attr("father")) + 1);
+            $prevTdP.attr("father", parseInt($mergeDiv.attr("father")) + 1);
+            $mergeDiv.find(".mergeItem").append($prevTdP.prop("outerHTML") + $tdP.prop("outerHTML"));
+            $tdP.remove();
+            $prevTdP.remove();
+        }
         setOrder();
     });
 
