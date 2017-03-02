@@ -125,7 +125,6 @@ $(function() {
     $("#target").on("click", ".down", function() {
         $tdP = $(this).parent().parent();
         $nextTdP = $tdP.next();
-        // console.log($tdP.attr("num"));
         if ($tdP.attr("num") == getLevelSubjectNum($tdP)) {
             txt = "已是最后一个题目，无法再向下移动";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});

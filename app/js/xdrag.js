@@ -135,23 +135,23 @@ $(document).ready(function() {
                         "border-bottom": "none"
                     });
                     tops = $.grep($target_subType, function(e) {
-                        return ($(e).position().top - mm_mouseY + half_box_height > 0 && $(e).attr("id") !== "target");
+                        return ($(e).position().top - mm_mouseY + half_box_height > 0 && mm_mouseY - $(e).position().top > 0 && $(e).attr("id") !== "target");
                     });
+                    bottoms = $.grep($target_subType, function(e) {
+                        return (mm_mouseY - $(e).position().top < 2 * half_box_height && mm_mouseY - $(e).position().top > half_box_height && $(e).attr("id") !== "target");
+                    });
+                    console.log("tops = " + tops);
                     if (tops.length > 0) {
                         /*识别位置在上半部分*/
-                        console.log("tops.length = " + tops.length);
                         $(tops[0]).css("border-top", "5px solid #1ABC9C");
+                    } else if (bottoms.length > 0) {
+                        $(bottoms[0]).css("border-bottom", "5px solid #1ABC9C");
                     } else {
-                        if ($target_subType.length > 0) {
-                            /*识别位置在下半部分*/
-                            console.log("$target_subType.length = " + $target_subType.length);
-                            $($target_subType[$target_subType.length - 1]).css("border-bottom", "5px solid #1ABC9C");
-                        } else {
-                            $("#emptyBox").css({
-                                "border-top": "5px solid #1ABC9C",
-                                "border-bottom": "none"
-                            });
-                        }
+                        /*设计区没有题目 空盒上加边界*/
+                        $("#emptyBox").css({
+                            "border-top": "5px solid #1ABC9C",
+                            "border-bottom": "none"
+                        });
                     }
                 } else {
                     $target_subType.css({
@@ -184,6 +184,9 @@ $(document).ready(function() {
 
                     if (tops.length > 0) {
                         $($temp.html()).insertBefore(tops[0]);
+                        setOrder();
+                    } else if (bottoms.length > 0) {
+                        $($temp.html()).insertAfter(bottoms[0]);
                         setOrder();
                     } else {
                         $("#target").append($temp.html());
