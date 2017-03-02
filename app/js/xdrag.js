@@ -183,9 +183,17 @@ $(document).ready(function() {
                     $temp.attr("style", null);
 
                     if (tops.length > 0) {
+                        level = tops[0].attributes["level"].nodeValue
+                        father = tops[0].attributes["father"].nodeValue
+                        $temp.html($($temp.html()).attr("level", level));
+                        $temp.html($($temp.html()).attr("father", father));
                         $($temp.html()).insertBefore(tops[0]);
                         setOrder();
                     } else if (bottoms.length > 0) {
+                        level = bottoms[0].attributes["level"].nodeValue
+                        father = bottoms[0].attributes["father"].nodeValue
+                        $temp.html($($temp.html()).attr("level", level));
+                        $temp.html($($temp.html()).attr("father", father));
                         $($temp.html()).insertAfter(bottoms[0]);
                         setOrder();
                     } else {
@@ -256,10 +264,6 @@ function setOrder() {
             }
         }
     }
-    // index = 1;
-    // $('.subject').each(function(i) {
-    //     $(this).attr("num", index++);
-    // });
 }
 
 /**
