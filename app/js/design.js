@@ -193,6 +193,79 @@ $(function() {
         setOrder();
     });
 
+    /*拆解题目按钮点击事件*/
+    $("#target").on("click", ".unmerge", function() {
+        $tdP = $(this).parent().parent();
+        if ($tdP.attr("level") == 1) {
+            /*最高层级不能拆解*/
+            txt = "只能拆解分组内的题目";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        } else if (getLevelSubjectNum($tdP) > 2) {
+            /*不弹窗 保留分组 直接拆解*/
+            $mergeTdP = $tdP.parent().parent().parent();
+            level = $mergeDiv.attr("level");
+            father = $mergeDiv.attr("father");
+            $tdP.attr("level", level);
+            $tdP.attr("father", father);
+            $mergeTdP.after($tdP.prop("outerHTML"));
+            $tdP.remove();
+            setOrder();
+        } else if (getLevelSubjectNum($tdP) == 2) {
+            /*弹窗询问是否保留分组信息*/
+            window.wxc.xcConfirm("是否保留分组信息？", window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+                if (res.data == true) {
+                    /*保留*/
+                    console.log("保留");
+                    $mergeTdP = $tdP.parent().parent().parent();
+                    level = $mergeDiv.attr("level");
+                    father = $mergeDiv.attr("father");
+                    $tdP.attr("level", level);
+                    $tdP.attr("father", father);
+                    $mergeTdP.after($tdP.prop("outerHTML"));
+                    $tdP.remove();
+                    setOrder();
+                } else if (res.success == true) {
+                    /*不保留*/
+                    console.log("不保留");
+                    $mergeTdP = $tdP.parent().parent().parent();
+                    level = $mergeDiv.attr("level");
+                    father = $mergeDiv.attr("father");
+                    if($tdP.prev()[0]){
+                      /*正在拆解后题*/
+                      $tdP.attr("level", level);
+                      $tdP.attr("father", father);
+                      $tdP.prev().attr("level", level);
+                      $tdP.prev().attr("father", father);
+                      $mergeTdP.after($tdP.prop("outerHTML"));
+                      $mergeTdP.after($tdP.prev().prop("outerHTML"));
+                      $mergeDiv.remove();
+                    }else if($tdP.next()[0]){
+                      /*正在拆解前题*/
+                      $tdP.attr("level", level);
+                      $tdP.attr("father", father);
+                      $tdP.next().attr("level", level);
+                      $tdP.next().attr("father", father);
+                      $mergeTdP.after($tdP.next().prop("outerHTML"));
+                      $mergeTdP.after($tdP.prop("outerHTML"));
+                      $mergeDiv.remove();
+                    }
+                } else {
+                    /*关闭 没有动作*/
+                    console.log("关闭");
+                }
+            });
+        } else if (getLevelSubjectNum($tdP) == 1) {
+            /*不弹窗 不保留分组*/
+            $mergeTdP = $tdP.parent().parent().parent();
+            level = $mergeDiv.attr("level");
+            father = $mergeDiv.attr("father");
+            $tdP.attr("level", level);
+            $tdP.attr("father", father);
+            $mergeTdP.after($tdP.prop("outerHTML"));
+            $mergeDiv.remove();
+        }
+    });
+
     /*添加选项按钮点击事件*/
     $("#target").on("click", ".addItem", function() {
         $tdP = $(this).parent().parent();
