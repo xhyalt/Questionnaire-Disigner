@@ -263,11 +263,12 @@
                 $el.data('active', 'off');
             }
         });
-
-        $drop.on('mouseover', 'li').on('click', 'li', function(event) {
-            $inp[0].innerHTML = this.innerHTML;
-            $drop[0].style.display = 'none';
-            $tri.data('active', 'off');
+        $drop.on('mouseover', 'li', function(event) {
+            $drop.on("click", "li", function(event) {
+                $inp[0].innerHTML = this.innerHTML;
+                $drop[0].style.display = 'none';
+                $tri.data('active', 'off');
+            });
             /*局部刷新*/
         });
     }(jQuery));
