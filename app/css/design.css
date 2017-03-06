@@ -360,7 +360,7 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 185px;
+    min-height: 200px;
 }
 
 .radioItem {
@@ -387,7 +387,7 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 185px;
+    min-height: 200px;
 }
 
 .multipleItem {
@@ -414,7 +414,7 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 185px;
+    min-height: 200px;
 }
 
 .completionItem li {
@@ -437,7 +437,7 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 185px;
+    min-height: 200px;
 }
 
 .multitermCompletionItem {
@@ -465,7 +465,7 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 185px;
+    min-height: 200px;
 }
 
 .shortAnswerItem li {
@@ -490,7 +490,7 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 185px;
+    min-height: 200px;
 }
 
 .sortItem {
@@ -540,7 +540,7 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 185px;
+    min-height: 200px;
 }
 
 .mergeItem {

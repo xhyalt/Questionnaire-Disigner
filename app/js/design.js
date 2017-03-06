@@ -12,6 +12,7 @@ var quesNoArr = new Array(5);
 for (var i = 0; i < 5; i++) {
     quesNoArr[i] = 0;
 }
+var quesNoTemp = new Array(5);
 /*题号种类*/
 var quesNoPattern = new Array(5);
 quesNoPattern[0] = "一、 二、 三、";
@@ -334,7 +335,7 @@ $(function() {
             "border-color": "#1ABC9C"
         });
         quesActiveNo = parseInt($td.html()) - 1;
-        $inp[0].innerHTML = quesNoPattern[quesNoArr[quesActiveNo]];
+        $inp[0].innerHTML = quesNoPattern[quesNoTemp[quesActiveNo]];
         /*下拉框显示该层级的题号格式*/
     });
 
@@ -351,20 +352,18 @@ $(function() {
     });
 
     /*下拉框列表点击事件*/
-    $drop.on('mouseover', 'li', function(event) {
-        $drop.on("click", "li", function(event) {
-            $td = $(this);
-            $inp[0].innerHTML = this.innerHTML;
-            quesNoArr[quesActiveNo] = parseInt($td.attr("queNoType"));
-            $drop[0].style.display = 'none';
-            $tri.data('active', 'off');
+    $drop.on("click", "li", function(event) {
+        $td = $(this);
+        $inp[0].innerHTML = this.innerHTML;
+        quesNoTemp[quesActiveNo] = parseInt($td.attr("queNoType"));
+        $drop[0].style.display = 'none';
+        $tri.data('active', 'off');
 
-            /*初始化预览*/
-            $("#quesNoPreview ul").empty();
-            for (var i = 0; i < quesNoArr.length; i++) {
-                $("#quesNoPreview ul").append(`<li>` + quesNoPattern[quesNoArr[i]] + `</li>`);
-            }
-        });
+        /*刷新预览*/
+        $("#quesNoPreview ul").empty();
+        for (var i = 0; i < quesNoTemp.length; i++) {
+            $("#quesNoPreview ul").append(`<li>` + quesNoPattern[quesNoTemp[i]] + `</li>`);
+        }
     });
 
     /*问卷设计弹出框 点击关闭和取消事件*/
@@ -375,6 +374,12 @@ $(function() {
     /*问卷设计弹出框 点击确认事件*/
     $("#popBox").on("click", "#popBoxButtonConfirm", function() {
         console.log("hehe");
+
+        for (var i = 0; i < quesNoArr.length; i++) {
+            quesNoArr[i] = quesNoTemp[i];
+        }
+        setOrder();
+        hide();
     });
 
     /*问卷设计监听事件end==================*/
@@ -651,6 +656,12 @@ function show() {
         $drop = $('div.dropBox_drop', $dropBox),
         $inp = $('div.dropBox_inp', $dropBox);
     var hideobj = document.getElementById("hidebg");
+
+    for (var i = 0; i < quesNoArr.length; i++) {
+        quesNoTemp[i] = quesNoArr[i];
+    }
+    console.log(quesNoArr);
+    console.log(quesNoTemp);
 
     /*初始化级别*/
     $("#quesNoGrade").find("li").css({

@@ -247,7 +247,25 @@ function setOrder() {
             console.log("老子是第一节点");
             $td.eq(i).find("h4").html("Q1");
             $td.eq(i).attr("num", "1");
+            var level = parseInt($td.eq(i).attr("level"));
             flag = 0;
+            switch (quesNoArr[level - 1]) {
+                case 0:
+                    $td.eq(i).find("h4").html("一、");
+                    break;
+                case 1:
+                    $td.eq(i).find("h4").html("(一)");
+                    break;
+                case 2:
+                    $td.eq(i).find("h4").html("1.");
+                    break;
+                case 3:
+                    $td.eq(i).find("h4").html("1)");
+                    break;
+                case 4:
+                    $td.eq(i).find("h4").html("Q1");
+                    break;
+            }
         } else {
             /*非第一题*/
             var $prevTd = $td.eq(i).prev();
@@ -255,15 +273,79 @@ function setOrder() {
                 /*非第一个 同胞节点 前节点存在 父节点相同 层数相同*/
                 console.log("非第一个同胞节点");
                 $td.eq(i).attr("num", parseInt($prevTd.attr("num")) + 1);
-                $td.eq(i).find("h4").html("Q" + $td.eq(i).attr("num"));
+                var level = parseInt($td.eq(i).attr("level"));
+                switch (quesNoArr[level - 1]) {
+                    case 0:
+                        $td.eq(i).find("h4").html(intToChinese($td.eq(i).attr("num")));
+                        break;
+                    case 1:
+                        $td.eq(i).find("h4").html("(" + intToChinese($td.eq(i).attr("num")) + ")");
+                        break;
+                    case 2:
+                        $td.eq(i).find("h4").html($td.eq(i).attr("num") + ".");
+                        break;
+                    case 3:
+                        $td.eq(i).find("h4").html($td.eq(i).attr("num") + ")");
+                        break;
+                    case 4:
+                        $td.eq(i).find("h4").html("Q" + $td.eq(i).attr("num"));
+                        break;
+                }
             } else if ($prevTd.length == 0) {
                 /*该层第一个节点*/
                 console.log("该层第一个节点");
                 $td.eq(i).attr("num", "1");
-                $td.eq(i).find("h4").html("Q1");
+                var level = parseInt($td.eq(i).attr("level"));
+                switch (quesNoArr[level - 1]) {
+                    case 0:
+                        $td.eq(i).find("h4").html("一、");
+                        break;
+                    case 1:
+                        $td.eq(i).find("h4").html("(一)");
+                        break;
+                    case 2:
+                        $td.eq(i).find("h4").html("1.");
+                        break;
+                    case 3:
+                        $td.eq(i).find("h4").html("1)");
+                        break;
+                    case 4:
+                        $td.eq(i).find("h4").html("Q1");
+                        break;
+                }
             }
         }
     }
+}
+
+function intToChinese(str) {
+    str = str + '';
+    var len = str.length - 1;
+    var idxs = ['', '十', '百', '千', '万', '十', '百', '千', '亿', '十', '百', '千', '万', '十', '百', '千', '亿'];
+    var num = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+    return str.replace(/([1-9]|0+)/g, function($, $1, idx, full) {
+        var pos = 0;
+        if ($1[0] != '0') {
+            pos = len - idx;
+            if (idx == 0 && $1[0] == 1 && idxs[len - idx] == '十') {
+                return idxs[len - idx];
+            }
+            return num[$1[0]] + idxs[len - idx];
+        } else {
+            var left = len - idx;
+            var right = len - idx + $1.length;
+            if (Math.floor(right / 4) - Math.floor(left / 4) > 0) {
+                pos = left - left % 4;
+            }
+            if (pos) {
+                return idxs[pos] + num[$1[0]];
+            } else if (idx + $1.length >= len) {
+                return '';
+            } else {
+                return num[$1[0]];
+            }
+        }
+    });
 }
 
 /**
