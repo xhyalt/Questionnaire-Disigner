@@ -60,14 +60,17 @@
 }
 
 .xcConfirm .popBox .txtBox {
-    margin: 40px 30px;
-    height: 50px;
+    margin-left: 30px;
+    margin-right: 30px;
+    height: 125px;
     overflow: hidden;
+    text-align: left;
 }
 
 .xcConfirm .popBox .txtBox .bigIcon {
     float: left;
-    margin-right: 20px;
+    line-height: 140px;
+    margin-top: 40px;
     width: 48px;
     height: 48px;
     background-image: url(../images/icons.png);
@@ -76,9 +79,7 @@
 }
 
 .xcConfirm .popBox .txtBox p {
-    height: 84px;
-    margin-top: 16px;
-    line-height: 26px;
+    line-height: 125px;
     overflow-x: hidden;
     overflow-y: auto;
 }
