@@ -60,12 +60,17 @@
         var itype = type ? type instanceof Object ? type : popType[type] || {} : {}; /*格式化输入的参数:弹窗类型*/
         var config = $.extend(true, {
             /*属性*/
-            title: "", /*自定义的标题*/
-            icon: "", /*图标*/
-            btn: btnType.ok, /*按钮,默认单按钮*/
+            title: "",
+            /*自定义的标题*/
+            icon: "",
+            /*图标*/
+            btn: btnType.ok,
+            /*按钮,默认单按钮*/
             /*事件*/
-            onOk: $.noop, /*点击确定的按钮回调*/
-            onCancel: $.noop, /*点击取消的按钮回调*/
+            onOk: $.noop,
+            /*点击确定的按钮回调*/
+            onCancel: $.noop,
+            /*点击取消的按钮回调*/
             onClose: $.noop /*弹窗关闭的回调,返回触发事件*/
         }, itype, cb);
 

@@ -205,6 +205,57 @@
         Menu.setApplicationMenu(menu);
     </script> -->
 
+    <div id="hidebg"></div>
+    <div id="popBox">
+        <div id="popBoxHead">
+            问卷设置
+            <div id="popBoxClose"></div>
+        </div>
+        <div id="popBoxMain">
+            <div id="quesNo">
+                <div id="quesNoGrade">
+                    <p>级别</p>
+                    <ul>
+                        <li id="activeQuesNo">1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                    </ul>
+                </div>
+                <div id="quesNoEx">
+                    <p>编号：</p>
+                    <div id="dropBox">
+                        <div class="dropBox_wrp">
+                            <div class="dropBox_inp dropBox_tri"></div>
+                            <a href="javascript: ;" class="dropBox_tri"></a>
+                        </div>
+                        <div class="dropBox_drop" style="display:none">
+                            <ul>
+                                <!-- 所有题号类型 -->
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="quesNoPreview">
+                        <ul>
+                            <!-- 所有级别的题号类型显示 -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="popBoxButtonBox">
+            <div id="popBoxButtonGroup">
+                <div id="popBoxButtonCancel">
+                    <a href="javascript: ;">返 回</a>
+                </div>
+                <div id="popBoxButtonConfirm">
+                    <a href="javascript: ;">确 认</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="parent">
         <div id="left">
             <div class="menuBox">
@@ -371,7 +422,10 @@
                 <a href="./list.html">返 回</a>
             </div>
             <div class="lightButton">
-                <a href="javascript: setOrder();" target="_blank">预 览</a>
+                <a href="javascript: show();" target="_blank">设 置</a>
+            </div>
+            <div class="lightButton">
+                <a href="javascript: ;" target="_blank">预 览</a>
             </div>
             <div class="darkButton">
                 <a href="#">保 存</a>
@@ -431,34 +485,35 @@
             });
         });
     </script>
-    <!-- 拖拽菜单项 -->
+
     <script type="text/javascript">
-        var brightTempDiv = `<div id="brightTempDiv" style="background-color: #1ABC9C; margin-bottom: 5px; width: 800px; height: 10px;"></div>`;
-        $(function() {
-            $("#MenuItemRadio")[0].ondragstart = function(event) {
-                console.log("drapStart");
-                event.dataTransfer.setData("Text", event.target.id);
-            };
-            $("#emptyBox")[0].ondrop = function(event) {
-                console.log("onDrop");
-                $("#brightTempDiv").remove();
-                $("#emptyBox").remove();
-                event.preventDefault();
-            };
-            $("#emptyBox")[0].ondragover = function(event) {
-                console.log("onDrop over");
-                event.preventDefault();
-            };
-            $("#emptyBox")[0].ondragenter = function(event) {
-                console.log("onDrop enter");
-                /*在titleBox下添加亮色div*/
-                $("#titleBox").after(brightTempDiv);
-            };
-            $("#emptyBox")[0].ondragleave = function(event) {
-                console.log("onDrop leave");
-                $("#brightTempDiv").remove();
-            };
-        });
+        // 下拉列表js
+        // (function($) {
+        //     var $dropBox = $('#dropBox'),
+        //         $tri = $('.dropBox_tri', $dropBox),
+        //         $drop = $('div.dropBox_drop', $dropBox),
+        //         $inp = $('div.dropBox_inp', $dropBox);
+        //
+        //     $tri.on('click', function(event) {
+        //         var $el = $(this);
+        //         if ($el.data('active') !== 'on') {
+        //             $drop[0].style.display = 'block';
+        //             $el.data('active', 'on');
+        //         } else {
+        //             $drop[0].style.display = 'none';
+        //             $el.data('active', 'off');
+        //         }
+        //     });
+        //
+        //     $drop.on("mouseover", "li", function(event) {
+        //         $drop.on("click", "li", function(event) {
+        //             $inp[0].innerHTML = this.innerHTML;
+        //             $drop[0].style.display = 'none';
+        //             $tri.data('active', 'off');
+        //         });
+        //         /*局部刷新*/
+        //     });
+        // }(jQuery));
     </script>
 </body>
 

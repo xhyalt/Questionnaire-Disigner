@@ -6,6 +6,22 @@
 /*用户基础数据*/
 var GlobalData = null;
 
+
+/*题号数组*/
+var quesNoArr = new Array(5);
+for (var i = 0; i < 5; i++) {
+    quesNoArr[i] = 0;
+}
+/*题号种类*/
+var quesNoPattern = new Array(5);
+quesNoPattern[0] = "一、 二、 三、";
+quesNoPattern[1] = "(一) (二) (三)";
+quesNoPattern[2] = "1. 2. 3.";
+quesNoPattern[3] = "1) 2) 3)";
+quesNoPattern[4] = "Q1. Q2. Q3.";
+/*当前编辑的题号*/
+var quesActiveNo = 0;
+
 $(function() {
 
     /*获取用户基本信息*/
@@ -212,7 +228,8 @@ $(function() {
             setOrder();
         } else if (getLevelSubjectNum($tdP) == 2) {
             /*弹窗询问是否保留分组信息*/
-            window.wxc.xcConfirm("是否保留分组信息？", window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+            txt = "是否保留分组信息？";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
                 if (res.data == true) {
                     /*保留*/
                     console.log("保留");
@@ -230,24 +247,24 @@ $(function() {
                     $mergeTdP = $tdP.parent().parent().parent();
                     level = $mergeDiv.attr("level");
                     father = $mergeDiv.attr("father");
-                    if($tdP.prev()[0]){
-                      /*正在拆解后题*/
-                      $tdP.attr("level", level);
-                      $tdP.attr("father", father);
-                      $tdP.prev().attr("level", level);
-                      $tdP.prev().attr("father", father);
-                      $mergeTdP.after($tdP.prop("outerHTML"));
-                      $mergeTdP.after($tdP.prev().prop("outerHTML"));
-                      $mergeDiv.remove();
-                    }else if($tdP.next()[0]){
-                      /*正在拆解前题*/
-                      $tdP.attr("level", level);
-                      $tdP.attr("father", father);
-                      $tdP.next().attr("level", level);
-                      $tdP.next().attr("father", father);
-                      $mergeTdP.after($tdP.next().prop("outerHTML"));
-                      $mergeTdP.after($tdP.prop("outerHTML"));
-                      $mergeDiv.remove();
+                    if ($tdP.prev()[0]) {
+                        /*正在拆解后题*/
+                        $tdP.attr("level", level);
+                        $tdP.attr("father", father);
+                        $tdP.prev().attr("level", level);
+                        $tdP.prev().attr("father", father);
+                        $mergeTdP.after($tdP.prop("outerHTML"));
+                        $mergeTdP.after($tdP.prev().prop("outerHTML"));
+                        $mergeDiv.remove();
+                    } else if ($tdP.next()[0]) {
+                        /*正在拆解前题*/
+                        $tdP.attr("level", level);
+                        $tdP.attr("father", father);
+                        $tdP.next().attr("level", level);
+                        $tdP.next().attr("father", father);
+                        $mergeTdP.after($tdP.next().prop("outerHTML"));
+                        $mergeTdP.after($tdP.prop("outerHTML"));
+                        $mergeDiv.remove();
                     }
                 } else {
                     /*关闭 没有动作*/
@@ -280,6 +297,87 @@ $(function() {
             $tdP.find(".sortItem").append(sortItemLabel);
         }
     });
+
+    /*问卷设计监听事件start====================*/
+    var $dropBox = $('#dropBox'),
+        $tri = $('.dropBox_tri', $dropBox),
+        $drop = $('div.dropBox_drop', $dropBox),
+        $inp = $('div.dropBox_inp', $dropBox);
+
+    /*级别鼠标移入移出事件*/
+    $("#popBox #quesNoGrade").on("mouseover", "li", function() {
+        $td = $(this);
+        $td.css({
+            "border": "2px solid #1ABC9C"
+        });
+    }).on("mouseout", "li", function() {
+        $td = $(this);
+        if ($td.css("background-color") != "rgb(26, 188, 156)") {
+            $td.css({
+                "border": "2px solid #f3f3f3"
+            });
+        }
+    });
+
+    /*级别点击事件*/
+    $("#popBox #quesNoGrade").on("click", "li", function() {
+        $td = $(this);
+        $tdP = $td.parent();
+        $tdP.find("li").css({
+            "background-color": "#fff",
+            "color": "#666666",
+            "border-color": "#f3f3f3"
+        });
+        $td.css({
+            "background-color": "#1ABC9C",
+            "color": "#fff",
+            "border-color": "#1ABC9C"
+        });
+        quesActiveNo = parseInt($td.html()) - 1;
+        $inp[0].innerHTML = quesNoPattern[quesNoArr[quesActiveNo]];
+        /*下拉框显示该层级的题号格式*/
+    });
+
+    /*下拉框点击事件*/
+    $tri.on('click', function(event) {
+        var $el = $(this);
+        if ($el.data('active') !== 'on') {
+            $drop[0].style.display = 'block';
+            $el.data('active', 'on');
+        } else {
+            $drop[0].style.display = 'none';
+            $el.data('active', 'off');
+        }
+    });
+
+    /*下拉框列表点击事件*/
+    $drop.on('mouseover', 'li', function(event) {
+        $drop.on("click", "li", function(event) {
+            $td = $(this);
+            $inp[0].innerHTML = this.innerHTML;
+            quesNoArr[quesActiveNo] = parseInt($td.attr("queNoType"));
+            $drop[0].style.display = 'none';
+            $tri.data('active', 'off');
+
+            /*初始化预览*/
+            $("#quesNoPreview ul").empty();
+            for (var i = 0; i < quesNoArr.length; i++) {
+                $("#quesNoPreview ul").append(`<li>` + quesNoPattern[quesNoArr[i]] + `</li>`);
+            }
+        });
+    });
+
+    /*问卷设计弹出框 点击关闭和取消事件*/
+    $("#popBox").on("click", "#popBoxClose, #popBoxButtonCancel", function() {
+        hide();
+    });
+
+    /*问卷设计弹出框 点击确认事件*/
+    $("#popBox").on("click", "#popBoxButtonConfirm", function() {
+        console.log("hehe");
+    });
+
+    /*问卷设计监听事件end==================*/
 
     /*标题 点击编辑*/
     $("#titleBox").on("click", "#titleNameTextID", function() {
@@ -532,6 +630,63 @@ function getType(td) {
         type = "description";
     }
     return type;
+}
+
+function setQuesNo() {
+    /*弹窗设置题号格式*/
+    txt = "是否保留分组信息？";
+    window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.custom, function(res) {
+
+    });
+}
+
+function getQuesNo() {
+    /*获取题号格式*/
+}
+
+/*显示隐藏层和弹出层 弹窗问卷设置*/
+function show() {
+    var $dropBox = $('#dropBox'),
+        $tri = $('.dropBox_tri', $dropBox),
+        $drop = $('div.dropBox_drop', $dropBox),
+        $inp = $('div.dropBox_inp', $dropBox);
+    var hideobj = document.getElementById("hidebg");
+
+    /*初始化级别*/
+    $("#quesNoGrade").find("li").css({
+        "background-color": "#fff",
+        "color": "#666666",
+        "border-color": "#f3f3f3"
+    });
+    $("#activeQuesNo").css({
+        "background-color": "#1ABC9C",
+        "color": "#fff",
+        "border-color": "#1ABC9C"
+    });
+
+    /*初始化下拉框*/
+    $drop[0].style.display = 'none';
+    $tri.data('active', 'off');
+    $inp[0].innerHTML = quesNoPattern[quesNoArr[0]];
+    $(".dropBox_drop ul").empty();
+    for (var i = 0; i < quesNoPattern.length; i++) {
+        $(".dropBox_drop ul").append(`<li queNoType=` + i + `>` + quesNoPattern[i] + `</li>`);
+    }
+
+    /*初始化预览*/
+    $("#quesNoPreview ul").empty();
+    for (var i = 0; i < quesNoArr.length; i++) {
+        $("#quesNoPreview ul").append(`<li>` + quesNoPattern[quesNoArr[i]] + `</li>`);
+    }
+
+    hidebg.style.display = "block"; //显示隐藏层
+    document.getElementById("popBox").style.display = "block"; //显示弹出层
+}
+
+/*去除隐藏层和弹出层*/
+function hide() {
+    document.getElementById("hidebg").style.display = "none";
+    document.getElementById("popBox").style.display = "none";
 }
 
 function MM_swapImgRestore() {
