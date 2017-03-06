@@ -234,6 +234,7 @@ $(document).ready(function() {
 
 /**
  * 每次修改target时重置题目的题号
+ * @public
  */
 function setOrder() {
     var index = 1;
@@ -245,7 +246,6 @@ function setOrder() {
         if (flag) {
             /*第一题，只走一遍*/
             console.log("老子是第一节点");
-            $td.eq(i).find("h4").html("Q1");
             $td.eq(i).attr("num", "1");
             var level = parseInt($td.eq(i).attr("level"));
             flag = 0;
@@ -318,6 +318,12 @@ function setOrder() {
     }
 }
 
+/**
+ * 输入阿拉伯数字输出汉字的函数
+ * @public
+ * @param  str [阿拉伯数字字符串]
+ * @return [汉字字符串]
+ */
 function intToChinese(str) {
     str = str + '';
     var len = str.length - 1;
@@ -350,6 +356,7 @@ function intToChinese(str) {
 
 /**
  * 获取所有题目的数量 包括合并题型
+ * @public
  * @return [题目数量]
  */
 function getSubjectNum() {
@@ -374,6 +381,7 @@ function getLevelSubjectNum($tdP) {
 
 /**
  * 拖拽或点击时 获取题目类型
+ * @public
  * @param  $this [当前拖拽的题型html题型]
  * @return type  [判断出该html段的题型]
  */
@@ -439,7 +447,7 @@ const radioItemLabel = `
 </li>`;
 
 const multipleDiv = `
-<div class="multipleDiv subject">
+<div class="multipleDiv subject"  level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -473,7 +481,7 @@ const multipleItemLabel = `
 </li>`;
 
 const completionDiv = `
-<div class="completionDiv subject">
+<div class="completionDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -495,7 +503,7 @@ const completionDiv = `
 </div>`;
 
 const multitermCompletionDiv = `
-<div class="multitermCompletionDiv subject">
+<div class="multitermCompletionDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -529,7 +537,7 @@ const multitermCompletionItemLabel = `
 </li>`;
 
 const shortAnswerDiv = `
-<div class="shortAnswerDiv subject">
+<div class="shortAnswerDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -551,7 +559,7 @@ const shortAnswerDiv = `
 </div>`;
 
 const sortDiv = `
-<div class="sortDiv subject">
+<div class="sortDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -585,7 +593,7 @@ const sortItemLabel = `
 </li>`;
 
 const descriptionDiv = `
-<div class="descriptionDiv subject">
+<div class="descriptionDiv subject" level="1" father="0">
     <div class="leftSetup">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
@@ -595,7 +603,7 @@ const descriptionDiv = `
 </div>`;
 
 const dividingLineDiv = `
-<div class="dividingLineDiv subject">
+<div class="dividingLineDiv subject" level="1" father="0">
     <div class="leftSetup">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
@@ -605,7 +613,7 @@ const dividingLineDiv = `
 </div>`;
 
 const mergeDiv = `
-<div class="mergeDiv subject">
+<div class="mergeDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
