@@ -24,7 +24,7 @@ $(function() {
 $(document).ready(function() {
 
     /*题型鼠标点击事件*/
-    $(".menuItemBox").delegate(".subType", "click", function(md) {
+    $(".menuItemBox").delegate(".subType, .unSubject", "click", function(md) {
         md.preventDefault();
 
         $this = $(this);
@@ -51,14 +51,14 @@ $(document).ready(function() {
 
         setOrder();
 
-        $("#target .subject").css({
+        $("#target .subject, #target .unSubject").css({
             "border-top": "none",
             "border-bottom": "none"
         });
 
         tops = [];
         $(document).undelegate("body", "mousemove");
-        $("body").undelegate(".subject", "mouseup");
+        $("body").undelegate(".subject, .unSubject", "mouseup");
         $("#target .subType").popover({
             trigger: "manual"
         });
@@ -80,7 +80,8 @@ $(document).ready(function() {
         var type = getSubjectType($this);
 
         var delayed = setTimeout(function() {
-            console.log("var delayed = setTimeout");
+
+            /*判断盒子类型*/
             if (type == "radio") {
                 $temp = $(`<div class="cloth"></div>`).append(radioDiv);
             } else if (type == "multiple") {
@@ -112,7 +113,7 @@ $(document).ready(function() {
             var half_box_width = ($temp.width() / 2);
             var $target = $("#target");
             var tar_pos = $target.position();
-            var $target_subType = $("#target .subject");
+            var $target_subType = $("#target .subject, #target .unSubject");
 
             /*题型 鼠标移动触发事件*/
             $(document).delegate("body", "mousemove", function(mm) {
@@ -120,6 +121,8 @@ $(document).ready(function() {
                 $temp.show();
                 var mm_mouseX = mm.pageX;
                 var mm_mouseY = mm.pageY;
+
+                /*将盒子位置与鼠标位置关联*/
                 $temp.css({
                     "top": mm_mouseY - half_box_height + "px",
                     "left": mm_mouseX - half_box_width + "px"
@@ -135,16 +138,17 @@ $(document).ready(function() {
                         "border-bottom": "none"
                     });
                     tops = $.grep($target_subType, function(e) {
-                        return ($(e).position().top - mm_mouseY + half_box_height > 0 && mm_mouseY - $(e).position().top > 0 && $(e).attr("id") !== "target");
+                        return (mm_mouseY - $(e).position().top < $(e).height() / 2 && mm_mouseY - $(e).position().top > 0 && $(e).attr("id") !== "target");
                     });
                     bottoms = $.grep($target_subType, function(e) {
-                        return (mm_mouseY - $(e).position().top < 2 * half_box_height && mm_mouseY - $(e).position().top > half_box_height && $(e).attr("id") !== "target");
+                        return (mm_mouseY - $(e).position().top < 2 * $(e).height() / 2 && mm_mouseY - $(e).position().top > $(e).height() / 2 && $(e).attr("id") !== "target");
                     });
-                    console.log("tops = " + tops);
+                    // console.log("tops = " + tops);
                     if (tops.length > 0) {
                         /*识别位置在上半部分*/
                         $(tops[0]).css("border-top", "5px solid #1ABC9C");
                     } else if (bottoms.length > 0) {
+                        /*识别位置在下半部分*/
                         $(bottoms[0]).css("border-bottom", "5px solid #1ABC9C");
                     } else {
                         /*设计区没有题目 空盒上加边界*/
@@ -162,14 +166,14 @@ $(document).ready(function() {
             });
 
             /*在middle松开鼠标触发事件*/
-            $("body").delegate(".subject", "mouseup", function(mu) {
+            $("body").delegate(".subject, .unSubject", "mouseup", function(mu) {
                 mu.preventDefault();
 
                 var mu_mouseX = mu.pageX;
                 var mu_mouseY = mu.pageY;
                 var tar_pos = $target.position();
 
-                $("#target .subject").css({
+                $("#target .subject, #target .unSubject").css({
                     "border-top": "none",
                     "border-bottom": "none"
                 });
@@ -180,20 +184,25 @@ $(document).ready(function() {
                     mu_mouseY > tar_pos.top &&
                     mu_mouseY < tar_pos.top + $target.height()
                 ) {
+                  console.log("进入target范围");
                     $temp.attr("style", null);
 
                     if (tops.length > 0) {
+                        console.log("===tops===");
                         level = tops[0].attributes["level"].nodeValue
                         father = tops[0].attributes["father"].nodeValue
                         $temp.html($($temp.html()).attr("level", level));
                         $temp.html($($temp.html()).attr("father", father));
+                        console.log($temp.html());
                         $($temp.html()).insertBefore(tops[0]);
                         setOrder();
                     } else if (bottoms.length > 0) {
+                        console.log("===bottoms===");
                         level = bottoms[0].attributes["level"].nodeValue
                         father = bottoms[0].attributes["father"].nodeValue
                         $temp.html($($temp.html()).attr("level", level));
                         $temp.html($($temp.html()).attr("father", father));
+                        console.log($temp.html());
                         $($temp.html()).insertAfter(bottoms[0]);
                         setOrder();
                     } else {
@@ -202,7 +211,7 @@ $(document).ready(function() {
                         $("#emptyBox").remove();
                     }
                 } else {
-                    $("#target .subject").css({
+                    $("#target .subject, #target .unSubject").css({
                         "border-top": "none",
                         "border-bottom": "none"
                     });
@@ -210,7 +219,7 @@ $(document).ready(function() {
                 }
 
                 $(document).undelegate("body", "mousemove");
-                $("body").undelegate(".subject", "mouseup");
+                $("body").undelegate(".subject, .unSubject", "mouseup");
                 $("#target .subType").popover({
                     trigger: "manual"
                 });
@@ -218,7 +227,6 @@ $(document).ready(function() {
                 LPB.genSource();
             });
         }, delays[type]);
-
 
         $(document).mouseup(function() {
             $(".cloth").remove();
@@ -242,7 +250,8 @@ function setOrder() {
     var $td = $("#target .subject");
     var $prevTd;
     for (var i = 0; i < $td.length; i++) {
-        // $td[i].innerHTML = "Q" + (index++).toString();
+
+        /*其它题型正常设置题号*/
         if (flag) {
             /*第一题，只走一遍*/
             console.log("老子是第一节点");
@@ -268,8 +277,13 @@ function setOrder() {
             }
         } else {
             /*非第一题*/
-            var $prevTd = $td.eq(i).prev();
-            if ($prevTd.length && $td.eq(i).attr("father") == $prevTd.attr("father") && $td.eq(i).attr("level") == $prevTd.attr("level")) {
+            var $prevTd = $td.eq(i - 1);
+            // console.log("第几题 " + i);
+            // console.log("本题的father " + $td.eq(i).attr("father"));
+            // console.log("上题的father " + $prevTd.attr("father"));
+            // console.log("本题的level " + $td.eq(i).attr("level"));
+            // console.log("上题的level " + $prevTd.attr("level"));
+            if ($td.eq(i).attr("father") == $prevTd.attr("father") && $td.eq(i).attr("level") == $prevTd.attr("level")) {
                 /*非第一个 同胞节点 前节点存在 父节点相同 层数相同*/
                 console.log("非第一个同胞节点");
                 $td.eq(i).attr("num", parseInt($prevTd.attr("num")) + 1);
@@ -291,7 +305,7 @@ function setOrder() {
                         $td.eq(i).find("h4").html("Q" + $td.eq(i).attr("num"));
                         break;
                 }
-            } else if ($prevTd.length == 0) {
+            } else {
                 /*该层第一个节点*/
                 console.log("该层第一个节点");
                 $td.eq(i).attr("num", "1");
@@ -593,7 +607,7 @@ const sortItemLabel = `
 </li>`;
 
 const descriptionDiv = `
-<div class="descriptionDiv subject" level="1" father="0">
+<div class="descriptionDiv unSubject" level="1" father="0">
     <div class="leftSetup">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
@@ -603,7 +617,7 @@ const descriptionDiv = `
 </div>`;
 
 const dividingLineDiv = `
-<div class="dividingLineDiv subject" level="1" father="0">
+<div class="dividingLineDiv unSubject" level="1" father="0">
     <div class="leftSetup">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>

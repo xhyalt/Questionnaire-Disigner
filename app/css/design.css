@@ -277,7 +277,7 @@ body {
 
 /*所有题型公有*/
 
-.subject {
+.subject, .unSubject {
     width: 100%;
     background-color: #fff;
     margin-top: 8px;
@@ -285,7 +285,7 @@ body {
     color: #666666;
 }
 
-.subject img {
+.subject img, .unSubject img {
     margin-bottom: 2px;
     visibility: hidden;
 }
@@ -518,7 +518,7 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 30px;
+    min-height: 30px;/*220px*/
 }
 
 
@@ -530,7 +530,7 @@ body {
     padding: 15px;
     padding-left: 10px;
     padding-right: 10px;
-    min-height: 10px;
+    min-height: 10px;/*220px*/
 }
 
 

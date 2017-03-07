@@ -368,7 +368,7 @@ $(function() {
 
     /*问卷设计弹出框 点击关闭和取消事件*/
     $("#popBox").on("click", "#popBoxClose, #popBoxButtonCancel", function() {
-        hide();
+        hideSetup();
     });
 
     /*问卷设计弹出框 点击确认事件*/
@@ -379,7 +379,7 @@ $(function() {
             quesNoArr[i] = quesNoTemp[i];
         }
         setOrder();
-        hide();
+        hideSetup();
     });
 
     /*问卷设计监听事件end==================*/
@@ -633,6 +633,8 @@ function getType(td) {
         type = "sort";
     } else if (td.attr("class").indexOf("description") >= 0) {
         type = "description";
+    } else if (td.attr("class").indexOf("dividingLine") >= 0) {
+        type = "dividingLine";
     }
     return type;
 }
@@ -650,7 +652,7 @@ function getQuesNo() {
 }
 
 /*显示隐藏层和弹出层 弹窗问卷设置*/
-function show() {
+function showSetup() {
     var $dropBox = $('#dropBox'),
         $tri = $('.dropBox_tri', $dropBox),
         $drop = $('div.dropBox_drop', $dropBox),
@@ -695,7 +697,7 @@ function show() {
 }
 
 /*去除隐藏层和弹出层*/
-function hide() {
+function hideSetup() {
     document.getElementById("hidebg").style.display = "none";
     document.getElementById("popBox").style.display = "none";
 }
