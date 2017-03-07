@@ -162,6 +162,11 @@ $(function() {
         /*复制题目*/
         $tdP = $(this).parent().parent();
         $tdP.after($tdP.prop("outerHTML"));
+        /*初始化左侧的图标效果*/
+        $tdP.next().children().children("img.copy").attr('src', "./images/main_06_copy_off.png");
+        $tdP.next().children().children("img").css({
+          "visibility": "hidden"
+        });
         setOrder();
     });
 
