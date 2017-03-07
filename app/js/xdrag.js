@@ -184,7 +184,7 @@ $(document).ready(function() {
                     mu_mouseY > tar_pos.top &&
                     mu_mouseY < tar_pos.top + $target.height()
                 ) {
-                  console.log("进入target范围");
+                    console.log("进入target范围");
                     $temp.attr("style", null);
 
                     if (tops.length > 0) {
@@ -278,11 +278,7 @@ function setOrder() {
         } else {
             /*非第一题*/
             var $prevTd = $td.eq(i - 1);
-            // console.log("第几题 " + i);
-            // console.log("本题的father " + $td.eq(i).attr("father"));
-            // console.log("上题的father " + $prevTd.attr("father"));
-            // console.log("本题的level " + $td.eq(i).attr("level"));
-            // console.log("上题的level " + $prevTd.attr("level"));
+
             if ($td.eq(i).attr("father") == $prevTd.attr("father") && $td.eq(i).attr("level") == $prevTd.attr("level")) {
                 /*非第一个 同胞节点 前节点存在 父节点相同 层数相同*/
                 console.log("非第一个同胞节点");
@@ -305,8 +301,8 @@ function setOrder() {
                         $td.eq(i).find("h4").html("Q" + $td.eq(i).attr("num"));
                         break;
                 }
-            } else {
-                /*该层第一个节点*/
+            } else if ($td.eq(i).attr("father") - 1 == $prevTd.attr("father") && $td.eq(i).attr("level") - 1 == $prevTd.attr("level")) {
+                /*该组第一个节点*/
                 console.log("该层第一个节点");
                 $td.eq(i).attr("num", "1");
                 var level = parseInt($td.eq(i).attr("level"));
@@ -327,6 +323,30 @@ function setOrder() {
                         $td.eq(i).find("h4").html("Q1");
                         break;
                 }
+            } else if (parseInt($td.eq(i).attr("father")) < parseInt($prevTd.attr("father")) && parseInt($td.eq(i).attr("level")) < parseInt($prevTd.attr("level"))) {
+                /*非第一个节点 同层上一题为合并节点*/
+                console.log("非第一个节点 同层上一题为合并节点");
+                $td.eq(i).attr("num", parseInt($td.eq(i).prev().attr("num")) + 1);
+                var level = parseInt($td.eq(i).attr("level"));
+                switch (quesNoArr[level - 1]) {
+                    case 0:
+                        $td.eq(i).find("h4").html(intToChinese($td.eq(i).attr("num")));
+                        break;
+                    case 1:
+                        $td.eq(i).find("h4").html("(" + intToChinese($td.eq(i).attr("num")) + ")");
+                        break;
+                    case 2:
+                        $td.eq(i).find("h4").html($td.eq(i).attr("num") + ".");
+                        break;
+                    case 3:
+                        $td.eq(i).find("h4").html($td.eq(i).attr("num") + ")");
+                        break;
+                    case 4:
+                        $td.eq(i).find("h4").html("Q" + $td.eq(i).attr("num"));
+                        break;
+                }
+            } else {
+                console.log("这是漏掉的题目");
             }
         }
     }

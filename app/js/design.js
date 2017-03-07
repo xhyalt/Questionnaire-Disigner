@@ -10,7 +10,7 @@ var GlobalData = null;
 /*题号数组*/
 var quesNoArr = new Array(5);
 for (var i = 0; i < 5; i++) {
-    quesNoArr[i] = 0;
+    quesNoArr[i] = i;
 }
 var quesNoTemp = new Array(5);
 /*题号种类*/
@@ -267,9 +267,10 @@ $(function() {
                         $mergeTdP.after($tdP.prop("outerHTML"));
                         $mergeDiv.remove();
                     }
+                    setOrder();
                 } else {
                     /*关闭 没有动作*/
-                    console.log("关闭");
+                    console.log("直接关闭 没有动作");
                 }
             });
         } else if (getLevelSubjectNum($tdP) == 1) {
