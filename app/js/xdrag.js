@@ -632,7 +632,7 @@ const descriptionDiv = `
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
     <div class="descriptionMain">
-        <div class="descriptionStemText textBox stemText" id="descriptionStemTextID">描述说明</div>
+        <div class="descriptionStemText textBox stemText" id="descriptionStemTextID" placeholder="描述说明"></div>
     </div>
 </div>`;
 
@@ -658,8 +658,8 @@ const mergeDiv = `
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
     <div class="mergeMain">
-        <div class="mergeStemText textBox stemText" id="sortStemTextID">合并题</div>
-        <div class="mergeDescriptionText textBox descriptionText">合并题描述</div>
+        <div class="mergeStemText textBox stemText" id="sortStemTextID" placeholder="合并题"></div>
+        <div class="mergeDescriptionText textBox descriptionText" placeholder="合并题描述"></div>
         <ul class="mergeItem">
         </ul>
     </div>

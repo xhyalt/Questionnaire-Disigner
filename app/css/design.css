@@ -501,16 +501,16 @@ body {
     outline: none;
 }
 
-.multitermCompletionItem .itemTextInput{
-  float: left;
-  margin-left: 0px;
-  background-color: #b4fbef;
-  line-height: 2;
-  font-size: 14px;
-  color: #666666;
-  border: none;
-  outline: none;
-  width: 60%;
+.multitermCompletionItem .itemTextInput {
+    float: left;
+    margin-left: 0px;
+    background-color: #b4fbef;
+    line-height: 2;
+    font-size: 14px;
+    color: #666666;
+    border: none;
+    outline: none;
+    width: 60%;
 }
 
 .multitermCompletionItem label:empty:before {
@@ -574,16 +574,16 @@ body {
     outline: none;
 }
 
-.sortItem .itemTextInput{
-  float: left;
-  margin-left: 0px;
-  background-color: #b4fbef;
-  line-height: 2;
-  font-size: 14px;
-  color: #666666;
-  border: none;
-  outline: none;
-  width: 60%;
+.sortItem .itemTextInput {
+    float: left;
+    margin-left: 0px;
+    background-color: #b4fbef;
+    line-height: 2;
+    font-size: 14px;
+    color: #666666;
+    border: none;
+    outline: none;
+    width: 60%;
 }
 
 .sortItem label:empty:before {
