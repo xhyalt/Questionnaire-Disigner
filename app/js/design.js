@@ -165,7 +165,7 @@ $(function() {
         /*初始化左侧的图标效果*/
         $tdP.next().children().children("img.copy").attr('src', "./images/main_06_copy_off.png");
         $tdP.next().children().children("img").css({
-          "visibility": "hidden"
+            "visibility": "hidden"
         });
         setOrder();
     });
@@ -479,10 +479,10 @@ $(function() {
     $("#target").on("click", ".stemText", function() {
 
         var td = $(this);
-        var type = getType(td);
         /*确定题目种类*/
+        var type = getType(td);
 
-        var txt = td.text();
+        var txt = td.html();
         var input = $(`<div class="stemTextInput" contenteditable="true">` + txt + `</div>`);
         td.html(input);
 
@@ -493,26 +493,10 @@ $(function() {
         input.trigger("focus");
         input.blur(function() {
             var newtxt = $(".stemTextInput").html();
-            if (newtxt == "") {
-                if (type == "radio") {
-                    td.html("单选题");
-                } else if (type == "multiple") {
-                    td.html("多选题");
-                } else if (type == "completion") {
-                    td.html("填空题");
-                } else if (type == "multitermCompletion") {
-                    td.html("多项填空题");
-                } else if (type == "shortAnswer") {
-                    td.html("简答题");
-                } else if (type == "sort") {
-                    td.html("排序题");
-                } else if (type == "description") {
-                    td.html("描述说明");
-                }
-            } else if (newtxt != txt) {
+            if (newtxt != txt) {
                 /*数据库操作*/
                 td.html(newtxt);
-            } else {
+            } else if (newtxt == txt) {
                 td.html(newtxt);
             }
         });
@@ -522,43 +506,24 @@ $(function() {
     $("#target").on("click", ".descriptionText", function() {
 
         var td = $(this);
-        var type = getType(td);
         /*确定题目种类*/
+        var type = getType(td);
 
-        var txt = td.text();
-        var input = $(`<input class='descriptionTextInput' type='text' value='` + txt + `'/>`);
+        var txt = td.html();
+        var input = $(`<div class="descriptionTextInput" contenteditable="true">` + txt + `</div>`);
         td.html(input);
-        input.select();
+
         input.click(function() {
-            $(this).select();
             return false;
         });
-        input.keydown(function() {
-            if (event.keyCode == "13") {
-                input.blur();
-            }
-        });
+
         input.trigger("focus");
         input.blur(function() {
-            var newtxt = $(this).val();
-            if (newtxt == "") {
-                if (type == "radio") {
-                    td.html("单选题描述");
-                } else if (type == "multiple") {
-                    td.html("多选题描述");
-                } else if (type == "completion") {
-                    td.html("填空题描述");
-                } else if (type == "multitermCompletion") {
-                    td.html("多项填空题描述");
-                } else if (type == "shortAnswer") {
-                    td.html("简答题描述");
-                } else if (type == "sort") {
-                    td.html("排序题描述");
-                }
-            } else if (newtxt != txt) {
+            var newtxt = $(".descriptionTextInput").html();
+            if (newtxt != txt) {
                 /*数据库操作*/
                 td.html(newtxt);
-            } else {
+            } else if (newtxt == txt) {
                 td.html(newtxt);
             }
         });
@@ -567,28 +532,24 @@ $(function() {
     /*所以题目选项 点击编辑*/
     $("#target").on("click", ".ItemText", function() {
         var td = $(this);
-        var txt = td.text();
-        var input = $(`<input class='itemTextInput' type='text' value='` + txt + `'/>`);
+        /*确定题目种类*/
+        var type = getType(td);
+
+        var txt = td.html();
+        var input = $(`<div class="itemTextInput" contenteditable="true">` + txt + `</div>`);
         td.html(input);
-        input.select();
+
         input.click(function() {
-            $(this).select();
             return false;
         });
-        input.keydown(function() {
-            if (event.keyCode == "13") {
-                input.blur();
-            }
-        });
+
         input.trigger("focus");
         input.blur(function() {
-            var newtxt = $(this).val();
-            if (newtxt == "") {
-                td.html("选项");
-            } else if (newtxt != txt) {
+            var newtxt = $(".itemTextInput").html();
+            if (newtxt != txt) {
                 /*数据库操作*/
                 td.html(newtxt);
-            } else {
+            } else if (newtxt == txt) {
                 td.html(newtxt);
             }
         });

@@ -307,12 +307,28 @@ body {
     line-height: 2;
 }
 
+.stemText:empty:before {
+    content: attr(placeholder);
+}
+
+.stemText:focus:before {
+    content: none;
+}
+
 .descriptionText {
     width: 100%;
     line-height: 2;
     font-size: 14px;
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.descriptionText:empty:before {
+    content: attr(placeholder);
+}
+
+.descriptionText:focus:before {
+    content: none;
 }
 
 
@@ -334,7 +350,7 @@ body {
 .descriptionTextInput {
     background-color: #b4fbef;
     width: 100%;
-    line-height: 1.8;
+    line-height: 2;
     font-size: 14px;
     color: #666666;
     border: none;
@@ -345,12 +361,14 @@ body {
 /*选项编辑框*/
 
 .itemTextInput {
+    margin-left: 21px;
     background-color: #b4fbef;
-    line-height: 1.8;
+    line-height: 2;
     font-size: 14px;
     color: #666666;
     border: none;
     outline: none;
+    width: 95%;
 }
 
 
@@ -369,15 +387,27 @@ body {
 }
 
 .radioItem li {
-    width: 90%;
+    width: 100%;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.radioItem li input {
+    float: left;
 }
 
 .radioItem label {
     line-height: 2;
     margin-top: 5px;
     font-size: 14px;
+}
+
+.radioItem label:empty:before {
+    content: attr(placeholder);
+}
+
+.radioItem label:focus:before {
+    content: none;
 }
 
 
@@ -396,15 +426,27 @@ body {
 }
 
 .multipleItem li {
-    width: 90%;
+    width: 100%;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.multipleItem li input {
+    float: left;
 }
 
 .multipleItem label {
     line-height: 2;
     margin-top: 5px;
     font-size: 14px;
+}
+
+.multipleItem label:empty:before {
+    content: attr(placeholder);
+}
+
+.multipleItem label:focus:before {
+    content: none;
 }
 
 
@@ -452,10 +494,31 @@ body {
     font-size: 14px;
 }
 
-.multitermCompletionItem li input {
+.multitermCompletionItem li label input {
+    /*float: left;*/
     font-size: 14px;
     color: #666666;
     outline: none;
+}
+
+.multitermCompletionItem .itemTextInput{
+  float: left;
+  margin-left: 0px;
+  background-color: #b4fbef;
+  line-height: 2;
+  font-size: 14px;
+  color: #666666;
+  border: none;
+  outline: none;
+  width: 60%;
+}
+
+.multitermCompletionItem label:empty:before {
+    content: attr(placeholder);
+}
+
+.multitermCompletionItem label:focus:before {
+    content: none;
 }
 
 
@@ -511,6 +574,26 @@ body {
     outline: none;
 }
 
+.sortItem .itemTextInput{
+  float: left;
+  margin-left: 0px;
+  background-color: #b4fbef;
+  line-height: 2;
+  font-size: 14px;
+  color: #666666;
+  border: none;
+  outline: none;
+  width: 60%;
+}
+
+.sortItem label:empty:before {
+    content: attr(placeholder);
+}
+
+.sortItem label:focus:before {
+    content: none;
+}
+
 
 /*描述说明*/
 
@@ -518,7 +601,8 @@ body {
     margin-left: 55px;
     border-left: 1px solid #f3f3f3;
     padding: 10px;
-    min-height: 30px;/*220px*/
+    min-height: 30px;
+    /*220px*/
 }
 
 
@@ -530,7 +614,8 @@ body {
     padding: 15px;
     padding-left: 10px;
     padding-right: 10px;
-    min-height: 10px;/*220px*/
+    min-height: 10px;
+    /*220px*/
 }
 
 

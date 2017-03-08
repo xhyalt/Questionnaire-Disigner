@@ -458,16 +458,16 @@ const radioDiv = `
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
     <div class="radioMain">
-        <div class="radioStemText textBox stemText" id="radioStemTextID">单选题</div>
-        <div class="radioDescriptionText textBox descriptionText">单选题描述</div>
+        <div class="radioStemText textBox stemText" id="radioStemTextID" placeholder="单选题"></div>
+        <div class="radioDescriptionText textBox descriptionText" placeholder="单选题描述"></div>
         <ul class="radioItem">
             <li>
                 <input type="radio" name="radio1" id="Num1" />
-                <label class="textBox radioItemText ItemText">选项1</label>
+                <label class="textBox radioItemText ItemText" placeholder="选项1"></label>
             </li>
             <li>
                 <input type="radio" name="radio1" id="Num2" />
-                <label class="textBox radioItemText ItemText">选项2</label>
+                <label class="textBox radioItemText ItemText" placeholder="选项2"></label>
             </li>
         </ul>
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
@@ -477,7 +477,7 @@ const radioDiv = `
 const radioItemLabel = `
 <li>
     <input type="radio" name="radio1" id="Num1" />
-    <label class="textBox radioItemText ItemText">选项</label>
+    <label class="textBox radioItemText ItemText" placeholder="选项"></label>
 </li>`;
 
 const multipleDiv = `
@@ -492,16 +492,16 @@ const multipleDiv = `
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
     <div class="multipleMain">
-        <div class="multipleStemText textBox stemText" id="multipleStemTextID">多选题</div>
-        <div class="multipleDescriptionText textBox descriptionText">多选题描述</div>
+        <div class="multipleStemText textBox stemText" id="multipleStemTextID" placeholder="多选题"></div>
+        <div class="multipleDescriptionText textBox descriptionText" placeholder="多选题描述"></div>
         <ul class="multipleItem">
             <li>
                 <input type="checkbox" name="checkbox1" id="Num1" />
-                <label class="textBox multipleItemText ItemText">选项1</label>
+                <label class="textBox multipleItemText ItemText" placeholder="选项1"></label>
             </li>
             <li>
                 <input type="checkbox" name="checkbox1" id="Num2" />
-                <label class="textBox multipleItemText ItemText">选项2</label>
+                <label class="textBox multipleItemText ItemText" placeholder="选项2"></label>
             </li>
         </ul>
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
@@ -510,8 +510,8 @@ const multipleDiv = `
 
 const multipleItemLabel = `
 <li>
-    <input type="checkbox" name="radio1" id="Num1" />
-    <label class="textBox multipleItemText ItemText">选项</label>
+    <input type="checkbox" name="checkbox1" id="Num2" />
+    <label class="textBox multipleItemText ItemText" placeholder="选项"></label>
 </li>`;
 
 const completionDiv = `
@@ -526,8 +526,8 @@ const completionDiv = `
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
     <div class="completionMain">
-        <div class="completionStemText textBox stemText" id="completionStemTextID">填空题</div>
-        <div class="completionDescriptionText textBox descriptionText">填空题描述</div>
+        <div class="completionStemText textBox stemText" id="completionStemTextID" placeholder="填空题"></div>
+        <div class="completionDescriptionText textBox descriptionText" placeholder="填空题描述"></div>
         <ul class="completionItem">
             <li>
                 <input type="text" name="completion1" id="Num1" />
@@ -548,15 +548,15 @@ const multitermCompletionDiv = `
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
     <div class="multitermCompletionMain">
-        <div class="multitermCompletionStemText textBox stemText" id="multitermCompletionStemTextID">多项填空题</div>
-        <div class="multitermCompletionDescriptionText textBox descriptionText">多项填空题描述</div>
+        <div class="multitermCompletionStemText textBox stemText" id="multitermCompletionStemTextID" placeholder="多项填空题"></div>
+        <div class="multitermCompletionDescriptionText textBox descriptionText" placeholder="多项填空题描述"></div>
         <ul class="multitermCompletionItem">
             <li>
-              <label class="textBox multitermCompletionItemText ItemText">选项1</label>
+              <label class="textBox multitermCompletionItemText ItemText" placeholder="选项1"></label>
               <input type="text" name="multitermCompletion1" id="Num1" />
             </li>
             <li>
-              <label class="textBox multitermCompletionItemText ItemText">选项2</label>
+              <label class="textBox multitermCompletionItemText ItemText" placeholder="选项2"></label>
               <input type="text" name="multitermCompletion1" id="Num2" />
             </li>
         </ul>
@@ -566,8 +566,8 @@ const multitermCompletionDiv = `
 
 const multitermCompletionItemLabel = `
 <li>
-  <label class="textBox multitermCompletionItemText ItemText">选项</label>
-  <input type="text" name="multitermCompletion1" id="Num1" />
+  <label class="textBox multitermCompletionItemText ItemText" placeholder="选项"></label>
+  <input type="text" name="multitermCompletion1" id="Num2" />
 </li>`;
 
 const shortAnswerDiv = `
@@ -582,8 +582,8 @@ const shortAnswerDiv = `
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
     <div class="shortAnswerMain">
-        <div class="shortAnswerStemText textBox stemText" id="shortAnswerStemTextID">简答题</div>
-        <div class="shortAnswerDescriptionText textBox descriptionText">简答题描述</div>
+        <div class="shortAnswerStemText textBox stemText" id="shortAnswerStemTextID" placeholder="简答题"></div>
+        <div class="shortAnswerDescriptionText textBox descriptionText" placeholder="简答题描述"></div>
         <ul class="shortAnswerItem">
             <li>
                 <textarea name="shortAnswer1" id="Num1" ></textarea>
@@ -604,15 +604,15 @@ const sortDiv = `
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
     <div class="sortMain">
-        <div class="sortStemText textBox stemText" id="sortStemTextID">排序题</div>
-        <div class="sortDescriptionText textBox descriptionText">排序题描述</div>
+        <div class="sortStemText textBox stemText" id="sortStemTextID" placeholder="排序题"></div>
+        <div class="sortDescriptionText textBox descriptionText" placeholder="排序题描述"></div>
         <ul class="sortItem">
             <li>
-                <label class="textBox sortItemText ItemText">选项1</label>
+                <label class="textBox sortItemText ItemText" placeholder="选项1"></label>
                 <input type="text" name="sort1" id="Num1" />
             </li>
             <li>
-                <label class="textBox sortItemText ItemText">选项2</label>
+                <label class="textBox sortItemText ItemText" placeholder="选项2"></label>
                 <input type="text" name="sort1" id="Num2" />
             </li>
         </ul>
@@ -622,8 +622,8 @@ const sortDiv = `
 
 const sortItemLabel = `
 <li>
-    <label class="textBox sortItemText ItemText">选项</label>
-    <input type="text" name="sort1" id="Num1" />
+    <label class="textBox sortItemText ItemText" placeholder="选项"></label>
+    <input type="text" name="sort1" id="Num2" />
 </li>`;
 
 const descriptionDiv = `
