@@ -172,11 +172,31 @@ $(function() {
 
     /*删除题目按钮点击事件*/
     $("#target").on("click", ".delete", function() {
-        $tdP = $(this).parent().parent();
+        $td = $(this).parent().parent();
+        var $tdP;
+        var flag = 1;
         /*弹出提示框*/
         window.wxc.xcConfirm("确定删除？", window.wxc.xcConfirm.typeEnum.confirm, function(res) {
             if (res.data == true) {
-                $tdP.remove();
+                var subjectNum = getLevelSubjectNum($td);
+                $tdP = $td.parent().parent().parent();
+                if ($td.parent().attr("id") == "target") {
+                    /*只有一道题*/
+                    flag = 0;
+                }
+                $td.remove();
+                while (subjectNum == 1 && flag) {
+                    /*连锁删除*/
+                    console.log("连锁删除");
+                    $td = $tdP;
+                    $tdP = $td.parent().parent().parent();
+                    subjectNum = getLevelSubjectNum($td);
+                    if (subjectNum == 0) {
+                        flag = 0;
+                        break;
+                    }
+                    $td.remove();
+                }
                 setOrder();
                 if (getSubjectNum() == 0) {
                     $("#target").append(emptyBox);
@@ -584,24 +604,28 @@ function __getGlobalData(cb) {
  * @param  td [div]
  * @return [题目类型]
  */
-function getType(td) {
+function getType($td) {
     var type;
-    if (td.attr("class").indexOf("radio") >= 0) {
+    if ($td.attr("class").indexOf("radio") >= 0) {
         type = "radio";
-    } else if (td.attr("class").indexOf("multiple") >= 0) {
+    } else if ($td.attr("class").indexOf("multiple") >= 0) {
         type = "multiple";
-    } else if (td.attr("class").indexOf("multitermCompletion") >= 0) {
+    } else if ($td.attr("class").indexOf("multitermCompletion") >= 0) {
         type = "multitermCompletion";
-    } else if (td.attr("class").indexOf("completion") >= 0) {
+    } else if ($td.attr("class").indexOf("completion") >= 0) {
         type = "completion";
-    } else if (td.attr("class").indexOf("shortAnswer") >= 0) {
+    } else if ($td.attr("class").indexOf("shortAnswer") >= 0) {
         type = "shortAnswer";
-    } else if (td.attr("class").indexOf("sort") >= 0) {
+    } else if ($td.attr("class").indexOf("sort") >= 0) {
         type = "sort";
-    } else if (td.attr("class").indexOf("description") >= 0) {
+    } else if ($td.attr("class").indexOf("description") >= 0) {
         type = "description";
-    } else if (td.attr("class").indexOf("dividingLine") >= 0) {
+    } else if ($td.attr("class").indexOf("dividingLine") >= 0) {
         type = "dividingLine";
+    } else if ($td.attr("class").indexOf("merge") >= 0) {
+        type = "merge";
+    } else {
+        type = "unKnown Type";
     }
     return type;
 }

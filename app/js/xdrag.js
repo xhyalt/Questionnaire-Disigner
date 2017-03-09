@@ -404,13 +404,13 @@ function getSubjectNum() {
  * @param  $tdP [某题目]
  * @return [符合条件的题目数量]
  */
-function getLevelSubjectNum($tdP) {
+function getLevelSubjectNum($td) {
     var index = 0;
-    var father = $tdP.attr("father");
-    var level = $tdP.attr("level");
-    $td = $('div').filter(`[level=${level}]`).filter(`[father=${father}]`);
-    console.log($td.length);
-    return $td.length;
+    var father = $td.attr("father");
+    var level = $td.attr("level");
+    $tdTemp = $('div').filter(`[level=${level}]`).filter(`[father=${father}]`);
+    console.log($tdTemp.length);
+    return $tdTemp.length;
 }
 
 /**
