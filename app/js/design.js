@@ -414,7 +414,7 @@ $(function() {
     });
 
     /*当前活动题目点击高亮*/
-    $("#target").on("click", ".subject, .unSubject", function() {
+    $("#target").on("click", ".radioDiv, .multipleDiv, .completionDiv, .multitermCompletionDiv, .shortAnswerDiv, .sortDiv, .descriptionDiv, .dividingLineDiv", function() {
         /*当前活动题目高亮*/
         $(".subject, .unSubject").css({
             "border-right": "#fff solid 5px"
