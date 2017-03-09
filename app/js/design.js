@@ -128,12 +128,12 @@ $(function() {
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else {
             /*非第一题，向上移动*/
-            $preTempSubject = $prevTdP.html();
-            $tempSubject = $tdP.html();
-            $tdP.empty();
-            $tdP.append($preTempSubject);
-            $prevTdP.empty();
-            $prevTdP.append($tempSubject);
+            $preTempSubject = $prevTdP.prop("outerHTML");
+            $tempSubject = $tdP.prop("outerHTML");
+            $tdP.after($preTempSubject);
+            $tdP.after($tempSubject);
+            $tdP.remove();
+            $prevTdP.remove();
             setOrder();
         }
     });
@@ -147,12 +147,14 @@ $(function() {
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else {
             /*非第一题，向上移动*/
-            $nextTempSubject = $nextTdP.html();
-            $tempSubject = $tdP.html();
-            $tdP.empty();
-            $tdP.append($nextTempSubject);
-            $nextTdP.empty();
-            $nextTdP.append($tempSubject);
+            $nextTempSubject = $nextTdP.prop("outerHTML");
+            $tempSubject = $tdP.prop("outerHTML");
+
+            $tdP.after($tempSubject);
+            $tdP.after($nextTempSubject);
+
+            $tdP.remove();
+            $nextTdP.remove();
             setOrder();
         }
     });
@@ -209,7 +211,6 @@ $(function() {
     $("#target").on("click", ".merge", function() {
         $tdP = $(this).parent().parent();
         $prevTdP = $tdP.prev();
-
         if ($tdP.attr("num") == 1) {
             /*第一个题无法合并*/
             txt = "第一个题无法合并";
@@ -318,6 +319,7 @@ $(function() {
     /*添加选项按钮点击事件*/
     $("#target").on("click", ".addItem", function() {
         $tdP = $(this).parent().parent();
+
         var type = getType($tdP);
         if (type == "radio") {
             $tdP.find(".radioItem").append(radioItemLabel);
@@ -329,6 +331,17 @@ $(function() {
             $tdP.find(".sortItem").append(sortItemLabel);
         }
     });
+
+    $("#target").on("click", ".subject, .unSubject", function() {
+
+        /*当前活动题目高亮*/
+        $(".subject, .unSubject").css({
+            "border-right": "#fff solid 5px"
+        });
+        $(this).css({
+            "border-right": "#1ABC9C solid 5px"
+        });
+    })
 
     /*问卷设计监听事件start====================*/
     var $dropBox = $('#dropBox'),
