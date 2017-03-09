@@ -171,7 +171,6 @@ body {
 #middle {
     width: 800px;
     height: 90%;
-    ;
     margin: 10px auto;
     float: left;
     margin-left: 160px;
@@ -181,6 +180,8 @@ body {
     width: 100%;
     background-color: #fff;
     margin-bottom: 8px;
+    border-left: #fff solid 5px;
+    border-right: #fff solid 5px;
 }
 
 #titleName {
@@ -283,6 +284,13 @@ body {
     margin-top: 8px;
     margin-bottom: 8px;
     color: #666666;
+    border-left: #fff solid 5px;
+    border-right: #fff solid 5px;
+}
+
+.subject:hover, .unSubject:hover {
+
+    border-left: #1ABC9C solid 5px;
 }
 
 .subject img, .unSubject img {
@@ -640,6 +648,8 @@ body {
     height: auto;
     background-color: #fff;
     margin-top: 8px;
+    border-left: #fff solid 5px;
+    border-right: #fff solid 5px;
 }
 
 #tailUp {
@@ -679,7 +689,7 @@ body {
     width: 180px;
     height: 200px;
     float: left;
-    margin-left: 970px;
+    margin-left: 980px;
 }
 
 .lightButton {
