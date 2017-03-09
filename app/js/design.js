@@ -735,7 +735,11 @@ function getItemNum($tdP) {
     return $tdTemp.length;
 }
 
-/*显示隐藏层和弹出层 弹窗问卷设置*/
+/**
+ * [显示隐藏层和弹出层 弹窗问卷设置]
+ * @public
+ * @return
+ */
 function showSetup() {
     var $dropBox = $('#dropBox'),
         $tri = $('.dropBox_tri', $dropBox),
@@ -780,7 +784,11 @@ function showSetup() {
     document.getElementById("popBox").style.display = "block"; //显示弹出层
 }
 
-/*去除隐藏层和弹出层*/
+/**
+ * [去除隐藏层和弹出层]
+ * @public
+ * @return
+ */
 function hideSetup() {
     document.getElementById("hidebg").style.display = "none";
     document.getElementById("popBox").style.display = "none";
