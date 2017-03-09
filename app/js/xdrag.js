@@ -394,7 +394,7 @@ function intToChinese(str) {
  * @return [题目数量]
  */
 function getSubjectNum() {
-    $td = $(".subject");
+    $td = $(".subject, .unSubject");
     return $td.length;
 }
 
@@ -460,14 +460,24 @@ const radioDiv = `
     <div class="radioMain">
         <div class="radioStemText textBox stemText" id="radioStemTextID" placeholder="单选题"></div>
         <div class="radioDescriptionText textBox descriptionText" placeholder="单选题描述"></div>
-        <ul class="radioItem">
+        <ul class="radioItem optionItem">
             <li>
                 <input type="radio" name="radio1" id="Num1" />
                 <label class="textBox radioItemText ItemText" placeholder="选项1"></label>
+                <div class="itemMenu">
+                    <img class="up" src="./images/main_01_up_off.png" alt="">
+                    <img class="down" src="./images/main_02_down_off.png" alt="">
+                    <img class="delete" src="./images/main_03_delete_off.png" alt="">
+                </div>
             </li>
             <li>
                 <input type="radio" name="radio1" id="Num2" />
                 <label class="textBox radioItemText ItemText" placeholder="选项2"></label>
+                <div class="itemMenu">
+                    <img class="up" src="./images/main_01_up_off.png" alt="">
+                    <img class="down" src="./images/main_02_down_off.png" alt="">
+                    <img class="delete" src="./images/main_03_delete_off.png" alt="">
+                </div>
             </li>
         </ul>
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
@@ -477,7 +487,12 @@ const radioDiv = `
 const radioItemLabel = `
 <li>
     <input type="radio" name="radio1" id="Num1" />
-    <label class="textBox radioItemText ItemText" placeholder="选项"></label>
+    <label class="textBox radioItemText ItemText" placeholder="选项1"></label>
+    <div class="itemMenu">
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+    </div>
 </li>`;
 
 const multipleDiv = `
@@ -494,14 +509,24 @@ const multipleDiv = `
     <div class="multipleMain">
         <div class="multipleStemText textBox stemText" id="multipleStemTextID" placeholder="多选题"></div>
         <div class="multipleDescriptionText textBox descriptionText" placeholder="多选题描述"></div>
-        <ul class="multipleItem">
+        <ul class="multipleItem optionItem">
             <li>
                 <input type="checkbox" name="checkbox1" id="Num1" />
                 <label class="textBox multipleItemText ItemText" placeholder="选项1"></label>
+                <div class="itemMenu">
+                    <img class="up" src="./images/main_01_up_off.png" alt="">
+                    <img class="down" src="./images/main_02_down_off.png" alt="">
+                    <img class="delete" src="./images/main_03_delete_off.png" alt="">
+                </div>
             </li>
             <li>
                 <input type="checkbox" name="checkbox1" id="Num2" />
                 <label class="textBox multipleItemText ItemText" placeholder="选项2"></label>
+                <div class="itemMenu">
+                    <img class="up" src="./images/main_01_up_off.png" alt="">
+                    <img class="down" src="./images/main_02_down_off.png" alt="">
+                    <img class="delete" src="./images/main_03_delete_off.png" alt="">
+                </div>
             </li>
         </ul>
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
@@ -512,6 +537,11 @@ const multipleItemLabel = `
 <li>
     <input type="checkbox" name="checkbox1" id="Num2" />
     <label class="textBox multipleItemText ItemText" placeholder="选项"></label>
+    <div class="itemMenu">
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+    </div>
 </li>`;
 
 const completionDiv = `
@@ -550,14 +580,24 @@ const multitermCompletionDiv = `
     <div class="multitermCompletionMain">
         <div class="multitermCompletionStemText textBox stemText" id="multitermCompletionStemTextID" placeholder="多项填空题"></div>
         <div class="multitermCompletionDescriptionText textBox descriptionText" placeholder="多项填空题描述"></div>
-        <ul class="multitermCompletionItem">
+        <ul class="multitermCompletionItem  optionItem">
             <li>
               <label class="textBox multitermCompletionItemText ItemText" placeholder="选项1"></label>
               <input type="text" name="multitermCompletion1" id="Num1" />
+              <div class="itemMenu">
+                  <img class="up" src="./images/main_01_up_off.png" alt="">
+                  <img class="down" src="./images/main_02_down_off.png" alt="">
+                  <img class="delete" src="./images/main_03_delete_off.png" alt="">
+              </div>
             </li>
             <li>
               <label class="textBox multitermCompletionItemText ItemText" placeholder="选项2"></label>
               <input type="text" name="multitermCompletion1" id="Num2" />
+              <div class="itemMenu">
+                  <img class="up" src="./images/main_01_up_off.png" alt="">
+                  <img class="down" src="./images/main_02_down_off.png" alt="">
+                  <img class="delete" src="./images/main_03_delete_off.png" alt="">
+              </div>
             </li>
         </ul>
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
@@ -566,8 +606,13 @@ const multitermCompletionDiv = `
 
 const multitermCompletionItemLabel = `
 <li>
-  <label class="textBox multitermCompletionItemText ItemText" placeholder="选项"></label>
-  <input type="text" name="multitermCompletion1" id="Num2" />
+    <label class="textBox multitermCompletionItemText ItemText" placeholder="选项"></label>
+    <input type="text" name="multitermCompletion1" id="Num2" />
+    <div class="itemMenu">
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+    </div>
 </li>`;
 
 const shortAnswerDiv = `
@@ -606,14 +651,24 @@ const sortDiv = `
     <div class="sortMain">
         <div class="sortStemText textBox stemText" id="sortStemTextID" placeholder="排序题"></div>
         <div class="sortDescriptionText textBox descriptionText" placeholder="排序题描述"></div>
-        <ul class="sortItem">
+        <ul class="sortItem optionItem">
             <li>
                 <label class="textBox sortItemText ItemText" placeholder="选项1"></label>
                 <input type="text" name="sort1" id="Num1" />
+                <div class="itemMenu">
+                    <img class="up" src="./images/main_01_up_off.png" alt="">
+                    <img class="down" src="./images/main_02_down_off.png" alt="">
+                    <img class="delete" src="./images/main_03_delete_off.png" alt="">
+                </div>
             </li>
             <li>
                 <label class="textBox sortItemText ItemText" placeholder="选项2"></label>
                 <input type="text" name="sort1" id="Num2" />
+                <div class="itemMenu">
+                    <img class="up" src="./images/main_01_up_off.png" alt="">
+                    <img class="down" src="./images/main_02_down_off.png" alt="">
+                    <img class="delete" src="./images/main_03_delete_off.png" alt="">
+                </div>
             </li>
         </ul>
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
@@ -624,6 +679,11 @@ const sortItemLabel = `
 <li>
     <label class="textBox sortItemText ItemText" placeholder="选项"></label>
     <input type="text" name="sort1" id="Num2" />
+    <div class="itemMenu">
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+    </div>
 </li>`;
 
 const descriptionDiv = `
@@ -660,7 +720,14 @@ const mergeDiv = `
     <div class="mergeMain">
         <div class="mergeStemText textBox stemText" id="sortStemTextID" placeholder="合并题"></div>
         <div class="mergeDescriptionText textBox descriptionText" placeholder="合并题描述"></div>
-        <ul class="mergeItem">
+        <ul class="mergeItem  optionItem">
         </ul>
     </div>
+</div>`;
+
+const itemMenuDiv = `
+<div class="itemMenu">
+    <img class="up" src="./images/main_01_up_off.png" alt="">
+    <img class="down" src="./images/main_02_down_off.png" alt="">
+    <img class="delete" src="./images/main_03_delete_off.png" alt="">
 </div>`;

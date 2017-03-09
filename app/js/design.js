@@ -44,12 +44,12 @@ $(function() {
     });
 
     /*题目中的小图 鼠标移入题目显示 移出隐藏*/
-    $("#target").on("mouseover", ".subject", function() {
+    $("#target").on("mouseover", ".subject, .unSubject", function() {
         var td = $(this);
         $(this).children().children("img").css({
             "visibility": "visible"
         });
-    }).on("mouseout", ".subject", function() {
+    }).on("mouseout", ".subject, .unSubject", function() {
         var td = $(this);
         $(this).children().children("img").css({
             "visibility": "hidden"
@@ -120,10 +120,15 @@ $(function() {
     });
 
     /*上移题目按钮点击事件*/
-    $("#target").on("click", ".up", function() {
+    $("#target").on("click", ".leftSetup .up", function() {
         $tdP = $(this).parent().parent();
+        /*初始化左侧的图标效果*/
+        $tdP.children().children("img.up").attr('src', "./images/main_01_up_off.png");
+        $tdP.children().children("img").css({
+            "visibility": "hidden"
+        });
         $prevTdP = $tdP.prev();
-        if ($tdP.attr("num") == 1) {
+        if ($prevTdP.length == 0) {
             txt = "已是第一个题目，无法再向上移动";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else {
@@ -139,10 +144,15 @@ $(function() {
     });
 
     /*下移题目按钮点击事件*/
-    $("#target").on("click", ".down", function() {
+    $("#target").on("click", ".leftSetup .down", function() {
         $tdP = $(this).parent().parent();
+        /*初始化左侧的图标效果*/
+        $tdP.children().children("img.down").attr('src', "./images/main_02_down_off.png");
+        $tdP.children().children("img").css({
+            "visibility": "hidden"
+        });
         $nextTdP = $tdP.next();
-        if ($tdP.attr("num") == getLevelSubjectNum($tdP)) {
+        if ($nextTdP.length == 0) {
             txt = "已是最后一个题目，无法再向下移动";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else {
@@ -160,7 +170,7 @@ $(function() {
     });
 
     /*复制题目按钮点击事件*/
-    $("#target").on("click", ".copy", function() {
+    $("#target").on("click", ".leftSetup .copy", function() {
         /*复制题目*/
         $tdP = $(this).parent().parent();
         $tdP.after($tdP.prop("outerHTML"));
@@ -173,7 +183,7 @@ $(function() {
     });
 
     /*删除题目按钮点击事件*/
-    $("#target").on("click", ".delete", function() {
+    $("#target").on("click", ".leftSetup .delete", function() {
         $td = $(this).parent().parent();
         var $tdP;
         var flag = 1;
@@ -208,7 +218,7 @@ $(function() {
     });
 
     /*合并题目按钮点击事件*/
-    $("#target").on("click", ".merge", function() {
+    $("#target").on("click", ".leftSetup .merge", function() {
         $tdP = $(this).parent().parent();
         $prevTdP = $tdP.prev();
         if ($tdP.attr("num") == 1) {
@@ -242,7 +252,7 @@ $(function() {
     });
 
     /*拆解题目按钮点击事件*/
-    $("#target").on("click", ".unmerge", function() {
+    $("#target").on("click", ".leftSetup .unmerge", function() {
         $tdP = $(this).parent().parent();
         if ($tdP.attr("level") == 1) {
             /*最高层级不能拆解*/
@@ -332,8 +342,79 @@ $(function() {
         }
     });
 
-    $("#target").on("click", ".subject, .unSubject", function() {
+    /*删除选项按钮点击事件*/
+    $("#target").on("click", ".optionItem .delete", function() {
+        console.log("点击删除键成功");
+        $tdP = $(this).parent().parent();
+        if (getItemNum($tdP) > 1) {
+            $tdP.remove();
+        } else {
+            txt = "只有一个选项，不能继续删除";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        }
+    });
 
+    /*上移选项按钮点击事件*/
+    $("#target").on("click", ".optionItem .up", function() {
+        $tdP = $(this).parent().parent();
+        /*初始化左侧的图标效果*/
+        $tdP.children().children("img.up").attr('src', "./images/main_01_up_off.png");
+        $tdP.children().children("img").css({
+            "visibility": "hidden"
+        });
+        $prevTdP = $tdP.prev();
+        if ($prevTdP.length == 0) {
+            txt = "已是第一个选项，无法再向上移动";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        } else {
+            /*非第一个选项，向上移动*/
+            $preTempSubject = $prevTdP.prop("outerHTML");
+            $tempSubject = $tdP.prop("outerHTML");
+            $tdP.after($preTempSubject);
+            $tdP.after($tempSubject);
+            $tdP.remove();
+            $prevTdP.remove();
+        }
+    });
+
+    /*下移选项按钮点击事件*/
+    $("#target").on("click", ".optionItem .down", function() {
+        $tdP = $(this).parent().parent();
+        /*初始化左侧的图标效果*/
+        $tdP.children().children("img.down").attr('src', "./images/main_02_down_off.png");
+        $tdP.children().children("img").css({
+            "visibility": "hidden"
+        });
+        $nextTdP = $tdP.next();
+        if ($nextTdP.length == 0) {
+            txt = "已是最后一个选项，无法再向下移动";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        } else {
+            /*非第一选项，向上移动*/
+            $nextTempSubject = $nextTdP.prop("outerHTML");
+            $tempSubject = $tdP.prop("outerHTML");
+            $tdP.after($tempSubject);
+            $tdP.after($nextTempSubject);
+            $tdP.remove();
+            $nextTdP.remove();
+        }
+    });
+
+    /*选项菜单中的小图 鼠标移入题目显示 移出隐藏*/
+    $("#target").on("mouseover", ".optionItem li", function() {
+        var $td = $(this);
+        $td.find("img").css({
+            "visibility": "visible"
+        });
+    }).on("mouseout", ".optionItem li", function() {
+        var $td = $(this);
+        $td.find("img").css({
+            "visibility": "hidden"
+        });
+    });
+
+    /*当前活动题目点击高亮*/
+    $("#target").on("click", ".subject, .unSubject", function() {
         /*当前活动题目高亮*/
         $(".subject, .unSubject").css({
             "border-right": "#fff solid 5px"
@@ -341,7 +422,7 @@ $(function() {
         $(this).css({
             "border-right": "#1ABC9C solid 5px"
         });
-    })
+    });
 
     /*问卷设计监听事件start====================*/
     var $dropBox = $('#dropBox'),
@@ -648,16 +729,10 @@ function getType($td) {
     return type;
 }
 
-function setQuesNo() {
-    /*弹窗设置题号格式*/
-    txt = "是否保留分组信息？";
-    window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.custom, function(res) {
-
-    });
-}
-
-function getQuesNo() {
-    /*获取题号格式*/
+function getItemNum($tdP) {
+    $tdP = $tdP.parent();
+    $tdTemp = $tdP.find("li");
+    return $tdTemp.length;
 }
 
 /*显示隐藏层和弹出层 弹窗问卷设置*/

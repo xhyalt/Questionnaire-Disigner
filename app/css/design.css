@@ -289,11 +289,15 @@ body {
 }
 
 .subject:hover, .unSubject:hover {
-
     border-left: #1ABC9C solid 5px;
 }
 
-.subject img, .unSubject img {
+.leftSetup img {
+    margin-bottom: 2px;
+    visibility: hidden;
+}
+
+img.addItem {
     margin-bottom: 2px;
     visibility: hidden;
 }
@@ -377,6 +381,15 @@ body {
     border: none;
     outline: none;
     width: 95%;
+}
+
+.itemMenu {
+    float: right;
+    background-color: #fff;
+}
+
+.itemMenu img {
+    visibility: hidden;
 }
 
 
@@ -496,7 +509,6 @@ body {
 }
 
 .multitermCompletionItem li {
-    width: 90%;
     padding-top: 5px;
     padding-bottom: 5px;
     font-size: 14px;
@@ -570,7 +582,6 @@ body {
 }
 
 .sortItem li {
-    width: 90%;
     padding-top: 5px;
     padding-bottom: 5px;
     font-size: 14px;
