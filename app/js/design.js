@@ -220,6 +220,11 @@ $(function() {
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else if ($tdP.attr("level") == $prevTdP.attr("level") && $tdP.attr("father") == $prevTdP.attr("father")) {
             /*两题同级*/
+            /*初始化左侧的图标效果*/
+            $tdP.children().children("img.merge").attr('src', "./images/main_07_merge_off.png");
+            $tdP.children().children("img").css({
+                "visibility": "hidden"
+            });
             $tdP.after(mergeDiv);
             $mergeDiv = $tdP.next();
             $mergeDiv.attr("level", parseInt($tdP.attr("level")));
