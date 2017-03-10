@@ -128,6 +128,7 @@ $(function() {
             "visibility": "hidden"
         });
         $prevTdP = $tdP.prev();
+        console.log($prevTdP.length);
         if ($prevTdP.length == 0) {
             txt = "已是第一个题目，无法再向上移动";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
@@ -152,7 +153,7 @@ $(function() {
             "visibility": "hidden"
         });
         $nextTdP = $tdP.next();
-        if ($nextTdP.length == 0) {
+        if ($nextTdP.length  == 0) {
             txt = "已是最后一个题目，无法再向下移动";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else {
@@ -343,7 +344,7 @@ $(function() {
     });
 
     /*删除选项按钮点击事件*/
-    $("#target").on("click", ".optionItem .delete", function() {
+    $("#target").on("click", ".subjectMain .delete", function() {
         console.log("点击删除键成功");
         $tdP = $(this).parent().parent();
         if (getItemNum($tdP) > 1) {
@@ -355,7 +356,7 @@ $(function() {
     });
 
     /*上移选项按钮点击事件*/
-    $("#target").on("click", ".optionItem .up", function() {
+    $("#target").on("click", ".subjectMain .up", function() {
         $tdP = $(this).parent().parent();
         /*初始化左侧的图标效果*/
         $tdP.children().children("img.up").attr('src', "./images/main_01_up_off.png");
@@ -378,7 +379,7 @@ $(function() {
     });
 
     /*下移选项按钮点击事件*/
-    $("#target").on("click", ".optionItem .down", function() {
+    $("#target").on("click", ".subjectMain .down", function() {
         $tdP = $(this).parent().parent();
         /*初始化左侧的图标效果*/
         $tdP.children().children("img.down").attr('src', "./images/main_02_down_off.png");
@@ -401,12 +402,12 @@ $(function() {
     });
 
     /*选项菜单中的小图 鼠标移入题目显示 移出隐藏*/
-    $("#target").on("mouseover", ".optionItem li", function() {
+    $("#target").on("mouseover", ".subjectMain li", function() {
         var $td = $(this);
         $td.find("img").css({
             "visibility": "visible"
         });
-    }).on("mouseout", ".optionItem li", function() {
+    }).on("mouseout", ".subjectMain li", function() {
         var $td = $(this);
         $td.find("img").css({
             "visibility": "hidden"

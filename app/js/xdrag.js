@@ -114,6 +114,7 @@ $(document).ready(function() {
             var $target = $("#target");
             var tar_pos = $target.position();
             var $target_subType = $("#target .subject, #target .unSubject");
+            var $mergeTarget_subType = $(".mergeDiv .mergeStemText, .mergeDiv .mergeDescriptionText");
 
             /*题型 鼠标移动触发事件*/
             $(document).delegate("body", "mousemove", function(mm) {
@@ -137,11 +138,14 @@ $(document).ready(function() {
                         "border-top": "none",
                         "border-bottom": "none"
                     });
-                    tops = $.grep($target_subType, function(e) {
+                    tops = $.grep($target_subType.not(".mergeDiv"), function(e) {
                         return (mm_mouseY - $(e).position().top < $(e).height() / 2 && mm_mouseY - $(e).position().top > 0 && $(e).attr("id") !== "target");
                     });
-                    bottoms = $.grep($target_subType, function(e) {
+                    bottoms = $.grep($target_subType.not(".mergeDiv"), function(e) {
                         return (mm_mouseY - $(e).position().top < 2 * $(e).height() / 2 && mm_mouseY - $(e).position().top > $(e).height() / 2 && $(e).attr("id") !== "target");
+                    });
+                    mergesTop = $.grep($mergeTarget_subType, function(e) {
+                        return (mm_mouseY - $(e).position().top < $(e).height() && mm_mouseY - $(e).position().top > 0 && $(e).attr("id") !== "target");
                     });
                     // console.log("tops = " + tops);
                     if (tops.length > 0) {
@@ -150,6 +154,8 @@ $(document).ready(function() {
                     } else if (bottoms.length > 0) {
                         /*识别位置在下半部分*/
                         $(bottoms[0]).css("border-bottom", "5px solid #1ABC9C");
+                    } else if (mergesTop.length > 0) {
+                        $(mergesTop[0]).parent().parent().css("border-top", "5px solid #1ABC9C");
                     } else {
                         /*设计区没有题目 空盒上加边界*/
                         $("#emptyBox").css({
@@ -189,8 +195,8 @@ $(document).ready(function() {
 
                     if (tops.length > 0) {
                         console.log("===tops===");
-                        level = tops[0].attributes["level"].nodeValue
-                        father = tops[0].attributes["father"].nodeValue
+                        level = tops[0].attributes["level"].nodeValue;
+                        father = tops[0].attributes["father"].nodeValue;
                         $temp.html($($temp.html()).attr("level", level));
                         $temp.html($($temp.html()).attr("father", father));
                         console.log($temp.html());
@@ -198,12 +204,21 @@ $(document).ready(function() {
                         setOrder();
                     } else if (bottoms.length > 0) {
                         console.log("===bottoms===");
-                        level = bottoms[0].attributes["level"].nodeValue
-                        father = bottoms[0].attributes["father"].nodeValue
+                        level = bottoms[0].attributes["level"].nodeValue;
+                        father = bottoms[0].attributes["father"].nodeValue;
                         $temp.html($($temp.html()).attr("level", level));
                         $temp.html($($temp.html()).attr("father", father));
                         console.log($temp.html());
                         $($temp.html()).insertAfter(bottoms[0]);
+                        setOrder();
+                    } else if (mergesTop.length > 0) {
+                        console.log("===mergesTop===");
+                        level = $(mergesTop[0]).parent().parent().attr["level"];
+                        father = $(mergesTop[0]).parent().parent().attr["father"];
+                        $temp.html($($temp.html()).attr("level", level));
+                        $temp.html($($temp.html()).attr("father", father));
+                        console.log($temp.html());
+                        $($temp.html()).insertBefore($(mergesTop[0]).parent().parent());
                         setOrder();
                     } else {
                         $("#target").append($temp.html());
@@ -216,6 +231,8 @@ $(document).ready(function() {
                         "border-bottom": "none"
                     });
                     tops = [];
+                    bottoms = [];
+                    merges = [];
                 }
 
                 $(document).undelegate("body", "mousemove");
@@ -457,10 +474,10 @@ const radioDiv = `
         <img class="merge" src="./images/main_07_merge_off.png" alt="">
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
-    <div class="radioMain">
+    <div class="radioMain subjectMain">
         <div class="radioStemText textBox stemText" id="radioStemTextID" placeholder="单选题"></div>
         <div class="radioDescriptionText textBox descriptionText" placeholder="单选题描述"></div>
-        <ul class="radioItem optionItem">
+        <ul class="radioItem">
             <li>
                 <input type="radio" name="radio1" id="Num1" />
                 <label class="textBox radioItemText ItemText" placeholder="选项1"></label>
@@ -487,7 +504,7 @@ const radioDiv = `
 const radioItemLabel = `
 <li>
     <input type="radio" name="radio1" id="Num1" />
-    <label class="textBox radioItemText ItemText" placeholder="选项1"></label>
+    <label class="textBox radioItemText ItemText" placeholder="选项"></label>
     <div class="itemMenu">
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
@@ -506,10 +523,10 @@ const multipleDiv = `
         <img class="merge" src="./images/main_07_merge_off.png" alt="">
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
-    <div class="multipleMain">
+    <div class="multipleMain subjectMain">
         <div class="multipleStemText textBox stemText" id="multipleStemTextID" placeholder="多选题"></div>
         <div class="multipleDescriptionText textBox descriptionText" placeholder="多选题描述"></div>
-        <ul class="multipleItem optionItem">
+        <ul class="multipleItem">
             <li>
                 <input type="checkbox" name="checkbox1" id="Num1" />
                 <label class="textBox multipleItemText ItemText" placeholder="选项1"></label>
@@ -555,7 +572,7 @@ const completionDiv = `
         <img class="merge" src="./images/main_07_merge_off.png" alt="">
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
-    <div class="completionMain">
+    <div class="completionMain subjectMain">
         <div class="completionStemText textBox stemText" id="completionStemTextID" placeholder="填空题"></div>
         <div class="completionDescriptionText textBox descriptionText" placeholder="填空题描述"></div>
         <ul class="completionItem">
@@ -577,10 +594,10 @@ const multitermCompletionDiv = `
         <img class="merge" src="./images/main_07_merge_off.png" alt="">
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
-    <div class="multitermCompletionMain">
+    <div class="multitermCompletionMain subjectMain">
         <div class="multitermCompletionStemText textBox stemText" id="multitermCompletionStemTextID" placeholder="多项填空题"></div>
         <div class="multitermCompletionDescriptionText textBox descriptionText" placeholder="多项填空题描述"></div>
-        <ul class="multitermCompletionItem  optionItem">
+        <ul class="multitermCompletionItem">
             <li>
               <label class="textBox multitermCompletionItemText ItemText" placeholder="选项1"></label>
               <input type="text" name="multitermCompletion1" id="Num1" />
@@ -626,7 +643,7 @@ const shortAnswerDiv = `
         <img class="merge" src="./images/main_07_merge_off.png" alt="">
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
-    <div class="shortAnswerMain">
+    <div class="shortAnswerMain subjectMain">
         <div class="shortAnswerStemText textBox stemText" id="shortAnswerStemTextID" placeholder="简答题"></div>
         <div class="shortAnswerDescriptionText textBox descriptionText" placeholder="简答题描述"></div>
         <ul class="shortAnswerItem">
@@ -648,10 +665,10 @@ const sortDiv = `
         <img class="merge" src="./images/main_07_merge_off.png" alt="">
         <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
-    <div class="sortMain">
+    <div class="sortMain subjectMain">
         <div class="sortStemText textBox stemText" id="sortStemTextID" placeholder="排序题"></div>
         <div class="sortDescriptionText textBox descriptionText" placeholder="排序题描述"></div>
-        <ul class="sortItem optionItem">
+        <ul class="sortItem">
             <li>
                 <label class="textBox sortItemText ItemText" placeholder="选项1"></label>
                 <input type="text" name="sort1" id="Num1" />
@@ -691,7 +708,7 @@ const descriptionDiv = `
     <div class="leftSetup">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
-    <div class="descriptionMain">
+    <div class="descriptionMain subjectMain">
         <div class="descriptionStemText textBox stemText" id="descriptionStemTextID" placeholder="描述说明"></div>
     </div>
 </div>`;
@@ -701,7 +718,7 @@ const dividingLineDiv = `
     <div class="leftSetup">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
-    <div class="dividingLineMain">
+    <div class="dividingLineMain subjectMain">
         <hr width="650" color="#f3f3f3" noshade="noshade" align="left" border="none"/>
     </div>
 </div>`;
@@ -720,7 +737,7 @@ const mergeDiv = `
     <div class="mergeMain">
         <div class="mergeStemText textBox stemText" id="sortStemTextID" placeholder="合并题"></div>
         <div class="mergeDescriptionText textBox descriptionText" placeholder="合并题描述"></div>
-        <ul class="mergeItem  optionItem">
+        <ul class="mergeItem">
         </ul>
     </div>
 </div>`;
