@@ -158,10 +158,12 @@ $(document).ready(function() {
                         $(mergesTop[0]).parent().parent().css("border-top", "5px solid #1ABC9C");
                     } else {
                         /*设计区没有题目 空盒上加边界*/
-                        $("#emptyBox").css({
-                            "border-top": "5px solid #1ABC9C",
-                            "border-bottom": "none"
-                        });
+                        if ($("#emptyBox").length != 0) {
+                            $("#emptyBox").css({
+                                "border-top": "5px solid #1ABC9C",
+                                "border-bottom": "none"
+                            });
+                        }
                     }
                 } else {
                     $target_subType.css({
@@ -232,7 +234,7 @@ $(document).ready(function() {
                     });
                     tops = [];
                     bottoms = [];
-                    merges = [];
+                    mergesTop = [];
                 }
 
                 $(document).undelegate("body", "mousemove");
