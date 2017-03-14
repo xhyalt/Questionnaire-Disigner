@@ -16,7 +16,7 @@ const __restfulUtil = require('./app/js/restfulUtil.js');
 const __quesSqlite = require('./app/js/quesSqlite.js');
 
 /*监听渲染进程里发出的message，获取GlobalData*/
-ipcMain.on('asynchronous-set-GlobalData-message', (event, arg) => {
+ipcMain.once('asynchronous-set-GlobalData-message', (event, arg) => {
     GlobalData = arg;
     event.sender.send('asynchronous-set-GlobalData-reply', true);
 });
@@ -65,7 +65,8 @@ app.on('ready', function() {
         height: size.height,
         minWidth: 1200,
         minHeight: 800,
-        show: false
+        show: false,
+        backgroundColor: '#f3f3f3'
     });
 
     /*加载进入页*/

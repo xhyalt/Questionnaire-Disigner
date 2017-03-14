@@ -263,7 +263,7 @@ body {
 
 .form li.style:hover {
     background: #18af91;
-     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #18af91), color-stop(33%, #17a589), color-stop(72%, #159b80), color-stop(100%, #148f76));
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #18af91), color-stop(33%, #17a589), color-stop(72%, #159b80), color-stop(100%, #148f76));
 }
 
 .form li.style input {
@@ -286,6 +286,7 @@ body {
     bottom: 20px;
     left: 45%;
 }
+
 
 /*****copy-right*****/
 
@@ -418,4 +419,23 @@ body {
     .warning {
         margin: 16% auto;
     }
+}
+
+
+/*遮挡层*/
+
+#hidebg {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    /*宽度设置为100%，这样才能使隐藏背景层覆盖原页面*/
+    filter: alpha(opacity=60);
+    /*设置透明度为60%*/
+    opacity: 0.6;
+    /*非IE浏览器下设置透明度为60%*/
+    display: none;
+    z-Index: 2;
 }

@@ -133,12 +133,10 @@ function initDB(GlobalData, cb) {
 function initSolutions(GlobalData, solutionInfo, cb) {
     __checkSolution(GlobalData, solutionInfo, function(res) {
         if (res.success == true) {
-            // console.log(res.data["count(1)"]);
             if (res.data["count(1)"] == 0) {
                 // console.log("不存在该业务方案 添加业务方案");
                 __insertSolution(GlobalData, solutionInfo, function(res2) {
                     if (res2.success == true) {
-                        // console.log("添加业务方案成功");
                         cb({
                             success: true
                         });
@@ -150,7 +148,6 @@ function initSolutions(GlobalData, solutionInfo, cb) {
                         });
                     }
                 });
-
             } else {
                 // console.log("已存在该业务方案 更新业务方案");
                 __updateSolution(GlobalData, solutionInfo, function(res2) {
@@ -238,6 +235,38 @@ function initQuestionnairesList(GlobalData, solutionRecid, questionnaireJson, cb
 }
 
 /**
+ * 将所有业务方案和调查问卷的isNew字段设置为0
+ * 回调函数传回更新是否成功
+ * @public
+ * @param  GlobalData   [用户基础数据]
+ * @param  {Function} cb [回调函数]
+ * @return
+ */
+function updateIsNew(GlobalData, cb) {
+    __updateSolutionIsNew(GlobalData, function(res) {
+        if (res.success == true) {
+            __updateQustionnaireIsNew(GlobalData, function(res2) {
+                if (res.success == true) {
+                    cb({
+                        success: true
+                    });
+                } else {
+                    cb({
+                        success: false,
+                        data: "更新调查问卷isNew字段失败"
+                    });
+                }
+            });
+        } else {
+            cb({
+                success: false,
+                data: "更新业务方案isNew字段失败"
+            });
+        }
+    });
+}
+
+/**
  * 选出所有业务方案
  * @public
  * @param  GlobalData [用户基础数据]
@@ -285,6 +314,53 @@ function getQuestionnaires(GlobalData, cb) {
                 data: "选出调查问卷失败"
             });
         }
+    });
+}
+
+/**
+ * 将所有调查问卷的isNew字段设置为0
+ * 回调函数传回更新是否成功
+ * @private
+ * @param  GlobalData   [用户基础数据]
+ * @param  {Function} cb [回调函数]
+ * @return
+ */
+function __updateQustionnaireIsNew(GlobalData, cb) {
+    console.log("正在更新业务方案中的isNew字段为0");
+    db.get("update QUESTIONNAIRES set isNew = ? where URL = ? and user = ?", ["0", GlobalData.urlRoot, GlobalData.user], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
+/**
+ * 删除调查问卷isNew字段为0的数据
+ * 回调函数传回删除是否成功
+ * @public
+ * @param  GlobalData   [用户基础数据]
+ * @param  solutionJson [某一具体业务方案]
+ * @param  {Function} cb [回调函数]
+ * @return
+ */
+function deleteQustionnaireIsNew(GlobalData, solutionRecid, cb) {
+    console.log("正在删除所有isNew字段为0的业务方案");
+    db.get("delete from QUESTIONNAIRES where URL = ? and user = ? and solutionRecid = ? and isNew = ?", [GlobalData.urlRoot, GlobalData.user, solutionRecid, "0"], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true,
+        });
     });
 }
 
@@ -389,6 +465,54 @@ function __checkQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) 
 }
 
 /**
+ * 删除业务方案isNew字段为0的数据
+ * 回调函数传回删除是否成功
+ * @public
+ * @param  GlobalData   [用户基础数据]
+ * @param  solutionJson [某一具体业务方案]
+ * @param  {Function} cb [回调函数]
+ * @return
+ */
+function deleteSolutionIsNew(GlobalData, cb) {
+    console.log("正在删除所有isNew字段为0的业务方案");
+    db.get("delete from SOLUTIONS where URL = ? and user = ? and isNew = ?", [GlobalData.urlRoot, GlobalData.user, "0"], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true,
+        });
+    });
+}
+
+/**
+ * 将所有业务方案的isNew字段设置为0
+ * 回调函数传回更新是否成功
+ * @private
+ * @param  GlobalData   [用户基础数据]
+ * @param  solutionJson [某一具体业务方案]
+ * @param  {Function} cb [回调函数]
+ * @return
+ */
+function __updateSolutionIsNew(GlobalData, cb) {
+    console.log("正在更新业务方案中的isNew字段为0");
+    db.get("update SOLUTIONS set isNew = ? where URL = ? and user = ?", ["0", GlobalData.urlRoot, GlobalData.user], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
+/**
  * 添加某业务方案
  * 回调函数传回添加是否成功
  * @private
@@ -399,7 +523,7 @@ function __checkQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) 
  */
 function __insertSolution(GlobalData, solutionJson, cb) {
     // console.log("正在添加业务方案 __insertSolution");
-    db.run("insert into SOLUTIONS(URL, user, periodType, name, minPeriod, maxPeriod, title, recid) values(?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionJson.periodType, solutionJson.name, solutionJson.minPeriod, solutionJson.maxPeriod, solutionJson.title, solutionJson.recid], function(err) {
+    db.run("insert into SOLUTIONS(URL, user, periodType, name, minPeriod, maxPeriod, title, recid, isNew) values(?, ?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionJson.periodType, solutionJson.name, solutionJson.minPeriod, solutionJson.maxPeriod, solutionJson.title, solutionJson.recid, "1"], function(err) {
         if (err) {
             console.log(err.message);
             cb({
@@ -411,21 +535,6 @@ function __insertSolution(GlobalData, solutionJson, cb) {
             success: true,
         });
 
-    });
-}
-
-function __deleteSolutionAll(GlobalData, cb) {
-    db.get("delete from SOLUTIONS where URL=?, user=?", [GlobalData.urlRoot, GlobalData.user], function(err) {
-        if (err) {
-            console.log(err.message);
-            cb({
-                success: false,
-                data: err.message
-            });
-        }
-        cb({
-            success: true,
-        });
     });
 }
 
@@ -440,7 +549,7 @@ function __deleteSolutionAll(GlobalData, cb) {
  */
 function __updateSolution(GlobalData, solutionJson, cb) {
     // console.log("正在更新该业务方案 __updateSolution");
-    db.get("update SOLUTIONS set periodType = ?, minPeriod = ?, maxPeriod = ?, title = ?, name = ? where URL = ? and user = ? and recid = ?", [solutionJson.periodType, solutionJson.periodRange.minPeriod, solutionJson.periodRange.maxPeriod, solutionJson.title, solutionJson.name, GlobalData.urlRoot, GlobalData.user, solutionJson.recid], function(err) {
+    db.get("update SOLUTIONS set periodType = ?, minPeriod = ?, maxPeriod = ?, title = ?, name = ?, isNew = ? where URL = ? and user = ? and recid = ?", [solutionJson.periodType, solutionJson.periodRange.minPeriod, solutionJson.periodRange.maxPeriod, solutionJson.title, solutionJson.name, "1", GlobalData.urlRoot, GlobalData.user, solutionJson.recid], function(err) {
         if (err) {
             cb({
                 success: false,
@@ -462,7 +571,6 @@ function __updateSolution(GlobalData, solutionJson, cb) {
  */
 function __selectSolutions(GlobalData, cb) {
     console.log("正在获取该用户的所有业务方案 __selectSolution");
-    ``
     db.all("select * from SOLUTIONS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
             cb({
@@ -540,9 +648,9 @@ function __createTable(cb) {
         try {
             db.run("create table USERS(URL TEXT, user TEXT, userName TEXT, pwd TEXT, token TEXT)");
 
-            db.run("create table SOLUTIONS(URL TEXT, user TEXT, periodType TEXT, name TEXT, minPeriod TEXT, maxPeriod TEXT, title TEXT, recid TEXT)");
+            db.run("create table SOLUTIONS(URL TEXT, user TEXT, periodType TEXT, name TEXT, minPeriod TEXT, maxPeriod TEXT, title TEXT, recid TEXT, isNew TEXT)");
 
-            db.run("create table QUESTIONNAIRES(URL TEXT, user TEXT, solutionRecid TEXT, name TEXT, title TEXT, recid TEXT)");
+            db.run("create table QUESTIONNAIRES(URL TEXT, user TEXT, solutionRecid TEXT, name TEXT, title TEXT, recid TEXT, isNew TEXT)");
             /*表单创建成功*/
             if (cb) {
                 cb({
@@ -636,3 +744,6 @@ exports.initSolutions = initSolutions;
 exports.initQuestionnairesList = initQuestionnairesList;
 exports.getSolutions = getSolutions;
 exports.getQuestionnaires = getQuestionnaires;
+exports.updateIsNew = updateIsNew;
+exports.deleteSolutionIsNew = deleteSolutionIsNew;
+exports.deleteQustionnaireIsNew = deleteQustionnaireIsNew;

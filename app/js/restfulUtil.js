@@ -23,7 +23,7 @@ function getToken(GlobalData, cb) {
         });
         res.resume();
     }).on('error', (e) => {
-        alert(`无法登录: ${e.message}`);
+        cb(false, `${e.message}`);
     });
 }
 
