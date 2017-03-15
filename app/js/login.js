@@ -96,8 +96,8 @@ function signIn() {
 function initQuestionnaire() {
     var solutionsLength = null;
     var questionnairesLength = null;
-    var countI = 0;
-    var countJ = new Array();
+    // var countI = 0;
+    // var countJ = new Array();
 
     /*更新isNew字段为0*/
     quesSqlite.updateIsNew(GlobalData, function(res0) {
@@ -120,17 +120,17 @@ function initQuestionnaire() {
                                 console.log("业务方案列表写入数据库成功");
                                 // console.log("i = " + i);
 
-                                if (++countI == solutionsLength) {
-                                    /*删除isNew字段为0的数据*/
-                                    quesSqlite.deleteSolutionIsNew(GlobalData, function(res3) {
-                                        if (res3.success == true) {
-                                            console.log("删除isNew字段为0的数据成功");
-                                        } else {
-                                            console.log("删除isNew字段为0的字段失败");
-                                        }
-                                    });
-                                }
-                                countJ[i] = 0;
+                                // if (++countI == solutionsLength) {
+                                //     /*删除isNew字段为0的数据*/
+                                //     quesSqlite.deleteSolutionIsNew(GlobalData, function(res3) {
+                                //         if (res3.success == true) {
+                                //             console.log("删除isNew字段为0的数据成功");
+                                //         } else {
+                                //             console.log("删除isNew字段为0的字段失败");
+                                //         }
+                                //     });
+                                // }
+                                // countJ[i] = 0;
 
                                 /*向服务器发送请求获取调查问卷 restfulUtil.js*/
                                 restfulUtil.getQuestionnaires(GlobalData, solutionsInfo[i].recid, function(res3) {
@@ -142,15 +142,15 @@ function initQuestionnaire() {
                                         for (let j = 0; j < questionnairesLength; j++) {
                                             /*更新某业务方案的调查问卷 quesSqlite.js*/
                                             quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[i].recid, questionnairesInfo[j], function(res4) {
-                                                if (++countJ[i] == questionnairesLength) {
-                                                    quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
-                                                        if (res5.success == true) {
-                                                            console.log("删除isNew字段为0的数据成功");
-                                                        } else {
-                                                            console.log("删除isNew字段为0的数据失败");
-                                                        }
-                                                    });
-                                                }
+                                                // if (++countJ[i] == questionnairesLength) {
+                                                //     quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
+                                                //         if (res5.success == true) {
+                                                //             console.log("删除isNew字段为0的数据成功");
+                                                //         } else {
+                                                //             console.log("删除isNew字段为0的数据失败");
+                                                //         }
+                                                //     });
+                                                // }
                                                 // console.log("j = " + j);
                                                 if (res4.success == true) {
                                                     console.log("调查问卷列表写入数据库成功");
@@ -180,7 +180,7 @@ function initQuestionnaire() {
     setTimeout(function() {
         window.location.href = "./list.html";
         hideShielder();
-    }, 3000);
+    }, 5000);
 }
 
 function showShielder() {

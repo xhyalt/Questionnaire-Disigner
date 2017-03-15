@@ -326,7 +326,7 @@ function getQuestionnaires(GlobalData, cb) {
  * @return
  */
 function __updateQustionnaireIsNew(GlobalData, cb) {
-    console.log("正在更新业务方案中的isNew字段为0");
+    // console.log("正在更新调查问卷中的isNew字段为0");
     db.get("update QUESTIONNAIRES set isNew = ? where URL = ? and user = ?", ["0", GlobalData.urlRoot, GlobalData.user], function(err) {
         if (err) {
             cb({
@@ -375,7 +375,7 @@ function deleteQustionnaireIsNew(GlobalData, solutionRecid, cb) {
  */
 function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
     // console.log("正在更新调查问卷 __updateQuestionnaire");
-    db.get("update QUESTIONNAIRES set title = ?, name = ? where URL = ? and user = ? and recid = ? and solutionRecid = ?", [questionnaireJson.title, questionnaireJson.name, GlobalData.urlRoot, GlobalData.user, questionnaireJson.recid, solutionRecid], function(err) {
+    db.get("update QUESTIONNAIRES set title = ?, name = ?, isNew = ? where URL = ? and user = ? and recid = ? and solutionRecid = ?", [questionnaireJson.title, questionnaireJson.name, "1", GlobalData.urlRoot, GlobalData.user, questionnaireJson.recid, solutionRecid], function(err) {
         if (err) {
             cb({
                 success: false,
@@ -400,7 +400,7 @@ function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
  */
 function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
     // console.log("正在添加调查问卷 __insertQuestionnaire");
-    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecid, name,  title, recid) values(?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.title, questionnaireJson.recid], function(err) {
+    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecid, name,  title, recid, isNew) values(?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.title, questionnaireJson.recid, "1"], function(err) {
         if (err) {
             console.log(err.message);
             cb({
@@ -424,7 +424,7 @@ function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
  */
 function __selectQuestionnaires(GlobalData, cb) {
     console.log("正在获取该用户的所有问卷");
-    db.all("select * from QUESTIONNAIRES where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
+    db.all("select * from QUESTIONNAIRES where user = ? and URL = ? and isNew = ?", [GlobalData.user, GlobalData.urlRoot, "1"], function(err, row) {
         if (err) {
             cb({
                 success: false,
@@ -498,7 +498,7 @@ function deleteSolutionIsNew(GlobalData, cb) {
  * @return
  */
 function __updateSolutionIsNew(GlobalData, cb) {
-    console.log("正在更新业务方案中的isNew字段为0");
+    // console.log("正在更新业务方案中的isNew字段为0");
     db.get("update SOLUTIONS set isNew = ? where URL = ? and user = ?", ["0", GlobalData.urlRoot, GlobalData.user], function(err) {
         if (err) {
             cb({
@@ -571,7 +571,7 @@ function __updateSolution(GlobalData, solutionJson, cb) {
  */
 function __selectSolutions(GlobalData, cb) {
     console.log("正在获取该用户的所有业务方案 __selectSolution");
-    db.all("select * from SOLUTIONS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
+    db.all("select * from SOLUTIONS where user = ? and URL = ? and isNew = ?", [GlobalData.user, GlobalData.urlRoot, "1"], function(err, row) {
         if (err) {
             cb({
                 success: false,
