@@ -41,11 +41,11 @@ function dTree(objName) {
 		inOrder					: false
 	}
 	this.icon = {
-		root				: 'img/base.gif',
+		root				: 'images/tree_01_opg.png',
 		folder			: 'img/folder.gif',
 		folderOpen	: 'img/folderopen.gif',
 		node				: 'img/page.gif',
-		empty				: 'img/empty.gif',
+		empty				: 'images/empty.gif',
 		line				: 'images/tree_line.gif',
 		join				: 'images/tree_join.gif',
 		joinBottom	: 'images/tree_joinbottom.gif',
