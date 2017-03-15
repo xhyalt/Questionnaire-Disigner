@@ -184,7 +184,6 @@ body {
 #tree {
     position: absolute;
     padding: 15px;
-    /*float: left;*/
     width: 270px;
     height: 80%;
     background-color: #fff;
@@ -192,19 +191,71 @@ body {
     /*margin-right: 10px;*/
 }
 
-#tree p {
+#tree #treeMenu {
+    float: left;
     padding-bottom: 10px;
     font-size: 14px;
 }
 
-#tree p a {
+#tree #treeMenu a {
     color: #666666;
     text-decoration: none;
 }
 
-#tree p img {
+
+/*#tree p img {
     cursor: pointer;
     margin-left: 10px;
+}*/
+
+#tree #fresh {
+    float: left;
+    width: 20px;
+    height: 20px;
+}
+
+#tree .on {
+    background: url('../images/tree_00_refresh_on.png') no-repeat 0 0;
+    -webkit-animation: rotating 1.2s linear infinite;
+    animation: rotating 1.2s linear infinite;
+}
+
+#tree .off {
+    background: url('../images/tree_00_refresh_off.png') no-repeat 0 0;
+}
+
+@-webkit-keyframes rotating {
+    from {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotating {
+    from {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 
 #main {

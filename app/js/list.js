@@ -22,22 +22,21 @@ var questionnairesBySolutionsRecid = null;
 
 $(function() {
 
-    /*刷新树图标点击事件*/
-    $("#tree p").on("click", "img", function() {
-        /*刷新树的节点*/
-        console.log("刷新树");
-    });
-
     /*刷新树图标鼠标移入移出事件*/
-    $("#tree p").on("mouseover", "img", function() {
-        $(this).attr('src', "./images/tree_00_refresh_on.png");
-    }).on("mouseout", "img", function() {
-        $(this).attr('src', "./images/tree_00_refresh_off.png");
+    $("#tree").on("mouseover", "#fresh", function() {
+        $(this).css({
+            "background": "url('./images/tree_00_refresh_on.png') no-repeat 0 0"
+        });
+    }).on("mouseout", "#fresh", function() {
+        $(this).css({
+            "background": "url('./images/tree_00_refresh_off.png') no-repeat 0 0"
+        });
     });
 
     /*刷新树图标点击事件 重新获取业务方案和调查问卷 更新树*/
-    $("#tree p").on("click", "img", function() {
+    $("#tree").on("click", "#fresh", function() {
         // showShielder();
+        fresh.changeClassToOn(this);
         initQuestionnaire(function(res) {
             if (res.success == true) {
                 initTree();
@@ -47,14 +46,11 @@ $(function() {
 });
 
 var fresh = {
-    changeClass: function(target, id) {
-        var className = $(target).attr('class');
-        var ids = document.getElementById(id);
-        (className == 'on') ? $(target).removeClass('on').addClass('off'): $(target).removeClass('off').addClass('on');
-        (className == 'on') ? ids.pause(): ids.play();
+    changeClassToOn: function(target) {
+        $(target).removeClass('off').addClass('on');
     },
-    play: function() {
-        // document.getElementById('media').play();
+    changeClassToOff: function(target) {
+        $(target).removeClass('on').addClass('off');
     }
 }
 
@@ -88,7 +84,6 @@ function initTree() {
             __addSolutionTreeItem(function(res) {
                 if (res.success == true) {
                     console.log("添加业务方案树节点成功");
-                    // document.getElementById('treeDemo').innerHTML = d;
                     /*获取所有调查问卷 quesSqlite.js*/
                     quesSqlite.getQuestionnaires(GlobalData, function(res2) {
                         if (res2.success == true) {
@@ -102,6 +97,7 @@ function initTree() {
                             __addQuestionnaireTreeItem(function(res) {
                                 if (res.success == true) {
                                     console.log("添加调查问卷树节点成功");
+                                    fresh.changeClassToOff($("#fresh"));
                                     document.getElementById('treeDemo').innerHTML = d;
                                     // $("#treeDemo").empty().append(d);
                                     /*树节点业务方案的点击事件*/
@@ -138,14 +134,17 @@ function initTree() {
                             });
                         } else {
                             console.log("获取所有调查问卷失败");
+                            fresh.changeClassToOff($("#fresh"));
                         }
                     });
                 } else {
                     console.log("添加业务方案节点失败");
+                    fresh.changeClassToOff($("#fresh"));
                 }
             });
         } else {
             console.log("获取所有业务方案失败");
+            fresh.changeClassToOff($("#fresh"));
         }
     });
 }
@@ -213,11 +212,13 @@ function initQuestionnaire(cb) {
                                                         quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
                                                             if (res5.success == true) {
                                                                 console.log("删除isNew字段为0的数据成功");
+                                                                fresh.changeClassToOff($("#fresh"));
                                                                 cb({
                                                                     success: true
                                                                 });
                                                             } else {
                                                                 console.log("删除isNew字段为0的数据失败");
+                                                                fresh.changeClassToOff($("#fresh"));
                                                                 cb({
                                                                     success: false,
                                                                     data: "删除isNew字段为0的数据失败"
@@ -227,6 +228,7 @@ function initQuestionnaire(cb) {
                                                     }
                                                 } else {
                                                     console.log("调查问卷列表写入数据库失败");
+                                                    fresh.changeClassToOff($("#fresh"));
                                                     cb({
                                                         success: false,
                                                         data: "调查问卷列表写入数据库失败"
@@ -236,6 +238,7 @@ function initQuestionnaire(cb) {
                                         }
                                     } else {
                                         console.log("调查问卷列表请求失败");
+                                        fresh.changeClassToOff($("#fresh"));
                                         cb({
                                             success: false,
                                             data: "调查问卷列表请求失败"
@@ -244,6 +247,7 @@ function initQuestionnaire(cb) {
                                 });
                             } else {
                                 console.log("业务方案列表写入数据库失败");
+                                fresh.changeClassToOff($("#fresh"));
                                 cb({
                                     success: false,
                                     data: "业务方案列表写入数据库失败"
@@ -253,6 +257,7 @@ function initQuestionnaire(cb) {
                     }
                 } else {
                     console.log("业务方案列表请求失败");
+                    fresh.changeClassToOff($("#fresh"));
                     cb({
                         success: false,
                         data: "业务方案列表请求失败"
@@ -261,6 +266,7 @@ function initQuestionnaire(cb) {
             });
         } else {
             console.log("数据库修改isNew字段失败");
+            fresh.changeClassToOff($("#fresh"));
             cb({
                 success: false,
                 data: "数据库修改isNew字段失败"
