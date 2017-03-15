@@ -12,8 +12,9 @@
     <script type="text/javascript" src="./js/dtree.js"></script>
     <title>问卷列表</title>
 </head>
+<!-- onLoad="init()" -->
 
-<body onLoad="initQuestionnaire()">
+<body onLoad="init()">
     <script>
         /*菜单设置*/
         var Menu = require('electron').remote.Menu;
@@ -190,6 +191,7 @@
         Menu.setApplicationMenu(menu);
     </script>
 
+    <div id="hidebg"></div>
     <div id="head">
         <div id="dropBox">
             <div class="dropBox_wrp">
@@ -221,11 +223,11 @@
     </div>
     <div id="middle">
         <div id="tree">
-            <p><a href="javascript: d.openAll();">展开所有</a> | <a href="javascript: d.closeAll();">折叠所有</a></p>
+            <p>
+                <a href="javascript: d.openAll();">展开所有</a> | <a href="javascript: d.closeAll();">折叠所有</a>
+                <img src="./images/tree_00_refresh_off.png" alt="">
+            </p>
             <div class="dtree" id="treeDemo">
-                <script type="text/javascript">
-                    // initQuestionnaire();
-                </script>
             </div>
         </div>
         <div id="main">
