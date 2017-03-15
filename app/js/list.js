@@ -99,37 +99,6 @@ function initTree() {
                                     console.log("添加调查问卷树节点成功");
                                     fresh.changeClassToOff($("#fresh"));
                                     document.getElementById('treeDemo').innerHTML = d;
-                                    // $("#treeDemo").empty().append(d);
-                                    /*树节点业务方案的点击事件*/
-                                    d.s = (function(questionnairesInfo, questionnairesLength) {
-                                        return function(nodeId) {
-                                            //添加节点点击事件
-                                            var solutionRecidIndex = this.aNodes[nodeId].target;
-                                            var quesNum = 0;
-                                            console.log($(".listBody"));
-                                            console.log("长度" + $(".listBody").length);
-                                            if ($(".listBody").length && $(".listBody").length > 0)
-                                                $(".listBody").remove();
-                                            for (let i = 0; i < questionnairesLength; i++) {
-                                                if (questionnairesInfo[i].solutionRecid == solutionRecidIndex) {
-                                                    console.log(questionnairesInfo[i].title);
-                                                    /*在右边显示出点击的业务方案所包含的所有调查问卷*/
-                                                    $("#listHead").after(`
-                                                                <tr class="listBody">
-                                                                    <td class="titleTd">${questionnairesInfo[i].title}</td>
-                                                                    <td class="codeTd">${questionnairesInfo[i].recid}</td>
-                                                                    <td class="syncTd"></td>
-                                                                    <td class="editTd"></td>
-                                                                    <td class="operTd">
-                                                                        <a href="javascript: ;">编辑</a>
-                                                                        <a href="javascript: ;">预览</a>
-                                                                        <a href="javascript: ;">删除</a>
-                                                                    </td>
-                                                                </tr>`);
-                                                }
-                                            }
-                                        };
-                                    }(questionnairesInfo, questionnairesLength));
                                 }
                             });
                         } else {
@@ -147,6 +116,38 @@ function initTree() {
             fresh.changeClassToOff($("#fresh"));
         }
     });
+}
+
+/**
+ * [树节点业务方案的点击事件]
+ * @param  solutionRecidIndex [该业务方案节点的recid]
+ * @return
+ */
+function showQuestionnaires(solutionRecidIndex) {
+    //添加节点点击事件
+    var quesNum = 0;
+    console.log($(".listBody"));
+    console.log("长度" + $(".listBody").length);
+    if ($(".listBody").length && $(".listBody").length > 0)
+        $(".listBody").remove();
+    for (let i = 0; i < questionnairesLength; i++) {
+        if (questionnairesInfo[i].solutionRecid == solutionRecidIndex) {
+            console.log(questionnairesInfo[i].title);
+            /*在右边显示出点击的业务方案所包含的所有调查问卷*/
+            $("#listHead").after(`
+                <tr class="listBody">
+                <td class="titleTd">${questionnairesInfo[i].title}</td>
+                <td class="codeTd">${questionnairesInfo[i].recid}</td>
+                <td class="syncTd"></td>
+                <td class="editTd"></td>
+                <td class="operTd">
+                    <a href="javascript: ;">编辑</a>
+                    <a href="javascript: ;">预览</a>
+                    <a href="javascript: ;">删除</a>
+                </td>
+            </tr>`);
+        }
+    }
 }
 
 /**
@@ -320,7 +321,10 @@ function __getGlobalData(cb) {
 function __addSolutionTreeItem(cb) {
     console.log("正在添加业务方案树节点");
     for (var i = 0; i < solutionsLength; i++) {
-        d.add(++dTreeItemNum, 0, solutionsInfo[i].title, 'javascript: ', '', solutionsInfo[i].recid, "./images/tree_02_op.png", "./images/tree_02_op.png");
+        let temp = solutionsInfo[i].recid;
+        temp = `javascript:showQuestionnaires('${temp}');`;
+        d.add(++dTreeItemNum, 0, solutionsInfo[i].title,
+            temp, '', solutionsInfo[i].recid, "./images/tree_02_op.png", "./images/tree_02_op.png");
         solutionsInfo[i].rowID = dTreeItemNum;
     }
     cb({
