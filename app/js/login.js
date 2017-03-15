@@ -75,7 +75,16 @@ function signIn() {
                     if (res.success == true) {
                         console.log("数据库用户部分更新成功");
                         /*获取数据*/
-                        initQuestionnaire();
+                        initQuestionnaire(function(res2) {
+                            if (res2.success == true) {
+                                console.log("更新数据成功");
+                                hideShielder();
+                                window.location.href = "./list.html";
+                            } else {
+                                console.log("更新数据失败");
+                                console.log(res2.data);
+                            }
+                        });
                     } else {
                         alert("后台处理出错，error：" + res.data, "提示");
                         hideShielder();
@@ -93,11 +102,12 @@ function signIn() {
     }
 }
 
-function initQuestionnaire() {
-    var solutionsLength = null;
-    var questionnairesLength = null;
-    // var countI = 0;
-    // var countJ = new Array();
+function initQuestionnaire(cb) {
+    var solutionsLength = 0;
+    var questionnairesLength = 0;
+    var countI = 0;
+    var countJ = 0;
+    var questionnairesAllLength = 0;
 
     /*更新isNew字段为0*/
     quesSqlite.updateIsNew(GlobalData, function(res0) {
@@ -120,17 +130,17 @@ function initQuestionnaire() {
                                 console.log("业务方案列表写入数据库成功");
                                 // console.log("i = " + i);
 
-                                // if (++countI == solutionsLength) {
-                                //     /*删除isNew字段为0的数据*/
-                                //     quesSqlite.deleteSolutionIsNew(GlobalData, function(res3) {
-                                //         if (res3.success == true) {
-                                //             console.log("删除isNew字段为0的数据成功");
-                                //         } else {
-                                //             console.log("删除isNew字段为0的字段失败");
-                                //         }
-                                //     });
-                                // }
-                                // countJ[i] = 0;
+                                if (++countI == solutionsLength) {
+                                    /*删除isNew字段为0的数据*/
+                                    quesSqlite.deleteSolutionIsNew(GlobalData, function(res3) {
+                                        if (res3.success == true) {
+                                            console.log("删除isNew字段为0的数据成功");
+                                        } else {
+                                            console.log("删除isNew字段为0的字段失败");
+                                        }
+                                    });
+                                }
+                                countJ[i] = 0;
 
                                 /*向服务器发送请求获取调查问卷 restfulUtil.js*/
                                 restfulUtil.getQuestionnaires(GlobalData, solutionsInfo[i].recid, function(res3) {
@@ -138,49 +148,72 @@ function initQuestionnaire() {
                                         console.log("调查问卷列表请求成功");
                                         questionnairesInfo = res3.resJson.questionnairelist;
                                         var questionnairesLength = __getJsonLength(questionnairesInfo);
+                                        questionnairesAllLength += questionnairesLength;
                                         // console.log("该方案包含的问卷个数为" + questionnairesLength);
                                         for (let j = 0; j < questionnairesLength; j++) {
                                             /*更新某业务方案的调查问卷 quesSqlite.js*/
                                             quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[i].recid, questionnairesInfo[j], function(res4) {
-                                                // if (++countJ[i] == questionnairesLength) {
-                                                //     quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
-                                                //         if (res5.success == true) {
-                                                //             console.log("删除isNew字段为0的数据成功");
-                                                //         } else {
-                                                //             console.log("删除isNew字段为0的数据失败");
-                                                //         }
-                                                //     });
-                                                // }
-                                                // console.log("j = " + j);
+                                                console.log("j = " + j);
                                                 if (res4.success == true) {
                                                     console.log("调查问卷列表写入数据库成功");
+                                                    if (++countJ == questionnairesAllLength) {
+                                                        quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
+                                                            if (res5.success == true) {
+                                                                console.log("删除isNew字段为0的数据成功");
+                                                                cb({
+                                                                    success: true
+                                                                });
+                                                            } else {
+                                                                console.log("删除isNew字段为0的数据失败");
+                                                                cb({
+                                                                    success: false,
+                                                                    data: "删除isNew字段为0的数据失败"
+                                                                });
+                                                            }
+                                                        });
+                                                    }
                                                 } else {
-                                                    console.log("调查问卷列表写入数据库失败")
+                                                    console.log("调查问卷列表写入数据库失败");
+                                                    cb({
+                                                        success: false,
+                                                        data: "调查问卷列表写入数据库失败"
+                                                    });
                                                 }
                                             });
                                         }
                                     } else {
                                         console.log("调查问卷列表请求失败");
+                                        cb({
+                                            success: false,
+                                            data: "调查问卷列表请求失败"
+                                        });
                                     }
                                 });
                             } else {
                                 console.log("业务方案列表写入数据库失败");
+                                cb({
+                                    success: false,
+                                    data: "业务方案列表写入数据库失败"
+                                });
                             }
                         });
                     }
                 } else {
                     console.log("业务方案列表请求失败");
+                    cb({
+                        success: false,
+                        data: "业务方案列表请求失败"
+                    });
                 }
             });
         } else {
             console.log("数据库修改isNew字段失败");
+            cb({
+                success: false,
+                data: "数据库修改isNew字段失败"
+            });
         }
     });
-
-    setTimeout(function() {
-        window.location.href = "./list.html";
-        hideShielder();
-    }, 5000);
 }
 
 function showShielder() {
