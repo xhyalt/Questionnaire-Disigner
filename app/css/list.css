@@ -181,9 +181,19 @@ body {
     margin-right: 50px;
 }
 
+#tree {
+    position: absolute;
+    padding: 15px;
+    /*float: left;*/
+    width: 270px;
+    height: 80%;
+    background-color: #fff;
+    min-height: 100px;
+    /*margin-right: 10px;*/
+}
+
 #tree p {
-    padding: 10px;
-    width: 200px;
+    padding-bottom: 10px;
     font-size: 14px;
 }
 
@@ -192,19 +202,12 @@ body {
     text-decoration: none;
 }
 
-#tree {
-    position: absolute;
-    padding: 15px;
-    /*float: left;*/
-    width: 270px;
-    height: 80%;
-    background-color: #fff;
-    min-height: 400px;
-    overflow: auto;
-    /*margin-right: 10px;*/
+#tree p img {
+    cursor: pointer;
+    margin-left: 10px;
 }
 
-#main{
+#main {
     max-height: 80%;
     overflow-y: auto;
 }
@@ -276,11 +279,30 @@ body {
 
 .operTd {
     width: 200px;
-    min-width: 120px;
+    min-width: 150px;
 }
 
-.operTd a{
+.operTd a {
     margin-right: 12px;
     text-decoration: none;
     color: #666666;
+}
+
+
+/*遮挡层*/
+
+#hidebg {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    /*宽度设置为100%，这样才能使隐藏背景层覆盖原页面*/
+    filter: alpha(opacity=60);
+    /*设置透明度为60%*/
+    opacity: 0.6;
+    /*非IE浏览器下设置透明度为60%*/
+    display: none;
+    z-Index: 2;
 }
