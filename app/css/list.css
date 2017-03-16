@@ -64,7 +64,7 @@ body {
     position: relative;
     background: #fff;
     margin-right: 10px;
-    z-index: 9999;
+    z-index: 5;
 }
 
 #dropBox .dropBox_wrp {
@@ -343,5 +343,5 @@ body {
     opacity: 0.6;
     /*非IE浏览器下设置透明度为60%*/
     display: none;
-    z-Index: 2;
+    z-Index: 10;
 }

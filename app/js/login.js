@@ -40,11 +40,11 @@ function signIn() {
         // var i = urlValue.lastIndexOf(':');
         // GlobalData.host = urlValue.substring(0, i);
         // GlobalData.post = urlValue.substr(i);
-        GlobalData.urlRoot = "10.2.20.74:9797";
-        GlobalData.host = "10.2.20.74";
+        GlobalData.urlRoot = "10.2.20.61:9797";
+        GlobalData.host = "10.2.20.61";
         GlobalData.post = 9797;
-        GlobalData.user = "heyedong";
-        GlobalData.pwd = "1";
+        GlobalData.user = "sr";
+        GlobalData.pwd = "";
 
         // if (onlineStatus() == true) {
         //     console.log("有网");
@@ -64,12 +64,13 @@ function signIn() {
             var body = eval('(' + chunk + ')');
             if (statusCode == 200) {
                 console.log("登录成功");
-                // alert(body.token);
+                
                 GlobalData.username = body.username;
                 GlobalData.token = body.token;
                 /*与主进程通信，发送GlobalData*/
                 __setGlobalData();
                 console.log("给主进程发送用户信息");
+
                 /*初始化数据库 quesSqlite.js*/
                 quesSqlite.initDB(GlobalData, function(res) {
                     if (res.success == true) {
@@ -113,12 +114,14 @@ function initQuestionnaire(cb) {
     quesSqlite.updateIsNew(GlobalData, function(res0) {
         if (res0.success == true) {
             console.log("isNew字段更新成功");
+
             /*向服务器发送请求获取业务方案 restfulUtil.js*/
             restfulUtil.getSolutions(GlobalData, function(res) {
                 // console.log(JSON.stringify(res.resJson.solutionInfo));
                 if (res.success == true) {
                     console.log("业务方案列表请求成功");
                     solutionsInfo = res.resJson.solutionInfo;
+                    // console.log(solutionsInfo);
                     solutionsLength = __getJsonLength(solutionsInfo);
                     console.log("业务方案的长度 " + solutionsLength);
                     for (let i = 0; i < solutionsLength; i++) {
@@ -128,9 +131,8 @@ function initQuestionnaire(cb) {
                             /*处理业务方案*/
                             if (res2.success == true) {
                                 console.log("业务方案列表写入数据库成功");
-                                // console.log("i = " + i);
-
                                 if (++countI == solutionsLength) {
+
                                     /*删除isNew字段为0的数据*/
                                     quesSqlite.deleteSolutionIsNew(GlobalData, function(res3) {
                                         if (res3.success == true) {
@@ -147,16 +149,19 @@ function initQuestionnaire(cb) {
                                     if (res3.success == true) {
                                         console.log("调查问卷列表请求成功");
                                         questionnairesInfo = res3.resJson.questionnairelist;
+                                        // console.log(questionnairesInfo);
                                         var questionnairesLength = __getJsonLength(questionnairesInfo);
                                         questionnairesAllLength += questionnairesLength;
                                         // console.log("该方案包含的问卷个数为" + questionnairesLength);
                                         for (let j = 0; j < questionnairesLength; j++) {
+
                                             /*更新某业务方案的调查问卷 quesSqlite.js*/
                                             quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[i].recid, questionnairesInfo[j], function(res4) {
-                                                console.log("j = " + j);
                                                 if (res4.success == true) {
                                                     console.log("调查问卷列表写入数据库成功");
                                                     if (++countJ == questionnairesAllLength) {
+
+                                                        /*判断是否为最后一次 最后一次删除其余*/
                                                         quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
                                                             if (res5.success == true) {
                                                                 console.log("删除isNew字段为0的数据成功");
