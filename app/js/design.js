@@ -23,6 +23,7 @@ quesNoPattern[4] = "Q1. Q2. Q3.";
 /*当前编辑的题号*/
 var quesActiveNo = 0;
 
+/*各种监听事件*/
 $(function() {
 
     /*获取用户基本信息*/

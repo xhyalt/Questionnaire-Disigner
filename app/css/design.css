@@ -932,6 +932,7 @@ img.addItem {
     font-size: 14px;
     line-height: 25px;
     text-align: left;
+    margin-left: 10px;
 }
 
 #popBoxButtonBox {

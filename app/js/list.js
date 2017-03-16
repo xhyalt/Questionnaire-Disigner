@@ -43,6 +43,18 @@ $(function() {
             }
         });
     });
+
+    $("#listTable").on("mouseover", ".listBody", function() {
+        $(this).css({
+            "background-color": "#f8fefd",
+            "border-left": "3px solid #1ABC9C"
+        });
+    }).on("mouseout", ".listBody", function() {
+        $(this).css({
+            "background-color": "#fff",
+            "border-left": "3px solid #fff"
+        });
+    });
 });
 
 var fresh = {
@@ -136,16 +148,16 @@ function showQuestionnaires(solutionRecidIndex) {
             /*在右边显示出点击的业务方案所包含的所有调查问卷*/
             $("#listHead").after(`
                 <tr class="listBody">
-                <td class="titleTd">${questionnairesInfo[i].title}</td>
-                <td class="codeTd">${questionnairesInfo[i].recid}</td>
-                <td class="syncTd"></td>
-                <td class="editTd"></td>
-                <td class="operTd">
-                    <a href="javascript: ;">编辑</a>
-                    <a href="javascript: ;">预览</a>
-                    <a href="javascript: ;">删除</a>
-                </td>
-            </tr>`);
+                    <td class="titleTd">${questionnairesInfo[i].title}</td>
+                    <td class="codeTd">${questionnairesInfo[i].recid}</td>
+                    <td class="syncTd"></td>
+                    <td class="editTd"></td>
+                    <td class="operTd">
+                        <a href="javascript: ;">编辑</a>
+                        <a href="javascript: ;">预览</a>
+                        <a href="javascript: ;">删除</a>
+                    </td>
+                </tr>`);
         }
     }
 }

@@ -202,12 +202,6 @@ body {
     text-decoration: none;
 }
 
-
-/*#tree p img {
-    cursor: pointer;
-    margin-left: 10px;
-}*/
-
 #tree #fresh {
     float: left;
     width: 20px;
@@ -292,11 +286,6 @@ body {
     height: 50px;
     line-height: 50px;
     border-left: 3px solid #fff;
-}
-
-.listBody:hover {
-    background-color: #f8fefd;
-    border-left: 3px solid #1ABC9C;
 }
 
 #listTable td {

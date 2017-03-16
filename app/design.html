@@ -26,7 +26,7 @@
 
 <body onLoad="load()">
 
-    <!-- <script>
+    <script>
         /*菜单设置*/
         var Menu = require('electron').remote.Menu;
 
@@ -96,10 +96,10 @@
                         label: '重新加载',
                         enabled: true,
                         accelerator: 'CmdOrCtrl+R',
-                        // click: function(item, focusedWindow) {
-                        // 	if (focusedWindow)
-                        // 		focusedWindow.reload();
-                        // }
+                        click: function(item, focusedWindow) {
+                        	if (focusedWindow)
+                        		focusedWindow.reload();
+                        }
                     },
                     {
                         type: 'separator'
@@ -200,7 +200,7 @@
         ];
         var menu = Menu.buildFromTemplate(template);
         Menu.setApplicationMenu(menu);
-    </script> -->
+    </script>
 
     <div id="hidebg"></div>
     <div id="popBox">
