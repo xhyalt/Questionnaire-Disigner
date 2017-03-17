@@ -64,33 +64,36 @@ function signIn() {
             var body = eval('(' + chunk + ')');
             if (statusCode == 200) {
                 console.log("登录成功");
-                
+
                 GlobalData.username = body.username;
                 GlobalData.token = body.token;
                 /*与主进程通信，发送GlobalData*/
-                __setGlobalData();
-                console.log("给主进程发送用户信息");
-
-                /*初始化数据库 quesSqlite.js*/
-                quesSqlite.initDB(GlobalData, function(res) {
+                __setGlobalData(function(res) {
                     if (res.success == true) {
-                        console.log("数据库用户部分更新成功");
-                        /*获取数据*/
-                        initQuestionnaire(function(res2) {
-                            if (res2.success == true) {
-                                console.log("更新数据成功");
-                                hideShielder();
-                                window.location.href = "./list.html";
+                        console.log("给主进程发送用户信息成功");
+                        /*初始化数据库 quesSqlite.js*/
+                        quesSqlite.initDB(GlobalData, function(res) {
+                            if (res.success == true) {
+                                console.log("数据库用户部分更新成功");
+                                /*获取数据*/
+                                initQuestionnaire(function(res2) {
+                                    if (res2.success == true) {
+                                        console.log("更新数据成功");
+                                        hideShielder();
+                                        window.location.href = "./list.html";
+                                    } else {
+                                        console.log("更新数据失败");
+                                        console.log(res2.data);
+                                    }
+                                });
                             } else {
-                                console.log("更新数据失败");
-                                console.log(res2.data);
+                                alert("后台处理出错，error：" + res.data, "提示");
+                                hideShielder();
                             }
                         });
-                    } else {
-                        alert("后台处理出错，error：" + res.data, "提示");
-                        hideShielder();
                     }
                 });
+
             } else if (statusCode == 401) {
                 alert(body.error_msg, "提示");
                 hideShielder();
@@ -236,9 +239,12 @@ function hideShielder() {
  * @private
  * @return
  */
-function __setGlobalData() {
-    ipcRenderer.once('asynchronous-set-GlobalData-reply', (event, arg) => {
+function __setGlobalData(cb) {
+    ipcRenderer.on('asynchronous-set-GlobalData-reply', (event, arg) => {
         console.log("主进程收到GlobalData是否成功 " + arg);
+        cb({
+            success: true
+        });
     });
     ipcRenderer.send('asynchronous-set-GlobalData-message', GlobalData);
 }
