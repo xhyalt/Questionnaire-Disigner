@@ -181,6 +181,7 @@ function initQuestionnaire(cb) {
             /*向服务器发送请求获取业务方案 restfulUtil.js*/
             restfulUtil.getSolutions(GlobalData, function(res) {
                 // console.log(JSON.stringify(res.resJson.solutionInfo));
+                console.log(GlobalData.token);
                 if (res.success == true) {
                     console.log("业务方案列表请求成功");
                     solutionsInfo = res.resJson.solutionInfo;
@@ -193,7 +194,6 @@ function initQuestionnaire(cb) {
                             /*处理业务方案*/
                             if (res2.success == true) {
                                 console.log("业务方案列表写入数据库成功");
-                                // console.log("i = " + i);
 
                                 if (++countI == solutionsLength) {
                                     /*删除isNew字段为0的数据*/
@@ -218,7 +218,6 @@ function initQuestionnaire(cb) {
                                         for (let j = 0; j < questionnairesLength; j++) {
                                             /*更新某业务方案的调查问卷 quesSqlite.js*/
                                             quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[i].recid, questionnairesInfo[j], function(res4) {
-                                                console.log("j = " + j);
                                                 if (res4.success == true) {
                                                     console.log("调查问卷列表写入数据库成功");
                                                     if (++countJ == questionnairesAllLength) {

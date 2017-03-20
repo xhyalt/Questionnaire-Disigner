@@ -154,7 +154,7 @@ $(function() {
             "visibility": "hidden"
         });
         $nextTdP = $tdP.next();
-        if ($nextTdP.length  == 0) {
+        if ($nextTdP.length == 0) {
             txt = "已是最后一个题目，无法再向下移动";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         } else {
@@ -513,10 +513,10 @@ $(function() {
 
     /*标题 点击编辑*/
     $("#titleBox").on("click", "#titleNameTextID", function() {
-        var td = $(this);
-        var txt = td.html();
+        var $td = $(this);
+        var txt = $td.html();
         var input = $(`<div id="titleNameTextInput" contenteditable="true">` + txt + `</div>`);
-        td.html(input);
+        $td.html(input);
 
         input.click(function() {
             /*防止二次嵌套临时idv*/
@@ -530,24 +530,24 @@ $(function() {
             /*判断文本有没有修改*/
             if (newtxt == "") {
                 /*文本为空*/
-                td.html("空问卷");
+                $td.html("空问卷");
             } else if (newtxt == txt) {
                 /*文本与原来相同*/
-                td.html(newtxt);
+                $td.html(newtxt);
             } else {
                 /*文本与原来不同*/
                 /*数据库操作*/
-                td.html(newtxt);
+                $td.html(newtxt);
             }
         });
     });
 
     /*题头详述 点击编辑*/
     $("#titleBox").on("click", "#headDetailTextID", function() {
-        var td = $(this);
-        var txt = td.html();
+        var $td = $(this);
+        var txt = $td.html();
         var input = $(`<div id="headDetailTextInput" contenteditable="true">` + txt + `</div>`);
-        td.html(input);
+        $td.html(input);
 
         input.click(function() {
             return false;
@@ -559,22 +559,22 @@ $(function() {
             var newtxt = $("#headDetailTextInput").html();
             /*判断文本有没有修改*/
             if (newtxt == "") {
-                td.html("欢迎参加本次答题");
+                $td.html("欢迎参加本次答题");
             } else if (newtxt != txt) {
                 /*数据库操作*/
-                td.html(newtxt);
+                $td.html(newtxt);
             } else {
-                td.html(newtxt);
+                $td.html(newtxt);
             }
         });
     });
 
     /*题尾详述 点击编辑*/
     $("#tailBox").on("click", "#tailDetailTextID", function() {
-        var td = $(this);
-        var txt = td.html();
+        var $td = $(this);
+        var txt = $td.html();
         var input = $(`<div id="tailDetailTextInput" contenteditable="true">` + txt + `</div>`);
-        td.html(input);
+        $td.html(input);
 
         input.click(function() {
             return false;
@@ -586,12 +586,12 @@ $(function() {
             var newtxt = $("#tailDetailTextInput").html();
             /*判断文本有没有修改*/
             if (newtxt == "") {
-                td.html("您已完成本次问卷，感谢您的帮助与支持");
+                $td.html("您已完成本次问卷，感谢您的帮助与支持");
             } else if (newtxt != txt) {
                 /*数据库操作*/
-                td.html(newtxt);
+                $td.html(newtxt);
             } else {
-                td.html(newtxt);
+                $td.html(newtxt);
             }
         });
     });
@@ -599,13 +599,13 @@ $(function() {
     /*所有题干 点击编辑*/
     $("#target").on("click", ".stemText", function() {
 
-        var td = $(this);
+        var $td = $(this);
         /*确定题目种类*/
-        var type = getType(td);
+        var type = getType($td);
 
-        var txt = td.html();
+        var txt = $td.html();
         var input = $(`<div class="stemTextInput" contenteditable="true">` + txt + `</div>`);
-        td.html(input);
+        $td.html(input);
 
         input.click(function() {
             return false;
@@ -616,9 +616,9 @@ $(function() {
             var newtxt = $(".stemTextInput").html();
             if (newtxt != txt) {
                 /*数据库操作*/
-                td.html(newtxt);
+                $td.html(newtxt);
             } else if (newtxt == txt) {
-                td.html(newtxt);
+                $td.html(newtxt);
             }
         });
     });
@@ -626,13 +626,13 @@ $(function() {
     /*所有题目描述 点击编辑*/
     $("#target").on("click", ".descriptionText", function() {
 
-        var td = $(this);
+        var $td = $(this);
         /*确定题目种类*/
-        var type = getType(td);
+        var type = getType($td);
 
-        var txt = td.html();
+        var txt = $td.html();
         var input = $(`<div class="descriptionTextInput" contenteditable="true">` + txt + `</div>`);
-        td.html(input);
+        $td.html(input);
 
         input.click(function() {
             return false;
@@ -643,22 +643,22 @@ $(function() {
             var newtxt = $(".descriptionTextInput").html();
             if (newtxt != txt) {
                 /*数据库操作*/
-                td.html(newtxt);
+                $td.html(newtxt);
             } else if (newtxt == txt) {
-                td.html(newtxt);
+                $td.html(newtxt);
             }
         });
     });
 
     /*所以题目选项 点击编辑*/
     $("#target").on("click", ".ItemText", function() {
-        var td = $(this);
+        var $td = $(this);
         /*确定题目种类*/
-        var type = getType(td);
+        var type = getType($td);
 
-        var txt = td.html();
+        var txt = $td.html();
         var input = $(`<div class="itemTextInput" contenteditable="true">` + txt + `</div>`);
-        td.html(input);
+        $td.html(input);
 
         input.click(function() {
             return false;
@@ -669,9 +669,9 @@ $(function() {
             var newtxt = $(".itemTextInput").html();
             if (newtxt != txt) {
                 /*数据库操作*/
-                td.html(newtxt);
+                $td.html(newtxt);
             } else if (newtxt == txt) {
-                td.html(newtxt);
+                $td.html(newtxt);
             }
         });
     });

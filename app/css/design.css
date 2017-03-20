@@ -928,6 +928,10 @@ img.addItem {
     border: 1px solid #cccccc;
 }
 
+#quesNoEx #quesNoPreview legend{
+    margin-left: 10px;
+}
+
 #quesNoEx #quesNoPreview ul li {
     font-size: 14px;
     line-height: 25px;
