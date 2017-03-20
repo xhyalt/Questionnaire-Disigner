@@ -49,6 +49,80 @@ body {
     -ms-user-select: none;
     user-select: none;
 }
+/*页面头部*/
+#headTop{
+    height: 60px;
+    width: 100%;
+    background-color: #fff;
+}
+
+#buttonBox{
+    float: right;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.lightButton {
+    width: 160px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+.darkButton {
+    width: 160px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+.lightButton a {
+    text-decoration: none;
+    /*背景*/
+    background: #fff;
+    padding: 8px 50px 8px 50px;
+    border-radius: 5px;
+    /*字体*/
+    font-size: 16px;
+    font-weight: bold;
+    color: #1ABC9C;
+    /*边框*/
+    border-style: solid;
+    border-width: 2px;
+    border-color: #1ABC9C;
+    /*浏览器适配*/
+    -webkit-transition: all linear 0.30s;
+    -moz-transition: all linear 0.30s;
+    transition: all linear 0.30s;
+}
+
+.darkButton a {
+    text-decoration: none;
+    /*背景*/
+    background: #1ABC9C;
+    padding: 8px 50px 8px 50px;
+    border-radius: 5px;
+    /*字体*/
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    /*边框*/
+    border-style: solid;
+    border-width: 2px;
+    border-color: #1ABC9C;
+    /*浏览器适配*/
+    -webkit-transition: all linear 0.30s;
+    -moz-transition: all linear 0.30s;
+    transition: all linear 0.30s;
+}
+
+.lightButton a:hover {
+    background: #1ABC9C;
+    color: #fff;
+}
+
+.darkButton a:hover {
+    background: #17a085;
+    border-color: #17a085;
+}
 
 
 /*问卷设计左侧菜单部分*/
@@ -273,6 +347,7 @@ body {
 
 #target {
     background-color: #f3f3f3;
+    z-index: 50;
 }
 
 
@@ -703,67 +778,7 @@ img.addItem {
     margin-left: 980px;
 }
 
-.lightButton {
-    width: 160px;
-    padding-top: 10px;
-    padding-bottom: 15px;
-}
 
-.darkButton {
-    width: 160px;
-    padding-top: 10px;
-    padding-bottom: 15px;
-}
-
-.lightButton a {
-    text-decoration: none;
-    /*背景*/
-    background: #fff;
-    padding: 8px 50px 8px 50px;
-    border-radius: 5px;
-    /*字体*/
-    font-size: 16px;
-    font-weight: bold;
-    color: #1ABC9C;
-    /*边框*/
-    border-style: solid;
-    border-width: 2px;
-    border-color: #1ABC9C;
-    /*浏览器适配*/
-    -webkit-transition: all linear 0.30s;
-    -moz-transition: all linear 0.30s;
-    transition: all linear 0.30s;
-}
-
-.darkButton a {
-    text-decoration: none;
-    /*背景*/
-    background: #1ABC9C;
-    padding: 8px 50px 8px 50px;
-    border-radius: 5px;
-    /*字体*/
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    /*边框*/
-    border-style: solid;
-    border-width: 2px;
-    border-color: #1ABC9C;
-    /*浏览器适配*/
-    -webkit-transition: all linear 0.30s;
-    -moz-transition: all linear 0.30s;
-    transition: all linear 0.30s;
-}
-
-.lightButton a:hover {
-    background: #1ABC9C;
-    color: #fff;
-}
-
-.darkButton a:hover {
-    background: #17a085;
-    border-color: #17a085;
-}
 
 
 /*问卷设置*/
@@ -781,7 +796,7 @@ img.addItem {
     opacity: 0.6;
     /*非IE浏览器下设置透明度为60%*/
     display: none;
-    z-Index: 2;
+    z-Index: 100;
 }
 
 #popBox {
@@ -794,7 +809,7 @@ img.addItem {
     height: 405px;
     background-color: #fff;
     display: none;
-    z-Index: 3;
+    z-Index: 110;
     border-radius: 5px;
     margin-left: -285px;
     margin-top: -250px;
@@ -875,7 +890,7 @@ img.addItem {
     position: relative;
     background: #fff;
     margin-right: 10px;
-    z-index: 9999;
+    z-index: 120;
 }
 
 #quesNoEx #dropBox .dropBox_wrp {
@@ -1006,7 +1021,23 @@ img.addItem {
 
 /*弹出框*/
 
-.popover {
+.trianglePop{
+    display: block;
+    position: absolute;
+    z-index: 70;
+}
+.popMenu{
+    z-index: 30;
+    background-color: #fff;
+    border: 1px solid #e2e2e2;
+    color: #666666;
+    line-height: 1.4;
+    font-size: 14px;
+    width: 50px;
+    height: 100px;
+}
+
+/*.popover {
     position: absolute;
     top: 0;
     left: 0;
@@ -1090,4 +1121,4 @@ img.addItem {
     content: " ";
     border-right-color: #fff;
     border-left-width: 0;
-}
+}*/
