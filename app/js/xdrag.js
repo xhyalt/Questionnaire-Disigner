@@ -24,7 +24,7 @@ $(function() {
 $(document).ready(function() {
 
     /*题型鼠标点击事件*/
-    $(".menuItemBox").delegate(".subType, .unSubject", "click", function(md) {
+    $(".menuItemBox").on("click", ".subType, .unSubject", function(md) {
         md.preventDefault();
 
         $this = $(this);
@@ -57,15 +57,15 @@ $(document).ready(function() {
         });
 
         tops = [];
-        $(document).undelegate("body", "mousemove");
-        $("body").undelegate(".subject, .unSubject", "mouseup");
+        $(document).off("mousemove", "body");
+        $("body").off("mouseup", ".subject, .unSubject");
         $("#target .subType").popover({
             trigger: "manual"
         });
     });
 
     /*题型鼠标落下事件*/
-    $(".menuItemBox").delegate(".subType", "mousedown", function(md) {
+    $(".menuItemBox").on("mousedown", ".subType", function(md) {
         md.preventDefault();
         var tops = [];
         var mouseX = md.pageX;
@@ -117,7 +117,7 @@ $(document).ready(function() {
             var $mergeTarget_subType = $(".mergeDiv .mergeStemText, .mergeDiv .mergeDescriptionText");
 
             /*题型 鼠标移动触发事件*/
-            $(document).delegate("body", "mousemove", function(mm) {
+            $(document).on("mousemove", "body", function(mm) {
 
                 $temp.show();
                 var mm_mouseX = mm.pageX;
@@ -174,7 +174,7 @@ $(document).ready(function() {
             });
 
             /*在middle松开鼠标触发事件*/
-            $("body").delegate(".subject, .unSubject", "mouseup", function(mu) {
+            $("body").on("mouseup", ".subject, .unSubject", function(mu) {
                 mu.preventDefault();
 
                 var mu_mouseX = mu.pageX;
@@ -196,30 +196,24 @@ $(document).ready(function() {
                     $temp.attr("style", null);
 
                     if (tops.length > 0) {
-                        console.log("===tops===");
                         level = tops[0].attributes["level"].nodeValue;
                         father = tops[0].attributes["father"].nodeValue;
                         $temp.html($($temp.html()).attr("level", level));
                         $temp.html($($temp.html()).attr("father", father));
-                        console.log($temp.html());
                         $($temp.html()).insertBefore(tops[0]);
                         setOrder();
                     } else if (bottoms.length > 0) {
-                        console.log("===bottoms===");
                         level = bottoms[0].attributes["level"].nodeValue;
                         father = bottoms[0].attributes["father"].nodeValue;
                         $temp.html($($temp.html()).attr("level", level));
                         $temp.html($($temp.html()).attr("father", father));
-                        console.log($temp.html());
                         $($temp.html()).insertAfter(bottoms[0]);
                         setOrder();
                     } else if (mergesTop.length > 0) {
-                        console.log("===mergesTop===");
                         level = $(mergesTop[0]).parent().parent().attr["level"];
                         father = $(mergesTop[0]).parent().parent().attr["father"];
                         $temp.html($($temp.html()).attr("level", level));
                         $temp.html($($temp.html()).attr("father", father));
-                        console.log($temp.html());
                         $($temp.html()).insertBefore($(mergesTop[0]).parent().parent());
                         setOrder();
                     } else {
@@ -237,8 +231,8 @@ $(document).ready(function() {
                     mergesTop = [];
                 }
 
-                $(document).undelegate("body", "mousemove");
-                $("body").undelegate(".subject, .unSubject", "mouseup");
+                $(document).off("mousemove", "body");
+                $("body").off("mouseup", ".subject, .unSubject");
                 $("#target .subType").popover({
                     trigger: "manual"
                 });
