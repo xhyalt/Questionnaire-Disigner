@@ -22,6 +22,8 @@ quesNoPattern[3] = "1) 2) 3)";
 quesNoPattern[4] = "Q1. Q2. Q3.";
 /*当前编辑的题号*/
 var quesActiveNo = 0;
+/*弹出框*/
+var popMenu = false;
 
 /*各种监听事件*/
 $(function() {
@@ -510,6 +512,21 @@ $(function() {
     });
 
     /*问卷设计监听事件end==================*/
+    /*body 点击事件*/
+    $(document).on("click", function() {
+        $td = $(this);
+        if ($td.parents(".popMenu").length == 0 && $(".popMenu").length > 0) {
+            console.log("进来了");
+            $(".trianglePop").remove();
+            // $(".popMenu").animate({
+            //     left: '-200px',
+            //     opacity: '0'
+            // }, 300, function() {
+            //     popMenu = false;
+            //     $("#right").empty();
+            // });
+        }
+    });
 
     /*标题 点击编辑*/
     $("#titleBox").on("click", "#titleNameTextID", function() {
@@ -519,7 +536,7 @@ $(function() {
         $td.html(input);
 
         input.click(function() {
-            /*防止二次嵌套临时idv*/
+            /*防止二次嵌套临时div*/
             return false;
         });
 
@@ -611,6 +628,8 @@ $(function() {
             return false;
         });
 
+        __showPopMenu($td);
+
         input.trigger("focus");
         input.blur(function() {
             var newtxt = $(".stemTextInput").html();
@@ -676,6 +695,29 @@ $(function() {
         });
     });
 });
+
+/**
+ * [显示题目设置的菜单]
+ * @private
+ * @param  $td [当前弹出题目设置的盒子]
+ * @return
+ */
+function __showPopMenu($td) {
+    var position = $td[0].offsetHeight / 2 + $td[0].offsetTop - $("#headTop")[0].offsetHeight - 20;
+    $("#right").append(radioMenuDiv);
+    popMenu = true;
+
+    $(".popMenu").animate({
+        left: '0px',
+        opacity: '1'
+    }, 300, function() {
+        $("#right").append(trianglePop);
+        console.log($(".trianglePop"));
+        $(".trianglePop").css({
+            "top": `${position}px`
+        });
+    });
+}
 
 /**
  * 与主进程通信获取用户基础数据GlobalData

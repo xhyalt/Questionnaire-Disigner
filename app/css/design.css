@@ -49,28 +49,49 @@ body {
     -ms-user-select: none;
     user-select: none;
 }
+
+
 /*页面头部*/
-#headTop{
-    height: 60px;
+
+#headTop {
+    height: 50px;
     width: 100%;
     background-color: #fff;
+    position: fixed;
+    z-index: 80;
 }
 
-#buttonBox{
+#buttonBox1 {
+    float: left;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+#buttonBox2 {
     float: right;
     padding-right: 10px;
     padding-top: 10px;
 }
 
+#buttonBox1 div {
+    float: left;
+    margin-left: 10px;
+}
+
+#buttonBox2 div {
+    float: right;
+    margin-left: 10px;
+}
+
 .lightButton {
-    width: 160px;
-    padding-top: 10px;
+    width: 100px;
+    padding-top: 5px;
     padding-bottom: 15px;
 }
 
 .darkButton {
-    width: 160px;
-    padding-top: 10px;
+    width: 100px;
+    padding-top: 5px;
     padding-bottom: 15px;
 }
 
@@ -78,10 +99,10 @@ body {
     text-decoration: none;
     /*背景*/
     background: #fff;
-    padding: 8px 50px 8px 50px;
+    padding: 5px 30px 5px 30px;
     border-radius: 5px;
     /*字体*/
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     color: #1ABC9C;
     /*边框*/
@@ -98,10 +119,10 @@ body {
     text-decoration: none;
     /*背景*/
     background: #1ABC9C;
-    padding: 8px 50px 8px 50px;
+    padding: 5px 30px 5px 30px;
     border-radius: 5px;
     /*字体*/
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     color: #fff;
     /*边框*/
@@ -141,6 +162,7 @@ body {
     /*border: 1px solid #ccc;*/
     font-size: 14px;
     margin: 10px;
+    margin-top: 60px;
     float: left;
 }
 
@@ -248,6 +270,9 @@ body {
     margin: 10px auto;
     float: left;
     margin-left: 160px;
+    margin-top: 60px;
+    z-index: 50;
+    background-color: #f3f3f3;
 }
 
 #titleBox {
@@ -340,14 +365,6 @@ body {
     line-height: 250px;
     color: #888888;
     font-size: 20px;
-}
-
-
-/*中间部分*/
-
-#target {
-    background-color: #f3f3f3;
-    z-index: 50;
 }
 
 
@@ -770,15 +787,110 @@ img.addItem {
 /*问卷设计右侧按钮部分*/
 
 #right {
-    position: fixed;
+    position: absolute;
     margin: 10px;
     width: 180px;
-    height: 200px;
     float: left;
-    margin-left: 980px;
+    margin-left: 978px;
+    margin-top: 60px;
 }
 
+.trianglePop {
+    background: url(../images/trianglePop.png) no-repeat;
+    width: 13px;
+    height: 26px;
+    display: block;
+    position: absolute;
+    z-index: 70;
+    left: -12px;
+}
 
+.popMenu {
+    z-index: 30;
+    background-color: #fff;
+    border: 1px solid #e2e2e2;
+    color: #666666;
+    line-height: 1.4;
+    font-size: 14px;
+    width: 180px;
+    position: absolute;
+    left: -200px;
+    opacity: 0;
+}
+
+.popMenu a.popMenuClose {
+    float: right;
+    margin: 10px;
+    display: block;
+    /*padding: 15px;*/
+    cursor: pointer;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: url(../images/icons.png) -48px -96px no-repeat;
+}
+
+.popMenu h4 {
+    font-size: 16px;
+    padding: 15px;
+}
+
+.popMenuDetail {
+    border-top: 1px #cccccc solid;
+    width: 180px;
+}
+
+.popMenuDetail .detail {
+    margin: 10px;
+    border-bottom: 1px solid #cccccc;
+}
+
+.detail .title {
+    margin-bottom: 10px;
+}
+
+.detail li {
+    margin-bottom: 10px;
+}
+
+.detail li input.inputNumber {
+    width: 35px;
+}
+
+.popMenuButton {
+    float: left;
+    width: 100px;
+    padding-top: 5px;
+    padding-bottom: 15px;
+    margin-left: 10px;
+}
+
+.popMenuButton a {
+    text-decoration: none;
+    /*背景*/
+    background: #fff;
+    padding: 5px 30px 5px 30px;
+    border-radius: 5px;
+    /*字体*/
+    font-size: 14px;
+    font-weight: bold;
+    color: #1ABC9C;
+    /*边框*/
+    border-style: solid;
+    border-width: 2px;
+    border-color: #1ABC9C;
+    /*浏览器适配*/
+    -webkit-transition: all linear 0.30s;
+    -moz-transition: all linear 0.30s;
+    transition: all linear 0.30s;
+}
+
+.popMenuButton a:hover {
+    background: #1ABC9C;
+    color: #fff;
+}
 
 
 /*问卷设置*/
@@ -943,7 +1055,7 @@ img.addItem {
     border: 1px solid #cccccc;
 }
 
-#quesNoEx #quesNoPreview legend{
+#quesNoEx #quesNoPreview legend {
     margin-left: 10px;
 }
 
@@ -1018,24 +1130,6 @@ img.addItem {
     transition: all linear 0.30s;
 }
 
-
-/*弹出框*/
-
-.trianglePop{
-    display: block;
-    position: absolute;
-    z-index: 70;
-}
-.popMenu{
-    z-index: 30;
-    background-color: #fff;
-    border: 1px solid #e2e2e2;
-    color: #666666;
-    line-height: 1.4;
-    font-size: 14px;
-    width: 50px;
-    height: 100px;
-}
 
 /*.popover {
     position: absolute;

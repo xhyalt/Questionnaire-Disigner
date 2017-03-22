@@ -1,26 +1,3 @@
-$(function() {
-    var LPB = window.LPB = window.LPB || {
-        plugins: [],
-        genSource: function() {
-            var $temptxt = $("<div>").html($("#build").html());
-            $($temptxt).find(".subType").attr({
-                "title": null,
-                "data-original-title": null,
-                "data-type": null,
-                "data-content": null,
-                "rel": null,
-                "trigger": null,
-                "style": null
-            });
-            $($temptxt).find(".subType").removeClass("subType");
-            $($temptxt).find("form").attr({
-                "id": null,
-                "style": null
-            });
-        }
-    };
-});
-
 $(document).ready(function() {
 
     /*题型鼠标点击事件*/
@@ -59,9 +36,6 @@ $(document).ready(function() {
         tops = [];
         $(document).off("mousemove", "body");
         $("body").off("mouseup", ".subject, .unSubject");
-        $("#target .subType").popover({
-            trigger: "manual"
-        });
     });
 
     /*题型鼠标落下事件*/
@@ -233,11 +207,7 @@ $(document).ready(function() {
 
                 $(document).off("mousemove", "body");
                 $("body").off("mouseup", ".subject, .unSubject");
-                $("#target .subType").popover({
-                    trigger: "manual"
-                });
                 $temp.remove();
-                LPB.genSource();
             });
         }, delays[type]);
 
@@ -743,4 +713,47 @@ const itemMenuDiv = `
     <img class="up" src="./images/main_01_up_off.png" alt="">
     <img class="down" src="./images/main_02_down_off.png" alt="">
     <img class="delete" src="./images/main_03_delete_off.png" alt="">
+</div>`;
+
+const trianglePop = `
+<div class="trianglePop"></div>`;
+
+const radioMenuDiv = `
+<div class="popMenu">
+    <h4>题目设置</h4>
+    <a class="popMenuClose" href="javascript: ;"></a>
+    <div class="popMenuDetail">
+        <div class="detail">
+            <div class="title">题目控制</div>
+            <ul>
+                <li>
+                    <input type="checkbox" name="multitermCompletion1" />
+                    <label>必答</label>
+                </li>
+                <li>
+                    <input type="checkbox" checked="true" name="multitermCompletion1" />
+                    <label>显示题目编号</label>
+                </li>
+                <li>
+                    <input type="checkbox" checked="true" name="multitermCompletion1" />
+                    <label>显示描述</label>
+                </li>
+            </ul>
+        </div>
+        <div class="detail">
+            <div class="title">选项显示模式</div>
+            <ul>
+                <li>
+                    <input type="radio" name="multitermCompletion1" />
+                    <label>与题目同行</label>
+                </li>
+                <li>
+                    <input type="radio" checked="true" name="multitermCompletion1" />
+                    <label>每行显示</label>
+                    <input class="inputNumber" type="number" defaultValue="1" placeholder="1" name="multitermCompletion1" min="1" />
+                    <label>个</label>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>`;
