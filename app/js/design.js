@@ -24,6 +24,7 @@ quesNoPattern[4] = "Q1. Q2. Q3.";
 var quesActiveNo = 0;
 /*弹出框*/
 var popMenu = false;
+var activeSubject = null;
 
 /*各种监听事件*/
 $(function() {
@@ -513,18 +514,50 @@ $(function() {
 
     /*问卷设计监听事件end==================*/
     /*body 点击事件*/
-    $(document).on("click", function() {
-        $td = $(this);
-        if ($td.parents(".popMenu").length == 0 && $(".popMenu").length > 0) {
+    // $("body").on("click", "*", function() {
+    //     $td = $(this);
+    //     console.log($td);
+    //     console.log($td.parents(".popMenu").length);
+    //     console.log($(".popMenu").length);
+    //     /*如果弹出框存在且点击的不是弹出框*/
+    //     if ($td.parents(".popMenu").length == 0 && $(".popMenu").length > 0) {
+    //         console.log("进来了");
+    //         $(".trianglePop").remove();
+    //         // $(".popMenu").animate({
+    //         //     left: '-200px',
+    //         //     opacity: '0'
+    //         // }, 300, function() {
+    //         //     popMenu = false;
+    //         //     $("#right").empty();
+    //         // });
+    //     }
+    // });
+
+    $(document).on('click', function(event) {
+        var target = $(event.target);
+        if (popMenu == true && !target.hasClass('popMenu') &&
+            target[0] != activeSubject.children().children(".stemText")[0] &&
+            target.parents('.popMenu').length == 0
+        ) {
             console.log("进来了");
             $(".trianglePop").remove();
-            // $(".popMenu").animate({
-            //     left: '-200px',
-            //     opacity: '0'
-            // }, 300, function() {
-            //     popMenu = false;
-            //     $("#right").empty();
-            // });
+            $(".popMenu").animate({
+                left: '-200px',
+                opacity: '0'
+            }, 300, function() {
+                popMenu = false;
+                $("#right").empty();
+            });
+        }
+    });
+
+    $("#back").on('click', function() {
+        if (popMenu == true) {
+            setTimeout(function() {
+                window.location.href = "./list.html";
+            }, 300);
+        } else {
+            window.location.href = "./list.html";
         }
     });
 
@@ -615,31 +648,38 @@ $(function() {
 
     /*所有题干 点击编辑*/
     $("#target").on("click", ".stemText", function() {
+        if (popMenu == false) {
+            var $td = $(this);
+            activeSubject = $td.parent().parent(".subject, .unSubject");
+            /*确定题目类别*/
+            var type = getType($td);
 
-        var $td = $(this);
-        /*确定题目种类*/
-        var type = getType($td);
+            var txt = $td.html();
+            var input = $(`<div class="stemTextInput" contenteditable="true">` + txt + `</div>`);
+            $td.html(input);
 
-        var txt = $td.html();
-        var input = $(`<div class="stemTextInput" contenteditable="true">` + txt + `</div>`);
-        $td.html(input);
+            input.click(function() {
+                return false;
+            });
 
-        input.click(function() {
-            return false;
-        });
+            /*题目设置弹出框*/
+            __showPopMenu($td);
 
-        __showPopMenu($td);
+            input.trigger("focus");
+            $(".popMenu").click(function() {
+                console.log("en");
+            });
 
-        input.trigger("focus");
-        input.blur(function() {
-            var newtxt = $(".stemTextInput").html();
-            if (newtxt != txt) {
-                /*数据库操作*/
-                $td.html(newtxt);
-            } else if (newtxt == txt) {
-                $td.html(newtxt);
-            }
-        });
+            input.blur(function() {
+                var newtxt = $(".stemTextInput").html();
+                if (newtxt != txt) {
+                    /*数据库操作*/
+                    $td.html(newtxt);
+                } else if (newtxt == txt) {
+                    $td.html(newtxt);
+                }
+            });
+        }
     });
 
     /*所有题目描述 点击编辑*/
@@ -697,26 +737,69 @@ $(function() {
 });
 
 /**
+ * [显示描述的执行函数]
+ * @public
+ * @param  {Boolean} isChecked [input中的checked属性]
+ * @return
+ */
+function showDesc(isChecked) {
+    if (isChecked == true) {
+        var type = getType(activeSubject);
+        if (type == "radio") {
+            activeSubject.children().children(".stemText").after(radioDiscription);
+        } else if (type == "multiple") {
+            activeSubject.children().children(".stemText").after(multipleDiscription);
+        } else if (type == "competion") {
+            activeSubject.children().children(".stemText").after(competionDiscription);
+        } else if (type == "multitermCompletion") {
+            activeSubject.children().children(".stemText").after(multitermCompletionDiscription);
+        } else if (type == "shortAnswer") {
+            activeSubject.children().children(".stemText").after(shortAnswerDiscription);
+        } else if (type == "sort") {
+            activeSubject.children().children(".stemText").after(sortDiscription);
+        } else if (type == "merge") {
+            activeSubject.children().children(".stemText").after(mergeDiscription);
+        }
+    } else {
+        activeSubject.children().children(".descriptionText").remove();
+    }
+}
+
+/**
  * [显示题目设置的菜单]
  * @private
  * @param  $td [当前弹出题目设置的盒子]
  * @return
  */
 function __showPopMenu($td) {
-    var position = $td[0].offsetHeight / 2 + $td[0].offsetTop - $("#headTop")[0].offsetHeight - 20;
-    $("#right").append(radioMenuDiv);
-    popMenu = true;
+    if (popMenu == false) {
+        var position = $td[0].offsetHeight / 2 + $td[0].offsetTop - $("#headTop")[0].offsetHeight - 20;
+        $("#right").append(radioMenuDiv);
+        if ($td.next(".descriptionText").length > 0) {
+            $(".showDesc").attr("checked", true);
+        } else {
+            $(".showDesc").attr("checked", false);
+        }
+        popMenu = true;
 
-    $(".popMenu").animate({
-        left: '0px',
-        opacity: '1'
-    }, 300, function() {
-        $("#right").append(trianglePop);
-        console.log($(".trianglePop"));
-        $(".trianglePop").css({
-            "top": `${position}px`
+        $(".popMenu").animate({
+            left: '0px',
+            opacity: '1'
+        }, 300, function() {
+            $("#right").append(trianglePop);
+            $(".trianglePop").css({
+                "top": `${position}px`
+            });
         });
-    });
+    }
+
+}
+
+function back() {
+    console.log("back");
+    (() => {
+        window.location.href = "./list.html"
+    })();
 }
 
 /**
@@ -794,8 +877,6 @@ function showSetup() {
     for (var i = 0; i < quesNoArr.length; i++) {
         quesNoTemp[i] = quesNoArr[i];
     }
-    console.log(quesNoArr);
-    console.log(quesNoTemp);
 
     /*初始化级别*/
     $("#quesNoGrade").find("li").css({

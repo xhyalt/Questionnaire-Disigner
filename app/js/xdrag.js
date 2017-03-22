@@ -467,6 +467,9 @@ const radioDiv = `
     </div>
 </div>`;
 
+const radioDiscription = `
+<div class="radioDescriptionText textBox descriptionText" placeholder="单选题描述"></div>`;
+
 const radioItemLabel = `
 <li>
     <input type="radio" name="radio1" id="Num1" />
@@ -516,6 +519,9 @@ const multipleDiv = `
     </div>
 </div>`;
 
+const multipleDiscription = `
+<div class="multipleDescriptionText textBox descriptionText" placeholder="多选题描述"></div>`;
+
 const multipleItemLabel = `
 <li>
     <input type="checkbox" name="checkbox1" id="Num2" />
@@ -548,6 +554,9 @@ const completionDiv = `
         </ul>
     </div>
 </div>`;
+
+const competionDiscription = `
+<div class="completionDescriptionText textBox descriptionText" placeholder="填空题描述"></div>`;
 
 const multitermCompletionDiv = `
 <div class="multitermCompletionDiv subject" level="1" father="0">
@@ -587,6 +596,9 @@ const multitermCompletionDiv = `
     </div>
 </div>`;
 
+const multitermCompletionDiscription=`
+<div class="multitermCompletionDescriptionText textBox descriptionText" placeholder="多项填空题描述"></div>`;
+
 const multitermCompletionItemLabel = `
 <li>
     <label class="textBox multitermCompletionItemText ItemText" placeholder="选项"></label>
@@ -619,6 +631,9 @@ const shortAnswerDiv = `
         </ul>
     </div>
 </div>`;
+
+const shortAnswerDiscription=`
+<div class="shortAnswerDescriptionText textBox descriptionText" placeholder="简答题描述"></div>`;
 
 const sortDiv = `
 <div class="sortDiv subject" level="1" father="0">
@@ -657,6 +672,9 @@ const sortDiv = `
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
     </div>
 </div>`;
+
+const sortDiscription=`
+<div class="sortDescriptionText textBox descriptionText" placeholder="排序题描述"></div>`;
 
 const sortItemLabel = `
 <li>
@@ -708,6 +726,9 @@ const mergeDiv = `
     </div>
 </div>`;
 
+const mergeDiscription = `
+<div class="mergeDescriptionText textBox descriptionText" placeholder="合并题描述"></div>`;
+
 const itemMenuDiv = `
 <div class="itemMenu">
     <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -735,7 +756,7 @@ const radioMenuDiv = `
                     <label>显示题目编号</label>
                 </li>
                 <li>
-                    <input type="checkbox" checked="true" name="multitermCompletion1" />
+                    <input class="showDesc" type="checkbox" checked="true" onchange="showDesc(checked)"/>
                     <label>显示描述</label>
                 </li>
             </ul>
