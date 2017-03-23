@@ -596,7 +596,7 @@ const multitermCompletionDiv = `
     </div>
 </div>`;
 
-const multitermCompletionDiscription=`
+const multitermCompletionDiscription = `
 <div class="multitermCompletionDescriptionText textBox descriptionText" placeholder="多项填空题描述"></div>`;
 
 const multitermCompletionItemLabel = `
@@ -626,13 +626,13 @@ const shortAnswerDiv = `
         <div class="shortAnswerDescriptionText textBox descriptionText" placeholder="简答题描述"></div>
         <ul class="shortAnswerItem">
             <li>
-                <textarea name="shortAnswer1" id="Num1" ></textarea>
+                <textarea rows="5"></textarea>
             </li>
         </ul>
     </div>
 </div>`;
 
-const shortAnswerDiscription=`
+const shortAnswerDiscription = `
 <div class="shortAnswerDescriptionText textBox descriptionText" placeholder="简答题描述"></div>`;
 
 const sortDiv = `
@@ -673,7 +673,7 @@ const sortDiv = `
     </div>
 </div>`;
 
-const sortDiscription=`
+const sortDiscription = `
 <div class="sortDescriptionText textBox descriptionText" placeholder="排序题描述"></div>`;
 
 const sortItemLabel = `
@@ -748,15 +748,15 @@ const radioMenuDiv = `
             <div class="title">题目控制</div>
             <ul>
                 <li>
-                    <input type="checkbox" name="multitermCompletion1" />
+                    <input class="forced" type="checkbox" />
                     <label>必答</label>
                 </li>
                 <li>
-                    <input type="checkbox" checked="true" name="multitermCompletion1" />
+                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
                     <label>显示题目编号</label>
                 </li>
                 <li>
-                    <input class="showDesc" type="checkbox" checked="true" onchange="showDesc(checked)"/>
+                    <input class="showDescription" type="checkbox" checked="true" onchange="showDesc(checked)"/>
                     <label>显示描述</label>
                 </li>
             </ul>
@@ -765,14 +765,181 @@ const radioMenuDiv = `
             <div class="title">选项显示模式</div>
             <ul>
                 <li>
-                    <input type="radio" name="multitermCompletion1" />
+                    <input class="sameLine" type="radio" name="multitermCompletion1" />
                     <label>与题目同行</label>
                 </li>
                 <li>
-                    <input type="radio" checked="true" name="multitermCompletion1" />
+                    <input class="sameLine2" type="radio" checked="true" />
                     <label>每行显示</label>
-                    <input class="inputNumber" type="number" defaultValue="1" placeholder="1" name="multitermCompletion1" min="1" />
+                    <input class="showEveryLine" type="number" value="1" defaultValue="1" placeholder="1" min="1" />
                     <label>个</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>`;
+
+const multipleMenuDiv = `
+<div class="popMenu">
+    <h4>题目设置</h4>
+    <a class="popMenuClose" href="javascript: ;"></a>
+    <div class="popMenuDetail">
+        <div class="detail">
+            <div class="title">题目控制</div>
+            <ul>
+                <li>
+                    <input class="forced" type="checkbox" />
+                    <label>必答</label>
+                </li>
+                <li>
+                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
+                    <label>显示题目编号</label>
+                </li>
+                <li>
+                    <input class="showDescription" type="checkbox" checked="true" onchange="showDesc(checked)"/>
+                    <label>显示描述</label>
+                </li>
+                <li>
+                    <label>最少选择项数</label>
+                    <input class="minSelectItem" type="number" value="0" defaultValue="0" placeholder="0" min="0" />
+                    <label>个</label>
+                </li>
+                <li>
+                    <label>最多选择项数</label>
+                    <input class="maxSelectItem" type="number" value="0" defaultValue="0" placeholder="0" min="0" />
+                    <label>个</label>
+                </li>
+            </ul>
+        </div>
+        <div class="detail">
+            <div class="title">选项显示模式</div>
+            <ul>
+                <li>
+                    <input class="sameLine" type="radio" name="multitermCompletion1" />
+                    <label>与题目同行</label>
+                </li>
+                <li>
+                    <input class="sameLine2" type="radio" checked="true" />
+                    <label>每行显示</label>
+                    <input class="showEveryLine" type="number" value="1" defaultValue="1" placeholder="1" min="1" />
+                    <label>个</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>`;
+
+const completionMenuDiv = `
+<div class="popMenu">
+    <h4>题目设置</h4>
+    <a class="popMenuClose" href="javascript: ;"></a>
+    <div class="popMenuDetail">
+        <div class="detail">
+            <div class="title">题目控制</div>
+            <ul>
+                <li>
+                    <input class="forced" type="checkbox" />
+                    <label>必答</label>
+                </li>
+                <li>
+                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
+                    <label>显示题目编号</label>
+                </li>
+                <li>
+                    <input class="showDescription" type="checkbox" checked="true" onchange="showDesc(checked)"/>
+                    <label>显示描述</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>`;
+
+const multitermCompletionMenuDiv = `
+<div class="popMenu">
+    <h4>题目设置</h4>
+    <a class="popMenuClose" href="javascript: ;"></a>
+    <div class="popMenuDetail">
+        <div class="detail">
+            <div class="title">题目控制</div>
+            <ul>
+                <li>
+                    <input class="forced" type="checkbox" />
+                    <label>必答</label>
+                </li>
+                <li>
+                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
+                    <label>显示题目编号</label>
+                </li>
+                <li>
+                    <input class="showDescription" type="checkbox" checked="true" onchange="showDesc(checked)"/>
+                    <label>显示描述</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>`;
+
+const shortAnswerMenuDiv = `
+<div class="popMenu">
+    <h4>题目设置</h4>
+    <a class="popMenuClose" href="javascript: ;"></a>
+    <div class="popMenuDetail">
+        <div class="detail">
+            <div class="title">题目控制</div>
+            <ul>
+                <li>
+                    <input class="forced" type="checkbox" />
+                    <label>必答</label>
+                </li>
+                <li>
+                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
+                    <label>显示题目编号</label>
+                </li>
+                <li>
+                    <input class="showDescription" type="checkbox" checked="true" onchange="showDesc(checked)"/>
+                    <label>显示描述</label>
+                </li>
+            </ul>
+        </div>
+        <div class="detail">
+            <div class="title">答题区</div>
+            <ul>
+                <li>
+                    <label>显示行数</label>
+                    <input class="showLine" type="number" value="5" defaultValue="5" placeholder="5" min="1" />
+                </li>
+                <li>
+                    <label>最少字数</label>
+                    <input class="minLength" type="number" value="0" defaultValue="0" placeholder="0" min="0" />
+                </li>
+                <li>
+                    <label>最多字数</label>
+                    <input class="maxLength" type="number" value="1000" defaultValue="1000" placeholder="1000" min="0" />
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>`;
+
+const sortMenuDiv = `
+<div class="popMenu">
+    <h4>题目设置</h4>
+    <a class="popMenuClose" href="javascript: ;"></a>
+    <div class="popMenuDetail">
+        <div class="detail">
+            <div class="title">题目控制</div>
+            <ul>
+                <li>
+                    <input class="forced" type="checkbox" />
+                    <label>必答</label>
+                </li>
+                <li>
+                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
+                    <label>显示题目编号</label>
+                </li>
+                <li>
+                    <input class="showDescription" type="checkbox" checked="true" onchange="showDesc(checked)"/>
+                    <label>显示描述</label>
                 </li>
             </ul>
         </div>
