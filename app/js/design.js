@@ -1,8 +1,8 @@
 /*引用JS文件*/
-// const restfulUtil = require('./js/restfulUtil.js');
-// const quesSqlite = require('./js/quesSqlite.js');
+const restfulUtil = require('./js/restfulUtil.js');
+const quesSqlite = require('./js/quesSqlite.js');
 /*与主进程通信的模块*/
-// const ipcRenderer = require('electron').ipcRenderer;
+const ipcRenderer = require('electron').ipcRenderer;
 /*用户基础数据*/
 var GlobalData = null;
 
@@ -20,11 +20,15 @@ quesNoPattern[1] = "(一) (二) (三)";
 quesNoPattern[2] = "1. 2. 3.";
 quesNoPattern[3] = "1) 2) 3)";
 quesNoPattern[4] = "Q1. Q2. Q3.";
-/*当前编辑的题号*/
+/*当前编辑的级别*/
 var quesActiveNo = 0;
+
 /*弹出框*/
 var popMenu = false;
 var activeSubject = null;
+
+/*题目对象的数组*/
+var subject = new Array();
 
 /*各种监听事件*/
 $(function() {
@@ -429,7 +433,7 @@ $(function() {
         });
     });
 
-    /*问卷设计监听事件start====================*/
+    /*问卷设置监听事件start====================*/
     var $dropBox = $('#dropBox'),
         $tri = $('.dropBox_tri', $dropBox),
         $drop = $('div.dropBox_drop', $dropBox),
@@ -465,8 +469,8 @@ $(function() {
             "border-color": "#1ABC9C"
         });
         quesActiveNo = parseInt($td.html()) - 1;
-        $inp[0].innerHTML = quesNoPattern[quesNoTemp[quesActiveNo]];
         /*下拉框显示该层级的题号格式*/
+        $inp[0].innerHTML = quesNoPattern[quesNoTemp[quesActiveNo]];
     });
 
     /*下拉框点击事件*/
@@ -496,12 +500,12 @@ $(function() {
         }
     });
 
-    /*问卷设计弹出框 点击关闭和取消事件*/
+    /*问卷设置弹出框 点击关闭和取消事件*/
     $("#popBox").on("click", "#popBoxClose, #popBoxButtonCancel", function() {
         hideSetup();
     });
 
-    /*问卷设计弹出框 点击确认事件*/
+    /*问卷设置弹出框 点击确认事件*/
     $("#popBox").on("click", "#popBoxButtonConfirm", function() {
         console.log("hehe");
 
@@ -512,34 +516,28 @@ $(function() {
         hideSetup();
     });
 
-    /*问卷设计监听事件end==================*/
-    /*body 点击事件*/
-    // $("body").on("click", "*", function() {
-    //     $td = $(this);
-    //     console.log($td);
-    //     console.log($td.parents(".popMenu").length);
-    //     console.log($(".popMenu").length);
-    //     /*如果弹出框存在且点击的不是弹出框*/
-    //     if ($td.parents(".popMenu").length == 0 && $(".popMenu").length > 0) {
-    //         console.log("进来了");
-    //         $(".trianglePop").remove();
-    //         // $(".popMenu").animate({
-    //         //     left: '-200px',
-    //         //     opacity: '0'
-    //         // }, 300, function() {
-    //         //     popMenu = false;
-    //         //     $("#right").empty();
-    //         // });
-    //     }
-    // });
+    /*问卷设置监听事件end==================*/
 
+    /*题目设置监听事件start================*/
+    /*关闭按钮 监听事件*/
+    $("#right").on('click', ".popMenuClose", function() {
+        $(".trianglePop").remove();
+        $(".popMenu").animate({
+            left: '-200px',
+            opacity: '0'
+        }, 300, function() {
+            popMenu = false;
+            $("#right").empty();
+        });
+    });
+
+    /*body 点击事件*/
     $(document).on('click', function(event) {
         var target = $(event.target);
         if (popMenu == true && !target.hasClass('popMenu') &&
             target[0] != activeSubject.children().children(".stemText")[0] &&
             target.parents('.popMenu').length == 0
         ) {
-            console.log("进来了");
             $(".trianglePop").remove();
             $(".popMenu").animate({
                 left: '-200px',
@@ -550,7 +548,9 @@ $(function() {
             });
         }
     });
+    /*题目设置监听事件end================*/
 
+    /*返回按钮 监听事件*/
     $("#back").on('click', function() {
         if (popMenu == true) {
             setTimeout(function() {
@@ -661,14 +661,10 @@ $(function() {
             input.click(function() {
                 return false;
             });
+            input.trigger("focus");
 
             /*题目设置弹出框*/
-            __showPopMenu($td);
-
-            input.trigger("focus");
-            $(".popMenu").click(function() {
-                console.log("en");
-            });
+            __showPopMenu($td, type);
 
             input.blur(function() {
                 var newtxt = $(".stemTextInput").html();
@@ -736,6 +732,23 @@ $(function() {
     });
 });
 
+function testArr() {
+    // var arr = new Array(0, 1, 2, 3, 4);
+    // console.log(arr);
+    // var reArr = arr.splice(2, 2);
+    // console.log(reArr);
+    // var reArr = arr.splice(2, 0, 6, 7, 8, 9);
+    // console.log(reArr);
+    // console.log(arr);
+    // for (var i = 0; i < arr.length; i++) {
+    //     console.log(arr[i]);
+    // }
+    var arr = new Array();
+    var subject = new Subject(false, true, true);
+    arr[0] = subject;
+    console.log(arr);
+}
+
 /**
  * [显示描述的执行函数]
  * @public
@@ -749,8 +762,8 @@ function showDesc(isChecked) {
             activeSubject.children().children(".stemText").after(radioDiscription);
         } else if (type == "multiple") {
             activeSubject.children().children(".stemText").after(multipleDiscription);
-        } else if (type == "competion") {
-            activeSubject.children().children(".stemText").after(competionDiscription);
+        } else if (type == "completion") {
+            activeSubject.children().children(".stemText").after(completionDiscription);
         } else if (type == "multitermCompletion") {
             activeSubject.children().children(".stemText").after(multitermCompletionDiscription);
         } else if (type == "shortAnswer") {
@@ -771,35 +784,40 @@ function showDesc(isChecked) {
  * @param  $td [当前弹出题目设置的盒子]
  * @return
  */
-function __showPopMenu($td) {
-    if (popMenu == false) {
-        var position = $td[0].offsetHeight / 2 + $td[0].offsetTop - $("#headTop")[0].offsetHeight - 20;
+function __showPopMenu($td, type) {
+    var position = $td[0].offsetHeight / 2 + $td[0].offsetTop - $("#headTop")[0].offsetHeight - 25;
+    if (type == "radio") {
         $("#right").append(radioMenuDiv);
-        if ($td.next(".descriptionText").length > 0) {
-            $(".showDesc").attr("checked", true);
-        } else {
-            $(".showDesc").attr("checked", false);
-        }
-        popMenu = true;
-
-        $(".popMenu").animate({
-            left: '0px',
-            opacity: '1'
-        }, 300, function() {
-            $("#right").append(trianglePop);
-            $(".trianglePop").css({
-                "top": `${position}px`
-            });
-        });
+    } else if (type == "multiple") {
+        $("#right").append(multipleMenuDiv);
+    } else if (type == "completion") {
+        $("#right").append(completionMenuDiv);
+    } else if (type == "multitermCompletion") {
+        $("#right").append(multitermCompletionMenuDiv);
+    } else if (type == "shortAnswer") {
+        $("#right").append(shortAnswerMenuDiv);
+    } else if (type == "sort") {
+        $("#right").append(sortMenuDiv);
+    } else if (type == "merge") {
+        $("#right").append(mergeMenuDiv);
     }
 
-}
+    if ($td.next(".descriptionText").length > 0) {
+        $(".showDescription").attr("checked", true);
+    } else {
+        $(".showDescription").attr("checked", false);
+    }
+    popMenu = true;
 
-function back() {
-    console.log("back");
-    (() => {
-        window.location.href = "./list.html"
-    })();
+    $(".popMenu").animate({
+        left: '0px',
+        opacity: '1'
+    }, 300, function() {
+        $("#right").append(trianglePop);
+        $(".trianglePop").css({
+            "top": `${position}px`
+        });
+    });
 }
 
 /**

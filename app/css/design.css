@@ -361,9 +361,9 @@ body {
 /*中间空白部分*/
 
 #emptyBox {
-    height: 250px;
+    height: 300px;
     text-align: center;
-    line-height: 250px;
+    line-height: 300px;
     color: #888888;
     font-size: 20px;
 }
@@ -652,7 +652,6 @@ img.addItem {
 
 .shortAnswerItem li textarea {
     width: 100%;
-    height: 70px;
     font-size: 14px;
     color: #666666;
     /*border: none;*/
@@ -856,8 +855,14 @@ img.addItem {
     margin-bottom: 10px;
 }
 
-.detail li input.inputNumber {
+input.minLength, input.showEveryLine, input.minSelectItem, input.maxSelectItem, input.showLine {
     width: 35px;
+    color: #666666;
+}
+
+input.maxLength{
+    width: 50px;
+    color: #666666;
 }
 
 .popMenuButton {
@@ -906,7 +911,7 @@ img.addItem {
     /*宽度设置为100%，这样才能使隐藏背景层覆盖原页面*/
     filter: alpha(opacity=60);
     /*设置透明度为60%*/
-    opacity: 0.6;
+    opacity: 0.5;
     /*非IE浏览器下设置透明度为60%*/
     display: none;
     z-Index: 100;
