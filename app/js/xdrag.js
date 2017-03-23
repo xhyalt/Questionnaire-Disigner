@@ -5,26 +5,10 @@ $(document).ready(function() {
         md.preventDefault();
 
         $this = $(this);
-        var type = getSubjectType($this);
+        var type = getType($this);
 
         $("#emptyBox").remove();
-        if (type == "radio") {
-            $("#target").append(radioDiv);
-        } else if (type == "multiple") {
-            $("#target").append(multipleDiv);
-        } else if (type == "completion") {
-            $("#target").append(completionDiv);
-        } else if (type == "multitermCompletion") {
-            $("#target").append(multitermCompletionDiv);
-        } else if (type == "shortAnswer") {
-            $("#target").append(shortAnswerDiv);
-        } else if (type == "sort") {
-            $("#target").append(sortDiv);
-        } else if (type == "description") {
-            $("#target").append(descriptionDiv);
-        } else if (type == "dividingLine") {
-            $("#target").append(dividingLineDiv);
-        }
+        $("#target").append(subjectDiv[type]);
 
         setOrder();
 
@@ -51,28 +35,12 @@ $(document).ready(function() {
             main: 0,
             form: 120
         };
-        var type = getSubjectType($this);
+        var type = getType($this);
 
         var delayed = setTimeout(function() {
 
             /*判断盒子类型*/
-            if (type == "radio") {
-                $temp = $(`<div class="cloth"></div>`).append(radioDiv);
-            } else if (type == "multiple") {
-                $temp = $(`<div class="cloth"></div>`).append(multipleDiv);
-            } else if (type == "completion") {
-                $temp = $(`<div class="cloth"></div>`).append(completionDiv);
-            } else if (type == "multitermCompletion") {
-                $temp = $(`<div class="cloth"></div>`).append(multitermCompletionDiv);
-            } else if (type == "shortAnswer") {
-                $temp = $(`<div class="cloth"></div>`).append(shortAnswerDiv);
-            } else if (type == "sort") {
-                $temp = $(`<div class="cloth"></div>`).append(sortDiv);
-            } else if (type == "description") {
-                $temp = $(`<div class="cloth"></div>`).append(descriptionDiv);
-            } else if (type == "dividingLine") {
-                $temp = $(`<div class="cloth"></div>`).append(dividingLineDiv);
-            }
+            $temp = $(`<div class="cloth"></div>`).append(subjectDiv[type]);
 
             $("body").append($temp);
 
@@ -396,40 +364,17 @@ function getLevelSubjectNum($td) {
     return $tdTemp.length;
 }
 
-/**
- * 拖拽或点击时 获取题目类型
- * @public
- * @param  $this [当前拖拽的题型html题型]
- * @return type  [判断出该html段的题型]
- */
-function getSubjectType($this) {
-    var type;
-    if ($this.attr("id") === "MenuItemRadio") {
-        type = "radio";
-    } else if ($this.attr("id") === "MenuItemMultiple") {
-        type = "multiple";
-    } else if ($this.attr("id") === "MenuItemCompletion") {
-        type = "completion";
-    } else if ($this.attr("id") === "MenuItemMultitermCompletion") {
-        type = "multitermCompletion";
-    } else if ($this.attr("id") === "MenuItemShortAnswer") {
-        type = "shortAnswer";
-    } else if ($this.attr("id") === "MenuItemSort") {
-        type = "sort";
-    } else if ($this.attr("id") === "MenuItemDescription") {
-        type = "description";
-    } else if ($this.attr("id") === "MenuItemDividingLine") {
-        type = "dividingLine";
-    }
-    return type;
-}
+var subjectDiv = {};
+var descriptionDiv = {};
+var itemLabelDiv = {};
+var menuPopDiv = {};
 
 const emptyBox = `
 <div id="emptyBox">
     可单击或拖拽左侧题型，以添加题目到此处区域
 </div>`;
 
-const radioDiv = `
+subjectDiv["radio"] = `
 <div class="radioDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
@@ -443,7 +388,7 @@ const radioDiv = `
     <div class="radioMain subjectMain">
         <div class="radioStemText textBox stemText" id="radioStemTextID" placeholder="单选题"></div>
         <div class="radioDescriptionText textBox descriptionText" placeholder="单选题描述"></div>
-        <ul class="radioItem">
+        <ul class="radioItem itemBox">
             <li>
                 <input type="radio" name="radio1" id="Num1" />
                 <label class="textBox radioItemText ItemText" placeholder="选项1"></label>
@@ -467,10 +412,10 @@ const radioDiv = `
     </div>
 </div>`;
 
-const radioDiscription = `
+descriptionDiv["radio"] = `
 <div class="radioDescriptionText textBox descriptionText" placeholder="单选题描述"></div>`;
 
-const radioItemLabel = `
+itemLabelDiv["radio"] = `
 <li>
     <input type="radio" name="radio1" id="Num1" />
     <label class="textBox radioItemText ItemText" placeholder="选项"></label>
@@ -481,7 +426,7 @@ const radioItemLabel = `
     </div>
 </li>`;
 
-const multipleDiv = `
+subjectDiv["multiple"] = `
 <div class="multipleDiv subject"  level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
@@ -495,7 +440,7 @@ const multipleDiv = `
     <div class="multipleMain subjectMain">
         <div class="multipleStemText textBox stemText" id="multipleStemTextID" placeholder="多选题"></div>
         <div class="multipleDescriptionText textBox descriptionText" placeholder="多选题描述"></div>
-        <ul class="multipleItem">
+        <ul class="multipleItem itemBox">
             <li>
                 <input type="checkbox" name="checkbox1" id="Num1" />
                 <label class="textBox multipleItemText ItemText" placeholder="选项1"></label>
@@ -519,10 +464,10 @@ const multipleDiv = `
     </div>
 </div>`;
 
-const multipleDiscription = `
+descriptionDiv["multiple"] = `
 <div class="multipleDescriptionText textBox descriptionText" placeholder="多选题描述"></div>`;
 
-const multipleItemLabel = `
+itemLabelDiv["multiple"] = `
 <li>
     <input type="checkbox" name="checkbox1" id="Num2" />
     <label class="textBox multipleItemText ItemText" placeholder="选项"></label>
@@ -533,7 +478,7 @@ const multipleItemLabel = `
     </div>
 </li>`;
 
-const completionDiv = `
+subjectDiv["completion"] = `
 <div class="completionDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
@@ -547,7 +492,7 @@ const completionDiv = `
     <div class="completionMain subjectMain">
         <div class="completionStemText textBox stemText" id="completionStemTextID" placeholder="填空题"></div>
         <div class="completionDescriptionText textBox descriptionText" placeholder="填空题描述"></div>
-        <ul class="completionItem">
+        <ul class="completionItem itemBox">
             <li>
                 <input type="text" name="completion1" id="Num1" />
             </li>
@@ -555,10 +500,10 @@ const completionDiv = `
     </div>
 </div>`;
 
-const competionDiscription = `
+descriptionDiv["competion"] = `
 <div class="completionDescriptionText textBox descriptionText" placeholder="填空题描述"></div>`;
 
-const multitermCompletionDiv = `
+subjectDiv["multitermCompletion"] = `
 <div class="multitermCompletionDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
@@ -572,7 +517,7 @@ const multitermCompletionDiv = `
     <div class="multitermCompletionMain subjectMain">
         <div class="multitermCompletionStemText textBox stemText" id="multitermCompletionStemTextID" placeholder="多项填空题"></div>
         <div class="multitermCompletionDescriptionText textBox descriptionText" placeholder="多项填空题描述"></div>
-        <ul class="multitermCompletionItem">
+        <ul class="multitermCompletionItem itemBox">
             <li>
               <label class="textBox multitermCompletionItemText ItemText" placeholder="选项1"></label>
               <input type="text" name="multitermCompletion1" id="Num1" />
@@ -596,10 +541,10 @@ const multitermCompletionDiv = `
     </div>
 </div>`;
 
-const multitermCompletionDiscription = `
+descriptionDiv["multitermCompletion"] = `
 <div class="multitermCompletionDescriptionText textBox descriptionText" placeholder="多项填空题描述"></div>`;
 
-const multitermCompletionItemLabel = `
+itemLabelDiv["multitermCompletion"] = `
 <li>
     <label class="textBox multitermCompletionItemText ItemText" placeholder="选项"></label>
     <input type="text" name="multitermCompletion1" id="Num2" />
@@ -610,7 +555,7 @@ const multitermCompletionItemLabel = `
     </div>
 </li>`;
 
-const shortAnswerDiv = `
+subjectDiv["shortAnswer"] = `
 <div class="shortAnswerDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
@@ -624,7 +569,7 @@ const shortAnswerDiv = `
     <div class="shortAnswerMain subjectMain">
         <div class="shortAnswerStemText textBox stemText" id="shortAnswerStemTextID" placeholder="简答题"></div>
         <div class="shortAnswerDescriptionText textBox descriptionText" placeholder="简答题描述"></div>
-        <ul class="shortAnswerItem">
+        <ul class="shortAnswerItem itemBox">
             <li>
                 <textarea rows="5"></textarea>
             </li>
@@ -632,10 +577,10 @@ const shortAnswerDiv = `
     </div>
 </div>`;
 
-const shortAnswerDiscription = `
+descriptionDiv["shortAnswer"] = `
 <div class="shortAnswerDescriptionText textBox descriptionText" placeholder="简答题描述"></div>`;
 
-const sortDiv = `
+subjectDiv["sort"] = `
 <div class="sortDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
@@ -649,7 +594,7 @@ const sortDiv = `
     <div class="sortMain subjectMain">
         <div class="sortStemText textBox stemText" id="sortStemTextID" placeholder="排序题"></div>
         <div class="sortDescriptionText textBox descriptionText" placeholder="排序题描述"></div>
-        <ul class="sortItem">
+        <ul class="sortItem itemBox">
             <li>
                 <label class="textBox sortItemText ItemText" placeholder="选项1"></label>
                 <input type="text" name="sort1" id="Num1" />
@@ -673,10 +618,10 @@ const sortDiv = `
     </div>
 </div>`;
 
-const sortDiscription = `
+descriptionDiv["sort"] = `
 <div class="sortDescriptionText textBox descriptionText" placeholder="排序题描述"></div>`;
 
-const sortItemLabel = `
+itemLabelDiv["sort"] = `
 <li>
     <label class="textBox sortItemText ItemText" placeholder="选项"></label>
     <input type="text" name="sort1" id="Num2" />
@@ -687,7 +632,7 @@ const sortItemLabel = `
     </div>
 </li>`;
 
-const descriptionDiv = `
+subjectDiv["description"] = `
 <div class="descriptionDiv unSubject" level="1" father="0">
     <div class="leftSetup">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
@@ -697,7 +642,7 @@ const descriptionDiv = `
     </div>
 </div>`;
 
-const dividingLineDiv = `
+subjectDiv["dividingLine"] = `
 <div class="dividingLineDiv unSubject" level="1" father="0">
     <div class="leftSetup">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
@@ -707,7 +652,7 @@ const dividingLineDiv = `
     </div>
 </div>`;
 
-const mergeDiv = `
+subjectDiv["merge"] = `
 <div class="mergeDiv subject" level="1" father="0">
     <div class="leftSetup">
         <h4>Q</h4>
@@ -721,12 +666,12 @@ const mergeDiv = `
     <div class="mergeMain">
         <div class="mergeStemText textBox stemText" id="sortStemTextID" placeholder="合并题"></div>
         <div class="mergeDescriptionText textBox descriptionText" placeholder="合并题描述"></div>
-        <ul class="mergeItem">
+        <ul class="mergeItem itemBox">
         </ul>
     </div>
 </div>`;
 
-const mergeDiscription = `
+descriptionDiv["merge"] = `
 <div class="mergeDescriptionText textBox descriptionText" placeholder="合并题描述"></div>`;
 
 const itemMenuDiv = `
@@ -739,7 +684,7 @@ const itemMenuDiv = `
 const trianglePop = `
 <div class="trianglePop"></div>`;
 
-const radioMenuDiv = `
+menuPopDiv["radio"] = `
 <div class="popMenu">
     <h4>题目设置</h4>
     <a class="popMenuClose" href="javascript: ;"></a>
@@ -779,7 +724,7 @@ const radioMenuDiv = `
     </div>
 </div>`;
 
-const multipleMenuDiv = `
+menuPopDiv["multiple"] = `
 <div class="popMenu">
     <h4>题目设置</h4>
     <a class="popMenuClose" href="javascript: ;"></a>
@@ -829,7 +774,7 @@ const multipleMenuDiv = `
     </div>
 </div>`;
 
-const completionMenuDiv = `
+menuPopDiv["completion"] = `
 <div class="popMenu">
     <h4>题目设置</h4>
     <a class="popMenuClose" href="javascript: ;"></a>
@@ -854,7 +799,7 @@ const completionMenuDiv = `
     </div>
 </div>`;
 
-const multitermCompletionMenuDiv = `
+menuPopDiv["multitermCompletion"] = `
 <div class="popMenu">
     <h4>题目设置</h4>
     <a class="popMenuClose" href="javascript: ;"></a>
@@ -879,7 +824,7 @@ const multitermCompletionMenuDiv = `
     </div>
 </div>`;
 
-const shortAnswerMenuDiv = `
+menuPopDiv["shortAnswer"] = `
 <div class="popMenu">
     <h4>题目设置</h4>
     <a class="popMenuClose" href="javascript: ;"></a>
@@ -921,7 +866,7 @@ const shortAnswerMenuDiv = `
     </div>
 </div>`;
 
-const sortMenuDiv = `
+menuPopDiv["sort"] = `
 <div class="popMenu">
     <h4>题目设置</h4>
     <a class="popMenuClose" href="javascript: ;"></a>

@@ -6,7 +6,6 @@ const ipcRenderer = require('electron').ipcRenderer;
 /*用户基础数据*/
 var GlobalData = null;
 
-
 /*题号数组*/
 var quesNoArr = new Array(5);
 for (var i = 0; i < 5; i++) {
@@ -339,16 +338,10 @@ $(function() {
     $("#target").on("click", ".addItem", function() {
         $tdP = $(this).parent().parent();
 
+        console.log("执行完getType前");
         var type = getType($tdP);
-        if (type == "radio") {
-            $tdP.find(".radioItem").append(radioItemLabel);
-        } else if (type == "multiple") {
-            $tdP.find(".multipleItem").append(multipleItemLabel);
-        } else if (type == "multitermCompletion") {
-            $tdP.find(".multitermCompletionItem").append(multitermCompletionItemLabel);
-        } else if (type == "sort") {
-            $tdP.find(".sortItem").append(sortItemLabel);
-        }
+        console.log("执行完getType后");
+        $tdP.children().children(".itemBox").append(itemLabelDiv[type]);
     });
 
     /*删除选项按钮点击事件*/
@@ -743,10 +736,11 @@ function testArr() {
     // for (var i = 0; i < arr.length; i++) {
     //     console.log(arr[i]);
     // }
-    var arr = new Array();
-    var subject = new Subject(false, true, true);
-    arr[0] = subject;
-    console.log(arr);
+    // var arr = new Array();
+    // var subject = new Subject(false, true, true);
+    // arr[0] = subject;
+    // console.log(arr);
+    console.log(subjectDiv["multiple"]);
 }
 
 /**
@@ -758,21 +752,7 @@ function testArr() {
 function showDesc(isChecked) {
     if (isChecked == true) {
         var type = getType(activeSubject);
-        if (type == "radio") {
-            activeSubject.children().children(".stemText").after(radioDiscription);
-        } else if (type == "multiple") {
-            activeSubject.children().children(".stemText").after(multipleDiscription);
-        } else if (type == "completion") {
-            activeSubject.children().children(".stemText").after(completionDiscription);
-        } else if (type == "multitermCompletion") {
-            activeSubject.children().children(".stemText").after(multitermCompletionDiscription);
-        } else if (type == "shortAnswer") {
-            activeSubject.children().children(".stemText").after(shortAnswerDiscription);
-        } else if (type == "sort") {
-            activeSubject.children().children(".stemText").after(sortDiscription);
-        } else if (type == "merge") {
-            activeSubject.children().children(".stemText").after(mergeDiscription);
-        }
+        activeSubject.children().children(".stemText").after(descriptionDiv[type]);
     } else {
         activeSubject.children().children(".descriptionText").remove();
     }
@@ -786,21 +766,7 @@ function showDesc(isChecked) {
  */
 function __showPopMenu($td, type) {
     var position = $td[0].offsetHeight / 2 + $td[0].offsetTop - $("#headTop")[0].offsetHeight - 25;
-    if (type == "radio") {
-        $("#right").append(radioMenuDiv);
-    } else if (type == "multiple") {
-        $("#right").append(multipleMenuDiv);
-    } else if (type == "completion") {
-        $("#right").append(completionMenuDiv);
-    } else if (type == "multitermCompletion") {
-        $("#right").append(multitermCompletionMenuDiv);
-    } else if (type == "shortAnswer") {
-        $("#right").append(shortAnswerMenuDiv);
-    } else if (type == "sort") {
-        $("#right").append(sortMenuDiv);
-    } else if (type == "merge") {
-        $("#right").append(mergeMenuDiv);
-    }
+    $("#right").append(menuPopDiv[type]);
 
     if ($td.next(".descriptionText").length > 0) {
         $(".showDescription").attr("checked", true);
