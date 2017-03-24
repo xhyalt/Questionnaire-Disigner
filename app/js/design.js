@@ -26,8 +26,10 @@ var quesActiveNo = 0;
 var popMenu = false;
 var activeSubject = null;
 
+/*题目数量*/
+var subjectTotal = 0;
 /*题目对象的数组*/
-var subject = new Array();
+var subject = {};
 
 /*各种监听事件*/
 $(function() {
@@ -204,6 +206,7 @@ $(function() {
                     /*只有一道题*/
                     flag = 0;
                 }
+                delete subject[$td.attr("connection")];
                 $td.remove();
                 while (subjectNum == 1 && flag) {
                     /*连锁删除*/
@@ -215,6 +218,7 @@ $(function() {
                         flag = 0;
                         break;
                     }
+                    delete subject[$td.attr("connection")];
                     $td.remove();
                 }
                 setOrder();
@@ -244,6 +248,7 @@ $(function() {
             $tdP.children().children("img").css({
                 "visibility": "hidden"
             });
+            mergeDiv=subjectDiv["merge"];
             $tdP.after(mergeDiv);
             $mergeDiv = $tdP.next();
             $mergeDiv.attr("level", parseInt($tdP.attr("level")));
@@ -520,6 +525,7 @@ $(function() {
             opacity: '0'
         }, 300, function() {
             popMenu = false;
+            activeSubject = null;
             $("#right").empty();
         });
     });
@@ -537,6 +543,7 @@ $(function() {
                 opacity: '0'
             }, 300, function() {
                 popMenu = false;
+                activeSubject = null;
                 $("#right").empty();
             });
         }
@@ -726,21 +733,15 @@ $(function() {
 });
 
 function testArr() {
-    // var arr = new Array(0, 1, 2, 3, 4);
-    // console.log(arr);
-    // var reArr = arr.splice(2, 2);
-    // console.log(reArr);
-    // var reArr = arr.splice(2, 0, 6, 7, 8, 9);
-    // console.log(reArr);
-    // console.log(arr);
-    // for (var i = 0; i < arr.length; i++) {
-    //     console.log(arr[i]);
-    // }
-    // var arr = new Array();
-    // var subject = new Subject(false, true, true);
-    // arr[0] = subject;
-    // console.log(arr);
-    console.log(subjectDiv["multiple"]);
+    console.log(subject);
+}
+
+/**
+ * [设置简答题行数的执行函数]
+ * @param value [当前行数]
+ */
+function setLine(value) {
+    activeSubject.children().children().children().children("textarea").attr("rows", value);
 }
 
 /**

@@ -9,15 +9,10 @@ $(document).ready(function() {
 
         $("#emptyBox").remove();
         $("#target").append(subjectDiv[type]);
-
+        var current = $("#target").children(".subject, .unSubject").last();
         setOrder();
+        addSubjectJson(current, type);
 
-        $("#target .subject, #target .unSubject").css({
-            "border-top": "none",
-            "border-bottom": "none"
-        });
-
-        tops = [];
         $(document).off("mousemove", "body");
         $("body").off("mouseup", ".subject, .unSubject");
     });
@@ -142,26 +137,35 @@ $(document).ready(function() {
                         father = tops[0].attributes["father"].nodeValue;
                         $temp.html($($temp.html()).attr("level", level));
                         $temp.html($($temp.html()).attr("father", father));
-                        $($temp.html()).insertBefore(tops[0]);
+                        var current = $($temp.html()).insertBefore(tops[0]);
+
                         setOrder();
+                        addSubjectJson(current, type);
+
                     } else if (bottoms.length > 0) {
                         level = bottoms[0].attributes["level"].nodeValue;
                         father = bottoms[0].attributes["father"].nodeValue;
                         $temp.html($($temp.html()).attr("level", level));
                         $temp.html($($temp.html()).attr("father", father));
-                        $($temp.html()).insertAfter(bottoms[0]);
+                        var current = $($temp.html()).insertAfter(bottoms[0]);
+
                         setOrder();
+                        addSubjectJson(current, type);
+
                     } else if (mergesTop.length > 0) {
                         level = $(mergesTop[0]).parent().parent().attr["level"];
                         father = $(mergesTop[0]).parent().parent().attr["father"];
                         $temp.html($($temp.html()).attr("level", level));
                         $temp.html($($temp.html()).attr("father", father));
-                        $($temp.html()).insertBefore($(mergesTop[0]).parent().parent());
+                        var current = $($temp.html()).insertBefore($(mergesTop[0]).parent().parent());
+
                         setOrder();
+                        addSubjectJson(current[0], type);
                     } else {
                         $("#target").append($temp.html());
                         setOrder();
                         $("#emptyBox").remove();
+                        addSubjectJson($("#target").children(".subject, .unSubject"), type);
                     }
                 } else {
                     $("#target .subject, #target .unSubject").css({
@@ -190,6 +194,22 @@ $(document).ready(function() {
         });
     });
 });
+
+function addSubjectJson(current, type) {
+    if (type == "radio") {
+        subject[(++subjectTotal).toString()] = {
+            forced: false,
+            questionNo: true,
+            showDescription: true,
+            sameLine: 0,
+            showEveryLine: 1
+        };
+        current.attr("connection", subjectTotal);
+        console.log(subject);
+    } else if (type == "multiple") {
+
+    }
+}
 
 /**
  * 每次修改target时重置题目的题号
@@ -375,7 +395,7 @@ const emptyBox = `
 </div>`;
 
 subjectDiv["radio"] = `
-<div class="radioDiv subject" level="1" father="0">
+<div class="radioDiv subject" level="1" father="0" num="">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -427,7 +447,7 @@ itemLabelDiv["radio"] = `
 </li>`;
 
 subjectDiv["multiple"] = `
-<div class="multipleDiv subject"  level="1" father="0">
+<div class="multipleDiv subject"  level="1" father="0" num="">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -479,7 +499,7 @@ itemLabelDiv["multiple"] = `
 </li>`;
 
 subjectDiv["completion"] = `
-<div class="completionDiv subject" level="1" father="0">
+<div class="completionDiv subject" level="1" father="0" num="">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -504,7 +524,7 @@ descriptionDiv["competion"] = `
 <div class="completionDescriptionText textBox descriptionText" placeholder="填空题描述"></div>`;
 
 subjectDiv["multitermCompletion"] = `
-<div class="multitermCompletionDiv subject" level="1" father="0">
+<div class="multitermCompletionDiv subject" level="1" father="0" num="">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -556,7 +576,7 @@ itemLabelDiv["multitermCompletion"] = `
 </li>`;
 
 subjectDiv["shortAnswer"] = `
-<div class="shortAnswerDiv subject" level="1" father="0">
+<div class="shortAnswerDiv subject" level="1" father="0" num="">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -581,7 +601,7 @@ descriptionDiv["shortAnswer"] = `
 <div class="shortAnswerDescriptionText textBox descriptionText" placeholder="简答题描述"></div>`;
 
 subjectDiv["sort"] = `
-<div class="sortDiv subject" level="1" father="0">
+<div class="sortDiv subject" level="1" father="0" num="">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -633,7 +653,7 @@ itemLabelDiv["sort"] = `
 </li>`;
 
 subjectDiv["description"] = `
-<div class="descriptionDiv unSubject" level="1" father="0">
+<div class="descriptionDiv unSubject" level="1" father="0" num="">
     <div class="leftSetup">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
@@ -643,7 +663,7 @@ subjectDiv["description"] = `
 </div>`;
 
 subjectDiv["dividingLine"] = `
-<div class="dividingLineDiv unSubject" level="1" father="0">
+<div class="dividingLineDiv unSubject" level="1" father="0" num="">
     <div class="leftSetup">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
@@ -653,7 +673,7 @@ subjectDiv["dividingLine"] = `
 </div>`;
 
 subjectDiv["merge"] = `
-<div class="mergeDiv subject" level="1" father="0">
+<div class="mergeDiv subject" level="1" father="0" num="">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -851,7 +871,7 @@ menuPopDiv["shortAnswer"] = `
             <ul>
                 <li>
                     <label>显示行数</label>
-                    <input class="showLine" type="number" value="5" defaultValue="5" placeholder="5" min="1" />
+                    <input class="showLine" type="number" value="5" defaultValue="5" placeholder="5" min="1" onchange="setLine(value)"/>
                 </li>
                 <li>
                     <label>最少字数</label>
