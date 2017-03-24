@@ -195,6 +195,11 @@ $(document).ready(function() {
     });
 });
 
+/**
+ * 添加connection属性 与题目JSON对象配对
+ * @param {[type]} current [description]
+ * @param {[type]} type    [description]
+ */
 function addSubjectJson(current, type) {
     if (type == "radio") {
         subject[(++subjectTotal).toString()] = {
@@ -205,9 +210,51 @@ function addSubjectJson(current, type) {
             showEveryLine: 1
         };
         current.attr("connection", subjectTotal);
-        console.log(subject);
     } else if (type == "multiple") {
-
+        subject[(++subjectTotal).toString()] = {
+            forced: false,
+            questionNo: true,
+            showDescription: true,
+            minSelectItem: 0,
+            maxSelectItem: 0,
+            sameLine: 0,
+            showEveryLine: 1
+        };
+        current.attr("connection", subjectTotal);
+    } else if (type == "multitermCompletion") {
+        subject[(++subjectTotal).toString()] = {
+            forced: false,
+            questionNo: true,
+            showDescription: true
+        };
+        current.attr("connection", subjectTotal);
+    } else if (type == "Completion") {
+        subject[(++subjectTotal).toString()] = {
+            forced: false,
+            questionNo: true,
+            showDescription: true
+        };
+        current.attr("connection", subjectTotal);
+    } else if (type == "shortAnswer") {
+        subject[(++subjectTotal).toString()] = {
+            forced: false,
+            questionNo: true,
+            showDescription: true,
+            showLine: 5,
+            minLength: 0,
+            maxLength: 1000
+        };
+        current.attr("connection", subjectTotal);
+    } else if (type == "sort") {
+        subject[(++subjectTotal).toString()] = {
+            forced: false,
+            questionNo: true,
+            showDescription: true
+        };
+        current.attr("connection", subjectTotal);
+    } else {
+        subject[(++subjectTotal).toString()] = {};
+        current.attr("connection", subjectTotal);
     }
 }
 
@@ -520,7 +567,7 @@ subjectDiv["completion"] = `
     </div>
 </div>`;
 
-descriptionDiv["competion"] = `
+descriptionDiv["completion"] = `
 <div class="completionDescriptionText textBox descriptionText" placeholder="填空题描述"></div>`;
 
 subjectDiv["multitermCompletion"] = `
