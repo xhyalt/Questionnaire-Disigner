@@ -184,6 +184,7 @@ $(function() {
         /*复制题目*/
         $tdP = $(this).parent().parent();
         $tdP.after($tdP.prop("outerHTML"));
+        addSubjectJson($tdP.next(), getType($tdP));
         /*初始化左侧的图标效果*/
         $tdP.next().children().children("img.copy").attr('src', "./images/main_06_copy_off.png");
         $tdP.next().children().children("img").css({
@@ -737,7 +738,7 @@ function testArr() {
 }
 
 /**
- * [设置简答题行数的执行函数]
+ * 设置简答题行数的执行函数
  * @param value [当前行数]
  */
 function setLine(value) {
