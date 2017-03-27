@@ -756,7 +756,6 @@ function setLine(value) {
  * 显示描述的执行函数
  * @public
  * @param  {Boolean} checked [input中的checked属性]
- * @return
  */
 function showDesc(checked) {
     if (checked == true) {
@@ -771,7 +770,6 @@ function showDesc(checked) {
  * 显示必答的执行函数
  * @public
  * @param  {Boolean} checked input中的checked属性
- * @return
  */
 function showForced(checked) {
     var connection = activeSubject.attr("connection");
@@ -786,7 +784,6 @@ function showForced(checked) {
  * 显示题号的执行函数
  * @public
  * @param  {Boolean} checked input中的checked属性
- * @return
  */
 function showQuestionNo(checked) {
     var connection = activeSubject.attr("connection");
@@ -801,6 +798,37 @@ function showQuestionNo(checked) {
         activeSubject.attr("class", classTemp);
     }
     setOrder();
+}
+
+/**
+ * 与题目同行的执行函数
+ * @public
+ * @param  {Boolean} checked input中的checked属性
+ */
+function sameLine(checked) {
+    var connection = activeSubject.attr("connection");
+    subject[connection].sameLine = true;
+}
+
+/**
+ * 每行显示的执行函数
+ * @public
+ * @param  {Boolean} checked input中的checked属性
+ */
+function sameLine2(checked) {
+    var connection = activeSubject.attr("connection");
+    subject[connection].sameLine = false;
+    subject[connection].showEveryLine = parseInt($(".showEveryLine").val());
+}
+
+/**
+ * 每行显示input变动执行函数
+ * @public
+ * @param {Boolean} value input中的checked属性
+ */
+function setShowEveryLine(value) {
+    var connection = activeSubject.attr("connection");
+    subject[connection].showEveryLine = parseInt(value);
 }
 
 /**
