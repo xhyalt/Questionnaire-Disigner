@@ -19,6 +19,13 @@ quesNoPattern[1] = "(一) (二) (三)";
 quesNoPattern[2] = "1. 2. 3.";
 quesNoPattern[3] = "1) 2) 3)";
 quesNoPattern[4] = "Q1. Q2. Q3.";
+/*第一个题号*/
+var quesNoFirst = new Array(5);
+quesNoFirst[0] = "一、";
+quesNoFirst[1] = "(一)";
+quesNoFirst[2] = "1.";
+quesNoFirst[3] = "1)";
+quesNoFirst[4] = "Q1.";
 /*当前编辑的级别*/
 var quesActiveNo = 0;
 
@@ -249,7 +256,7 @@ $(function() {
             $tdP.children().children("img").css({
                 "visibility": "hidden"
             });
-            mergeDiv=subjectDiv["merge"];
+            mergeDiv = subjectDiv["merge"];
             $tdP.after(mergeDiv);
             $mergeDiv = $tdP.next();
             $mergeDiv.attr("level", parseInt($tdP.attr("level")));
@@ -746,13 +753,13 @@ function setLine(value) {
 }
 
 /**
- * [显示描述的执行函数]
+ * 显示描述的执行函数
  * @public
- * @param  {Boolean} isChecked [input中的checked属性]
+ * @param  {Boolean} checked [input中的checked属性]
  * @return
  */
-function showDesc(isChecked) {
-    if (isChecked == true) {
+function showDesc(checked) {
+    if (checked == true) {
         var type = getType(activeSubject);
         activeSubject.children().children(".stemText").after(descriptionDiv[type]);
     } else {
@@ -761,9 +768,40 @@ function showDesc(isChecked) {
 }
 
 /**
- * [显示题目设置的菜单]
+ * 显示必答的执行函数
+ * @public
+ * @param  {Boolean} checked input中的checked属性
+ * @return
+ */
+function showForced(checked) {
+    var connection = activeSubject.attr("connection");
+    if (checked == true) {
+        subject[connection].forced = true;
+    } else {
+        subject[connection].forced = false;
+    }
+}
+
+/**
+ * 显示题号的执行函数
+ * @public
+ * @param  {Boolean} checked input中的checked属性
+ * @return
+ */
+function showQuestionNo(checked) {
+    var connection = activeSubject.attr("connection");
+    if (checked == true) {
+        subject[connection].questionNo = true;
+    } else {
+        subject[connection].questionNo = false;
+    }
+    setOrder();
+}
+
+/**
+ * 显示题目设置的菜单
  * @private
- * @param  $td [当前弹出题目设置的盒子]
+ * @param  $td 当前弹出题目设置的盒子
  * @return
  */
 function __showPopMenu($td, type) {

@@ -276,23 +276,7 @@ function setOrder() {
             $td.eq(i).attr("num", "1");
             var level = parseInt($td.eq(i).attr("level"));
             flag = 0;
-            switch (quesNoArr[level - 1]) {
-                case 0:
-                    $td.eq(i).find("h4").html("一、");
-                    break;
-                case 1:
-                    $td.eq(i).find("h4").html("(一)");
-                    break;
-                case 2:
-                    $td.eq(i).find("h4").html("1.");
-                    break;
-                case 3:
-                    $td.eq(i).find("h4").html("1)");
-                    break;
-                case 4:
-                    $td.eq(i).find("h4").html("Q1");
-                    break;
-            }
+            $td.eq(i).find("h4").html(quesNoFirst[quesNoArr[level - 1]]);
         } else {
             /*非第一题*/
             var $prevTd = $td.eq(i - 1);
@@ -324,23 +308,7 @@ function setOrder() {
                 console.log("该层第一个节点");
                 $td.eq(i).attr("num", "1");
                 var level = parseInt($td.eq(i).attr("level"));
-                switch (quesNoArr[level - 1]) {
-                    case 0:
-                        $td.eq(i).find("h4").html("一、");
-                        break;
-                    case 1:
-                        $td.eq(i).find("h4").html("(一)");
-                        break;
-                    case 2:
-                        $td.eq(i).find("h4").html("1.");
-                        break;
-                    case 3:
-                        $td.eq(i).find("h4").html("1)");
-                        break;
-                    case 4:
-                        $td.eq(i).find("h4").html("Q1");
-                        break;
-                }
+                $td.eq(i).find("h4").html(quesNoFirst[quesNoArr[level - 1]]);
             } else if (parseInt($td.eq(i).attr("father")) < parseInt($prevTd.attr("father")) && parseInt($td.eq(i).attr("level")) < parseInt($prevTd.attr("level"))) {
                 /*非第一个节点 同层上一题为合并节点*/
                 console.log("非第一个节点 同层上一题为合并节点");
@@ -364,7 +332,7 @@ function setOrder() {
                         break;
                 }
             } else {
-                console.log("这是漏掉的题目");
+                console.log("一道漏掉的题目");
             }
         }
     }
@@ -760,11 +728,11 @@ menuPopDiv["radio"] = `
             <div class="title">题目控制</div>
             <ul>
                 <li>
-                    <input class="forced" type="checkbox" />
+                    <input class="forced" type="checkbox" onchange="showForced(checked)"/>
                     <label>必答</label>
                 </li>
                 <li>
-                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
+                    <input class="questionNo" type="checkbox" checked="true" onchange="showQuestionNo(checked)"/>
                     <label>显示题目编号</label>
                 </li>
                 <li>
@@ -777,7 +745,7 @@ menuPopDiv["radio"] = `
             <div class="title">选项显示模式</div>
             <ul>
                 <li>
-                    <input class="sameLine" type="radio" name="multitermCompletion1" />
+                    <input class="sameLine" type="radio"/>
                     <label>与题目同行</label>
                 </li>
                 <li>
@@ -800,11 +768,11 @@ menuPopDiv["multiple"] = `
             <div class="title">题目控制</div>
             <ul>
                 <li>
-                    <input class="forced" type="checkbox" />
+                    <input class="forced" type="checkbox" onchange="showForced(checked)"/>
                     <label>必答</label>
                 </li>
                 <li>
-                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
+                    <input class="questionNo" type="checkbox" checked="true" onchange="showQuestionNo(checked)" />
                     <label>显示题目编号</label>
                 </li>
                 <li>
@@ -827,7 +795,7 @@ menuPopDiv["multiple"] = `
             <div class="title">选项显示模式</div>
             <ul>
                 <li>
-                    <input class="sameLine" type="radio" name="multitermCompletion1" />
+                    <input class="sameLine" type="radio" />
                     <label>与题目同行</label>
                 </li>
                 <li>
@@ -850,11 +818,11 @@ menuPopDiv["completion"] = `
             <div class="title">题目控制</div>
             <ul>
                 <li>
-                    <input class="forced" type="checkbox" />
+                    <input class="forced" type="checkbox" onchange="showForced(checked)"/>
                     <label>必答</label>
                 </li>
                 <li>
-                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
+                    <input class="questionNo" type="checkbox" checked="true" onchange="showQuestionNo(checked)"/>
                     <label>显示题目编号</label>
                 </li>
                 <li>
@@ -875,11 +843,11 @@ menuPopDiv["multitermCompletion"] = `
             <div class="title">题目控制</div>
             <ul>
                 <li>
-                    <input class="forced" type="checkbox" />
+                    <input class="forced" type="checkbox" onchange="showForced(checked)" />
                     <label>必答</label>
                 </li>
                 <li>
-                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
+                    <input class="questionNo" type="checkbox" checked="true" onchange="showQuestionNo(checked)" />
                     <label>显示题目编号</label>
                 </li>
                 <li>
@@ -900,11 +868,11 @@ menuPopDiv["shortAnswer"] = `
             <div class="title">题目控制</div>
             <ul>
                 <li>
-                    <input class="forced" type="checkbox" />
+                    <input class="forced" type="checkbox" onchange="show" />
                     <label>必答</label>
                 </li>
                 <li>
-                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
+                    <input class="questionNo" type="checkbox" checked="true" onchange="showQuestionNo(checked)" />
                     <label>显示题目编号</label>
                 </li>
                 <li>
@@ -942,11 +910,11 @@ menuPopDiv["sort"] = `
             <div class="title">题目控制</div>
             <ul>
                 <li>
-                    <input class="forced" type="checkbox" />
+                    <input class="forced" type="checkbox" onchange="showForced(checked)"/>
                     <label>必答</label>
                 </li>
                 <li>
-                    <input class="questionNo" type="checkbox" checked="true" name="multitermCompletion1" />
+                    <input class="questionNo" type="checkbox" checked="true" onchange="showQuestionNo(checked)" />
                     <label>显示题目编号</label>
                 </li>
                 <li>
