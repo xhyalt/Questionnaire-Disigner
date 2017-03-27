@@ -790,10 +790,15 @@ function showForced(checked) {
  */
 function showQuestionNo(checked) {
     var connection = activeSubject.attr("connection");
+    var classTemp = activeSubject.attr("class");
     if (checked == true) {
         subject[connection].questionNo = true;
+        classTemp = classTemp.replace("unSubject", "subject");
+        activeSubject.attr("class", classTemp);
     } else {
         subject[connection].questionNo = false;
+        classTemp = classTemp.replace("subject", "unSubject");
+        activeSubject.attr("class", classTemp);
     }
     setOrder();
 }

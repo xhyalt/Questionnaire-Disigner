@@ -268,7 +268,6 @@ function setOrder() {
     var $td = $("#target .subject");
     var $prevTd;
     for (var i = 0; i < $td.length; i++) {
-
         /*其它题型正常设置题号*/
         if (flag) {
             /*第一题，只走一遍*/
@@ -332,9 +331,14 @@ function setOrder() {
                         break;
                 }
             } else {
-                console.log("一道漏掉的题目");
+                console.log("这是漏掉的题目");
             }
         }
+    }
+
+    $td = $("#target .unSubject");
+    for (var i = 0; i < $td.length; i++) {
+        $td.children(".leftSetup").children("h4").empty();
     }
 }
 
