@@ -32,6 +32,9 @@ var quesActiveNo = 0;
 /*弹出框*/
 var popMenu = false;
 var activeSubject = null;
+var activeInput;
+var activeDiv;
+var activeTxt;
 
 /*题目数量*/
 var subjectTotal = 0;
@@ -540,6 +543,17 @@ $(function() {
             target[0] != activeSubject.children().children(".stemText")[0] &&
             target.parents('.popMenu').length == 0
         ) {
+            /*处理输入框*/
+            var newtxt = $(".stemTextInput").html();
+            if (newtxt != activeTxt) {
+                /*数据库操作*/
+                activeDiv.html(newtxt);
+            } else if (newtxt == activeTxt) {
+                activeDiv.html(newtxt);
+            }
+            activeInput.blur();
+
+            /*处理侧向弹出框*/
             $(".trianglePop").remove();
             $(".popMenu").animate({
                 left: '-200px',
@@ -652,32 +666,32 @@ $(function() {
     /*所有题干 点击编辑*/
     $("#target").on("click", ".stemText", function() {
         if (popMenu == false) {
-            var $td = $(this);
-            activeSubject = $td.parent().parent(".subject, .unSubject");
+            activeDiv = $(this);
+            activeSubject = activeDiv.parent().parent(".subject, .unSubject");
             /*确定题目类别*/
-            var type = getType($td);
+            var type = getType(activeDiv);
 
-            var txt = $td.html();
-            var input = $(`<div class="stemTextInput" contenteditable="true">` + txt + `</div>`);
-            $td.html(input);
+            activeTxt = activeDiv.html();
+            activeInput = $(`<div class="stemTextInput" contenteditable="true">` + activeTxt + `</div>`);
+            activeDiv.html(activeInput);
 
-            input.click(function() {
+            activeInput.click(function() {
                 return false;
             });
-            input.trigger("focus");
+            activeInput.trigger("focus");
 
             /*题目设置弹出框*/
-            __showPopMenu($td, type);
+            __showPopMenu(activeDiv, type);
 
-            input.blur(function() {
-                var newtxt = $(".stemTextInput").html();
-                if (newtxt != txt) {
-                    /*数据库操作*/
-                    $td.html(newtxt);
-                } else if (newtxt == txt) {
-                    $td.html(newtxt);
-                }
-            });
+            // input.blur(function() {
+            //     var newtxt = $(".stemTextInput").html();
+            //     if (newtxt != txt) {
+            //         /*数据库操作*/
+            //         $td.html(newtxt);
+            //     } else if (newtxt == txt) {
+            //         $td.html(newtxt);
+            //     }
+            // }); $td txt input
         }
     });
 
