@@ -682,16 +682,6 @@ $(function() {
 
             /*题目设置弹出框*/
             __showPopMenu(activeDiv, type);
-
-            // input.blur(function() {
-            //     var newtxt = $(".stemTextInput").html();
-            //     if (newtxt != txt) {
-            //         /*数据库操作*/
-            //         $td.html(newtxt);
-            //     } else if (newtxt == txt) {
-            //         $td.html(newtxt);
-            //     }
-            // }); $td txt input
         }
     });
 
