@@ -894,11 +894,11 @@ menuPopDiv["shortAnswer"] = `
                 </li>
                 <li>
                     <label>最少字数</label>
-                    <input class="minLength" type="number" value="0" defaultValue="0" placeholder="0" min="0" />
+                    <input class="minLength" type="number" value="0" placeholder="0" min="0" onchange="setMinLength(value)"/>
                 </li>
                 <li>
                     <label>最多字数</label>
-                    <input class="maxLength" type="number" value="1000" defaultValue="1000" placeholder="1000" min="0" />
+                    <input class="maxLength" type="number" value="1000" placeholder="1000" min="0" onchange="setMaxLength(value)"/>
                 </li>
             </ul>
         </div>

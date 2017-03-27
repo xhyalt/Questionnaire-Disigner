@@ -218,7 +218,6 @@ $(function() {
                 $td.remove();
                 while (subjectNum == 1 && flag) {
                     /*连锁删除*/
-                    console.log("连锁删除");
                     $td = $tdP;
                     $tdP = $td.parent().parent().parent();
                     subjectNum = getLevelSubjectNum($td);
@@ -295,7 +294,6 @@ $(function() {
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
                 if (res.data == true) {
                     /*保留*/
-                    console.log("保留");
                     $mergeTdP = $tdP.parent().parent().parent();
                     level = $mergeDiv.attr("level");
                     father = $mergeDiv.attr("father");
@@ -306,7 +304,6 @@ $(function() {
                     setOrder();
                 } else if (res.success == true) {
                     /*不保留*/
-                    console.log("不保留");
                     $mergeTdP = $tdP.parent().parent().parent();
                     level = $mergeDiv.attr("level");
                     father = $mergeDiv.attr("father");
@@ -350,16 +347,12 @@ $(function() {
     /*添加选项按钮点击事件*/
     $("#target").on("click", ".addItem", function() {
         $tdP = $(this).parent().parent();
-
-        console.log("执行完getType前");
         var type = getType($tdP);
-        console.log("执行完getType后");
         $tdP.children().children(".itemBox").append(itemLabelDiv[type]);
     });
 
     /*删除选项按钮点击事件*/
     $("#target").on("click", ".subjectMain .delete", function() {
-        console.log("点击删除键成功");
         $tdP = $(this).parent().parent();
         if (getItemNum($tdP) > 1) {
             $tdP.remove();
@@ -745,24 +738,19 @@ function testArr() {
 }
 
 /**
- * 设置简答题行数的执行函数
- * @param value [当前行数]
- */
-function setLine(value) {
-    activeSubject.children().children().children().children("textarea").attr("rows", value);
-}
-
-/**
  * 显示描述的执行函数
  * @public
  * @param  {Boolean} checked [input中的checked属性]
  */
 function showDesc(checked) {
+    var connection = activeSubject.attr("connection");
     if (checked == true) {
         var type = getType(activeSubject);
         activeSubject.children().children(".stemText").after(descriptionDiv[type]);
+        subject[connection].showDescription = true;
     } else {
         activeSubject.children().children(".descriptionText").remove();
+        subject[connection].showDescription = false;
     }
 }
 
@@ -832,6 +820,38 @@ function setShowEveryLine(value) {
 }
 
 /**
+ * 设置简答题行数的执行函数
+ * @public
+ * @param value input值
+ */
+function setLine(value) {
+    var connection = activeSubject.attr("connection");
+    activeSubject.children().children().children().children("textarea").attr("rows", value);
+    subject[connection].showLine = parseInt(value);
+}
+
+/**
+ * 最少字数的执行函数
+ * @public
+ * @param value input值
+ */
+function setMinLength(value) {
+    console.log(value);
+    var connection = activeSubject.attr("connection");
+    subject[connection].minLength = parseInt(value);
+}
+
+/**
+ * 最多字数的执行函数
+ * @public
+ * @param value input值
+ */
+function setMaxLength(value) {
+    var connection = activeSubject.attr("connection");
+    subject[connection].maxLength = parseInt(value);
+}
+
+/**
  * 显示题目设置的菜单
  * @private
  * @param  $td 当前弹出题目设置的盒子
@@ -841,11 +861,26 @@ function __showPopMenu($td, type) {
     var position = $td[0].offsetHeight / 2 + $td[0].offsetTop - $("#headTop")[0].offsetHeight - 25;
     $("#right").append(menuPopDiv[type]);
 
-    if ($td.next(".descriptionText").length > 0) {
-        $(".showDescription").attr("checked", true);
+    var connection = activeSubject.attr("connection");
+
+    $(".forced").attr("checked", subject[connection].forced);
+    $(".questionNo").attr("checked", subject[connection].questionNo);
+    $(".showDescription").attr("checked", subject[connection].showDescription);
+
+    $(".minSelectItem").attr("checked", subject[connection].minSelectItem);
+    $(".maxSelectItem").attr("checked", subject[connection].maxSelectItem);
+
+    if (subject[connection].sameLine == true) {
+        $(".sameLine").attr("checked", true);
     } else {
-        $(".showDescription").attr("checked", false);
+        $(".sameLine2").attr("checked", true);
     }
+    $(".showEveryLine").attr("value", subject[connection].showEveryLine);
+
+    $(".showLine").attr("value", subject[connection].showLine);
+    $(".minLength").attr("value", subject[connection].minLength);
+    $(".maxLength").attr("value", subject[connection].maxLength);
+
     popMenu = true;
 
     $(".popMenu").animate({
@@ -913,6 +948,11 @@ function getType($td) {
     return type;
 }
 
+/**
+ * 获取选项个数
+ * @param  $tdP 某题型
+ * @return 选项个数
+ */
 function getItemNum($tdP) {
     $tdP = $tdP.parent();
     $tdTemp = $tdP.find("li");
