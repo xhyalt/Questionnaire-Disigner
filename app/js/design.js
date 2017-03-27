@@ -267,6 +267,8 @@ $(function() {
             $mergeDiv.find(".mergeItem").append($prevTdP.prop("outerHTML") + $tdP.prop("outerHTML"));
             $tdP.remove();
             $prevTdP.remove();
+
+            addSubjectJson($mergeDiv, "merge");
         }
         setOrder();
     });
@@ -858,6 +860,13 @@ function setMaxLength(value) {
  * @return
  */
 function __showPopMenu($td, type) {
+    /*如果是非弹出框题型 直接跳出*/
+    if (type == "merge" || type == "description") {
+        activeSubject == null;
+        popMenu == false;
+        return;
+    }
+
     var position = $td[0].offsetHeight / 2 + $td[0].offsetTop - $("#headTop")[0].offsetHeight - 25;
     $("#right").append(menuPopDiv[type]);
 

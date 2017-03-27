@@ -704,7 +704,6 @@ subjectDiv["merge"] = `
     </div>
     <div class="mergeMain">
         <div class="mergeStemText textBox stemText" id="sortStemTextID" placeholder="合并题"></div>
-        <div class="mergeDescriptionText textBox descriptionText" placeholder="合并题描述"></div>
         <ul class="mergeItem itemBox">
         </ul>
     </div>
