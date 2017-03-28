@@ -353,7 +353,7 @@ $(function() {
     /*添加选项按钮点击事件*/
     $("#target").on("click", ".addItem", function() {
         $tdP = $(this).parent().parent();
-        $tdPP = $(this).prev(".itemBox");
+        $tdPP = $tdP.children().children(".itemBox");
         var type = getType($tdP);
         $tdP.children().children(".itemBox").append(itemLabelDiv[type]);
         /*重置题目选项的字母*/
@@ -363,7 +363,7 @@ $(function() {
     /*删除选项按钮点击事件*/
     $("#target").on("click", ".subjectMain .delete", function() {
         $tdP = $(this).parent().parent();
-        if (getItemNum($tdP) > 1) {
+        if (getItemNum($tdP.parent()) > 1) {
             $tdP.remove();
             /*重置题目选项的字母*/
             setInitials($tdPP);
@@ -815,6 +815,35 @@ function sameLine(checked) {
     var connection = activeSubject.attr("connection");
     subject[connection].sameLine = true;
     /*显示同行*/
+    // setSameLine();
+}
+
+function setSameLine() {
+    var stemText = activeSubject.children(".subjectMain").children(".stemText");
+    var descriptionText = activeSubject.children(".subjectMain").children(".descriptionText");
+    var itemBox = activeSubject.children(".subjectMain").children(".itemBox");
+    var li = itemBox.children("li");
+    stemText.css({
+        "width": "40%",
+        "float": "left"
+    });
+    descriptionText.css({
+        "width": "40%",
+        "float": "left"
+    });
+    stemText.after(itemBox);
+    itemBox.css({
+        "width": "60%",
+        "float": "right"
+    });
+    var everyItem = 0.6 / getItemNum(itemBox);
+    for (var i = 0; i < li.length; i++) {
+        li.eq(i).css({
+            "display": "inline",
+            "width": everyItem
+        });
+        li.eq(i).children(".clear").remove();
+    }
 }
 
 /**
@@ -827,6 +856,22 @@ function sameLine2(checked) {
     subject[connection].sameLine = false;
     subject[connection].showEveryLine = parseInt($(".showEveryLine").val());
     /*显示每行显示几个*/
+    // setSameLine2(subject[connection].showEveryLine);
+}
+
+function setSameLine2(showEveryLine) {
+    console.log(showEveryLine);
+    var itemBox = activeSubject.children(".subjectMain").children(".itemBox");
+    var li = itemBox.children("li");
+    var everyItem = 100 / getItemNum(itemBox);
+    console.log(everyItem);
+    for (var i = 0; i < li.length; i++) {
+        li.eq(i).css({
+            "display": "inline",
+            "width": everyItem + "%"
+        });
+        li.eq(i).children(".clear").remove();
+    }
 }
 
 /**
@@ -990,7 +1035,6 @@ function getType($td) {
  * @return 选项个数
  */
 function getItemNum($tdP) {
-    $tdP = $tdP.parent();
     $tdTemp = $tdP.find("li");
     return $tdTemp.length;
 }

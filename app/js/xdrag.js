@@ -442,7 +442,7 @@ subjectDiv["radio"] = `
             <li>
                 <input type="radio" name="radio1" />
                 <div class="initials">B.</div>
-                <label class="textBox radioItemText ItemText" placeholder="选项2"></label>
+                <div class="textBox radioItemText ItemText" placeholder="选项2"></div>
                 <div class="itemMenu">
                     <img class="up" src="./images/main_01_up_off.png" alt="">
                     <img class="down" src="./images/main_02_down_off.png" alt="">
@@ -769,12 +769,12 @@ menuPopDiv["radio"] = `
             <div class="title">选项显示模式</div>
             <ul>
                 <li>
-                    <input class="sameLine" type="radio"
+                    <input class="sameLine" type="radio" name="radio1"
                     onchange="sameLine(checked)"/>
                     <label>与题目同行</label>
                 </li>
                 <li>
-                    <input class="sameLine2" type="radio" checked="true" onchange="sameLine2(checked)" />
+                    <input class="sameLine2" type="radio" name="radio1" checked="true" onchange="sameLine2(checked)" />
                     <label>每行显示</label>
                     <input class="showEveryLine" type="number" value="1" defaultValue="1" placeholder="1" min="1" onchange="setShowEveryLine(value)"/>
                     <label>个</label>
