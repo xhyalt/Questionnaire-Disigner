@@ -7,41 +7,6 @@ const ipcRenderer = require('electron').ipcRenderer;
 /*用户基础数据*/
 var GlobalData = null;
 
-/*题号数组*/
-var quesNoArr = new Array(5);
-for (var i = 0; i < 5; i++) {
-    quesNoArr[i] = i;
-}
-var quesNoTemp = new Array(5);
-/*题号种类*/
-var quesNoPattern = new Array(5);
-quesNoPattern[0] = "一、 二、 三、";
-quesNoPattern[1] = "(一) (二) (三)";
-quesNoPattern[2] = "1. 2. 3.";
-quesNoPattern[3] = "1) 2) 3)";
-quesNoPattern[4] = "Q1. Q2. Q3.";
-/*第一个题号*/
-var quesNoFirst = new Array(5);
-quesNoFirst[0] = "一、";
-quesNoFirst[1] = "(一)";
-quesNoFirst[2] = "1.";
-quesNoFirst[3] = "1)";
-quesNoFirst[4] = "Q1.";
-/*当前编辑的级别*/
-var quesActiveNo = 0;
-
-/*弹出框*/
-var popMenu = false;
-var activeSubject = null;
-var activeInput;
-var activeDiv;
-var activeTxt;
-
-/*题目数量*/
-var subjectTotal = 0;
-/*题目对象的数组*/
-var subject = {};
-
 /*各种监听事件*/
 $(function() {
 
