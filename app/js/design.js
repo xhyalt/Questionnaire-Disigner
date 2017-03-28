@@ -3,6 +3,7 @@ const restfulUtil = require('./js/restfulUtil.js');
 const quesSqlite = require('./js/quesSqlite.js');
 /*与主进程通信的模块*/
 const ipcRenderer = require('electron').ipcRenderer;
+
 /*用户基础数据*/
 var GlobalData = null;
 
@@ -352,8 +353,11 @@ $(function() {
     /*添加选项按钮点击事件*/
     $("#target").on("click", ".addItem", function() {
         $tdP = $(this).parent().parent();
+        $tdPP = $(this).prev(".itemBox");
         var type = getType($tdP);
         $tdP.children().children(".itemBox").append(itemLabelDiv[type]);
+        /*重置题目选项的字母*/
+        setInitials($tdPP);
     });
 
     /*删除选项按钮点击事件*/
@@ -361,6 +365,8 @@ $(function() {
         $tdP = $(this).parent().parent();
         if (getItemNum($tdP) > 1) {
             $tdP.remove();
+            /*重置题目选项的字母*/
+            setInitials($tdPP);
         } else {
             txt = "只有一个选项，不能继续删除";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
@@ -370,6 +376,7 @@ $(function() {
     /*上移选项按钮点击事件*/
     $("#target").on("click", ".subjectMain .up", function() {
         $tdP = $(this).parent().parent();
+        $tdPP = $(this).parent().parent().parent();
         /*初始化左侧的图标效果*/
         $tdP.children().children("img.up").attr('src', "./images/main_01_up_off.png");
         $tdP.children().children("img").css({
@@ -387,12 +394,15 @@ $(function() {
             $tdP.after($tempSubject);
             $tdP.remove();
             $prevTdP.remove();
+            /*重置题目选项的字母*/
+            setInitials($tdPP);
         }
     });
 
     /*下移选项按钮点击事件*/
     $("#target").on("click", ".subjectMain .down", function() {
         $tdP = $(this).parent().parent();
+        $tdPP = $(this).parent().parent().parent();
         /*初始化左侧的图标效果*/
         $tdP.children().children("img.down").attr('src', "./images/main_02_down_off.png");
         $tdP.children().children("img").css({
@@ -410,6 +420,8 @@ $(function() {
             $tdP.after($nextTempSubject);
             $tdP.remove();
             $nextTdP.remove();
+            /*重置题目选项的字母*/
+            setInitials($tdPP);
         }
     });
 
@@ -802,6 +814,7 @@ function showQuestionNo(checked) {
 function sameLine(checked) {
     var connection = activeSubject.attr("connection");
     subject[connection].sameLine = true;
+    /*显示同行*/
 }
 
 /**
@@ -813,6 +826,7 @@ function sameLine2(checked) {
     var connection = activeSubject.attr("connection");
     subject[connection].sameLine = false;
     subject[connection].showEveryLine = parseInt($(".showEveryLine").val());
+    /*显示每行显示几个*/
 }
 
 /**
@@ -823,6 +837,7 @@ function sameLine2(checked) {
 function setShowEveryLine(value) {
     var connection = activeSubject.attr("connection");
     subject[connection].showEveryLine = parseInt(value);
+    /*显示每行显示几个*/
 }
 
 /**
@@ -905,6 +920,14 @@ function __showPopMenu($td, type) {
             "top": `${position}px`
         });
     });
+}
+
+function setInitials($tdPP) {
+    $tdP = $tdPP.children("li").children(".initials");
+    for (var i = 0; i < $tdP.length; i++) {
+        $tdP.eq(i).empty();
+        $tdP.eq(i).append(String.fromCharCode((65 + i)) + ".");
+    }
 }
 
 /**

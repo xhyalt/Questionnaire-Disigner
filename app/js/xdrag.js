@@ -429,22 +429,26 @@ subjectDiv["radio"] = `
         <div class="radioDescriptionText textBox descriptionText" placeholder="单选题描述"></div>
         <ul class="radioItem itemBox">
             <li>
-                <input type="radio" name="radio1" id="Num1" />
-                <label class="textBox radioItemText ItemText" placeholder="选项1"></label>
+                <input type="radio" name="radio1"/>
+                <div class="initials">A.</div>
+                <div class="textBox radioItemText ItemText" placeholder="选项1"></div>
                 <div class="itemMenu">
                     <img class="up" src="./images/main_01_up_off.png" alt="">
                     <img class="down" src="./images/main_02_down_off.png" alt="">
                     <img class="delete" src="./images/main_03_delete_off.png" alt="">
                 </div>
+                <div class="clear"></div>
             </li>
             <li>
-                <input type="radio" name="radio1" id="Num2" />
+                <input type="radio" name="radio1" />
+                <div class="initials">B.</div>
                 <label class="textBox radioItemText ItemText" placeholder="选项2"></label>
                 <div class="itemMenu">
                     <img class="up" src="./images/main_01_up_off.png" alt="">
                     <img class="down" src="./images/main_02_down_off.png" alt="">
                     <img class="delete" src="./images/main_03_delete_off.png" alt="">
                 </div>
+                <div class="clear"></div>
             </li>
         </ul>
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
@@ -456,17 +460,19 @@ descriptionDiv["radio"] = `
 
 itemLabelDiv["radio"] = `
 <li>
-    <input type="radio" name="radio1" id="Num1" />
-    <label class="textBox radioItemText ItemText" placeholder="选项"></label>
+    <input type="radio" name="radio1"/>
+    <div class="initials">A.</div>
+    <div class="textBox radioItemText ItemText" placeholder="选项1"></div>
     <div class="itemMenu">
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
+    <div class="clear"></div>
 </li>`;
 
 subjectDiv["multiple"] = `
-<div class="multipleDiv subject"  level="1" father="0" num="">
+<div class="multipleDiv subject" level="1" father="0" num="">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">
@@ -481,22 +487,26 @@ subjectDiv["multiple"] = `
         <div class="multipleDescriptionText textBox descriptionText" placeholder="多选题描述"></div>
         <ul class="multipleItem itemBox">
             <li>
-                <input type="checkbox" name="checkbox1" id="Num1" />
-                <label class="textBox multipleItemText ItemText" placeholder="选项1"></label>
+                <input type="checkbox" name="checkbox1" />
+                <div class="initials">A.</div>
+                <div class="textBox multipleItemText ItemText" placeholder="选项1"></div>
                 <div class="itemMenu">
                     <img class="up" src="./images/main_01_up_off.png" alt="">
                     <img class="down" src="./images/main_02_down_off.png" alt="">
                     <img class="delete" src="./images/main_03_delete_off.png" alt="">
                 </div>
+                <div class="clear"></div>
             </li>
             <li>
-                <input type="checkbox" name="checkbox1" id="Num2" />
-                <label class="textBox multipleItemText ItemText" placeholder="选项2"></label>
+                <input type="checkbox" name="checkbox1"/>
+                <div class="initials">B.</div>
+                <div class="textBox multipleItemText ItemText" placeholder="选项2"></div>
                 <div class="itemMenu">
                     <img class="up" src="./images/main_01_up_off.png" alt="">
                     <img class="down" src="./images/main_02_down_off.png" alt="">
                     <img class="delete" src="./images/main_03_delete_off.png" alt="">
                 </div>
+                <div class="clear"></div>
             </li>
         </ul>
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
@@ -508,13 +518,15 @@ descriptionDiv["multiple"] = `
 
 itemLabelDiv["multiple"] = `
 <li>
-    <input type="checkbox" name="checkbox1" id="Num2" />
-    <label class="textBox multipleItemText ItemText" placeholder="选项"></label>
+    <input type="checkbox" name="checkbox1"/>
+    <div class="initials">B.</div>
+    <div class="textBox multipleItemText ItemText" placeholder="选项2"></div>
     <div class="itemMenu">
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
+    <div class="clear"></div>
 </li>`;
 
 subjectDiv["completion"] = `
@@ -635,6 +647,7 @@ subjectDiv["sort"] = `
         <div class="sortDescriptionText textBox descriptionText" placeholder="排序题描述"></div>
         <ul class="sortItem itemBox">
             <li>
+                <label class="initials">A.</label>
                 <label class="textBox sortItemText ItemText" placeholder="选项1"></label>
                 <input type="text" name="sort1" id="Num1" />
                 <div class="itemMenu">
@@ -644,6 +657,7 @@ subjectDiv["sort"] = `
                 </div>
             </li>
             <li>
+                <label class="initials">B.</label>
                 <label class="textBox sortItemText ItemText" placeholder="选项2"></label>
                 <input type="text" name="sort1" id="Num2" />
                 <div class="itemMenu">
@@ -662,6 +676,7 @@ descriptionDiv["sort"] = `
 
 itemLabelDiv["sort"] = `
 <li>
+    <label class="initials"></label>
     <label class="textBox sortItemText ItemText" placeholder="选项"></label>
     <input type="text" name="sort1" id="Num2" />
     <div class="itemMenu">

@@ -466,23 +466,36 @@ img.addItem {
 /*选项编辑框*/
 
 .itemTextInput {
-    margin-left: 21px;
     background-color: #b4fbef;
+    width: 200px;
     line-height: 2;
     font-size: 14px;
     color: #666666;
     border: none;
     outline: none;
-    width: 95%;
 }
 
 .itemMenu {
-    float: right;
     background-color: #fff;
+    float: left;
 }
 
 .itemMenu img {
     visibility: hidden;
+}
+
+
+/*换行*/
+
+.clear {
+    clear: both;
+}
+
+.initials {
+    line-height: 2;
+    font-size: 14px;
+    width: 10px;
+    float: left;
 }
 
 
@@ -508,19 +521,22 @@ img.addItem {
 
 .radioItem li input {
     float: left;
+    margin-top: 7px;
 }
 
-.radioItem label {
+.radioItem .radioItemText {
+    margin-left: 10px;
     line-height: 2;
-    margin-top: 5px;
     font-size: 14px;
+    float: left;
+    width: 200px;
 }
 
-.radioItem label:empty:before {
+.radioItem .radioItemText:empty:before {
     content: attr(placeholder);
 }
 
-.radioItem label:focus:before {
+.radioItem .radioItemText:focus:before {
     content: none;
 }
 
@@ -547,19 +563,22 @@ img.addItem {
 
 .multipleItem li input {
     float: left;
+    margin-top: 7px;
 }
 
-.multipleItem label {
+.multipleItem .multipleItemText {
+    margin-left: 10px;
     line-height: 2;
-    margin-top: 5px;
     font-size: 14px;
+    float: left;
+    width: 200px;
 }
 
-.multipleItem label:empty:before {
+.multipleItem .multipleItemText:empty:before {
     content: attr(placeholder);
 }
 
-.multipleItem label:focus:before {
+.multipleItem .multipleItemText:focus:before {
     content: none;
 }
 
@@ -860,7 +879,7 @@ input.minLength, input.showEveryLine, input.minSelectItem, input.maxSelectItem, 
     color: #666666;
 }
 
-input.maxLength{
+input.maxLength {
     width: 50px;
     color: #666666;
 }
