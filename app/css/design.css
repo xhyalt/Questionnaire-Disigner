@@ -410,6 +410,8 @@ img.addItem {
 .stemText {
     width: 100%;
     line-height: 2;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 .stemText:empty:before {
@@ -426,6 +428,8 @@ img.addItem {
     font-size: 14px;
     margin-top: 5px;
     margin-bottom: 5px;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 .descriptionText:empty:before {
@@ -467,7 +471,7 @@ img.addItem {
 
 .itemTextInput {
     background-color: #b4fbef;
-    width: 200px;
+    width: 100%;
     line-height: 2;
     font-size: 14px;
     color: #666666;
@@ -477,7 +481,7 @@ img.addItem {
 
 .itemMenu {
     background-color: #fff;
-    float: left;
+    float: right;
 }
 
 .itemMenu img {
@@ -529,7 +533,10 @@ img.addItem {
     line-height: 2;
     font-size: 14px;
     float: left;
-    width: 200px;
+    width: 600px;
+    max-width: 600px;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 .radioItem .radioItemText:empty:before {
@@ -571,7 +578,8 @@ img.addItem {
     line-height: 2;
     font-size: 14px;
     float: left;
-    width: 200px;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 .multipleItem .multipleItemText:empty:before {
@@ -627,7 +635,7 @@ img.addItem {
 }
 
 .multitermCompletionItem li label input {
-    /*float: left;*/
+    float: left;
     font-size: 14px;
     color: #666666;
     outline: none;
@@ -642,14 +650,22 @@ img.addItem {
     color: #666666;
     border: none;
     outline: none;
-    width: 60%;
 }
 
-.multitermCompletionItem label:empty:before {
+.multitermCompletionItem .multitermCompletionItemText {
+    line-height: 2;
+    font-size: 14px;
+    float: left;
+    width: 200px;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.multitermCompletionItem .multitermCompletionItemText:empty:before {
     content: attr(placeholder);
 }
 
-.multitermCompletionItem label:focus:before {
+.multitermCompletionItem .multitermCompletionItemText:focus:before {
     content: none;
 }
 
@@ -699,6 +715,7 @@ img.addItem {
 }
 
 .sortItem li input {
+    float: left;
     font-size: 14px;
     color: #666666;
     outline: none;
@@ -706,21 +723,29 @@ img.addItem {
 
 .sortItem .itemTextInput {
     float: left;
-    margin-left: 0px;
     background-color: #b4fbef;
     line-height: 2;
     font-size: 14px;
     color: #666666;
     border: none;
     outline: none;
-    width: 60%;
 }
 
-.sortItem label:empty:before {
+.sortItem .sortItemText {
+    margin-left: 10px;
+    line-height: 2;
+    font-size: 14px;
+    float: left;
+    width: 200px;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.sortItem .sortItemText:empty:before {
     content: attr(placeholder);
 }
 
-.sortItem label:focus:before {
+.sortItem .sortItemText:focus:before {
     content: none;
 }
 

@@ -462,7 +462,7 @@ itemLabelDiv["radio"] = `
 <li>
     <input type="radio" name="radio1"/>
     <div class="initials">A.</div>
-    <div class="textBox radioItemText ItemText" placeholder="选项1"></div>
+    <div class="textBox radioItemText ItemText" placeholder="选项"></div>
     <div class="itemMenu">
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
@@ -520,7 +520,7 @@ itemLabelDiv["multiple"] = `
 <li>
     <input type="checkbox" name="checkbox1"/>
     <div class="initials">B.</div>
-    <div class="textBox multipleItemText ItemText" placeholder="选项2"></div>
+    <div class="textBox multipleItemText ItemText" placeholder="选项"></div>
     <div class="itemMenu">
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
@@ -570,22 +570,24 @@ subjectDiv["multitermCompletion"] = `
         <div class="multitermCompletionDescriptionText textBox descriptionText" placeholder="多项填空题描述"></div>
         <ul class="multitermCompletionItem itemBox">
             <li>
-              <label class="textBox multitermCompletionItemText ItemText" placeholder="选项1"></label>
-              <input type="text" name="multitermCompletion1" id="Num1" />
-              <div class="itemMenu">
-                  <img class="up" src="./images/main_01_up_off.png" alt="">
-                  <img class="down" src="./images/main_02_down_off.png" alt="">
-                  <img class="delete" src="./images/main_03_delete_off.png" alt="">
-              </div>
+                <div class="textBox multitermCompletionItemText ItemText" placeholder="选项1"></div>
+                <input type="text" name="multitermCompletion1" id="Num1" />
+                <div class="itemMenu">
+                    <img class="up" src="./images/main_01_up_off.png" alt="">
+                    <img class="down" src="./images/main_02_down_off.png" alt="">
+                    <img class="delete" src="./images/main_03_delete_off.png" alt="">
+                </div>
+                <div class="clear"></div>
             </li>
             <li>
-              <label class="textBox multitermCompletionItemText ItemText" placeholder="选项2"></label>
-              <input type="text" name="multitermCompletion1" id="Num2" />
-              <div class="itemMenu">
-                  <img class="up" src="./images/main_01_up_off.png" alt="">
-                  <img class="down" src="./images/main_02_down_off.png" alt="">
-                  <img class="delete" src="./images/main_03_delete_off.png" alt="">
-              </div>
+                <div class="textBox multitermCompletionItemText ItemText" placeholder="选项2"></div>
+                <input type="text" name="multitermCompletion1" id="Num2" />
+                <div class="itemMenu">
+                    <img class="up" src="./images/main_01_up_off.png" alt="">
+                    <img class="down" src="./images/main_02_down_off.png" alt="">
+                    <img class="delete" src="./images/main_03_delete_off.png" alt="">
+                </div>
+                <div class="clear"></div>
             </li>
         </ul>
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
@@ -597,13 +599,14 @@ descriptionDiv["multitermCompletion"] = `
 
 itemLabelDiv["multitermCompletion"] = `
 <li>
-    <label class="textBox multitermCompletionItemText ItemText" placeholder="选项"></label>
+    <div class="textBox multitermCompletionItemText ItemText" placeholder="选项"></div>
     <input type="text" name="multitermCompletion1" id="Num2" />
     <div class="itemMenu">
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
+    <div class="clear"></div>
 </li>`;
 
 subjectDiv["shortAnswer"] = `
@@ -647,24 +650,26 @@ subjectDiv["sort"] = `
         <div class="sortDescriptionText textBox descriptionText" placeholder="排序题描述"></div>
         <ul class="sortItem itemBox">
             <li>
-                <label class="initials">A.</label>
-                <label class="textBox sortItemText ItemText" placeholder="选项1"></label>
+                <div class="initials">A.</div>
+                <div class="textBox sortItemText ItemText" placeholder="选项1"></div>
                 <input type="text" name="sort1" id="Num1" />
                 <div class="itemMenu">
                     <img class="up" src="./images/main_01_up_off.png" alt="">
                     <img class="down" src="./images/main_02_down_off.png" alt="">
                     <img class="delete" src="./images/main_03_delete_off.png" alt="">
                 </div>
+                <div class="clear"></div>
             </li>
             <li>
-                <label class="initials">B.</label>
-                <label class="textBox sortItemText ItemText" placeholder="选项2"></label>
+                <div class="initials">B.</div>
+                <div class="textBox sortItemText ItemText" placeholder="选项2"></div>
                 <input type="text" name="sort1" id="Num2" />
                 <div class="itemMenu">
                     <img class="up" src="./images/main_01_up_off.png" alt="">
                     <img class="down" src="./images/main_02_down_off.png" alt="">
                     <img class="delete" src="./images/main_03_delete_off.png" alt="">
                 </div>
+                <div class="clear"></div>
             </li>
         </ul>
         <img class="addItem" src="./images/main_04_add_off.png" alt="">
