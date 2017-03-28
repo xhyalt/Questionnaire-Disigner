@@ -545,7 +545,7 @@ subjectDiv["completion"] = `
         <div class="completionDescriptionText textBox descriptionText" placeholder="填空题描述"></div>
         <ul class="completionItem itemBox">
             <li>
-                <input type="text" name="completion1" id="Num1" />
+                <input type="text" />
             </li>
         </ul>
     </div>
@@ -571,7 +571,7 @@ subjectDiv["multitermCompletion"] = `
         <ul class="multitermCompletionItem itemBox">
             <li>
                 <div class="textBox multitermCompletionItemText ItemText" placeholder="选项1"></div>
-                <input type="text" name="multitermCompletion1" id="Num1" />
+                <input type="text" id="Num1" />
                 <div class="itemMenu">
                     <img class="up" src="./images/main_01_up_off.png" alt="">
                     <img class="down" src="./images/main_02_down_off.png" alt="">
@@ -581,7 +581,7 @@ subjectDiv["multitermCompletion"] = `
             </li>
             <li>
                 <div class="textBox multitermCompletionItemText ItemText" placeholder="选项2"></div>
-                <input type="text" name="multitermCompletion1" id="Num2" />
+                <input type="text" id="Num2" />
                 <div class="itemMenu">
                     <img class="up" src="./images/main_01_up_off.png" alt="">
                     <img class="down" src="./images/main_02_down_off.png" alt="">
@@ -600,7 +600,7 @@ descriptionDiv["multitermCompletion"] = `
 itemLabelDiv["multitermCompletion"] = `
 <li>
     <div class="textBox multitermCompletionItemText ItemText" placeholder="选项"></div>
-    <input type="text" name="multitermCompletion1" id="Num2" />
+    <input type="text" id="Num2" />
     <div class="itemMenu">
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
@@ -652,7 +652,7 @@ subjectDiv["sort"] = `
             <li>
                 <div class="initials">A.</div>
                 <div class="textBox sortItemText ItemText" placeholder="选项1"></div>
-                <input type="text" name="sort1" id="Num1" />
+                <input type="text"/>
                 <div class="itemMenu">
                     <img class="up" src="./images/main_01_up_off.png" alt="">
                     <img class="down" src="./images/main_02_down_off.png" alt="">
@@ -663,7 +663,7 @@ subjectDiv["sort"] = `
             <li>
                 <div class="initials">B.</div>
                 <div class="textBox sortItemText ItemText" placeholder="选项2"></div>
-                <input type="text" name="sort1" id="Num2" />
+                <input type="text" />
                 <div class="itemMenu">
                     <img class="up" src="./images/main_01_up_off.png" alt="">
                     <img class="down" src="./images/main_02_down_off.png" alt="">
@@ -681,14 +681,15 @@ descriptionDiv["sort"] = `
 
 itemLabelDiv["sort"] = `
 <li>
-    <label class="initials"></label>
-    <label class="textBox sortItemText ItemText" placeholder="选项"></label>
-    <input type="text" name="sort1" id="Num2" />
+    <div class="initials">B.</div>
+    <div class="textBox sortItemText ItemText" placeholder="选项"></div>
+    <input type="text" />
     <div class="itemMenu">
         <img class="up" src="./images/main_01_up_off.png" alt="">
         <img class="down" src="./images/main_02_down_off.png" alt="">
         <img class="delete" src="./images/main_03_delete_off.png" alt="">
     </div>
+    <div class="clear"></div>
 </li>`;
 
 subjectDiv["description"] = `
@@ -768,11 +769,12 @@ menuPopDiv["radio"] = `
             <div class="title">选项显示模式</div>
             <ul>
                 <li>
-                    <input class="sameLine" type="radio" name="setSameLine" onchange="sameLine(checked)"/>
+                    <input class="sameLine" type="radio"
+                    onchange="sameLine(checked)"/>
                     <label>与题目同行</label>
                 </li>
                 <li>
-                    <input class="sameLine2" type="radio" name="setSameLine" checked="true" onchange="sameLine2(checked)" />
+                    <input class="sameLine2" type="radio" checked="true" onchange="sameLine2(checked)" />
                     <label>每行显示</label>
                     <input class="showEveryLine" type="number" value="1" defaultValue="1" placeholder="1" min="1" onchange="setShowEveryLine(value)"/>
                     <label>个</label>
