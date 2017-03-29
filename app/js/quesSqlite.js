@@ -388,7 +388,16 @@ function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
     });
 }
 
-function createQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
+/**
+ * 创建临时调查问卷
+ * @public
+ * @param  GlobalData        [用户基础数据]
+ * @param  solutionRecid     [业务方案的ID]
+ * @param  questionnaireJson [调查问卷基本信息]
+ * @param  {Function} cb                [回调函数]
+ * @return                  [description]
+ */
+function createTempQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
     console.log("正在创建临时调查问卷 createQuestionnaire");
     __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res) {
         if (res.success == true) {
@@ -396,6 +405,21 @@ function createQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
                 "success": true
             });
         }
+    });
+}
+
+function deleteTempQuestionnaire(GlobalData, tempRecid, cb) {
+    console.log("正在删除临时调查问卷 deleteTempQuestionnaire");
+    db.run("delete from SOLUTIONS where URL = ? and user = ? and recid = ?", [GlobalData.urlRoot, GlobalData.user, tempRecid], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true,
+        });
     });
 }
 
@@ -757,4 +781,5 @@ exports.getQuestionnaires = getQuestionnaires;
 exports.updateIsNew = updateIsNew;
 exports.deleteSolutionIsNew = deleteSolutionIsNew;
 exports.deleteQustionnaireIsNew = deleteQustionnaireIsNew;
-exports.createQuestionnaire = createQuestionnaire;
+exports.createTempQuestionnaire = createTempQuestionnaire;
+exports.deleteTempQuestionnaire = deleteTempQuestionnaire;

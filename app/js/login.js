@@ -43,7 +43,7 @@ function signIn() {
         GlobalData.urlRoot = "10.2.20.61:9797";
         GlobalData.host = "10.2.20.61";
         GlobalData.post = 9797;
-        GlobalData.user = "sr";
+        GlobalData.user = "ci";
         GlobalData.pwd = "";
 
         // if (onlineStatus() == true) {

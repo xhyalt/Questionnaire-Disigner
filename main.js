@@ -11,6 +11,7 @@ const ipcMain = require('electron').ipcMain;
 var mainWindow = null;
 /*用户基本数据的全局引用*/
 var GlobalData = null;
+var tempQuestionnaire = null;
 
 const __restfulUtil = require('./app/js/restfulUtil.js');
 const __quesSqlite = require('./app/js/quesSqlite.js');
@@ -24,6 +25,17 @@ ipcMain.on('asynchronous-set-GlobalData-message', (event, arg) => {
 /*监听渲染进程里发出的message，发送GlobalData*/
 ipcMain.on('asynchronous-get-GlobalData-message', (event) => {
     event.sender.send('asynchronous-get-GlobalData-reply', GlobalData);
+});
+
+/*监听渲染进程里发出的message，获取tempQuestionnaire*/
+ipcMain.on('asynchronous-set-tempQuestionnaire-message', (event, arg) => {
+    tempQuestionnaire = arg;
+    event.sender.send('asynchronous-set-tempQuestionnaire-reply', true);
+});
+
+/*监听渲染进程里发出的message，发送tempQuestionnaire*/
+ipcMain.on('asynchronous-get-tempQuestionnaire-message', (event) => {
+    event.sender.send('asynchronous-get-tempQuestionnaire-reply', tempQuestionnaire);
 });
 
 /*监听渲染进程里发出的message，发送当前应用目录*/

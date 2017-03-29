@@ -109,13 +109,16 @@ $(function() {
         questionnaireJson = {
             "name": popBoxName,
             "title": popBoxTitle,
-            "recid": "tempRecid"
+            "recid": newGuid()
         };
-        quesSqlite.createQuestionnaire(GlobalData, solutionsInfo[solutionTemp].recid, questionnaireJson, function(res) {
+        quesSqlite.createTempQuestionnaire(GlobalData, solutionsInfo[solutionTemp].recid, questionnaireJson, function(res) {
             if (res.success == true) {
-                console.log("创建成功");
-                hideCreateQuestionnaire();
-                window.location.href = "./design.html";
+                console.log("创建临时调查问卷成功");
+                __setTempQuestionnaire(questionnaireJson, function(res) {
+                        hideCreateQuestionnaire();
+                        window.location.href = "./design.html";
+                });
+
             } else {
                 txt = "创建问卷失败，请重新创建";
                 window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
@@ -141,6 +144,16 @@ function init() {
             initTree();
         }
     });
+}
+
+function __setTempQuestionnaire(tempQuestionnaire, cb) {
+    ipcRenderer.on('asynchronous-set-tempQuestionnaire-reply', (event, arg) => {
+        console.log("主进程收到tempQuestionnaire是否成功 " + arg);
+        cb({
+            success: true
+        });
+    });
+    ipcRenderer.send('asynchronous-set-tempQuestionnaire-message', tempQuestionnaire);
 }
 
 /**

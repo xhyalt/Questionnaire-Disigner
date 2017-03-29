@@ -1,11 +1,20 @@
 /*引用JS文件*/
 const restfulUtil = require('./js/restfulUtil.js');
 const quesSqlite = require('./js/quesSqlite.js');
+
 /*与主进程通信的模块*/
 const ipcRenderer = require('electron').ipcRenderer;
 
 /*用户基础数据*/
 var GlobalData = null;
+var tempQuestionnaire = null;
+
+/*弹出框*/
+var popMenu = false;
+var activeSubject = null;
+var activeInput;
+var activeDiv;
+var activeTxt;
 
 /*各种监听事件*/
 $(function() {
@@ -16,6 +25,15 @@ $(function() {
             console.log("获取用户基本信息成功");
         } else {
             console.log("获取用户基本信息失败");
+        }
+    });
+
+    __getTempQuestionnaire(function(res) {
+        if (res.success == true) {
+            console.log("获取临时调查问卷信息成功");
+            console.log(tempQuestionnaire);
+        } else {
+            console.log("获取临时调查问卷信息失败");
         }
     });
 
@@ -546,12 +564,31 @@ $(function() {
 
     /*返回按钮 监听事件*/
     $("#back").on('click', function() {
-        if (popMenu == true) {
-            setTimeout(function() {
-                window.location.href = "./list.html";
-            }, 300);
+        /*如果没有保存题型保存*/
+        if (isSave == false) {
+            txt = "您还没有保存问卷，是否保存？";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+                if (res.data == true) {
+                    /*调用保存函数*/
+                } else {
+                    /*删除库 直接返回*/
+                    quesSqlite.deleteTempQuestionnaire(GlobalData, "tempRecid", function(res) {
+                        if (res.success == true) {
+                            window.location.href = "./list.html";
+                        } else {
+                            console.log("删除失败");
+                        }
+                    });
+                }
+            });
         } else {
-            window.location.href = "./list.html";
+            if (popMenu == true) {
+                setTimeout(function() {
+                    window.location.href = "./list.html";
+                }, 300);
+            } else {
+                window.location.href = "./list.html";
+            }
         }
     });
 
@@ -964,6 +1001,29 @@ function __getGlobalData(cb) {
 }
 
 /**
+ * 与主进程通信获取用户基础数据GlobalData
+ * @private
+ * @return
+ */
+function __getTempQuestionnaire(cb) {
+    try {
+        ipcRenderer.send('asynchronous-get-tempQuestionnaire-message');
+        ipcRenderer.on('asynchronous-get-tempQuestionnaire-reply', (event, arg) => {
+            tempQuestionnaire = arg;
+            console.log("tempQuestionnaire");
+            cb({
+                success: true
+            });
+        });
+    } catch (err) {
+        cb({
+            success: true,
+            data: err.message
+        });
+    }
+}
+
+/**
  * 获取题目类型
  * @param  td [div]
  * @return [题目类型]
@@ -1005,7 +1065,7 @@ function getItemNum($tdP) {
 }
 
 /**
- * [显示隐藏层和弹出层 弹窗问卷设置]
+ * 显示隐藏层和弹出层 弹窗问卷设置
  * @public
  * @return
  */
@@ -1052,7 +1112,7 @@ function showSetup() {
 }
 
 /**
- * [去除隐藏层和弹出层]
+ * 去除隐藏层和弹出层
  * @public
  * @return
  */

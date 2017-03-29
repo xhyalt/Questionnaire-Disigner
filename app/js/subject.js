@@ -1,3 +1,5 @@
+var isSave = false;
+
 /*题号数组*/
 var quesNoArr = new Array(5);
 for (var i = 0; i < 5; i++) {
@@ -24,12 +26,30 @@ quesNoFirst[4] = "Q1.";
 /*当前编辑的级别*/
 var quesActiveNo = 0;
 
-/*弹出框*/
-var popMenu = false;
-var activeSubject = null;
-var activeInput;
-var activeDiv;
-var activeTxt;
+/*所有字体数组*/
+var fontArr = new Array(
+    "宋体",
+    "楷体_GB2312",
+    "黑体",
+    "仿宋",
+    "仿宋_GB2312",
+    "新宋体",
+    "隶书",
+    "华文中宋",
+    "华文仿宋",
+    "华文宋体",
+    "华文彩云",
+    "华文新魏",
+    "华文楷体",
+    "华文琥珀",
+    "华文细黑",
+    "华文行楷",
+    "华文隶书",
+    "幼圆",
+    "微软雅黑",
+    "方正姚体",
+    "方正舒体"
+);
 
 /*题目数量*/
 var subjectTotal = 0;
