@@ -388,6 +388,17 @@ function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
     });
 }
 
+function createQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
+    console.log("正在创建临时调查问卷 createQuestionnaire");
+    __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res) {
+        if (res.success == true) {
+            cb({
+                "success": true
+            });
+        }
+    });
+}
+
 /**
  * 添加某调查问卷
  * 回调函数传回添加是否成功
@@ -411,7 +422,6 @@ function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
         cb({
             success: true,
         });
-
     });
 }
 
@@ -747,3 +757,4 @@ exports.getQuestionnaires = getQuestionnaires;
 exports.updateIsNew = updateIsNew;
 exports.deleteSolutionIsNew = deleteSolutionIsNew;
 exports.deleteQustionnaireIsNew = deleteQustionnaireIsNew;
+exports.createQuestionnaire = createQuestionnaire;

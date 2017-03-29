@@ -367,8 +367,8 @@ body {
     position: fixed;
     left: 50%;
     top: 50%;
-    width: 500px;
-    height: 405px;
+    width: 350px;
+    height: 350px;
     background-color: #fff;
     display: none;
     z-Index: 110;
@@ -398,6 +398,7 @@ body {
 
 #popBoxMain {
     margin: 20px;
+    margin-left: 30px;
     font-size: 14px;
 }
 
@@ -411,6 +412,7 @@ body {
 
 .popBoxItem label {
     float: left;
+    line-height: 2;
 }
 
 #popBox input {
@@ -419,6 +421,7 @@ body {
     width: 200px;
     height: 20px;
     outline: none;
+    border: solid #cccccc   1px;
 }
 
 #popBox .dropBox {
@@ -468,7 +471,7 @@ body {
 }
 
 #popBox .dropBox .dropBox_drop li {
-    padding-left: 13px;
+    padding-left: 10px;
     width: 187px;
 }
 

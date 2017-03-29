@@ -62,27 +62,11 @@ $(function() {
     });
 
     /*新建问卷监听事件start===========================*/
-    var $dropBox1 = $('#popBox #popBoxSolution .dropBox'),
-        $tri1 = $('.dropBox_tri', $dropBox1),
-        $drop1 = $('div.dropBox_drop', $dropBox1),
-        $inp1 = $('div.dropBox_inp', $dropBox1);
 
     var $dropBox2 = $('#popBox #popBoxSecret .dropBox'),
         $tri2 = $('.dropBox_tri', $dropBox2),
         $drop2 = $('div.dropBox_drop', $dropBox2),
         $inp2 = $('div.dropBox_inp', $dropBox2);
-
-    /*下拉框点击事件*/
-    $tri1.on('click', function(event) {
-        var $el = $(this);
-        if ($el.data('active') !== 'on') {
-            $drop1[0].style.display = 'block';
-            $el.data('active', 'on');
-        } else {
-            $drop1[0].style.display = 'none';
-            $el.data('active', 'off');
-        }
-    });
 
     /*下拉框点击事件*/
     $tri2.on('click', function(event) {
@@ -96,32 +80,11 @@ $(function() {
         }
     });
 
-    /*下拉框列表点击事件*/
-    $drop1.on("click", "li", function(event) {
-        $td = $(this);
-        $inp1[0].innerHTML = this.innerHTML;
-        quesNoTemp[quesActiveNo] = parseInt($td.attr("queNoType"));
-        $drop1[0].style.display = 'none';
-        $tri1.data('active', 'off');
-
-        /*刷新预览*/
-        $("#quesNoPreview ul").empty();
-        for (var i = 0; i < quesNoTemp.length; i++) {
-            $("#quesNoPreview ul").append(`<li>` + quesNoPattern[quesNoTemp[i]] + `</li>`);
-        }
-    });
-
     $drop2.on("click", "li", function(event) {
         $td = $(this);
         $inp2[0].innerHTML = this.innerHTML;
         $drop2[0].style.display = 'none';
-        $tri1.data('active', 'off');
-
-        /*刷新预览*/
-        $("#quesNoPreview ul").empty();
-        for (var i = 0; i < quesNoTemp.length; i++) {
-            $("#quesNoPreview ul").append(`<li>` + quesNoPattern[quesNoTemp[i]] + `</li>`);
-        }
+        $tri2.data('active', 'off');
     });
 
     /*新建问卷弹出框 点击关闭和取消事件*/
@@ -131,12 +94,34 @@ $(function() {
 
     /*新建问卷弹出框 点击确认事件*/
     $("#popBox").on("click", "#popBoxButtonConfirm", function() {
-        console.log("hehe");
+        /*判断是否有数据为空*/
+        var popBoxName = $("#popBoxName input").val();
+        var popBoxNo = $("#popBoxNo input").val();
+        var popBoxTitle = $("#popBoxTitle input").val();
+        var popBoxSecret = $("#popBoxSecret .dropBox_tri").html();
+        if (popBoxName == "" || popBoxNo == "" || popBoxTitle == "") {
+            txt = "不可为空，请重新填写";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+            return;
+        }
 
-
-
-        hideCreateQuestionnaire();
-        window.location.href = "./design.html";
+        /*获取信息并存入数据库*/
+        questionnaireJson = {
+            "name": popBoxName,
+            "title": popBoxTitle,
+            "recid": "tempRecid"
+        };
+        quesSqlite.createQuestionnaire(GlobalData, solutionsInfo[solutionTemp].recid, questionnaireJson, function(res) {
+            if (res.success == true) {
+                console.log("创建成功");
+                hideCreateQuestionnaire();
+                window.location.href = "./design.html";
+            } else {
+                txt = "创建问卷失败，请重新创建";
+                window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+                return;
+            }
+        });
     });
     /*新建问卷监听事件end===========================*/
 });
@@ -483,6 +468,8 @@ function showCreateQuestionnaire() {
     /*将选中的业务方案填入*/
     $(".solution").empty();
     $(".solution").append(solutionsInfo[solutionTemp].title);
+    $(".popBoxItem input").val("");
+    $("#popBoxSecret .dropBox_inp").empty().append("无秘");
 
     hidebg.style.display = "block"; //显示隐藏层
     document.getElementById("popBox").style.display = "block"; //显示弹出层
