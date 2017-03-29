@@ -54,7 +54,7 @@ body {
 
 /*下拉框*/
 
-#dropBox {
+#head .dropBox {
     float: left;
     height: 32px;
     line-height: 32px;
@@ -67,14 +67,14 @@ body {
     z-index: 5;
 }
 
-#dropBox .dropBox_wrp {
+#head .dropBox .dropBox_wrp {
     overflow: hidden;
     border: 1px solid #cccccc;
     border-radius: 3px;
     cursor: pointer;
 }
 
-#dropBox .dropBox_inp {
+#head .dropBox .dropBox_inp {
     color: #666666;
     padding-left: 13px;
     height: 32px;
@@ -84,14 +84,14 @@ body {
     float: left;
 }
 
-#dropBox a.dropBox_tri:link, #dropBox a.dropBox_tri:visited {
+#head .dropBox a.dropBox_tri:link, #head .dropBox a.dropBox_tri:visited {
     width: 32px;
     height: 32px;
     float: left;
     background: transparent url('../images/triangle.png') no-repeat center center;
 }
 
-#dropBox .dropBox_drop {
+#head .dropBox .dropBox_drop {
     background: #fff;
     width: 100px;
     border: 1px solid #cccccc;
@@ -99,12 +99,12 @@ body {
     border-radius: 3px;
 }
 
-#dropBox .dropBox_drop li {
+#head .dropBox .dropBox_drop li {
     padding-left: 13px;
     width: 85px;
 }
 
-#dropBox .dropBox_drop li:hover {
+#head .dropBox .dropBox_drop li:hover {
     background: #1ABC9C;
     color: #fff;
     cursor: pointer;
@@ -344,4 +344,200 @@ body {
     /*非IE浏览器下设置透明度为60%*/
     display: none;
     z-Index: 10;
+}
+
+
+/*新建问卷*/
+
+#hidebg {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    display: none;
+    z-Index: 100;
+}
+
+#popBox {
+    color: #666666;
+    /*position: absolute;*/
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 500px;
+    height: 405px;
+    background-color: #fff;
+    display: none;
+    z-Index: 110;
+    border-radius: 5px;
+    margin-left: -285px;
+    margin-top: -250px;
+}
+
+#popBoxHead {
+    height: 25px;
+    line-height: 25px;
+    font-weight: bold;
+    padding: 14px 30px;
+    border-bottom: solid 1px #f3f3f3;
+}
+
+#popBoxClose {
+    display: block;
+    cursor: pointer;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 22px;
+    right: 30px;
+    background: url(../images/icons.png) -48px -96px no-repeat;
+}
+
+#popBoxMain {
+    margin: 20px;
+    font-size: 14px;
+}
+
+.clear {
+    clear: both;
+}
+
+.popBoxItem {
+    margin-bottom: 10px;
+}
+
+.popBoxItem label {
+    float: left;
+}
+
+#popBox input {
+    font-size: 14px;
+    color: #666666;
+    width: 200px;
+    height: 20px;
+    outline: none;
+}
+
+#popBox .dropBox {
+    /*float: left;*/
+    margin-left: 70px;
+    height: 26px;
+    line-height: 30px;
+    text-align: left;
+    width: 200px;
+    font-size: 12px;
+    position: relative;
+    background: #fff;
+    margin-right: 10px;
+    z-index: 120;
+}
+
+#popBox .dropBox .dropBox_wrp {
+    overflow: hidden;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#popBox .dropBox .dropBox_inp {
+    color: #666666;
+    padding-left: 10px;
+    height: 26px;
+    line-height: 30px;
+    width: 150px;
+    border-right: none;
+    float: left;
+}
+
+#popBox .dropBox a.dropBox_tri:link, #popBox .dropBox a.dropBox_tri:visited {
+    width: 32px;
+    height: 26px;
+    float: left;
+    background: transparent url('../images/triangle.png') no-repeat center center;
+}
+
+#popBox .dropBox .dropBox_drop {
+    background: #fff;
+    width: 200px;
+    border: 1px solid #cccccc;
+    color: #666666;
+    border-radius: 3px;
+}
+
+#popBox .dropBox .dropBox_drop li {
+    padding-left: 13px;
+    width: 187px;
+}
+
+#popBox .dropBox .dropBox_drop li:hover {
+    background: #1ABC9C;
+    color: #fff;
+    cursor: pointer;
+}
+
+#popBoxButtonBox {
+    border-top: solid 1px #eef0f1;
+}
+
+#popBoxButtonGroup {
+    float: right;
+}
+
+#popBoxButtonCancel {
+    float: right;
+    margin-top: 10px;
+    width: 120px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+#popBoxButtonCancel a {
+    text-decoration: none;
+    /*背景*/
+    background: #fff;
+    padding: 8px 30px 8px 30px;
+    border-radius: 5px;
+    /*字体*/
+    font-size: 16px;
+    font-weight: bold;
+    color: #1ABC9C;
+    /*边框*/
+    border-style: solid;
+    border-width: 2px;
+    border-color: #1ABC9C;
+    /*浏览器适配*/
+    -webkit-transition: all linear 0.30s;
+    -moz-transition: all linear 0.30s;
+    transition: all linear 0.30s;
+}
+
+#popBoxButtonConfirm {
+    float: right;
+    margin-top: 10px;
+    width: 120px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+#popBoxButtonConfirm a {
+    text-decoration: none;
+    /*背景*/
+    background: #1ABC9C;
+    padding: 8px 30px 8px 30px;
+    border-radius: 5px;
+    /*字体*/
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    /*边框*/
+    border-style: solid;
+    border-width: 2px;
+    border-color: #1ABC9C;
+    /*浏览器适配*/
+    -webkit-transition: all linear 0.30s;
+    -moz-transition: all linear 0.30s;
+    transition: all linear 0.30s;
 }

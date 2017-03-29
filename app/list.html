@@ -8,6 +8,8 @@
     <link href="./css/list.css" rel="stylesheet" type="text/css" media="all" />
     <script src="./js/jquery.min.js"></script>
     <script src="./js/list.js"></script>
+    <script src="./js/xcConfirm.js"></script>
+    <link rel="StyleSheet" href="./css/xcConfirm.css" type="text/css" />
     <link rel="StyleSheet" href="./css/dtree.css" type="text/css" />
     <script type="text/javascript" src="./js/dtree.js"></script>
     <title>问卷列表</title>
@@ -192,8 +194,64 @@
     </script>
 
     <div id="hidebg"></div>
+    <div id="popBox">
+        <div id="popBoxHead">
+            新建问卷
+            <div id="popBoxClose"></div>
+        </div>
+        <div id="popBoxMain">
+            <div id="popBoxSolution" class="popBoxItem">
+                <label>业务方案：</label>
+                <div class="solution"></div>
+                <div class="clear"></div>
+            </div>
+            <div id="popBoxIdentification" class="popBoxItem">
+                <label>问卷标识：</label>
+                <input type="text" id="popBoxIdentificationText">
+                <div class="clear"></div>
+            </div>
+            <div id="popBoxNo" class="popBoxItem">
+                <label>问卷编号：</label>
+                <input type="text" id="popBoxNoText">
+                <div class="clear"></div>
+            </div>
+            <div id="popBoxTitle" class="popBoxItem">
+                <label>主&nbsp;&nbsp;标&nbsp;&nbsp;题：</label>
+                <input type="text" id="popBoxTitleText">
+                <div class="clear"></div>
+            </div>
+            <div id="popBoxSecret" class="popBoxItem">
+                <label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</label>
+                <div class="dropBox">
+                    <div class="dropBox_wrp">
+                        <div class="dropBox_inp dropBox_tri">无秘</div>
+                        <a href="javascript: ;" class="dropBox_tri"></a>
+                    </div>
+                    <div class="dropBox_drop" style="display:none">
+                        <ul>
+                            <li>无秘</li>
+                            <li>秘密</li>
+                            <li>机密</li>
+                            <li>绝密</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div id="popBoxButtonBox">
+            <div id="popBoxButtonGroup">
+                <div id="popBoxButtonCancel">
+                    <a href="javascript: ;">返 回</a>
+                </div>
+                <div id="popBoxButtonConfirm">
+                    <a href="javascript: ;">确 认</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="head">
-        <div id="dropBox">
+        <div class="dropBox">
             <div class="dropBox_wrp">
                 <div class="dropBox_inp dropBox_tri">由新到旧</div>
                 <a href="#" class="dropBox_tri"></a>
@@ -205,7 +263,7 @@
                 </ul>
             </div>
         </div>
-        <div id="newButton"><a id="back" href="./design.html">新建 +</a></div>
+        <div id="newButton"><a id="back" href="javascript: showCreateQuestionnaire();">新建 +</a></div>
         <div id="searchBar">
             <form action="#" name="search">
                 <table border="0" align="center" cellpadding="0" cellspacing="0" class="tab_search">

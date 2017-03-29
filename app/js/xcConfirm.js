@@ -89,8 +89,8 @@
         var $txtBox = $("<div>").addClass("txtBox"); /*弹窗内容主体区*/
         var $btnArea = $("<div>").addClass("btnArea"); /*按钮区域*/
 
-        var $ok = $("<a>").addClass("sgBtn").addClass("ok").text("是"); /*确定按钮*/
-        var $cancel = $("<a>").addClass("sgBtn").addClass("cancel").text("否"); /*取消按钮*/
+        var $ok = $("<a>").addClass("sgBtn").addClass("ok").text("确定"); /*确定按钮*/
+        var $cancel = $("<a>").addClass("sgBtn").addClass("cancel").text("取消"); /*取消按钮*/
         var $input = $("<input>").addClass("inputBox"); /*输入框*/
         var $clsBtn = $("<a>").addClass("clsBtn"); /*关闭按钮*/
 

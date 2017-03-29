@@ -19,6 +19,8 @@ var dTreeItemNum = 0;
 var d = null;
 /*被选中的业务方案下的所有调查问卷*/
 var questionnairesBySolutionsRecid = null;
+/*当前选中的业务方案*/
+var solutionTemp = null;
 
 $(function() {
 
@@ -40,6 +42,9 @@ $(function() {
         initQuestionnaire(function(res) {
             if (res.success == true) {
                 initTree();
+                solutionTemp = null;
+                if ($(".listBody").length && $(".listBody").length > 0)
+                    $(".listBody").remove();
             }
         });
     });
@@ -55,6 +60,85 @@ $(function() {
             "border-left": "3px solid #fff"
         });
     });
+
+    /*新建问卷监听事件start===========================*/
+    var $dropBox1 = $('#popBox #popBoxSolution .dropBox'),
+        $tri1 = $('.dropBox_tri', $dropBox1),
+        $drop1 = $('div.dropBox_drop', $dropBox1),
+        $inp1 = $('div.dropBox_inp', $dropBox1);
+
+    var $dropBox2 = $('#popBox #popBoxSecret .dropBox'),
+        $tri2 = $('.dropBox_tri', $dropBox2),
+        $drop2 = $('div.dropBox_drop', $dropBox2),
+        $inp2 = $('div.dropBox_inp', $dropBox2);
+
+    /*下拉框点击事件*/
+    $tri1.on('click', function(event) {
+        var $el = $(this);
+        if ($el.data('active') !== 'on') {
+            $drop1[0].style.display = 'block';
+            $el.data('active', 'on');
+        } else {
+            $drop1[0].style.display = 'none';
+            $el.data('active', 'off');
+        }
+    });
+
+    /*下拉框点击事件*/
+    $tri2.on('click', function(event) {
+        var $el = $(this);
+        if ($el.data('active') !== 'on') {
+            $drop2[0].style.display = 'block';
+            $el.data('active', 'on');
+        } else {
+            $drop2[0].style.display = 'none';
+            $el.data('active', 'off');
+        }
+    });
+
+    /*下拉框列表点击事件*/
+    $drop1.on("click", "li", function(event) {
+        $td = $(this);
+        $inp1[0].innerHTML = this.innerHTML;
+        quesNoTemp[quesActiveNo] = parseInt($td.attr("queNoType"));
+        $drop1[0].style.display = 'none';
+        $tri1.data('active', 'off');
+
+        /*刷新预览*/
+        $("#quesNoPreview ul").empty();
+        for (var i = 0; i < quesNoTemp.length; i++) {
+            $("#quesNoPreview ul").append(`<li>` + quesNoPattern[quesNoTemp[i]] + `</li>`);
+        }
+    });
+
+    $drop2.on("click", "li", function(event) {
+        $td = $(this);
+        $inp2[0].innerHTML = this.innerHTML;
+        $drop2[0].style.display = 'none';
+        $tri1.data('active', 'off');
+
+        /*刷新预览*/
+        $("#quesNoPreview ul").empty();
+        for (var i = 0; i < quesNoTemp.length; i++) {
+            $("#quesNoPreview ul").append(`<li>` + quesNoPattern[quesNoTemp[i]] + `</li>`);
+        }
+    });
+
+    /*新建问卷弹出框 点击关闭和取消事件*/
+    $("#popBox").on("click", "#popBoxClose, #popBoxButtonCancel", function() {
+        hideCreateQuestionnaire();
+    });
+
+    /*新建问卷弹出框 点击确认事件*/
+    $("#popBox").on("click", "#popBoxButtonConfirm", function() {
+        console.log("hehe");
+
+
+
+        hideCreateQuestionnaire();
+        window.location.href = "./design.html";
+    });
+    /*新建问卷监听事件end===========================*/
 });
 
 var fresh = {
@@ -135,9 +219,10 @@ function initTree() {
  * @param  solutionRecidIndex [该业务方案节点的recid]
  * @return
  */
-function showQuestionnaires(solutionRecidIndex) {
+function showQuestionnaires(solutionRecidIndex, i) {
     //添加节点点击事件
     var quesNum = 0;
+    solutionTemp = i;
     console.log($(".listBody"));
     console.log("长度" + $(".listBody").length);
     if ($(".listBody").length && $(".listBody").length > 0)
@@ -333,9 +418,7 @@ function __addSolutionTreeItem(cb) {
     console.log("正在添加业务方案树节点");
     for (var i = 0; i < solutionsLength; i++) {
         let temp = solutionsInfo[i].recid;
-        temp = `javascript:showQuestionnaires('${temp}');`;
-        d.add(++dTreeItemNum, 0, solutionsInfo[i].title,
-            temp, '', solutionsInfo[i].recid, "./images/tree_02_op.png", "./images/tree_02_op.png");
+        d.add(++dTreeItemNum, 0, solutionsInfo[i].title, `javascript:showQuestionnaires('${temp}', ${i});`, '', solutionsInfo[i].recid, "./images/tree_02_op.png", "./images/tree_02_op.png");
         solutionsInfo[i].rowID = dTreeItemNum;
     }
     cb({
@@ -377,4 +460,40 @@ function __getJsonLength(jsonData) {
         jsonLength++;
     }
     return jsonLength;
+}
+
+/**
+ * 显示隐藏层和弹出层 弹窗问卷设置
+ * @public
+ * @return
+ */
+function showCreateQuestionnaire() {
+    if (solutionTemp == null) {
+        txt = "请选择一个业务方案";
+        window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        return;
+    }
+    var hideobj = document.getElementById("hidebg");
+
+    var $dropBox = $('#popBox #popBoxSolution .dropBox'),
+        $tri = $('.dropBox_tri', $dropBox),
+        $drop = $('div.dropBox_drop', $dropBox),
+        $inp = $('div.dropBox_inp', $dropBox);
+
+    /*将选中的业务方案填入*/
+    $(".solution").empty();
+    $(".solution").append(solutionsInfo[solutionTemp].title);
+
+    hidebg.style.display = "block"; //显示隐藏层
+    document.getElementById("popBox").style.display = "block"; //显示弹出层
+}
+
+/**
+ * 去除隐藏层和弹出层
+ * @public
+ * @return
+ */
+function hideCreateQuestionnaire() {
+    document.getElementById("hidebg").style.display = "none";
+    document.getElementById("popBox").style.display = "none";
 }
