@@ -31,7 +31,7 @@ $(function() {
     __getTempQuestionnaire(function(res) {
         if (res.success == true) {
             console.log("获取临时调查问卷信息成功");
-            console.log(tempQuestionnaire);
+            $("#titleNameTextID").empty().append(tempQuestionnaire.title);
         } else {
             console.log("获取临时调查问卷信息失败");
         }
@@ -346,9 +346,11 @@ $(function() {
     /*删除选项按钮点击事件*/
     $("#target").on("click", ".subjectMain .delete", function() {
         $tdP = $(this).parent().parent();
+        $tdPP = $tdP.parent();
         if (getItemNum($tdP.parent()) > 1) {
             $tdP.remove();
             /*重置题目选项的字母*/
+            console.log($tdPP);
             setInitials($tdPP);
         } else {
             txt = "只有一个选项，不能继续删除";
