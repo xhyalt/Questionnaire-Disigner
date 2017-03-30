@@ -107,6 +107,7 @@ $(function() {
 
         /*获取信息并存入数据库*/
         questionnaireJson = {
+            "solutionRecid": solutionTemp.recid,
             "name": popBoxName,
             "title": popBoxTitle,
             "recid": newGuid()
@@ -115,8 +116,8 @@ $(function() {
             if (res.success == true) {
                 console.log("创建临时调查问卷成功");
                 __setTempQuestionnaire(questionnaireJson, function(res) {
-                        hideCreateQuestionnaire();
-                        window.location.href = "./design.html";
+                    hideCreateQuestionnaire();
+                    window.location.href = "./design.html";
                 });
 
             } else {

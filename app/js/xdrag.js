@@ -287,7 +287,7 @@ function setOrder() {
                 var level = parseInt($td.eq(i).attr("level"));
                 switch (quesNoArr[level - 1]) {
                     case 0:
-                        $td.eq(i).find("h4").html(intToChinese($td.eq(i).attr("num")));
+                        $td.eq(i).find("h4").html(intToChinese($td.eq(i).attr("num")) + "、");
                         break;
                     case 1:
                         $td.eq(i).find("h4").html("(" + intToChinese($td.eq(i).attr("num")) + ")");
@@ -315,7 +315,7 @@ function setOrder() {
                 var level = parseInt($td.eq(i).attr("level"));
                 switch (quesNoArr[level - 1]) {
                     case 0:
-                        $td.eq(i).find("h4").html(intToChinese($td.eq(i).attr("num")));
+                        $td.eq(i).find("h4").html(intToChinese($td.eq(i).attr("num")) + "、");
                         break;
                     case 1:
                         $td.eq(i).find("h4").html("(" + intToChinese($td.eq(i).attr("num")) + ")");

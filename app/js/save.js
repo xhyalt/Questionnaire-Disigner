@@ -1,3 +1,5 @@
+var mainData = null;
+
 function saveQuestionnaire() {
     console.log("正在保存");
     /*显示遮蔽层*/
@@ -26,23 +28,41 @@ function hideShielder() {
 
 function getQuestionnaireJson(cb) {
     var flag = 1;
+    mainData = {
+        "groupguid": tempQuestionnaire.solutionRecid,
+        "title": tempQuestionnaire.title,
+        "readonly": false,
+        "readonlyfilter": "1",
+        "subtitle": "1",
+        "subno": "1",
+        "usesqlfloatfml": false,
+        "reportGroupGuid": tempQuestionnaire.solutionRecid,
+        "securityClass": "",
+        "selitemarr": "",
+        "index": $("#target .subject, #target .unSubject").length,
+        "filter": "",
+        "description": "",
+        "name": tempQuestionnaire.name,
+    }
     var questionnaireData = {
         "guid": tempQuestionnaire.recid,
-        "autoNo": true,
+
         "title": tempQuestionnaire.title,
+        "autoNo": true,
         "name": tempQuestionnaire.name,
-        "questions": [],
-        "mainBodyGuid": "",
+        "grouplist":[],
         "float": false,
-        "css": ""
+        "mainBodyGuid": "",
+        "css": ".wrap{ 			font: normal10.5pt宋体;line-height: 22px;width: 880px;margin: -35pxauto;padding: 20px10px20px10px;background-color: white; 		}#bottom_btn{ 			width: 880px;text-align: right; 		}blockquote{ 			margin: 3px0; 		}.option{ 			font: bold10.5pt宋体;width: 18px;display: inline-block; 		}div[zb]: hover{ 			background-color: #dfdfdf; 		}.level1{ 			font: bold12pt仿宋_GB2312; 		}.level2{ 			font: bold11pt仿宋_GB2312; 		}.level3{ 			font: bold10pt仿宋_GB2312; 		}.level4{ 			font: bold9pt仿宋_GB2312; 		}.level5{ 			font: bold8pt仿宋_GB2312; 		}"
     }
     var Subjects = $("#target .subject, #target .unSubject");
     for (var i = 0; i < Subjects.length; i++) {
         var type = getType(Subjects.eq(i));
         var tempSubject = getSubjectJson(Subjects.eq(i), type);
-        questionnaireData.questions.push(tempSubject);
+        questionnaireData.grouplist.push(tempSubject);
     }
-    console.log(questionnaireData);
+    mainData.data = questionnaireData;
+    console.log(mainData);
     cb({
         success: true
     });
@@ -142,7 +162,7 @@ function getSubjectJson($td, type) {
             "nullable": !subject[connection].forced,
             "question": newGuid(),
             "type": "shortanswer",
-            "levelNum": "",
+            "levelNum": $td.children().children("h4").html(),
             "width": 800,
             "hight": 30 * subject[connection].showLine,
             "maxnum": subject[connection].maxLength,
@@ -175,9 +195,10 @@ function getSubjectJson($td, type) {
         }
     } else if (type == "description") {
         tempSubject = {
-            "title": "<p>吼吼吼吼吼吼吼吼这是静态文本的内容<br/></p>",
+            "title": $td.children().children(".stemText").html(),
             "level": "level" + $td.attr("level"),
             "description": "",
+            "nullable": true,
             "hidden": false,
             "question": newGuid(),
             "type": "static",

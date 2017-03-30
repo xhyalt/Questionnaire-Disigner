@@ -774,10 +774,6 @@ $(function() {
     });
 });
 
-function testArr() {
-    console.log(subject);
-}
-
 /**
  * 显示描述的执行函数
  * @public
@@ -925,7 +921,6 @@ function setLine(value) {
  * @param value input值
  */
 function setMinLength(value) {
-    console.log(value);
     var connection = activeSubject.attr("connection");
     subject[connection].minLength = parseInt(value);
 }
