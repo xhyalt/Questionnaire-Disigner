@@ -410,7 +410,7 @@ function createTempQuestionnaire(GlobalData, solutionRecid, questionnaireJson, c
 
 function deleteTempQuestionnaire(GlobalData, tempRecid, cb) {
     console.log("正在删除临时调查问卷 deleteTempQuestionnaire");
-    db.run("delete from SOLUTIONS where URL = ? and user = ? and recid = ?", [GlobalData.urlRoot, GlobalData.user, tempRecid], function(err) {
+    db.run("delete from QUESTIONNAIRES where URL = ? and user = ? and recid = ?", [GlobalData.urlRoot, GlobalData.user, tempRecid], function(err) {
         if (err) {
             cb({
                 success: false,

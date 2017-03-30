@@ -550,7 +550,7 @@ $(function() {
             }
             activeInput.blur();
 
-            /*处理侧向弹出框*/
+            /*收回侧向弹出框*/
             $(".trianglePop").remove();
             $(".popMenu").animate({
                 left: '-200px',
@@ -572,15 +572,19 @@ $(function() {
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
                 if (res.data == true) {
                     /*调用保存函数*/
-                } else {
+                    saveQuestionnaire();
+                } else if (res.success == true) {
                     /*删除库 直接返回*/
-                    quesSqlite.deleteTempQuestionnaire(GlobalData, "tempRecid", function(res) {
+                    console.log(tempQuestionnaire.recid);
+                    quesSqlite.deleteTempQuestionnaire(GlobalData, tempQuestionnaire.recid, function(res) {
                         if (res.success == true) {
                             window.location.href = "./list.html";
                         } else {
                             console.log("删除失败");
                         }
                     });
+                } else {
+
                 }
             });
         } else {
@@ -696,8 +700,23 @@ $(function() {
             });
             activeInput.trigger("focus");
 
-            /*题目设置弹出框*/
-            __showPopMenu(activeDiv, type);
+            /*如果是非弹出框题型 直接跳出*/
+            if (type == "merge" || type == "description") {
+                activeInput.blur(function() {
+                    var newtxt = $(".stemTextInput").html();
+                    if (newtxt != activeTxt) {
+                        /*数据库操作*/
+                        activeDiv.html(newtxt);
+                    } else if (newtxt == activeTxt) {
+                        activeDiv.html(newtxt);
+                    }
+                });
+
+                activeSubject == null;
+            } else {
+                /*题目设置弹出框*/
+                __showPopMenu(activeDiv, type);
+            }
         }
     });
 
@@ -928,12 +947,6 @@ function setMaxLength(value) {
  * @return
  */
 function __showPopMenu($td, type) {
-    /*如果是非弹出框题型 直接跳出*/
-    if (type == "merge" || type == "description") {
-        activeSubject == null;
-        popMenu == false;
-        return;
-    }
 
     var position = $td[0].offsetHeight / 2 + $td[0].offsetTop - $("#headTop")[0].offsetHeight - 25;
     $("#right").append(menuPopDiv[type]);

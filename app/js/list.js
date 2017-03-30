@@ -221,8 +221,6 @@ function showQuestionnaires(solutionRecidIndex, i) {
     //添加节点点击事件
     var quesNum = 0;
     solutionTemp = i;
-    console.log($(".listBody"));
-    console.log("长度" + $(".listBody").length);
     if ($(".listBody").length && $(".listBody").length > 0)
         $(".listBody").remove();
     for (let i = 0; i < questionnairesLength; i++) {
