@@ -957,7 +957,7 @@ input.maxLength {
 /*问卷整体设置*/
 
 #hidebg {
-    position: absolute;
+    position: fixed;
     left: 0px;
     top: 0px;
     background-color: #000;
