@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>wangEditor2 test</title>
-    <link rel="stylesheet" type="text/css" href="./css/wangEditor.min.css">
+    <link rel="stylesheet" type="text/css" href="./css/wangEditor.css">
     <style type="text/css">
         #editor-trigger {
             height: 400px;
@@ -33,12 +33,47 @@
 
     <script type="text/javascript" src="./js/jquery.min.js"></script>
     <!-- <script type="text/javascript" src="../dist/js/wangEditor.js"></script> -->
-    <script type="text/javascript" src="./js/wangEditor.min.js"></script>
+    <script type="text/javascript" src="./js/wangEditor.js"></script>
     <script type="text/javascript">
         // 阻止输出log
         // wangEditor.config.printLog = false;
 
         var editor = new wangEditor('editor-trigger');
+
+        /*自定义菜单*/
+        editor.config.menus = [
+            'source',
+            '|',
+            'eraser',
+            'bold',
+            'underline',
+            'italic',
+            'strikethrough',
+            '|',
+            'forecolor',
+            'bgcolor',
+            '|',
+            'head',
+            'fontfamily',
+            'fontsize',
+            'alignleft',
+            'aligncenter',
+            'alignright',
+            '|',
+            'lineheight',
+            '|',
+            'orderlist',
+            'unorderlist',
+            'date',
+            'time',
+            'link',
+            'unlink',
+            'img',
+            '|',
+            'undo',
+            'redo',
+            'fullscreen'
+        ];
 
         // 上传图片
         editor.config.uploadImgUrl = '/upload';
