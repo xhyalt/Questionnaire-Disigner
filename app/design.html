@@ -5,11 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="./css/wangEditor.css" rel="stylesheet" type="text/css" media="all">
     <link href="./css/design.css" rel="stylesheet" type="text/css" media="all" />
     <link href="./css/xcConfirm.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="./css/wangEditor.css" rel="stylesheet" type="text/css" media="all">
     <script src="./js/jquery.min.js"></script>
     <script src="./js/save.js"></script>
     <script src="./js/Guid.js"></script>
+    <script type="text/javascript" src="./js/wangEditor.js"></script>
     <title>问卷设计</title>
 
     <script type="text/javascript">
@@ -254,6 +257,64 @@
             </div>
         </div>
     </div>
+    <div id="popEditorBox">
+        <div id="popEditorBoxHead">
+            文本编辑器
+            <div id="popEditorBoxClose"></div>
+        </div>
+        <div id="editor-trigger"></div>
+        <div id="popEditorBoxButtonBox">
+            <div id="popEditorBoxButtonGroup">
+                <div id="popEditorBoxButtonCancel">
+                    <a href="javascript: ;">返 回</a>
+                </div>
+                <div id="popEditorBoxButtonConfirm">
+                    <a href="javascript: ;">确 认</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var editor = new wangEditor('editor-trigger');
+        /*自定义菜单*/
+        editor.config.menus = [
+            'source',
+            '|',
+            'eraser',
+            'bold',
+            'underline',
+            'italic',
+            'strikethrough',
+            '|',
+            'forecolor',
+            'bgcolor',
+            '|',
+            'head',
+            'fontfamily',
+            'fontsize',
+            'alignleft',
+            'aligncenter',
+            'alignright',
+            '|',
+            'lineheight',
+            '|',
+            'orderlist',
+            'unorderlist',
+            'calendar',
+            'time',
+            'link',
+            'unlink',
+            'img',
+            '|',
+            'undo',
+            'fullscreen'
+        ];
+        // 上传图片
+        editor.config.uploadImgUrl = '/upload';
+
+        editor.create();
+    </script>
+
     <div id="headTop">
         <div id="buttonBox1">
             <div class="lightButton">

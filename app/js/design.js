@@ -16,6 +16,9 @@ var activeInput;
 var activeDiv;
 var activeTxt;
 
+/*弹出编辑框*/
+var popEditor = false;
+
 /*各种监听事件*/
 $(function() {
 
@@ -508,8 +511,6 @@ $(function() {
 
     /*问卷设置弹出框 点击确认事件*/
     $("#popBox").on("click", "#popBoxButtonConfirm", function() {
-        console.log("hehe");
-
         for (var i = 0; i < quesNoArr.length; i++) {
             quesNoArr[i] = quesNoTemp[i];
         }
@@ -536,7 +537,7 @@ $(function() {
     /*body 点击事件*/
     $(document).on('click', function(event) {
         var target = $(event.target);
-        if (popMenu == true && !target.hasClass('popMenu') &&
+        if (popMenu == true && popEditor == false && !target.hasClass('popMenu') &&
             target[0] != activeSubject.children().children(".stemText")[0] &&
             target.parents('.popMenu').length == 0
         ) {
@@ -560,9 +561,25 @@ $(function() {
                 activeSubject = null;
                 $("#right").empty();
             });
+        } else if (popEditor == true && popMenu == false) {
+            /*获取富文本编辑器中的内容，放到div中*/
         }
     });
     /*题目设置监听事件end================*/
+
+    /*富文本编辑框start===================*/
+    /*点击关闭或取消的监听事件*/
+    $("#popEditorBox").on("click", "#popEditorBoxClose, #popEditorBoxButtonCancel", function() {
+        hideEditor();
+    });
+
+    /*富文本编辑器弹出框 点击确认事件*/
+    $("#popEditorBox").on("click", "#popEditorBoxButtonConfirm", function() {
+        console.log("hahahaha");
+        activeDiv.empty().append(editor.$txt.html());
+        hideEditor();
+    });
+    /*富文本编辑器end=====================*/
 
     /*返回按钮 监听事件*/
     $("#back").on('click', function() {
@@ -588,7 +605,7 @@ $(function() {
                 }
             });
         } else {
-            if (popMenu == true) {
+            if (popMenu == true && popEditor == false) {
                 setTimeout(function() {
                     window.location.href = "./list.html";
                 }, 300);
@@ -685,11 +702,19 @@ $(function() {
 
     /*所有题干 点击编辑*/
     $("#target").on("click", ".stemText", function() {
-        if (popMenu == false) {
-            activeDiv = $(this);
+        activeDiv = $(this);
+        var type = getType(activeDiv);
+
+        if (popMenu == false && popEditor == false && type == "description") {
+            /*描述说明题干的点击事件*/
+            activeTxt = activeDiv.html();
+            $("#editor-trigger").empty().append(activeTxt);
+            popEditor = true;
+
+            showEditor();
+        } else if (popMenu == false && popEditor == false) {
             activeSubject = activeDiv.parent().parent(".subject, .unSubject");
             /*确定题目类别*/
-            var type = getType(activeDiv);
 
             activeTxt = activeDiv.html();
             activeInput = $(`<div class="stemTextInput" contenteditable="true">` + activeTxt + `</div>`);
@@ -701,7 +726,7 @@ $(function() {
             activeInput.trigger("focus");
 
             /*如果是非弹出框题型 直接跳出*/
-            if (type == "merge" || type == "description") {
+            if (type == "merge") {
                 activeInput.blur(function() {
                     var newtxt = $(".stemTextInput").html();
                     if (newtxt != activeTxt) {
@@ -1129,6 +1154,21 @@ function showSetup() {
 function hideSetup() {
     document.getElementById("hidebg").style.display = "none";
     document.getElementById("popBox").style.display = "none";
+}
+
+function showEditor() {
+    hidebg.style.display = "block"; //显示隐藏层
+
+    editor.undestroy();
+
+    document.getElementById("popEditorBox").style.display = "block"; //显示弹出层
+}
+
+function hideEditor() {
+    document.getElementById("hidebg").style.display = "none";
+    document.getElementById("popEditorBox").style.display = "none";
+    popEditor = false;
+    editor.destroy();
 }
 
 function MM_swapImgRestore() {

@@ -2,8 +2,8 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     margin: 0;
     padding: 0;
     border: 0;
-    font-size: 100%;
-    font: inherit;
+    /*font-size: 100%;*/
+    /*font: inherit;*/
     vertical-align: baseline;
 }
 
@@ -970,7 +970,6 @@ input.maxLength {
 
 #popBox {
     color: #666666;
-    /*position: absolute;*/
     position: fixed;
     left: 50%;
     top: 50%;
@@ -1168,6 +1167,111 @@ input.maxLength {
 }
 
 #popBoxButtonConfirm a {
+    text-decoration: none;
+    /*背景*/
+    background: #1ABC9C;
+    padding: 8px 30px 8px 30px;
+    border-radius: 5px;
+    /*字体*/
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    /*边框*/
+    border-style: solid;
+    border-width: 2px;
+    border-color: #1ABC9C;
+    /*浏览器适配*/
+    -webkit-transition: all linear 0.30s;
+    -moz-transition: all linear 0.30s;
+    transition: all linear 0.30s;
+}
+
+
+/*富文本编辑框*/
+
+#popEditorBox {
+    color: #666666;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 810px;
+    background-color: #fff;
+    display: none;
+    z-Index: 150;
+    border-radius: 5px;
+    margin-left: -425px;
+    margin-top: -250px;
+    padding-top: 50px;
+}
+
+#popEditorBoxHead {
+    height: 25px;
+    line-height: 25px;
+    font-weight: bold;
+    padding: 14px 30px;
+    border-bottom: solid 1px #f3f3f3;
+}
+
+#popEditorBoxClose {
+    display: block;
+    cursor: pointer;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 22px;
+    right: 30px;
+    background: url(../images/icons.png) -48px -96px no-repeat;
+}
+
+#editor-trigger {
+    height: 300px;
+}
+
+#popEditorBoxButtonBox {
+    border-top: solid 1px #eef0f1;
+}
+
+#popEditorBoxButtonGroup {
+    float: right;
+}
+
+#popEditorBoxButtonCancel {
+    float: right;
+    margin-top: 10px;
+    width: 120px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+#popEditorBoxButtonCancel a {
+    text-decoration: none;
+    /*背景*/
+    background: #fff;
+    padding: 8px 30px 8px 30px;
+    border-radius: 5px;
+    /*字体*/
+    font-size: 16px;
+    font-weight: bold;
+    color: #1ABC9C;
+    /*边框*/
+    border-style: solid;
+    border-width: 2px;
+    border-color: #1ABC9C;
+    /*浏览器适配*/
+    -webkit-transition: all linear 0.30s;
+    -moz-transition: all linear 0.30s;
+    transition: all linear 0.30s;
+}
+
+#popEditorBoxButtonConfirm {
+    float: right;
+    margin-top: 10px;
+    width: 120px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+#popEditorBoxButtonConfirm a {
     text-decoration: none;
     /*背景*/
     background: #1ABC9C;
