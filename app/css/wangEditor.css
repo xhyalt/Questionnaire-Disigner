@@ -853,6 +853,14 @@
     content: "\e817";
 }
 
+.wangeditor-menu-img-superscript:before {
+    content: "\ea69";
+}
+
+.wangeditor-menu-img-subscript:before {
+    content: "\ea6a";
+}
+
 .hljs {
     display: block;
     overflow-x: auto;

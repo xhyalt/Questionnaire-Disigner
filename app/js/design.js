@@ -22,6 +22,10 @@ var popEditor = false;
 /*各种监听事件*/
 $(function() {
 
+    // document.addEventListener("click", function(event) {
+    //     console.log(event.target);
+    // });
+
     /*获取用户基本信息*/
     __getGlobalData(function(res) {
         if (res.success == true) {

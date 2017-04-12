@@ -8730,6 +8730,90 @@
         });
     });
 
+    //上标
+    _e(function(E, $) {
+
+        E.createMenu(function(check) {
+            var menuId = 'superscript';
+            if (!check(menuId)) {
+                return;
+            }
+
+            var editor = this;
+            var lang = editor.config.lang;
+
+            // 创建 menu 对象
+            var menu = new E.Menu({
+                editor: editor,
+                id: menuId,
+                title: "上标",
+                commandName: 'superscript',
+
+                // 正常状态和选中装下的dom对象，样式需要自定义
+                $domNormal: $('<a href="#" tabindex="-1"><i class="wangeditor-menu-img-superscript"></i></a>'),
+                $domSelected: $('<a href="#" tabindex="-1" class="selected"><i class="wangeditor-menu-img-superscript"></i></a>')
+            });
+
+            // 定义选中状态下的click事件
+            menu.clickEventSelected = function(e) {
+                var isRangeEmpty = editor.isRangeEmpty();
+                if (!isRangeEmpty) {
+                    // 如果选区有内容，则执行基础命令
+                    editor.command(e, 'superscript');
+                } else {
+                    // 如果选区没有内容
+                    editor.commandForElem('superscript', e, 'superscript');
+                }
+            };
+
+            // 增加到editor对象中
+            editor.menus[menuId] = menu;
+        });
+
+    });
+
+    //下标
+    _e(function(E, $) {
+
+        E.createMenu(function(check) {
+            var menuId = 'subscript';
+            if (!check(menuId)) {
+                return;
+            }
+
+            var editor = this;
+            var lang = editor.config.lang;
+
+            // 创建 menu 对象
+            var menu = new E.Menu({
+                editor: editor,
+                id: menuId,
+                title: "下标",
+                commandName: 'subscript',
+
+                // 正常状态和选中装下的dom对象，样式需要自定义
+                $domNormal: $('<a href="#" tabindex="-1"><i class="wangeditor-menu-img-subscript"></i></a>'),
+                $domSelected: $('<a href="#" tabindex="-1" class="selected"><i class="wangeditor-menu-img-subscript"></i></a>')
+            });
+
+            // 定义选中状态下的click事件
+            menu.clickEventSelected = function(e) {
+                var isRangeEmpty = editor.isRangeEmpty();
+                if (!isRangeEmpty) {
+                    // 如果选区有内容，则执行基础命令
+                    editor.command(e, 'subscript');
+                } else {
+                    // 如果选区没有内容
+                    editor.commandForElem('subscript', e, 'subscript');
+                }
+            };
+
+            // 增加到editor对象中
+            editor.menus[menuId] = menu;
+        });
+
+    });
+
     // 版权提示
     _e(function(E, $) {
         E.info('本页面富文本编辑器由 wangEditor 提供 http://wangeditor.github.io/ ');
