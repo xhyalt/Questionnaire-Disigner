@@ -849,6 +849,10 @@
     content: "\e94e";
 }
 
+.wangeditor-menu-img-line:before {
+    content: "\e817";
+}
+
 .hljs {
     display: block;
     overflow-x: auto;
