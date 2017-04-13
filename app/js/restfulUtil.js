@@ -65,20 +65,20 @@ function getQuestionnaires(GlobalData, obj, cb) {
 }
 
 /**
- * 调查问卷表样请求
+ * 某个调查问卷的表样请求
  * @public
  * @param  GlobalData [用户基础数据]
  * @param  obj        [业务方案的recid]
  * @param  {Function} cb         [回调函数]
  * @return
  */
-function getQuestionnairesData(GlobalData, obj, cb) {
+function getQuestionnaireDataByRPCode(GlobalData, obj, cb) {
     __getData(3, {
-        url: __getQuestionnairesDataURL(GlobalData),
+        url: __getQuestionnaireDataByRPCodeURL(GlobalData),
         body: {
             method: "POST",
             timeout: 3000,
-            body: `data={solutionId:${obj}}`
+            body: `data={reportCode:${obj}}`
         }
     }, cb);
 }
@@ -93,7 +93,7 @@ function getQuestionnairesData(GlobalData, obj, cb) {
 function __getData(type, obj, cb) {
     // console.log("__getData " + JSON.stringify(obj));
     /**
-     * type 1 业务方案 2 调查问卷 3 表样 4 save
+     * type 1 业务方案 2 调查问卷 3 某个问卷的表样 4 save
      */
     fetch(obj.url, obj.body).then(function(res) {
         return res.json();
@@ -145,8 +145,8 @@ function __getQuestionnairesURL(GlobalData) {
  * @param  GlobalData [用户基础数据]
  * @return 获取问卷列表以及问卷样式的URL
  */
-function __getQuestionnairesDataURL(GlobalData) {
-    var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/getQuestionnairesData?user=${GlobalData.user}&src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
+function __getQuestionnaireDataByRPCodeURL(GlobalData) {
+    var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/getQuestionnaireDataByRPCode?user=${GlobalData.user}&src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
     return url;
 }
 
@@ -164,4 +164,4 @@ function __getTokenUrl(GlobalData) {
 exports.getToken = getToken;
 exports.getSolutions = getSolutions;
 exports.getQuestionnaires = getQuestionnaires;
-exports.getQuestionnairesData = getQuestionnairesData;
+exports.getQuestionnaireDataByRPCode = getQuestionnaireDataByRPCode;
