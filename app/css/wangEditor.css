@@ -861,6 +861,10 @@
     content: "\ea6a";
 }
 
+.wangeditor-menu-img-alignfull:before{
+    content: "\f039";
+}
+
 .hljs {
     display: block;
     overflow-x: auto;

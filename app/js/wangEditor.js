@@ -3310,6 +3310,15 @@
             7: '48px'
         };
 
+        /*段前距 段后距*/
+        E.config.distance = {
+            1: "5px",
+            2: "10px",
+            3: "15px",
+            4: "20px",
+            5: "25px"
+        }
+
         // 表情包
         E.config.emotionsShow = 'icon'; // 显示项，默认为'icon'，也可以配置成'value'
         E.config.emotions = {
@@ -8813,6 +8822,113 @@
         });
 
     });
+
+    // 两端对齐 菜单
+    // _e(function(E, $) {
+    //
+    //     E.createMenu(function(check) {
+    //         var menuId = 'alignfull';
+    //         if (!check(menuId)) {
+    //             return;
+    //         }
+    //         var editor = this;
+    //         var lang = editor.config.lang;
+    //
+    //         // 创建 menu 对象
+    //         var menu = new E.Menu({
+    //             editor: editor,
+    //             id: menuId,
+    //             title: lang.aligncenter,
+    //             commandName: 'justifyFull',
+    //
+    //             // 正常状态和选中装下的dom对象，样式需要自定义
+    //             $domNormal: $('<a href="#" tabindex="-1"><i class="wangeditor-menu-img-alignfull"></i></a>'),
+    //             $domSelected: $('<a href="#" tabindex="-1" class="selected"><i class="wangeditor-menu-img-alignfull"></i></a>')
+    //         });
+    //
+    //         // 定义 update selected 事件
+    //         menu.updateSelectedEvent = function() {
+    //             var rangeElem = editor.getRangeElem();
+    //             rangeElem = editor.getSelfOrParentByName(rangeElem, 'p,h1,h2,h3,h4,h5,li', function(elem) {
+    //                 var cssText;
+    //                 if (elem && elem.style && elem.style.cssText != null) {
+    //                     cssText = elem.style.cssText;
+    //                     if (cssText && /text-align:\s*center;/.test(cssText)) {
+    //                         return true;
+    //                     }
+    //                 }
+    //                 if ($(elem).attr('align') === 'center') {
+    //                     // ff 中，设置align-center之后，会是 <p align="center">xxx</p>
+    //                     return true;
+    //                 }
+    //                 return false;
+    //             });
+    //             if (rangeElem) {
+    //                 return true;
+    //             }
+    //             return false;
+    //         };
+    //
+    //         // 增加到editor对象中
+    //         editor.menus[menuId] = menu;
+    //     });
+    //
+    // });
+
+    // 段前距
+    // _e(function(E, $) {
+    //     _e(function(E, $) {
+    //
+    //         E.createMenu(function(check) {
+    //             var menuId = 'beforeDistance';
+    //             if (!check(menuId)) {
+    //                 return;
+    //             }
+    //             var editor = this;
+    //             var lang = editor.config.lang;
+    //             var configDistance = editor.config.distance;
+    //
+    //             // 创建 menu 对象
+    //             var menu = new E.Menu({
+    //                 editor: editor,
+    //                 id: menuId,
+    //                 title: "段前距",
+    //
+    //                 // 正常状态和选中装下的dom对象，样式需要自定义
+    //                 $domNormal: $('<a href="#" tabindex="-1"><i class="wangeditor-menu-img-beforeDistance"></i></a>'),
+    //                 $domSelected: $('<a href="#" tabindex="-1" class="selected"><i class="wangeditor-menu-img-beforeDistance"></i></a>')
+    //             });
+    //
+    //             // 初始化数据
+    //             var data = {};
+    //             $.each(configDistance, function(k, v) {
+    //                 // configDistance 是数组，data 是对象
+    //                 data[v] = v;
+    //             });
+    //
+    //             // 创建droplist
+    //             var tpl = '<span style="font-family:{#commandValue};">{#title}</span>';
+    //             menu.dropList = new E.DropList(editor, menu, {
+    //                 data: data,
+    //                 tpl: tpl,
+    //                 selectorForELemCommand: 'font[face]' // 为了执行 editor.commandForElem 而传入的elem查询方式
+    //             });
+    //
+    //             // 定义 update selected 事件
+    //             menu.updateSelectedEvent = function() {
+    //                 var rangeElem = editor.getRangeElem();
+    //                 rangeElem = editor.getSelfOrParentByName(rangeElem, 'font[face]');
+    //                 if (rangeElem) {
+    //                     return true;
+    //                 }
+    //                 return false;
+    //             };
+    //
+    //             // 增加到editor对象中
+    //             editor.menus[menuId] = menu;
+    //         });
+    //     });
+    // });
 
     // 版权提示
     _e(function(E, $) {
