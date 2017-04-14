@@ -12,6 +12,7 @@ var mainWindow = null;
 /*用户基本数据的全局引用*/
 var GlobalData = null;
 var tempQuestionnaire = null;
+var tempQuestionnaireName = null;
 
 const __restfulUtil = require('./app/js/restfulUtil.js');
 const __quesSqlite = require('./app/js/quesSqlite.js');
@@ -36,6 +37,17 @@ ipcMain.on('asynchronous-set-tempQuestionnaire-message', (event, arg) => {
 /*监听渲染进程里发出的message，发送tempQuestionnaire*/
 ipcMain.on('asynchronous-get-tempQuestionnaire-message', (event) => {
     event.sender.send('asynchronous-get-tempQuestionnaire-reply', tempQuestionnaire);
+});
+
+/*监听渲染进程里发出的message，获取tempQuestionnaireName*/
+ipcMain.on('asynchronous-set-tempQuestionnaireName-message', (event, arg) => {
+    tempQuestionnaireName = arg;
+    event.sender.send('asynchronous-set-tempQuestionnaireName-reply', true);
+});
+
+/*监听渲染进程里发出的message，发送tempQuestionnaireName*/
+ipcMain.on('asynchronous-get-tempQuestionnaireName-message', (event) => {
+    event.sender.send('asynchronous-get-tempQuestionnaireName-reply', tempQuestionnaireName);
 });
 
 /*监听渲染进程里发出的message，发送当前应用目录*/

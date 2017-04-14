@@ -270,8 +270,30 @@ function showQuestionnaires(solutionRecidIndex, i) {
     }
 }
 
-function preview(name, row) {
+function preview(name, row, cb) {
     /*判断问卷是否已经下载*/
+    var listLength = $(".listBody").length;
+    if ($(".listBody").eq(listLength - row).find(".syncTd").html() == "未下载") {
+        /*未下载 下载问卷表样*/
+        showShielder();
+        getQuestionnaireDataByRPCode(GlobalData, name, function(res) {
+            if (res.success == true) {
+                /*将下载更换为删除 将未下载改为已同步*/
+                changeSyn(name, row, 1);
+                /*将标识传给主进程*/
+                __setTempQuestionnaireName(name, function(res2) {
+                    if (res2.success == true) {
+                        console.log("给主进程传递参数成功");
+                        /*打开预览界面*/
+                        window.open("http://www.baidu.html");
+                    }
+                })
+                hideShielder();
+            }
+        });
+    } else {
+        console.log("判断为已下载");
+    }
 }
 
 function getQuestionnaireData(name, row, cb) {
@@ -284,7 +306,6 @@ function getQuestionnaireData(name, row, cb) {
             hideShielder();
         }
     });
-
 }
 
 function getQuestionnaireDataByRPCode(GlobalData, name, cb) {
@@ -496,6 +517,16 @@ function __getGlobalData(cb) {
     }
 }
 
+function __setTempQuestionnaireName(tempQuestionnaireName, cb) {
+    ipcRenderer.on('asynchronous-set-tempQuestionnaireName-reply', (event, arg) => {
+        console.log("主进程收到tempQuestionnaireName是否成功 " + arg);
+        cb({
+            success: true
+        });
+    });
+    ipcRenderer.send('asynchronous-set-tempQuestionnaireName-message', tempQuestionnaireName);
+}
+
 /**
  * 添加业务方案界定啊
  * @private
@@ -585,8 +616,4 @@ function showCreateQuestionnaire() {
 function hideCreateQuestionnaire() {
     document.getElementById("hidebg").style.display = "none";
     document.getElementById("popBox").style.display = "none";
-}
-
-function test() {
-
 }

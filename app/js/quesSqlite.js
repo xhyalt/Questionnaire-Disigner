@@ -317,6 +317,39 @@ function getQuestionnaires(GlobalData, cb) {
     });
 }
 
+function getQuestionnaireDataByName(GlobalData, name, cb) {
+    __selectQuestionnaireData(GlobalData, name, function(res) {
+        if (res.success == true) {
+            /*选出调查问卷成功*/
+            cb({
+                success: true,
+                data: res.data
+            });
+        } else {
+            cb({
+                success: false,
+                data: "获取某问卷表样失败"
+            });
+        }
+    });
+}
+
+function __selectQuestionnaireData(GlobalData, name, cb) {
+    console.log("正在获取某问卷的表样");
+    db.all("select * from QUESTIONNAIRES where user = ? and URL = ? and name = ?", [GlobalData.user, GlobalData.urlRoot, name], function(err, row) {
+        if (err) {
+            cb({
+                success: false,
+                data: err
+            });
+        }
+        cb({
+            success: true,
+            data: row
+        });
+    });
+}
+
 /**
  * 将所有调查问卷的isNew字段设置为0
  * 回调函数传回更新是否成功
@@ -838,3 +871,4 @@ exports.deleteQustionnaireIsNew = deleteQustionnaireIsNew;
 exports.createTempQuestionnaire = createTempQuestionnaire;
 exports.deleteTempQuestionnaire = deleteTempQuestionnaire;
 exports.updateQuestionnaireData = updateQuestionnaireData;
+exports.getQuestionnaireDataByName = getQuestionnaireDataByName;
