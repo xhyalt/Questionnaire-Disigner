@@ -262,7 +262,7 @@ function showQuestionnaires(solutionRecidIndex, i) {
                     <td class="editTd">${editTd}</td>
                     <td class="operTd">
                         <a href="javascript: ;">编辑</a>
-                        <a href="javascript: ;">预览</a>
+                        <a href="javascript: preview('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a>
                         <div style="display:inline">${tempItem}</div>
                     </td>
                 </tr>`);
@@ -270,33 +270,64 @@ function showQuestionnaires(solutionRecidIndex, i) {
     }
 }
 
-function getQuestionnaireData(name, row) {
-    console.log(row);
+function preview(name, row) {
+    /*判断问卷是否已经下载*/
+}
+
+function getQuestionnaireData(name, row, cb) {
     showShielder();
     /*发送获取单个问卷表样的请求*/
+    getQuestionnaireDataByRPCode(GlobalData, name, function(res) {
+        if (res.success == true) {
+            /*将下载更换为删除 将未下载改为已同步*/
+            changeSyn(name, row, 1);
+            hideShielder();
+        }
+    });
+
+}
+
+function getQuestionnaireDataByRPCode(GlobalData, name, cb) {
     restfulUtil.getQuestionnaireDataByRPCode(GlobalData, name, function(res) {
         if (res.success == true) {
-            console.log(JSON.stringify(res.resJson));
             data = JSON.stringify(res.resJson.questionnairedata);
             /*将获取的表样存入数据库*/
             quesSqlite.updateQuestionnaireData(GlobalData, name, data, function(res) {
                 if (res.success == true) {
                     console.log("更新表样成功");
-                    /*将下载更换为删除 将未下载改为已同步*/
-                    var listLength = $(".listBody").length;
-                    $(".listBody").eq(listLength - row).find(".syncTd").empty().append("已同步");
-                    $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: ;">删除</a>`);
-                    hideShielder();
+                    cb({
+                        success: true
+                    });
                 } else {
                     console.log("更新表样失败");
+                    cb({
+                        success: false,
+                        data: res.data
+                    });
                 }
             });
         }
     });
 }
 
-function setQuestionnaireData(name) {
+function changeSyn(name, row, method) {
+    /*1.未下载——已同步 2.已同步——未下载 3.已同步——未同步 4.未同步——已同步 5.未同步——未下载*/
+    var listLength = $(".listBody").length;
+    switch (method) {
+        case 1:
+            {
+                $(".listBody").eq(listLength - row).find(".syncTd").empty().append("已同步");
+                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: ;">删除</a>`);
+            }
+            break;
+        case 2:
+            {}
+            break;
+    }
+}
 
+function setQuestionnaireData(name) {
+    /*上传问卷表样的逻辑*/
 }
 
 /**
