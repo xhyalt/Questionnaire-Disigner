@@ -295,8 +295,8 @@ function getSolutions(GlobalData, cb) {
 /**
  * 选出所有调查问卷
  * @public
- * @param  GlobalData [用户基础数据]
- * @param  {Function} cb         [回调函数]
+ * @param  GlobalData 用户基础数据
+ * @param  {Function} cb         回调函数
  * @return
  */
 function getQuestionnaires(GlobalData, cb) {
@@ -317,6 +317,13 @@ function getQuestionnaires(GlobalData, cb) {
     });
 }
 
+/**
+ * 根据标识获取某问卷表样
+ * @param  {json}     GlobalData 用户基础数据
+ * @param  {string}   name       标识
+ * @param  {Function} cb         回调函数
+ * @return
+ */
 function getQuestionnaireDataByName(GlobalData, name, cb) {
     __selectQuestionnaireData(GlobalData, name, function(res) {
         if (res.success == true) {
@@ -334,6 +341,13 @@ function getQuestionnaireDataByName(GlobalData, name, cb) {
     });
 }
 
+/**
+ * 获取某问卷的表样
+ * @param  {json}   GlobalData 用户基础数据
+ * @param  {string}   name       标识
+ * @param  {Function} cb         回调函数
+ * @return
+ */
 function __selectQuestionnaireData(GlobalData, name, cb) {
     console.log("正在获取某问卷的表样");
     db.all("select * from QUESTIONNAIRES where user = ? and URL = ? and name = ?", [GlobalData.user, GlobalData.urlRoot, name], function(err, row) {
@@ -396,8 +410,6 @@ function deleteQustionnaireIsNew(GlobalData, solutionRecid, cb) {
         });
     });
 }
-
-
 
 /**
  * 创建临时调查问卷
@@ -508,6 +520,15 @@ function __selectQuestionnaires(GlobalData, cb) {
     });
 }
 
+/**
+ * 更新某调查问卷的表样
+ * @public
+ * @param  GlobalData 用户基础数据
+ * @param  name       标识
+ * @param  data       表样
+ * @param  {Function} cb         回调函数
+ * @return
+ */
 function updateQuestionnaireData(GlobalData, name, data, cb) {
     __updateQuestionnaireData(GlobalData, name, data, function(res) {
         if (res.success == true) {
@@ -528,9 +549,17 @@ function updateQuestionnaireData(GlobalData, name, data, cb) {
     });
 }
 
+/**
+ * 更新某调查问卷的表样
+ * @private
+ * @param  GlobalData 用户基础数据
+ * @param  name       标识
+ * @param  data       表样
+ * @param  {Function} cb         回调函数
+ * @return
+ */
 function __updateQuestionnaireData(GlobalData, name, data, cb) {
     console.log("正在更新某个调查问卷的表样");
-    console.log(data);
     db.get("update QUESTIONNAIRES set data = ? where URL = ? and user = ? and name = ?", [data, GlobalData.urlRoot, GlobalData.user, name], function(err) {
         if (err) {
             cb({
@@ -544,6 +573,15 @@ function __updateQuestionnaireData(GlobalData, name, data, cb) {
     });
 }
 
+/**
+ * 更新某调查问卷是否被修改的字段
+ * @private
+ * @param  GlobalData        用户基础数据
+ * @param  name       标识
+ * @param  {Boolean}  isChanged  是否修改的字段
+ * @param  {Function} cb         回调函数
+ * @return
+ */
 function __updateQuestionnaireIsChanged(GlobalData, name, isChanged, cb) {
     console.log("正在更新某个调查问卷的表样");
     db.get("update QUESTIONNAIRES set isChanged = ? where URL = ? and user = ? and name = ?", [isChanged, GlobalData.urlRoot, GlobalData.user, name], function(err) {
@@ -563,10 +601,10 @@ function __updateQuestionnaireIsChanged(GlobalData, name, isChanged, cb) {
  * 检查是否存在该调查问卷
  * 回调函数传回select出的行数
  * @private
- * @param  GlobalData        [用户基础数据]
- * @param  solutionRecid     [业务方案的recid]
- * @param  questionnaireJson [调查问卷基础数据]
- * @param  {Function} cb                [回调函数]
+ * @param  GlobalData        用户基础数据
+ * @param  solutionRecid     业务方案的recid
+ * @param  questionnaireJson 调查问卷基础数据
+ * @param  {Function} cb     回调函数
  * @return
  */
 function __checkQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
