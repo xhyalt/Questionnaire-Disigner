@@ -364,29 +364,7 @@ function deleteQustionnaireIsNew(GlobalData, solutionRecid, cb) {
     });
 }
 
-/**
- * 更新调查问卷基本信息
- * @private
- * @param  GlobalData        [用户基本数据]
- * @param  solutionRecid     [业务方案ID]
- * @param  questionnaireJson [调查问卷基本信息]
- * @param  {Function} cb                [回调函数]
- * @return
- */
-function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
-    // console.log("正在更新调查问卷 __updateQuestionnaire");
-    db.get("update QUESTIONNAIRES set title = ?, name = ?, isNew = ? where URL = ? and user = ? and recid = ? and solutionRecid = ?", [questionnaireJson.title, questionnaireJson.name, "1", GlobalData.urlRoot, GlobalData.user, questionnaireJson.recid, solutionRecid], function(err) {
-        if (err) {
-            cb({
-                success: false,
-                data: err.message
-            });
-        }
-        cb({
-            success: true
-        });
-    });
-}
+
 
 /**
  * 创建临时调查问卷
@@ -424,6 +402,30 @@ function deleteTempQuestionnaire(GlobalData, tempRecid, cb) {
 }
 
 /**
+ * 更新调查问卷基本信息
+ * @private
+ * @param  GlobalData        [用户基本数据]
+ * @param  solutionRecid     [业务方案ID]
+ * @param  questionnaireJson [调查问卷基本信息]
+ * @param  {Function} cb                [回调函数]
+ * @return
+ */
+function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
+    // console.log("正在更新调查问卷 __updateQuestionnaire");
+    db.get("update QUESTIONNAIRES set title = ?, name = ?, isNew = ?, isRemote = ? where URL = ? and user = ? and recid = ? and solutionRecid = ?", [questionnaireJson.title, questionnaireJson.name, "1", "1", GlobalData.urlRoot, GlobalData.user, questionnaireJson.recid, solutionRecid], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
+/**
  * 添加某调查问卷
  * 回调函数传回添加是否成功
  * @private
@@ -435,7 +437,7 @@ function deleteTempQuestionnaire(GlobalData, tempRecid, cb) {
  */
 function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
     // console.log("正在添加调查问卷 __insertQuestionnaire");
-    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecid, name,  title, recid, isNew) values(?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.title, questionnaireJson.recid, "1"], function(err) {
+    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecid, name,  title, recid, isNew, isRemote) values(?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.title, questionnaireJson.recid, "1", "1"], function(err) {
         if (err) {
             console.log(err.message);
             cb({
@@ -458,7 +460,8 @@ function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
  */
 function __selectQuestionnaires(GlobalData, cb) {
     console.log("正在获取该用户的所有问卷");
-    db.all("select * from QUESTIONNAIRES where user = ? and URL = ? and isNew = ?", [GlobalData.user, GlobalData.urlRoot, "1"], function(err, row) {
+    // db.all("select * from QUESTIONNAIRES where user = ? and URL = ? and isNew = ?", [GlobalData.user, GlobalData.urlRoot, "1"], function(err, row) {
+    db.all("select * from QUESTIONNAIRES where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
             cb({
                 success: false,
@@ -468,6 +471,57 @@ function __selectQuestionnaires(GlobalData, cb) {
         cb({
             success: true,
             data: row
+        });
+    });
+}
+
+function updateQuestionnaireData(GlobalData, name, data, cb) {
+    __updateQuestionnaireData(GlobalData, name, data, function(res) {
+        if (res.success == true) {
+            __updateQuestionnaireIsChanged(GlobalData, name, "0", function(res2) {
+                if (res2.success == true) {
+                    cb({
+                        success: true
+                    });
+                }
+            });
+
+        } else {
+            cb({
+                success: false,
+                data: res.data
+            });
+        }
+    });
+}
+
+function __updateQuestionnaireData(GlobalData, name, data, cb) {
+    console.log("正在更新某个调查问卷的表样");
+    console.log(data);
+    db.get("update QUESTIONNAIRES set data = ? where URL = ? and user = ? and name = ?", [data, GlobalData.urlRoot, GlobalData.user, name], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
+function __updateQuestionnaireIsChanged(GlobalData, name, isChanged, cb) {
+    console.log("正在更新某个调查问卷的表样");
+    db.get("update QUESTIONNAIRES set isChanged = ? where URL = ? and user = ? and name = ?", [isChanged, GlobalData.urlRoot, GlobalData.user, name], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
         });
     });
 }
@@ -684,7 +738,7 @@ function __createTable(cb) {
 
             db.run("create table SOLUTIONS(URL TEXT, user TEXT, periodType TEXT, name TEXT, minPeriod TEXT, maxPeriod TEXT, title TEXT, recid TEXT, isNew TEXT)");
 
-            db.run("create table QUESTIONNAIRES(URL TEXT, user TEXT, solutionRecid TEXT, name TEXT, title TEXT, recid TEXT, isNew TEXT)");
+            db.run("create table QUESTIONNAIRES(URL TEXT, user TEXT, solutionRecid TEXT, name TEXT, title TEXT, recid TEXT, isNew TEXT, data TEXT, isChanged TEXT, isRemote TEXT, editTime TEXT)");
             /*表单创建成功*/
             if (cb) {
                 cb({
@@ -783,3 +837,4 @@ exports.deleteSolutionIsNew = deleteSolutionIsNew;
 exports.deleteQustionnaireIsNew = deleteQustionnaireIsNew;
 exports.createTempQuestionnaire = createTempQuestionnaire;
 exports.deleteTempQuestionnaire = deleteTempQuestionnaire;
+exports.updateQuestionnaireData = updateQuestionnaireData;

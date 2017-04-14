@@ -220,28 +220,83 @@ function initTree() {
  */
 function showQuestionnaires(solutionRecidIndex, i) {
     //添加节点点击事件
-    var quesNum = 0;
+    var row = 0;
+    var syncTd;
+    var editTd;
+    var tempItem;
     solutionTemp = i;
     if ($(".listBody").length && $(".listBody").length > 0)
         $(".listBody").remove();
+    console.log(questionnairesInfo);
     for (let i = 0; i < questionnairesLength; i++) {
         if (questionnairesInfo[i].solutionRecid == solutionRecidIndex) {
             console.log(questionnairesInfo[i].title);
+            questionnairesInfo[i].row = ++row;
+
+            if (questionnairesInfo[i].data == null || questionnairesInfo[i].data == "") {
+                /*data为空表示未下载*/
+                syncTd = "未下载";
+                tempItem = `<a href="javascript: getQuestionnaireData('${questionnairesInfo[i].name}', ${row});">下载</a>`;
+            } else if (questionnairesInfo[i].isChanged == "0") {
+                /*data不为空 且 没有修改 表示已同步*/
+                syncTd = "已同步";
+                tempItem = `<a href="javascript: ;">删除</a>`;
+            } else {
+                /*data不为空 且 已经修改 表示未同步*/
+                syncTd = "未同步";
+                tempItem = `<a href="javascript: ;">删除</a><a href="javascript: setQuestionnaireData('${questionnairesInfo[i].name}');">上传</a>`;
+            }
+
+            if (questionnairesInfo[i].editTime == null || questionnairesInfo[i].editTime == "") {
+                editTd = "";
+            } else {
+                editTd = "待计算";
+            }
+
             /*在右边显示出点击的业务方案所包含的所有调查问卷*/
             $("#listHead").after(`
                 <tr class="listBody">
                     <td class="titleTd">${questionnairesInfo[i].title}</td>
-                    <td class="codeTd">${questionnairesInfo[i].recid}</td>
-                    <td class="syncTd"></td>
-                    <td class="editTd"></td>
+                    <td class="codeTd">${questionnairesInfo[i].name}</td>
+                    <td class="syncTd">${syncTd}</td>
+                    <td class="editTd">${editTd}</td>
                     <td class="operTd">
                         <a href="javascript: ;">编辑</a>
                         <a href="javascript: ;">预览</a>
-                        <a href="javascript: ;">删除</a>
+                        <div style="display:inline">${tempItem}</div>
                     </td>
                 </tr>`);
         }
     }
+}
+
+function getQuestionnaireData(name, row) {
+    console.log(row);
+    showShielder();
+    /*发送获取单个问卷表样的请求*/
+    restfulUtil.getQuestionnaireDataByRPCode(GlobalData, name, function(res) {
+        if (res.success == true) {
+            console.log(JSON.stringify(res.resJson));
+            data = JSON.stringify(res.resJson.questionnairedata);
+            /*将获取的表样存入数据库*/
+            quesSqlite.updateQuestionnaireData(GlobalData, name, data, function(res) {
+                if (res.success == true) {
+                    console.log("更新表样成功");
+                    /*将下载更换为删除 将未下载改为已同步*/
+                    var listLength = $(".listBody").length;
+                    $(".listBody").eq(listLength - row).find(".syncTd").empty().append("已同步");
+                    $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: ;">删除</a>`);
+                    hideShielder();
+                } else {
+                    console.log("更新表样失败");
+                }
+            });
+        }
+    });
+}
+
+function setQuestionnaireData(name) {
+
 }
 
 /**
@@ -277,16 +332,16 @@ function initQuestionnaire(cb) {
                             if (res2.success == true) {
                                 console.log("业务方案列表写入数据库成功");
 
-                                if (++countI == solutionsLength) {
-                                    /*删除isNew字段为0的数据*/
-                                    quesSqlite.deleteSolutionIsNew(GlobalData, function(res3) {
-                                        if (res3.success == true) {
-                                            console.log("删除isNew字段为0的数据成功");
-                                        } else {
-                                            console.log("删除isNew字段为0的字段失败");
-                                        }
-                                    });
-                                }
+                                // if (++countI == solutionsLength) {
+                                //     /*删除isNew字段为0的数据*/
+                                //     quesSqlite.deleteSolutionIsNew(GlobalData, function(res3) {
+                                //         if (res3.success == true) {
+                                //             console.log("删除isNew字段为0的数据成功");
+                                //         } else {
+                                //             console.log("删除isNew字段为0的字段失败");
+                                //         }
+                                //     });
+                                // }
                                 countJ[i] = 0;
 
                                 /*向服务器发送请求获取调查问卷 restfulUtil.js*/
@@ -303,22 +358,26 @@ function initQuestionnaire(cb) {
                                                 if (res4.success == true) {
                                                     console.log("调查问卷列表写入数据库成功");
                                                     if (++countJ == questionnairesAllLength) {
-                                                        quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
-                                                            if (res5.success == true) {
-                                                                console.log("删除isNew字段为0的数据成功");
-                                                                fresh.changeClassToOff($("#fresh"));
-                                                                cb({
-                                                                    success: true
-                                                                });
-                                                            } else {
-                                                                console.log("删除isNew字段为0的数据失败");
-                                                                fresh.changeClassToOff($("#fresh"));
-                                                                cb({
-                                                                    success: false,
-                                                                    data: "删除isNew字段为0的数据失败"
-                                                                });
-                                                            }
+                                                        fresh.changeClassToOff($("#fresh"));
+                                                        cb({
+                                                            success: true
                                                         });
+                                                        // quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
+                                                        //     if (res5.success == true) {
+                                                        //         console.log("删除isNew字段为0的数据成功");
+                                                        //         fresh.changeClassToOff($("#fresh"));
+                                                        //         cb({
+                                                        //             success: true
+                                                        //         });
+                                                        //     } else {
+                                                        //         console.log("删除isNew字段为0的数据失败");
+                                                        //         fresh.changeClassToOff($("#fresh"));
+                                                        //         cb({
+                                                        //             success: false,
+                                                        //             data: "删除isNew字段为0的数据失败"
+                                                        //         });
+                                                        //     }
+                                                        // });
                                                     }
                                                 } else {
                                                     console.log("调查问卷列表写入数据库失败");
@@ -495,4 +554,8 @@ function showCreateQuestionnaire() {
 function hideCreateQuestionnaire() {
     document.getElementById("hidebg").style.display = "none";
     document.getElementById("popBox").style.display = "none";
+}
+
+function test() {
+
 }

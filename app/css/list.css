@@ -203,6 +203,7 @@ body {
 }
 
 #tree #fresh {
+    cursor: pointer;
     float: left;
     width: 20px;
     height: 20px;
@@ -295,30 +296,36 @@ body {
 
 .titleTd {
     padding-left: 10px;
-    width: 30%;
-    min-width: 120px;
+    width: 25%;
+    min-width: 180px;
 }
 
 .codeTd {
     text-align: left;
     width: 25%;
-    min-width: 80px;
+    min-width: 180px;
 }
 
 .syncTd {
     text-align: left;
-    width: 15%;
-    min-width: 80px;
+    width: 10%;
+    min-width: 70px;
+}
+
+.syncTd .tempImg {
+    display: inline;
+    width: 20px;
+    height: 20px;
 }
 
 .editTd {
     width: 15%;
-    min-width: 80px;
+    min-width: 110px;
 }
 
 .operTd {
     width: 200px;
-    min-width: 150px;
+    min-width: 180px;
 }
 
 .operTd a {
