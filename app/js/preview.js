@@ -1,5 +1,13 @@
+const quesSqlite = require('./js/quesSqlite.js');
+
+const ipcRenderer = require('electron').ipcRenderer;
+
+var GlobalData = null;
+var name = null;
+
 $(function() {
-    var questionnaireData = {
+    init();
+    /*var questionnaireData = {
         "guid": "BD73034058C408483B1B79276DF506D8",
         "mainBodyId": "QUES_JSZYFZCSWJJS",
         "title": "教师专业发展测试问卷-教师卷",
@@ -478,7 +486,81 @@ $(function() {
         "float": false,
         "mainBodyGuid": "7FE2FE601E3EF2D3C2BD015D249107F0",
         "css": " .wrap {font: normal 10.5pt 宋体;line-height:22px;width: 880px;margin: -35px auto;padding:20px 10px 20px 10px;background-color: white;} #bottom_btn{width:880px;text-align:right;} blockquote{margin:3px 0;} .option{font:bold 10.5pt 宋体;width:18px;display:inline-block;} div[zb]:hover{background-color: #dfdfdf;} .level1{font: bold 12pt 仿宋_GB2312; }  .level2{font: bold 11pt 仿宋_GB2312; }  .level3{font: bold 10pt 仿宋_GB2312; }  .level4{font: bold 9pt 仿宋_GB2312; }  .level5{font: bold 8pt 仿宋_GB2312; }  "
-    };
-
-    new Questionnaire($('#main'), questionnaireData, function() {});
+    };*/
+    // new Questionnaire($('#main'), questionnaireData, function() {});
 })
+
+function init() {
+    __getGlobalData(function(res) {
+        if (res.success == true) {
+            __getTempQuestionnaireName(function(res2) {
+                if (res2.success == true) {
+                    console.log(GlobalData);
+                    console.log(name);
+                    /*根据标识获取问卷表样*/
+                    quesSqlite.getQuestionnaireDataByName(GlobalData, name, function(res3) {
+                        if (res3.success == true) {
+                            /*显示预览效果*/
+                            var questionnaireData = res3.data[0].data;
+                            // console.log(JSON.parse(questionnaireData).data);
+                            new Questionnaire($('#main'), JSON.parse(questionnaireData).data, function() {});
+                        }
+                    })
+                } else {
+                    console.log("从主进程获取标识失败");
+                    console.log(res2.data);
+                }
+            });
+        } else {
+            console.log("从主进程获取用户数据失败");
+            console.log(res.data);
+        }
+    });
+
+}
+
+/**
+ * 与主进程通信获取用户基础数据GlobalData
+ * @private
+ * @return
+ */
+function __getGlobalData(cb) {
+    try {
+        ipcRenderer.send('asynchronous-get-GlobalData-message');
+        ipcRenderer.on('asynchronous-get-GlobalData-reply', (event, arg) => {
+            GlobalData = arg;
+            console.log("渲染进程收到GlobalData");
+            cb({
+                success: true
+            });
+        });
+    } catch (err) {
+        cb({
+            success: false,
+            data: err.message
+        });
+    }
+}
+
+/**
+ * 与主进程通信获取标识
+ * @private
+ * @return
+ */
+function __getTempQuestionnaireName(cb) {
+    try {
+        ipcRenderer.send('asynchronous-get-tempQuestionnaireName-message');
+        ipcRenderer.on('asynchronous-get-tempQuestionnaireName-reply', (event, arg) => {
+            name = arg;
+            console.log("渲染进程收到tempQuestionnaireName");
+            cb({
+                success: true
+            });
+        });
+    } catch (err) {
+        cb({
+            success: false,
+            data: err.message
+        });
+    }
+}
