@@ -285,10 +285,12 @@ function preview(name, row, cb) {
                     if (res2.success == true) {
                         console.log("给主进程传递参数成功");
                         /*打开预览界面*/
-                        window.open("http://www.baidu.html");
+                        window.open("./preview.html");
+
+                        hideShielder();
                     }
                 })
-                hideShielder();
+
             }
         });
     } else {
@@ -484,11 +486,19 @@ function clickQ() {
     alert("qqq");
 }
 
+/**
+ * 显示遮蔽层
+ * @return
+ */
 function showShielder() {
     var hideobj = document.getElementById("hidebg");
     hidebg.style.display = "block";
 }
 
+/**
+ * 去掉遮蔽层
+ * @return
+ */
 function hideShielder() {
     var hideobj = document.getElementById("hidebg");
     hidebg.style.display = "none";
@@ -511,14 +521,14 @@ function __getGlobalData(cb) {
         });
     } catch (err) {
         cb({
-            success: true,
+            success: false,
             data: err.message
         });
     }
 }
 
 function __setTempQuestionnaireName(tempQuestionnaireName, cb) {
-    ipcRenderer.on('asynchronous-set-tempQuestionnaireName-reply', (event, arg) => {
+    ipcRenderer.once('asynchronous-set-tempQuestionnaireName-reply', (event, arg) => {
         console.log("主进程收到tempQuestionnaireName是否成功 " + arg);
         cb({
             success: true
@@ -617,3 +627,11 @@ function hideCreateQuestionnaire() {
     document.getElementById("hidebg").style.display = "none";
     document.getElementById("popBox").style.display = "none";
 }
+
+// function test() {
+//     restfulUtil.getQuestionnaireDataByRPCode(GlobalData, "ASDASDF", function(res) {
+//         if (res.success == true) {
+//             console.log(JSON.stringify(res.data));
+//         }
+//     });
+// }

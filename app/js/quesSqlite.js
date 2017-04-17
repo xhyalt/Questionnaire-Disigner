@@ -583,7 +583,7 @@ function __updateQuestionnaireData(GlobalData, name, data, cb) {
  * @return
  */
 function __updateQuestionnaireIsChanged(GlobalData, name, isChanged, cb) {
-    console.log("正在更新某个调查问卷的表样");
+    console.log("正在更新某个调查问卷的是否修改字段");
     db.get("update QUESTIONNAIRES set isChanged = ? where URL = ? and user = ? and name = ?", [isChanged, GlobalData.urlRoot, GlobalData.user, name], function(err) {
         if (err) {
             cb({

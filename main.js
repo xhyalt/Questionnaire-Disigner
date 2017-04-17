@@ -9,13 +9,11 @@ const glob = require('glob');
 const ipcMain = require('electron').ipcMain;
 /*保持其全局引用，不然JS被GC，windows自动关闭*/
 var mainWindow = null;
+var previewWindow = null;
 /*用户基本数据的全局引用*/
 var GlobalData = null;
 var tempQuestionnaire = null;
 var tempQuestionnaireName = null;
-
-const __restfulUtil = require('./app/js/restfulUtil.js');
-const __quesSqlite = require('./app/js/quesSqlite.js');
 
 /*监听渲染进程里发出的message，获取GlobalData*/
 ipcMain.on('asynchronous-set-GlobalData-message', (event, arg) => {
@@ -89,7 +87,7 @@ app.on('ready', function() {
         height: size.height,
         minWidth: 1200,
         minHeight: 800,
-        show: false,
+        // show: false,
         backgroundColor: '#f3f3f3'
     });
 
@@ -102,10 +100,10 @@ app.on('ready', function() {
     });
 
     /*在所有都加载完成后，再显示窗口并聚焦提醒用户*/
-    mainWindow.on('ready-to-show', function() {
-        mainWindow.show();
-        mainWindow.focus();
-        /*打开窗口后再最大化*/
-        mainWindow.maximize();
-    });
+    // mainWindow.on('ready-to-show', function() {
+    //     mainWindow.show();
+    //     mainWindow.focus();
+    //     /*打开窗口后再最大化*/
+    //     mainWindow.maximize();
+    // });
 });
