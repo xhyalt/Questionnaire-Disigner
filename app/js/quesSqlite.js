@@ -195,8 +195,20 @@ function initQuestionnairesList(GlobalData, solutionRecid, questionnaireJson, cb
                 __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res2) {
                     if (res2.success == true) {
                         // console.log("添加调查问卷成功");
-                        cb({
-                            success: true
+                        /*将调查问卷的isRemote字段置1*/
+                        __updateQuestionnaireIsRemote(GlobalData, questionnaireJson.name, "1", function(res3) {
+                            if (res3.success == true) {
+                                console.log("更新isRemote字段成功");
+                                cb({
+                                    success: true
+                                });
+                            } else {
+                                cb({
+                                    success: false,
+                                    data: "更新isRemote字段失败"
+                                });
+                            }
+
                         });
                     } else {
                         // console.log("添加调查问卷失败");
@@ -211,12 +223,22 @@ function initQuestionnairesList(GlobalData, solutionRecid, questionnaireJson, cb
                 __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res2) {
                     if (res2.success == true) {
                         // console.log("更新调查问卷成功");
-                        cb({
-                            success: true
+                        __updateQuestionnaireIsRemote(GlobalData, questionnaireJson.name, "1", function(res3) {
+                            if (res3.success == true) {
+                                console.log("更新isRemote字段成功");
+                                cb({
+                                    success: true
+                                });
+                            } else {
+                                cb({
+                                    success: false,
+                                    data: "更新isRemote字段失败"
+                                });
+                            }
+
                         });
                     } else {
                         // console.log("更新调查问卷失败");
-                        // console.log(res2.data);
                         cb({
                             success: false,
                             data: "更新调差问卷失败"
@@ -325,7 +347,7 @@ function getQuestionnaires(GlobalData, cb) {
  * @return
  */
 function getQuestionnaireDataByName(GlobalData, name, cb) {
-    __selectQuestionnaireData(GlobalData, name, function(res) {
+    __selectQuestionnaireByName(GlobalData, name, function(res) {
         if (res.success == true) {
             /*选出调查问卷成功*/
             cb({
@@ -342,14 +364,38 @@ function getQuestionnaireDataByName(GlobalData, name, cb) {
 }
 
 /**
- * 获取某问卷的表样
+ * 根据标识获取某问卷isRemote字段
+ * @param  {json}     GlobalData 用户基础数据
+ * @param  {string}   name       标识
+ * @param  {Function} cb         回调函数
+ * @return
+ */
+function getQuestionnaireIsRemoteByName(GlobalData, name, cb) {
+    __selectQuestionnaireByName(GlobalData, name, function(res) {
+        if (res.success == true) {
+            /*选出调查问卷成功*/
+            cb({
+                success: true,
+                data: res.data
+            });
+        } else {
+            cb({
+                success: false,
+                data: "获取远程字段失败"
+            });
+        }
+    });
+}
+
+/**
+ * 根据标识获取某问卷
  * @param  {json}   GlobalData 用户基础数据
  * @param  {string}   name       标识
  * @param  {Function} cb         回调函数
  * @return
  */
-function __selectQuestionnaireData(GlobalData, name, cb) {
-    console.log("正在获取某问卷的表样");
+function __selectQuestionnaireByName(GlobalData, name, cb) {
+    console.log("正在根据标识获取某问卷");
     db.all("select * from QUESTIONNAIRES where user = ? and URL = ? and name = ?", [GlobalData.user, GlobalData.urlRoot, name], function(err, row) {
         if (err) {
             cb({
@@ -441,7 +487,7 @@ function deleteTempQuestionnaire(GlobalData, tempRecid, cb) {
             });
         }
         cb({
-            success: true,
+            success: true
         });
     });
 }
@@ -457,7 +503,7 @@ function deleteTempQuestionnaire(GlobalData, tempRecid, cb) {
  */
 function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
     // console.log("正在更新调查问卷 __updateQuestionnaire");
-    db.get("update QUESTIONNAIRES set title = ?, name = ?, isNew = ?, isRemote = ? where URL = ? and user = ? and recid = ? and solutionRecid = ?", [questionnaireJson.title, questionnaireJson.name, "1", "1", GlobalData.urlRoot, GlobalData.user, questionnaireJson.recid, solutionRecid], function(err) {
+    db.get("update QUESTIONNAIRES set title = ?, name = ?, isNew = ? where URL = ? and user = ? and recid = ? and solutionRecid = ?", [questionnaireJson.title, questionnaireJson.name, "1", GlobalData.urlRoot, GlobalData.user, questionnaireJson.recid, solutionRecid], function(err) {
         if (err) {
             cb({
                 success: false,
@@ -482,7 +528,7 @@ function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
  */
 function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
     // console.log("正在添加调查问卷 __insertQuestionnaire");
-    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecid, name,  title, recid, isNew, isRemote) values(?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.title, questionnaireJson.recid, "1", "1"], function(err) {
+    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecid, name,  title, recid, isNew) values(?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.title, questionnaireJson.recid, "1"], function(err) {
         if (err) {
             console.log(err.message);
             cb({
@@ -491,7 +537,7 @@ function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
             });
         }
         cb({
-            success: true,
+            success: true
         });
     });
 }
@@ -598,6 +644,57 @@ function __updateQuestionnaireIsChanged(GlobalData, name, isChanged, cb) {
 }
 
 /**
+ * 更新某调查问卷是否在远程服务器上
+ * @private
+ * @param  GlobalData 用户基础数据
+ * @param  name       标识
+ * @param  isRemote       是否存在于远程服务器上
+ * @param  {Function} cb         回调函数
+ * @return
+ */
+function updateQuestionnaireIsRemote(GlobalData, name, isRemote, cb) {
+    if (res.success == true) {
+        __updateQuestionnaireIsRemote(GlobalData, name, isRemote, function(res) {
+            if (res.success == true) {
+                cb({
+                    success: true
+                });
+            }
+        });
+
+    } else {
+        cb({
+            success: false,
+            data: res.data
+        });
+    }
+}
+
+/**
+ * 更新某调查问卷是否存在于服务器上的字段
+ * @private
+ * @param  GlobalData        用户基础数据
+ * @param  name       标识
+ * @param  {Boolean}  isRemote  是否存在于服务器
+ * @param  {Function} cb         回调函数
+ * @return
+ */
+function __updateQuestionnaireIsRemote(GlobalData, name, isRemote, cb) {
+    console.log("正在更新某个调查问卷的是否存在于服务端");
+    db.get("update QUESTIONNAIRES set isRemote = ? where URL = ? and user = ? and name = ?", [isRemote, GlobalData.urlRoot, GlobalData.user, name], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
+/**
  * 检查是否存在该调查问卷
  * 回调函数传回select出的行数
  * @private
@@ -642,7 +739,7 @@ function deleteSolutionIsNew(GlobalData, cb) {
             });
         }
         cb({
-            success: true,
+            success: true
         });
     });
 }
@@ -691,7 +788,7 @@ function __insertSolution(GlobalData, solutionJson, cb) {
             });
         }
         cb({
-            success: true,
+            success: true
         });
 
     });
@@ -870,7 +967,7 @@ function __insertUser(GlobalData, cb) {
             });
         }
         cb({
-            success: true,
+            success: true
         });
 
     });
@@ -910,3 +1007,5 @@ exports.createTempQuestionnaire = createTempQuestionnaire;
 exports.deleteTempQuestionnaire = deleteTempQuestionnaire;
 exports.updateQuestionnaireData = updateQuestionnaireData;
 exports.getQuestionnaireDataByName = getQuestionnaireDataByName;
+exports.updateQuestionnaireIsRemote = updateQuestionnaireIsRemote;
+exports.getQuestionnaireIsRemoteByName = getQuestionnaireIsRemoteByName;
