@@ -130,6 +130,10 @@ $(function() {
     /*新建问卷监听事件end===========================*/
 });
 
+/**
+ * 刷新按钮的旋转操作
+ * @type {Object}
+ */
 var fresh = {
     changeClassToOn: function(target) {
         $(target).removeClass('off').addClass('on');
@@ -139,6 +143,10 @@ var fresh = {
     }
 }
 
+/**
+ * 获取数据 更新树
+ * @return
+ */
 function init() {
     __getGlobalData(function(res0) {
         if (res0.success == true) {
@@ -214,8 +222,8 @@ function initTree() {
 }
 
 /**
- * [树节点业务方案的点击事件]
- * @param  solutionRecidIndex [该业务方案节点的recid]
+ * 树节点业务方案的点击事件
+ * @param  solutionRecidIndex 该业务方案节点的recid
  * @return
  */
 function showQuestionnaires(solutionRecidIndex, i) {
@@ -270,6 +278,13 @@ function showQuestionnaires(solutionRecidIndex, i) {
     }
 }
 
+/**
+ * 预览问卷的点击事件
+ * @param  name 标识
+ * @param  row  行数
+ * @param  {Function} cb   回调函数
+ * @return
+ */
 function preview(name, row, cb) {
     /*判断问卷是否已经下载*/
     var listLength = $(".listBody").length;
@@ -286,18 +301,41 @@ function preview(name, row, cb) {
                         console.log("给主进程传递参数成功");
                         /*打开预览界面*/
                         window.open("./preview.html");
-
                         hideShielder();
                     }
-                })
-
+                });
+            }
+        });
+    } else if ($(".listBody").eq(listLength - row).find(".syncTd").html() == "已同步") {
+        /*已同步 直接显示*/
+        __setTempQuestionnaireName(name, function(res2) {
+            if (res2.success == true) {
+                console.log("给主进程传递参数成功");
+                /*打开预览界面*/
+                window.open("./preview.html");
+                hideShielder();
             }
         });
     } else {
-        console.log("判断为已下载");
+        /*未同步 直接显示*/
+        __setTempQuestionnaireName(name, function(res2) {
+            if (res2.success == true) {
+                console.log("给主进程传递参数成功");
+                /*打开预览界面*/
+                window.open("./preview.html");
+                hideShielder();
+            }
+        });
     }
 }
 
+/**
+ * 下载问卷的点击事件
+ * @param  name 标识
+ * @param  row  行数
+ * @param  {Function} cb   回调函数
+ * @return
+ */
 function getQuestionnaireData(name, row, cb) {
     showShielder();
     /*发送获取单个问卷表样的请求*/
@@ -310,6 +348,14 @@ function getQuestionnaireData(name, row, cb) {
     });
 }
 
+/**
+ * 发送获取某问卷表样的请求
+ * 单独封装 便于其他函数调用
+ * @param  GlobalData 用户基础数据
+ * @param  name       标识
+ * @param  {Function} cb         回调函数
+ * @return
+ */
 function getQuestionnaireDataByRPCode(GlobalData, name, cb) {
     restfulUtil.getQuestionnaireDataByRPCode(GlobalData, name, function(res) {
         if (res.success == true) {
@@ -527,6 +573,11 @@ function __getGlobalData(cb) {
     }
 }
 
+/**
+ * 给主进程发送临时问卷的标识
+ * @param tempQuestionnaireName 临时问卷的标识
+ * @param {Function} cb         回调函数
+ */
 function __setTempQuestionnaireName(tempQuestionnaireName, cb) {
     ipcRenderer.once('asynchronous-set-tempQuestionnaireName-reply', (event, arg) => {
         console.log("主进程收到tempQuestionnaireName是否成功 " + arg);
