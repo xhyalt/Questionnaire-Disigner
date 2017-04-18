@@ -137,13 +137,13 @@ function initQuestionnaire(cb) {
                                 if (++countI == solutionsLength) {
 
                                     /*删除isNew字段为0的数据*/
-                                    quesSqlite.deleteSolutionIsNew(GlobalData, function(res3) {
+                                    /*quesSqlite.deleteSolutionIsNew(GlobalData, function(res3) {
                                         if (res3.success == true) {
                                             console.log("删除isNew字段为0的数据成功");
                                         } else {
                                             console.log("删除isNew字段为0的字段失败");
                                         }
-                                    });
+                                    });*/
                                 }
                                 countJ[i] = 0;
 
@@ -163,9 +163,11 @@ function initQuestionnaire(cb) {
                                                 if (res4.success == true) {
                                                     console.log("调查问卷列表写入数据库成功");
                                                     if (++countJ == questionnairesAllLength) {
-
+                                                        cb({
+                                                            success: true
+                                                        });
                                                         /*判断是否为最后一次 最后一次删除其余*/
-                                                        quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
+                                                        /*quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
                                                             if (res5.success == true) {
                                                                 console.log("删除isNew字段为0的数据成功");
                                                                 cb({
@@ -178,7 +180,7 @@ function initQuestionnaire(cb) {
                                                                     data: "删除isNew字段为0的数据失败"
                                                                 });
                                                             }
-                                                        });
+                                                        });*/
                                                     }
                                                 } else {
                                                     console.log("调查问卷列表写入数据库失败");
