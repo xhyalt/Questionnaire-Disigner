@@ -72,9 +72,9 @@ function getQuestionnaires(GlobalData, obj, cb) {
  * @param  {Function} cb         [回调函数]
  * @return
  */
-function getQuestionnaireDataByRPCode(GlobalData, obj, cb) {
+function getQuestionnaireInfo(GlobalData, obj, cb) {
     __getData(3, {
-        url: __getQuestionnaireDataByRPCodeURL(GlobalData),
+        url: __getQuestionnaireInfoURL(GlobalData),
         body: {
             method: "POST",
             timeout: 3000,
@@ -145,8 +145,8 @@ function __getQuestionnairesURL(GlobalData) {
  * @param  GlobalData [用户基础数据]
  * @return 获取问卷列表以及问卷样式的URL
  */
-function __getQuestionnaireDataByRPCodeURL(GlobalData) {
-    var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/getQuestionnaireDataByRPCode?user=${GlobalData.user}&src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
+function __getQuestionnaireInfoURL(GlobalData) {
+    var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/getQuestionnaireDataInfo?user=${GlobalData.user}&src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
     return url;
 }
 
@@ -164,4 +164,4 @@ function __getTokenUrl(GlobalData) {
 exports.getToken = getToken;
 exports.getSolutions = getSolutions;
 exports.getQuestionnaires = getQuestionnaires;
-exports.getQuestionnaireDataByRPCode = getQuestionnaireDataByRPCode;
+exports.getQuestionnaireInfo = getQuestionnaireInfo;

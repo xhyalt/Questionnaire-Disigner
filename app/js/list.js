@@ -248,11 +248,11 @@ function showQuestionnaires(solutionRecidIndex, i) {
             } else if (questionnairesInfo[i].isChanged == "0") {
                 /*data不为空 且 没有修改 表示已同步*/
                 syncTd = "已同步";
-                tempItem = `<a href="javascript: ;">删除</a>`;
+                tempItem = `<a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>`;
             } else {
                 /*data不为空 且 已经修改 表示未同步*/
                 syncTd = "未同步";
-                tempItem = `<a href="javascript: ;">删除</a><a href="javascript: setQuestionnaireData('${questionnairesInfo[i].name}');">上传</a>`;
+                tempItem = `<a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><a href="javascript: setQuestionnaireData('${questionnairesInfo[i].name}');">上传</a>`;
             }
 
             if (questionnairesInfo[i].editTime == null || questionnairesInfo[i].editTime == "") {
@@ -270,11 +270,34 @@ function showQuestionnaires(solutionRecidIndex, i) {
                     <td class="editTd">${editTd}</td>
                     <td class="operTd">
                         <a href="javascript: ;">编辑</a>
-                        <a href="javascript: preview('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a>
+                        <a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a>
                         <div style="display:inline">${tempItem}</div>
                     </td>
                 </tr>`);
         }
+    }
+}
+
+/**
+ * 删除调查问卷点击事件
+ * 判断问卷是否远程和是否已同步
+ * 远程且已同步 提示不能删除所有 删除本地表样
+ * 远程且未同步 提示还为同步 删除本地表样
+ * 本地且未同步 提示将直接删除所有
+ * @param  {[type]}   name [description]
+ * @param  {[type]}   row  [description]
+ * @param  {Function} cb   [description]
+ * @return {[type]}        [description]
+ */
+function deleteQuestionnaire(name, row, cb) {
+    var listLength = $(".listBody").length;
+    if($(".listBody").eq(listLength - row).find(".syncTd").html() == "已同步"){
+        /*已同步 判断是否远程*/
+        quesSqlite.getQuestionnaireIsRemoteByName(GlobalData, name, function(res){
+
+        });
+    }else{
+        /*未同步 提示 直接删除*/
     }
 }
 
@@ -285,13 +308,13 @@ function showQuestionnaires(solutionRecidIndex, i) {
  * @param  {Function} cb   回调函数
  * @return
  */
-function preview(name, row, cb) {
+function previewQuestionnaire(name, row, cb) {
     /*判断问卷是否已经下载*/
     var listLength = $(".listBody").length;
     if ($(".listBody").eq(listLength - row).find(".syncTd").html() == "未下载") {
         /*未下载 下载问卷表样*/
         showShielder();
-        getQuestionnaireDataByRPCode(GlobalData, name, function(res) {
+        getQuestionnaireInfo(GlobalData, name, function(res) {
             if (res.success == true) {
                 /*将下载更换为删除 将未下载改为已同步*/
                 changeSyn(name, row, 1);
@@ -339,7 +362,7 @@ function preview(name, row, cb) {
 function getQuestionnaireData(name, row, cb) {
     showShielder();
     /*发送获取单个问卷表样的请求*/
-    getQuestionnaireDataByRPCode(GlobalData, name, function(res) {
+    getQuestionnaireInfo(GlobalData, name, function(res) {
         if (res.success == true) {
             /*将下载更换为删除 将未下载改为已同步*/
             changeSyn(name, row, 1);
@@ -356,10 +379,10 @@ function getQuestionnaireData(name, row, cb) {
  * @param  {Function} cb         回调函数
  * @return
  */
-function getQuestionnaireDataByRPCode(GlobalData, name, cb) {
-    restfulUtil.getQuestionnaireDataByRPCode(GlobalData, name, function(res) {
+function getQuestionnaireInfo(GlobalData, name, cb) {
+    restfulUtil.getQuestionnaireInfo(GlobalData, name, function(res) {
         if (res.success == true) {
-            data = JSON.stringify(res.resJson.questionnairedata);
+            data = JSON.stringify(res.resJson.dataInfo);
             /*将获取的表样存入数据库*/
             quesSqlite.updateQuestionnaireData(GlobalData, name, data, function(res) {
                 if (res.success == true) {
@@ -386,17 +409,13 @@ function changeSyn(name, row, method) {
         case 1:
             {
                 $(".listBody").eq(listLength - row).find(".syncTd").empty().append("已同步");
-                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: ;">删除</a>`);
+                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: deleteQuestionnaire('${name}', ${row}, function(res){});">删除</a>`);
             }
             break;
         case 2:
             {}
             break;
     }
-}
-
-function setQuestionnaireData(name) {
-    /*上传问卷表样的逻辑*/
 }
 
 /**
@@ -680,7 +699,7 @@ function hideCreateQuestionnaire() {
 }
 
 // function test() {
-//     restfulUtil.getQuestionnaireDataByRPCode(GlobalData, "ASDASDF", function(res) {
+//     restfulUtil.getQuestionnaireInfo(GlobalData, "ASDASDF", function(res) {
 //         if (res.success == true) {
 //             console.log(JSON.stringify(res.data));
 //         }

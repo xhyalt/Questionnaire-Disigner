@@ -502,8 +502,8 @@ function init() {
                         if (res3.success == true) {
                             /*显示预览效果*/
                             var questionnaireData = res3.data[0].data;
-                            // console.log(JSON.parse(questionnaireData).data);
-                            new Questionnaire($('#main'), JSON.parse(questionnaireData).data, function() {});
+                            // console.log(questionnaireData);
+                            new Questionnaire($('#main'), JSON.parse(questionnaireData), function() {});
                         }
                     })
                 } else {
