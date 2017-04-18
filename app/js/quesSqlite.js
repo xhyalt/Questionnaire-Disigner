@@ -442,7 +442,7 @@ function __updateQustionnaireIsNew(GlobalData, cb) {
  * @param  {Function} cb [回调函数]
  * @return
  */
-function deleteQustionnaireIsNew(GlobalData, solutionRecid, cb) {
+function deleteQuestionnaireIsNew(GlobalData, solutionRecid, cb) {
     console.log("正在删除所有isNew字段为0的业务方案");
     db.get("delete from QUESTIONNAIRES where URL = ? and user = ? and solutionRecid = ? and isNew = ?", [GlobalData.urlRoot, GlobalData.user, solutionRecid, "0"], function(err) {
         if (err) {
@@ -504,6 +504,35 @@ function deleteTempQuestionnaire(GlobalData, tempRecid, cb) {
 function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
     // console.log("正在更新调查问卷 __updateQuestionnaire");
     db.get("update QUESTIONNAIRES set title = ?, name = ?, isNew = ? where URL = ? and user = ? and recid = ? and solutionRecid = ?", [questionnaireJson.title, questionnaireJson.name, "1", GlobalData.urlRoot, GlobalData.user, questionnaireJson.recid, solutionRecid], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
+function deleteQuestionnaireByName(GlobalData, name, cb) {
+    console.log("正在删除调查问卷");
+    __deleteQuestionnaire(GlobalData, name, function(res) {
+        if (res.success == true) {
+            cb({
+                success: true
+            });
+        } else {
+            cb({
+                success: false
+            });
+        }
+    });
+}
+
+function __deleteQuestionnaireByName(GlobalData, name, cb) {
+    db.run("delete from QUESTIONNAIRES where URL = ? and user = ? and name = ?", [GlobalData.urlRoot, GlobalData.user, name], function(err) {
         if (err) {
             cb({
                 success: false,
@@ -1002,10 +1031,11 @@ exports.getSolutions = getSolutions;
 exports.getQuestionnaires = getQuestionnaires;
 exports.updateIsNew = updateIsNew;
 exports.deleteSolutionIsNew = deleteSolutionIsNew;
-exports.deleteQustionnaireIsNew = deleteQustionnaireIsNew;
+exports.deleteQuestionnaireIsNew = deleteQuestionnaireIsNew;
 exports.createTempQuestionnaire = createTempQuestionnaire;
 exports.deleteTempQuestionnaire = deleteTempQuestionnaire;
 exports.updateQuestionnaireData = updateQuestionnaireData;
 exports.getQuestionnaireDataByName = getQuestionnaireDataByName;
 exports.updateQuestionnaireIsRemote = updateQuestionnaireIsRemote;
 exports.getQuestionnaireIsRemoteByName = getQuestionnaireIsRemoteByName;
+exports.deleteQuestionnaireByName = deleteQuestionnaireByName;

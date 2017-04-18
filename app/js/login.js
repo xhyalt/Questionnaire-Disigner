@@ -167,7 +167,7 @@ function initQuestionnaire(cb) {
                                                             success: true
                                                         });
                                                         /*判断是否为最后一次 最后一次删除其余*/
-                                                        /*quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
+                                                        /*quesSqlite.deleteQuestionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
                                                             if (res5.success == true) {
                                                                 console.log("删除isNew字段为0的数据成功");
                                                                 cb({

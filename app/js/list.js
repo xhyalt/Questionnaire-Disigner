@@ -180,7 +180,6 @@ function initTree() {
     quesSqlite.getSolutions(GlobalData, function(res) {
         if (res.success == true) {
             console.log("获取所有业务方案成功");
-            // console.log(JSON.stringify(res.data));
             solutionsLength = res.data.length;
             solutionsInfo = res.data;
             /*添加业务方案的树结点*/
@@ -291,13 +290,82 @@ function showQuestionnaires(solutionRecidIndex, i) {
  */
 function deleteQuestionnaire(name, row, cb) {
     var listLength = $(".listBody").length;
-    if($(".listBody").eq(listLength - row).find(".syncTd").html() == "已同步"){
-        /*已同步 判断是否远程*/
-        quesSqlite.getQuestionnaireIsRemoteByName(GlobalData, name, function(res){
-
+    if ($(".listBody").eq(listLength - row).find(".syncTd").html() == "已同步") {
+        /*已同步*/
+        var txt = "该调查问卷已经同步，只能删除表样。";
+        window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+            if (res.data == true) {
+                /*点击了确定，删除表样*/
+                quesSqlite.updateQuestionnaireData(GlobalData, name, "", function(res2) {
+                    if (res2.success == true) {
+                        console.log("更新表样成功");
+                        changeSyn(name, row, 2);
+                        cb({
+                            success: true
+                        });
+                    } else {
+                        console.log("更新表样失败");
+                        cb({
+                            success: false,
+                            data: res.data
+                        });
+                    }
+                });
+            }
         });
-    }else{
-        /*未同步 提示 直接删除*/
+    } else {
+        /*未同步 判断是否远程*/
+        quesSqlite.getQuestionnaireIsRemoteByName(GlobalData, name, function(res) {
+            if (res.success == true) {
+                console.log("修改isRemote字段成功");
+                console.log(res.data);
+                if (res.data.isRemote == "1") {
+                    /*该调查问卷已存在于服务器上 提示现在还未同步*/
+                    var txt = "该问卷尚未同步，是否仍旧删除表样？";
+                    window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+                        if (res.data == true) {
+                            /*点击确定 删除表样*/
+                            quesSqlite.updateQuestionnaireData(GlobalData, name, "", function(res2) {
+                                if (res2.success == true) {
+                                    console.log("更新表样成功");
+                                    changeSyn(name, row, 2);
+                                    cb({
+                                        success: true
+                                    });
+                                } else {
+                                    console.log("更新表样失败");
+                                    cb({
+                                        success: false,
+                                        data: res.data
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    /*该调查问卷不存在服务器上*/
+                    var txt = "该问卷尚未同步，是否仍旧删除所有信息？";
+                    window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+                        if (res.data == true) {
+                            /*点击确定 删除问卷所有信息*/
+                            quesSqlite.deleteQuestionnaireByName(GlobalData, name, function(res2) {
+                                if (res2.success == true) {
+                                    $(".listBody").eq(listLength - row).empty();
+                                    cb({
+                                        success: true
+                                    });
+                                } else {
+                                    cb({
+                                        success: true,
+                                        data: "删除问卷失败"
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
     }
 }
 
@@ -413,7 +481,15 @@ function changeSyn(name, row, method) {
             }
             break;
         case 2:
-            {}
+            {
+                $(".listBody").eq(listLength - row).find(".syncTd").empty().append("未下载");
+                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: getQuestionnaireData('${name}', ${row});">下载</a>`);
+            }
+            break;
+        case 3:
+            {
+
+            }
             break;
     }
 }
@@ -481,7 +557,7 @@ function initQuestionnaire(cb) {
                                                         cb({
                                                             success: true
                                                         });
-                                                        // quesSqlite.deleteQustionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
+                                                        // quesSqlite.deleteQuestionnaireIsNew(GlobalData, solutionsInfo[i].recid, function(res5) {
                                                         //     if (res5.success == true) {
                                                         //         console.log("删除isNew字段为0的数据成功");
                                                         //         fresh.changeClassToOff($("#fresh"));
