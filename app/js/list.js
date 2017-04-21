@@ -51,7 +51,7 @@ $(function() {
 
     $("#listTable").on("mouseover", ".listBody", function() {
         $(this).css({
-            "background-color": "#f8fefd",
+            "background-color": "#c9f8f0",
             "border-left": "3px solid #1ABC9C"
         });
     }).on("mouseout", ".listBody", function() {

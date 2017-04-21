@@ -541,7 +541,7 @@ $(function() {
     /*body 点击事件*/
     $(document).on('click', function(event) {
         var target = $(event.target);
-        if (popMenu == true && popEditor == false && !target.hasClass('popMenu') &&
+        if (popMenu == true && !target.hasClass('popMenu') &&
             target[0] != activeSubject.children().children(".stemText")[0] &&
             target.parents('.popMenu').length == 0
         ) {
@@ -565,8 +565,6 @@ $(function() {
                 activeSubject = null;
                 $("#right").empty();
             });
-        } else if (popEditor == true && popMenu == false) {
-            /*获取富文本编辑器中的内容，放到div中*/
         }
     });
     /*题目设置监听事件end================*/
@@ -996,6 +994,9 @@ function __showPopMenu($td, type) {
     $(".maxLength").attr("value", subject[connection].maxLength);
 
     popMenu = true;
+    $(".popMenu").css({
+        top: `${position}px`
+    });
 
     $(".popMenu").animate({
         left: '0px',
