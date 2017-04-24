@@ -8,12 +8,11 @@ function saveQuestionnaire() {
     /*获取问卷的JSON*/
     getQuestionnaireJson(function(res) {
         if (res.success == true) {
+            console.log(res.data);
             /*去掉遮蔽层*/
             hideShielder();
         }
     });
-
-
 }
 
 function showShielder() {
@@ -27,33 +26,42 @@ function hideShielder() {
 }
 
 function getQuestionnaireJson(cb) {
-    var flag = 1;
     mainData = {
-        "groupguid": tempQuestionnaire.solutionRecid,
         "title": tempQuestionnaire.title,
         "readonly": false,
-        "readonlyfilter": "1",
-        "subtitle": "1",
+        "subtitle": "",
         "subno": "1",
-        "usesqlfloatfml": false,
         "reportGroupGuid": tempQuestionnaire.solutionRecid,
-        "securityClass": "",
-        "selitemarr": "",
-        "index": $("#target .subject, #target .unSubject").length,
-        "filter": "",
+        "solutionName": "",
         "description": "",
         "name": tempQuestionnaire.name,
-    }
+        "float": "",
+        "dataInfo": {}
+    };
+    getPattern(function(res) {
+        if (res.success == true) {
+            main Data.data = res.data;
+            console.log(mainData);
+            cb({
+                success: true,
+                data: mainData
+            })
+        }
+    });
+}
+
+function getPatternJson(cb) {
+    var flag = 1;
+
     var questionnaireData = {
         "guid": tempQuestionnaire.recid,
-
         "title": tempQuestionnaire.title,
         "autoNo": true,
         "name": tempQuestionnaire.name,
-        "grouplist":[],
+        "question": "",
         "float": false,
         "mainBodyGuid": "",
-        "css": ".wrap{ 			font: normal10.5pt宋体;line-height: 22px;width: 880px;margin: -35pxauto;padding: 20px10px20px10px;background-color: white; 		}#bottom_btn{ 			width: 880px;text-align: right; 		}blockquote{ 			margin: 3px0; 		}.option{ 			font: bold10.5pt宋体;width: 18px;display: inline-block; 		}div[zb]: hover{ 			background-color: #dfdfdf; 		}.level1{ 			font: bold12pt仿宋_GB2312; 		}.level2{ 			font: bold11pt仿宋_GB2312; 		}.level3{ 			font: bold10pt仿宋_GB2312; 		}.level4{ 			font: bold9pt仿宋_GB2312; 		}.level5{ 			font: bold8pt仿宋_GB2312; 		}"
+        "css": ""
     }
     var Subjects = $("#target .subject, #target .unSubject");
     for (var i = 0; i < Subjects.length; i++) {
@@ -61,17 +69,18 @@ function getQuestionnaireJson(cb) {
         var tempSubject = getSubjectJson(Subjects.eq(i), type);
         questionnaireData.grouplist.push(tempSubject);
     }
-    mainData.data = questionnaireData;
-    console.log(mainData);
+
+    console.log(questionnaireData);
     cb({
-        success: true
+        success: true,
+        data: questionnaireData
     });
 }
 
 function getSubjectJson($td, type) {
     var connection = $td.attr("connection");
     var tempSubject = null;
-    if (type == "merge") {
+    if (type == "group") {
         tempSubject = {
             "title": $td.children().children(".stemText").html(),
             "level": "level" + $td.attr("level"),
@@ -91,23 +100,23 @@ function getSubjectJson($td, type) {
             "hidden": false,
             "description": $td.children().children(".descriptionText").html(),
             "nullable": !subject[connection].forced,
+            "optionlayout": 1,
             "question": newGuid(),
             "type": "single",
-            "levelNum": $td.children().children("h4").html(),
-            "optionlayout": 1,
-            "options": []
+            "levelNum": "",
+            "options": [],
         }
         var options = $td.children().children(".itemBox").children("li");
         for (var j = 0; j < options.length; j++) {
             var tempOption = {
-                "selected": false,
                 "title": options.eq(j).children(".ItemText").html(),
-                "relquestion": [],
                 "zbName": "",
+                "optionNum": options.eq(j).children(".initials").html(),
+                "selected": false,
+                "relquestion": [],
                 "inputable": false,
-                "optionNum": options.eq(j).children(".initials").html()
             }
-            tempSubject.options.push(tempOption);
+            tempSubject.datailInfo.options.push(tempOption);
         }
     } else if (type == "multiple") {
         tempSubject = {
@@ -118,13 +127,13 @@ function getSubjectJson($td, type) {
             "hidden": false,
             "description": $td.children().children(".descriptionText").html(),
             "nullable": !subject[connection].forced,
-            "question": newGuid(),
             "type": "multiple",
             "levelNum": $td.children().children("h4").html(),
-            "optionlayout": 1,
-            "options": [],
             "maxnum": subject[connection].maxSelectItem,
-            "minnum": subject[connection].minSelectItem
+            "minnum": subject[connection].minSelectItem,
+            "question": newGuid(),
+            "optionlayout": 1,
+            "options": []
         }
         var options = $td.children().children(".itemBox").children("li");
         for (var j = 0; j < options.length; j++) {
