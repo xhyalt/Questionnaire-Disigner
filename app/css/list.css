@@ -41,14 +41,23 @@ body {
 
 /*头部分*/
 
+#headParent{
+    position: fixed;
+    height: 70px;
+    width: 100%;
+    background-color: #f3f3f3;
+}
+
 #head {
+    position: fixed;
     margin-top: 20px;
     margin-left: 50px;
     margin-right: 50px;
     height: 35px;
+    width: 100%;
     line-height: 35px;
     min-width: 950px;
-    /*position: fixed;*/
+    background-color: #f3f3f3;
 }
 
 
@@ -138,8 +147,9 @@ body {
 /*搜索框部分*/
 
 #searchBar {
-    float: right;
+    margin-left: 310px;
     background-color: #fff;
+    width: 240px;
 }
 
 .tab_search {
@@ -176,18 +186,18 @@ body {
 /*主要列表部分*/
 
 #middle {
-    margin-top: 20px;
     margin-left: 50px;
     margin-right: 50px;
 }
 
 #tree {
-    position: absolute;
+    position: fixed;
     padding: 15px;
     width: 270px;
     height: 80%;
     background-color: #fff;
     min-height: 100px;
+    margin-top: 70px;
     /*margin-right: 10px;*/
 }
 
@@ -267,6 +277,7 @@ body {
     min-width: 600px;
     max-height: 80%;
     overflow-x: hidden;
+    margin-top: 70px;
 }
 
 #listTable {
