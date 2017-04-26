@@ -114,9 +114,14 @@ function getPatternJson(cb) {
 
 function getSubjectJson($td, type) {
     var connection = $td.attr("connection");
-    var tempSubject = null;
-    if (type == "merge") {
+    var tempGUID = $td.attr("guid");
+    if (tempGUID == "" || tempGUID == null || tempGUID == undefined) {
         tempGUID = newGuid();
+        $td.attr("guid", tempGUID);
+        console.log("hehe");
+    }
+
+    if (type == "merge") {
         tempSubject = {
             "title": $td.children().children(".stemText").html(),
             "level": "level" + $td.attr("level"),
@@ -137,7 +142,7 @@ function getSubjectJson($td, type) {
             "description": $td.children().children(".descriptionText").html(),
             "nullable": !subject[connection].forced,
             "optionlayout": 1,
-            "question": newGuid(),
+            "question": tempGUID,
             "type": "single",
             "levelNum": "",
             "options": [],
@@ -167,7 +172,7 @@ function getSubjectJson($td, type) {
             "levelNum": $td.children().children("h4").html(),
             "maxnum": subject[connection].maxSelectItem,
             "minnum": subject[connection].minSelectItem,
-            "question": newGuid(),
+            "question": tempGUID,
             "optionlayout": 1,
             "options": []
         };
@@ -190,7 +195,7 @@ function getSubjectJson($td, type) {
             "hidden": false,
             "description": $td.children().children(".descriptionText").html(),
             "nullable": !subject[connection].forced,
-            "question": newGuid(),
+            "question": tempGUID,
             "type": "fillblanks",
             "levelNum": $td.children().children("h4").html(),
             "blanks": [],
@@ -205,7 +210,7 @@ function getSubjectJson($td, type) {
             "zbName": "",
             "description": $td.children().children(".descriptionText").html(),
             "nullable": !subject[connection].forced,
-            "question": newGuid(),
+            "question": tempGUID,
             "type": "shortanswer",
             "levelNum": $td.children().children("h4").html(),
             "width": 800,
@@ -220,7 +225,7 @@ function getSubjectJson($td, type) {
             "hidden": false,
             "description": $td.children().children(".descriptionText").html(),
             "nullable": !subject[connection].forced,
-            "question": newGuid(),
+            "question": tempGUID,
             "type": "order",
             "levelNum": $td.children().children("h4").html(),
             "optionlayout": 1,
@@ -245,7 +250,7 @@ function getSubjectJson($td, type) {
             "description": "",
             "nullable": true,
             "hidden": false,
-            "question": newGuid(),
+            "question": tempGUID,
             "type": "static",
             "levelNum": ""
         };
@@ -256,7 +261,7 @@ function getSubjectJson($td, type) {
             "description": "",
             "nullable": true,
             "hidden": false,
-            "question": newGuid(),
+            "question": tempGUID,
             "type": "static",
             "levelNum": ""
         };
