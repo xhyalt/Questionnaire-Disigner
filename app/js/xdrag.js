@@ -157,10 +157,10 @@ $(document).ready(function() {
                         father = $(mergesTop[0]).parent().parent().attr["father"];
                         $temp.html($($temp.html()).attr("level", level));
                         $temp.html($($temp.html()).attr("father", father));
-                        var current = $($temp.html()).insertBefore($(mergesTop[0]).parent().parent());
+                        var current = $($temp.html()).insertBefore($(mergesTop[0]).parent().parent()).eq(0);
 
                         setOrder();
-                        addSubjectJson(current[0], type);
+                        addSubjectJson(current, type);
                     } else {
                         $("#target").append($temp.html());
                         setOrder();
