@@ -1,4 +1,5 @@
 var mainData = null;
+var tempGUID = null;
 
 function saveQuestionnaire() {
     console.log("正在保存");
@@ -38,9 +39,9 @@ function getQuestionnaireJson(cb) {
         "float": "",
         "dataInfo": {}
     };
-    getPattern(function(res) {
+    getPatternJson(function(res) {
         if (res.success == true) {
-            main Data.data = res.data;
+            mainData.data = res.data;
             console.log(mainData);
             cb({
                 success: true,
@@ -58,7 +59,7 @@ function getPatternJson(cb) {
         "title": tempQuestionnaire.title,
         "autoNo": true,
         "name": tempQuestionnaire.name,
-        "question": "",
+        "questions": [],
         "float": false,
         "mainBodyGuid": "",
         "css": ""
@@ -67,10 +68,44 @@ function getPatternJson(cb) {
     for (var i = 0; i < Subjects.length; i++) {
         var type = getType(Subjects.eq(i));
         var tempSubject = getSubjectJson(Subjects.eq(i), type);
-        questionnaireData.grouplist.push(tempSubject);
+        console.log(type);
+        console.log(tempSubject);
+        // console.log(Subjects.eq(i).parent().parent().parent(".mergeDiv").eq(0).attr("class"));
+
+        if (typeof(Subjects.eq(i).parent().parent().parent(".mergeDiv").eq(0).attr("class")) == "string") {
+            /*父节点为合并题 深度遍历*/
+            tempLength = questionnaireData.questions.length;
+            tempJson = questionnaireData.questions[tempLength - 1];
+            var flag = 1;
+
+            while (tempJson.type == "group" && flag == 1) {
+                console.log("这是一道合并题");
+                tempLength2 = tempJson.questions.length;
+                if (tempLength2 > 0) {
+                    tempJson2 = tempJson.questions[tempLength2 - 1];
+                    if (tempJson2.type != "group") {
+                        console.log("添加到该层");
+                        tempJson.questions.push(tempSubject);
+                        flag = 0;
+                    } else {
+                        /*继续向下深度遍历*/
+                        console.log("继续向下深度遍历");
+                        tempLength = tempLength2;
+                        tempJson = tempJson2;
+                    }
+                } else {
+                    /*该合并题中没有题目 直接添加到该合并题下*/
+                    console.log("该合并题中还没有题 直接添加");
+                    tempJson.questions.push(tempSubject);
+                    flag = 0;
+                }
+            }
+        } else {
+            questionnaireData.questions.push(tempSubject);
+        }
     }
 
-    console.log(questionnaireData);
+    console.log(JSON.stringify(questionnaireData));
     cb({
         success: true,
         data: questionnaireData
@@ -80,17 +115,18 @@ function getPatternJson(cb) {
 function getSubjectJson($td, type) {
     var connection = $td.attr("connection");
     var tempSubject = null;
-    if (type == "group") {
+    if (type == "merge") {
+        tempGUID = newGuid();
         tempSubject = {
             "title": $td.children().children(".stemText").html(),
             "level": "level" + $td.attr("level"),
             "hidden": false,
             "description": "",
             "questions": [],
-            "question": newGuid(),
+            "question": tempGUID,
             "type": "group",
             "levelNum": $td.children().children("h4").html()
-        }
+        };
     } else if (type == "radio") {
         tempSubject = {
             "title": $td.children().children(".stemText").html(),
@@ -105,7 +141,7 @@ function getSubjectJson($td, type) {
             "type": "single",
             "levelNum": "",
             "options": [],
-        }
+        };
         var options = $td.children().children(".itemBox").children("li");
         for (var j = 0; j < options.length; j++) {
             var tempOption = {
@@ -116,7 +152,7 @@ function getSubjectJson($td, type) {
                 "relquestion": [],
                 "inputable": false,
             }
-            tempSubject.datailInfo.options.push(tempOption);
+            tempSubject.options.push(tempOption);
         }
     } else if (type == "multiple") {
         tempSubject = {
@@ -134,7 +170,7 @@ function getSubjectJson($td, type) {
             "question": newGuid(),
             "optionlayout": 1,
             "options": []
-        }
+        };
         var options = $td.children().children(".itemBox").children("li");
         for (var j = 0; j < options.length; j++) {
             var tempOption = {
@@ -144,7 +180,7 @@ function getSubjectJson($td, type) {
                 "zbName": "",
                 "inputable": false,
                 "optionNum": options.eq(j).children(".initials").html()
-            }
+            };
             tempSubject.options.push(tempOption);
         }
     } else if (type == "completion") {
@@ -159,7 +195,7 @@ function getSubjectJson($td, type) {
             "levelNum": $td.children().children("h4").html(),
             "blanks": [],
             "score": ""
-        }
+        };
     } else if (type == "shortAnswer") {
         tempSubject = {
             "title": $td.children().children(".stemText").html(),
@@ -176,7 +212,7 @@ function getSubjectJson($td, type) {
             "hight": 30 * subject[connection].showLine,
             "maxnum": subject[connection].maxLength,
             "minnum": subject[connection].minLength
-        }
+        };
     } else if (type == "sort") {
         tempSubject = {
             "title": $td.children().children(".stemText").html(),
@@ -189,7 +225,7 @@ function getSubjectJson($td, type) {
             "levelNum": $td.children().children("h4").html(),
             "optionlayout": 1,
             "options": []
-        }
+        };
         var options = $td.children().children(".itemBox").children("li");
         for (var j = 0; j < options.length; j++) {
             var tempOption = {
@@ -199,7 +235,7 @@ function getSubjectJson($td, type) {
                 "zbName": "",
                 "inputable": false,
                 "optionNum": options.eq(j).children(".initials").html()
-            }
+            };
             tempSubject.options.push(tempOption);
         }
     } else if (type == "description") {
@@ -212,7 +248,7 @@ function getSubjectJson($td, type) {
             "question": newGuid(),
             "type": "static",
             "levelNum": ""
-        }
+        };
     } else if (type == "dividingLine") {
         tempSubject = {
             "title": "<hr/>",
@@ -223,7 +259,7 @@ function getSubjectJson($td, type) {
             "question": newGuid(),
             "type": "static",
             "levelNum": ""
-        }
+        };
     }
     return tempSubject;
 }
