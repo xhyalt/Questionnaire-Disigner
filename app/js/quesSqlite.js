@@ -63,7 +63,7 @@ function initDB(GlobalData, cb) {
             /*已存在数据库，调用查找函数*/
             // console.log("表已存在");
             /*判断表中是否存在该用户数据*/
-            __checkUser(GlobalData, function(res2) {
+            __selectUser(GlobalData, function(res2) {
                 if (res2.success == true) {
                     /*查询用户成功*/
                     if (res2.data["count(1)"] == 0) {
@@ -516,6 +516,49 @@ function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb)
     });
 }
 
+/**
+ * 更新问卷的主标题和副标题
+ * @public
+ * @param  GlobalData        用户基础数据
+ * @param  questionnaireJson 问卷信息
+ * @return
+ */
+function updateQuestionnaireTitle(GlobalData, questionnaireJson, cb) {
+    __updateQuestionnaireTitle(GlobalData, questionnaireJson, function(res) {
+        if (res.success == true) {
+            cb({
+                success: true
+            });
+        } else {
+            cb({
+                success: false,
+                data: res.data
+            });
+        }
+    });
+}
+
+/**
+ * 更新问卷的主标题和副标题
+ * @private
+ * @param  GlobalData        用户基础数据
+ * @param  questionnaireJson 问卷信息
+ * @return
+ */
+function __updateQuestionnaireTitle(GlobalData, questionnaireJson, cb) {
+    db.get("update QUESTIONNAIRES set title = ?, subtitle = ? where URL = ? and user = ? and name = ?", [questionnaireJson.title, questionnaireJson.subtitle, GlobalData.urlRoot, GlobalData.user, questionnaireJson.name], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
 function deleteQuestionnaireByName(GlobalData, name, cb) {
     console.log("正在删除调查问卷");
     __deleteQuestionnaire(GlobalData, name, function(res) {
@@ -557,7 +600,7 @@ function __deleteQuestionnaireByName(GlobalData, name, cb) {
  */
 function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
     // console.log("正在添加调查问卷 __insertQuestionnaire");
-    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecid, name,  title, recid, isNew) values(?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.title, questionnaireJson.recid, "1"], function(err) {
+    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecd, name, no, reportGroupCode, title, subtitle, recid, isNew) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.no, questionnaireJson.reportGroupCode, questionnaireJson.title, questionnaireJson.subtitle, questionnaireJson.recid, "1"], function(err) {
         if (err) {
             console.log(err.message);
             cb({
@@ -634,7 +677,7 @@ function updateQuestionnaireData(GlobalData, name, data, cb) {
  * @return
  */
 function __updateQuestionnaireData(GlobalData, name, data, cb) {
-    console.log("正在更新某个调查问卷的表样");
+    // console.log("正在更新某个调查问卷的表样");
     db.get("update QUESTIONNAIRES set data = ? where URL = ? and user = ? and name = ?", [data, GlobalData.urlRoot, GlobalData.user, name], function(err) {
         if (err) {
             cb({
@@ -658,7 +701,7 @@ function __updateQuestionnaireData(GlobalData, name, data, cb) {
  * @return
  */
 function __updateQuestionnaireIsChanged(GlobalData, name, isChanged, cb) {
-    console.log("正在更新某个调查问卷的是否修改字段");
+    // console.log("正在更新某个调查问卷的是否修改字段");
     db.get("update QUESTIONNAIRES set isChanged = ? where URL = ? and user = ? and name = ?", [isChanged, GlobalData.urlRoot, GlobalData.user, name], function(err) {
         if (err) {
             cb({
@@ -935,7 +978,7 @@ function __createTable(cb) {
 
             db.run("create table SOLUTIONS(URL TEXT, user TEXT, periodType TEXT, name TEXT, minPeriod TEXT, maxPeriod TEXT, title TEXT, recid TEXT, isNew TEXT)");
 
-            db.run("create table QUESTIONNAIRES(URL TEXT, user TEXT, solutionRecid TEXT, name TEXT, title TEXT, recid TEXT, isNew TEXT, data TEXT, isChanged TEXT, isRemote TEXT, editTime TEXT)");
+            db.run("create table QUESTIONNAIRES(URL TEXT, user TEXT, solutionRecid TEXT, name TEXT, no TEXT, reportGroupCode, title TEXT, subtitle TEXT, recid TEXT, isNew TEXT, data TEXT, isChanged TEXT, isRemote TEXT, editTime TEXT)");
             /*表单创建成功*/
             if (cb) {
                 cb({
@@ -955,13 +998,34 @@ function __createTable(cb) {
 
 /**
  * 检查当前用户表中是否存在该用户
+ * @public
+ * @param  GlobalData 用户基础数据
+ * @param  {Function} cb   回调函数
+ * @return
+ */
+function checkUser(GlobalData, cb) {
+    __selectUser(GlobalData, function(res) {
+        if (res.success == true) {
+            cb({
+                success: true
+            });
+        } else {
+            cb({
+                success: false
+            })
+        }
+    });
+}
+
+/**
+ * 检查当前用户表中是否存在该用户
  * @private
  * @param  GlobalData 用户基础数据
  * @param  cb 回调函数
  * @return
  */
-function __checkUser(GlobalData, cb) {
-    // console.log("正在检查该用户是否存在 __checkUser");
+function __selectUser(GlobalData, cb) {
+    // console.log("正在检查该用户是否存在 __selectUser");
     db.get("select count(1) from USERS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
             console.log("不存在该用户");
@@ -1039,3 +1103,5 @@ exports.getQuestionnaireDataByName = getQuestionnaireDataByName;
 exports.updateQuestionnaireIsRemote = updateQuestionnaireIsRemote;
 exports.getQuestionnaireIsRemoteByName = getQuestionnaireIsRemoteByName;
 exports.deleteQuestionnaireByName = deleteQuestionnaireByName;
+exports.checkUser = checkUser;
+exports.updateQuestionnaireTitle = updateQuestionnaireTitle;
