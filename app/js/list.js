@@ -97,10 +97,17 @@ $(function() {
         /*判断是否有数据为空*/
         var popBoxName = $("#popBoxName input").val();
         var popBoxNo = $("#popBoxNo input").val();
+        var popBoxReportGroupCode = $("#popBoxReportGroupCode input").val();
         var popBoxTitle = $("#popBoxTitle input").val();
-        var popBoxSecret = $("#popBoxSecret .dropBox_tri").html();
-        if (popBoxName == "" || popBoxNo == "" || popBoxTitle == "") {
-            txt = "不可为空，请重新填写";
+        var popBoxSubtitle = $("#popBoxSubtitle").val();
+        if (popBoxName == "") {
+            txt = "问卷标识不可为空，请重新填写";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+            return;
+        }
+
+        if (popBoxTitle == "") {
+            txt = "主标题不可为空，请重新填写";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
             return;
         }
@@ -109,7 +116,10 @@ $(function() {
         questionnaireJson = {
             "solutionRecid": solutionTemp.recid,
             "name": popBoxName,
+            "no": popBoxNo,
+            "reportGroupCode": popBoxReportGroupCode,
             "title": popBoxTitle,
+            "subtitle": popBoxSubtitle,
             "recid": newGuid()
         };
         quesSqlite.createTempQuestionnaire(GlobalData, solutionsInfo[solutionTemp].recid, questionnaireJson, function(res) {
