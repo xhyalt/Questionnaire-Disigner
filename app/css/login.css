@@ -434,7 +434,7 @@ body {
     /*宽度设置为100%，这样才能使隐藏背景层覆盖原页面*/
     filter: alpha(opacity=60);
     /*设置透明度为60%*/
-    opacity: 0.6;
+    opacity: 0.5;
     /*非IE浏览器下设置透明度为60%*/
     display: none;
     z-Index: 2;

@@ -30,7 +30,7 @@ var onlineStatus = function() {
  * @return
  */
 function signIn() {
-    showShielder();
+    // showShielder();
     if (true) {
         var urlValue = document.forms["login"]["url"].value;
         var adminValue = document.forms["login"]["username"].value;
@@ -40,7 +40,7 @@ function signIn() {
         // var i = urlValue.lastIndexOf(':');
         // GlobalData.host = urlValue.substring(0, i);
         // GlobalData.post = urlValue.substr(i);
-        GlobalData.urlRoot = "10.2.20.61:9797";
+        GlobalData.urlRoot = "10.2.20.61:797";
         GlobalData.host = "10.2.20.61";
         GlobalData.post = 9797;
         GlobalData.user = "ci";
@@ -57,13 +57,47 @@ function signIn() {
         /*get请求token restfulUtil.js*/
         restfulUtil.getToken(GlobalData, function(statusCode, chunk) {
             if (statusCode == false) {
-                alert("无法登录，请检查URL，重新登录！", "提示");
-                hideShielder();
-                return;
-            }
-            var body = eval('(' + chunk + ')');
-            if (statusCode == 200) {
+                quesSqlite.checkUser(GlobalData, function(res) {
+                    if (res.success == true) {
+                        if (res.data["count(1)"] == 0) {
+                            /*用户表中不存在该条数据*/
+                            console.log("用户表中不存在该数据");
+                            // alert("连接服务器失败，且无法离线登录");
+                            txt = "连接服务器失败，且无法离线登录";
+                            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+                            hideShielder();
+                            return;
+                        } else {
+                            /*用户表中存在该条数据 询问是否离线*/
+                            window.wxc.xcConfirm("无法连接服务器，是否进入离线模式？", window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+                                if (res.success == true) {
+                                    /*点击确定*/
+                                    GlobalData.username = body.username;
+                                    GlobalData.token = body.token;
+                                    __setGlobalData(function(res) {
+                                        if (res.success == true) {
+                                            window.location.href = "./list.html";
+                                            hideShielder();
+                                            return;
+                                        }
+                                    });
+                                } else {
+                                    hideShielder();
+                                    return;
+                                }
+                            });
+                        }
+
+                    } else {
+                        console.log("用户查询失败");
+                        hideShielder();
+                        return;
+                    }
+                });
+
+            } else if (statusCode == 200) {
                 console.log("登录成功");
+                var body = eval('(' + chunk + ')');
 
                 GlobalData.username = body.username;
                 GlobalData.token = body.token;

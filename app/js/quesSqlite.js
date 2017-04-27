@@ -1007,7 +1007,8 @@ function checkUser(GlobalData, cb) {
     __selectUser(GlobalData, function(res) {
         if (res.success == true) {
             cb({
-                success: true
+                success: true,
+                data: res.data
             });
         } else {
             cb({
@@ -1028,13 +1029,13 @@ function __selectUser(GlobalData, cb) {
     // console.log("正在检查该用户是否存在 __selectUser");
     db.get("select count(1) from USERS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
-            console.log("不存在该用户");
+            console.log("查询用户失败");
             cb({
                 success: false,
                 data: err
             });
         }
-        console.log("存在该用户");
+        console.log("查询用户成功");
         cb({
             success: true,
             data: row
