@@ -367,9 +367,9 @@ body {
 /*中间空白部分*/
 
 #emptyBox {
-    height: 300px;
+    height: 230px;
     text-align: center;
-    line-height: 300px;
+    line-height: 230px;
     color: #888888;
     font-size: 20px;
 }

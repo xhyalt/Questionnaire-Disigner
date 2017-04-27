@@ -1,6 +1,7 @@
 /*引用JS文件*/
 const restfulUtil = require('./js/restfulUtil.js');
 const quesSqlite = require('./js/quesSqlite.js');
+const save = require('./js/save.js');
 
 /*与主进程通信的模块*/
 const ipcRenderer = require('electron').ipcRenderer;
@@ -39,6 +40,7 @@ $(function() {
         if (res.success == true) {
             console.log("获取临时调查问卷信息成功");
             $("#titleNameTextID").empty().append(tempQuestionnaire.title);
+            $("#headDetailTextID").empty().append(tempQuestionnaire.subtitle);
         } else {
             console.log("获取临时调查问卷信息失败");
         }
@@ -591,12 +593,16 @@ $(function() {
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
                 if (res.data == true) {
                     /*调用保存函数*/
-                    saveQuestionnaire();
+                    saveQuestionnaire(function(res2) {
+                        if (res2.success == true) {
+                            window.location.href = "./list.html";
+                        }
+                    });
                 } else if (res.success == true) {
                     /*删除库 直接返回*/
                     console.log(tempQuestionnaire.recid);
-                    quesSqlite.deleteTempQuestionnaire(GlobalData, tempQuestionnaire.recid, function(res) {
-                        if (res.success == true) {
+                    quesSqlite.deleteTempQuestionnaire(GlobalData, tempQuestionnaire.recid, function(res2) {
+                        if (res2.success == true) {
                             window.location.href = "./list.html";
                         } else {
                             console.log("删除失败");
@@ -800,6 +806,36 @@ $(function() {
         });
     });
 });
+
+function saveQuestionnaire(cb) {
+    /*保存问卷主标题 副标题*/
+    tempQuestionnaire.title = $("#titleNameTextID").eq(0).html();
+    tempQuestionnaire.subtitle = $("#headDetailTextID").eq(0).html();
+    quesSqlite.updateQuestionnaireTitle(GlobalData, {
+        "name": tempQuestionnaire.name,
+        "title": tempQuestionnaire.title,
+        "subtitle": tempQuestionnaire.subtitle
+    }, function(res0) {
+        if (res0.success == true) {
+            /*保存问卷表样*/
+            save.saveQuestionnaire(function(res) {
+                if (res.success == true) {
+                    quesSqlite.updateQuestionnaireData(GlobalData, tempQuestionnaire.name, res.data, function(res2) {
+                        if (res2.success == true) {
+                            cb({
+                                success: true
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+
+
+
+}
 
 /**
  * 显示描述的执行函数
