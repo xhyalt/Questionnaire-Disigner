@@ -99,7 +99,7 @@ $(function() {
         var popBoxNo = $("#popBoxNo input").val();
         var popBoxReportGroupCode = $("#popBoxReportGroupCode input").val();
         var popBoxTitle = $("#popBoxTitle input").val();
-        var popBoxSubtitle = $("#popBoxSubtitle").val();
+        var popBoxSubtitle = $("#popBoxSubtitle input").val();
         if (popBoxName == "") {
             txt = "问卷标识不可为空，请重新填写";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
