@@ -4,13 +4,13 @@
  * @param  {Function} cb 回调函数
  * @return
  */
-function saveQuestionnaire(cb) {
+function saveQuestionnaire(tempQuestionnaire, cb) {
     console.log("正在保存");
     /*显示遮蔽层*/
     showShielder();
 
     /*获取问卷的JSON*/
-    getQuestionnaireJson(function(res) {
+    getQuestionnaireJson(tempQuestionnaire, function(res) {
         if (res.success == true) {
             console.log(res.data);
             /*去掉遮蔽层*/
@@ -29,14 +29,14 @@ function saveQuestionnaire(cb) {
  * @param  {Function} cb 回调函数
  * @return
  */
-function getQuestionnaireJson(cb) {
+function getQuestionnaireJson(tempQuestionnaire, cb) {
     var mainData = {
         "title": tempQuestionnaire.title,
         "readonly": false,
-        "subtitle": "",
-        "subno": "1",
-        "reportGroupGuid": tempQuestionnaire.solutionRecid,
-        "solutionName": "",
+        "subtitle": tempQuestionnaire.subtitle,
+        "subno": tempQuestionnaire.no,
+        "reportGroupGuid": tempQuestionnaire.reportGroupCode,
+        "solutionName": tempQuestionnaire.solutionRecid,
         "description": "",
         "name": tempQuestionnaire.name,
         "float": "",
@@ -55,7 +55,7 @@ function getQuestionnaireJson(cb) {
 
 /**
  * 获取表样的JSON
- * @private
+ * @public
  * @param  {Function} cb 回调函数
  * @return
  */
@@ -277,3 +277,4 @@ function hideShielder() {
 }
 
 exports.saveQuestionnaire = saveQuestionnaire;
+exports.getPatternJson = getPatternJson;

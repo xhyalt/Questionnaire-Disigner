@@ -129,20 +129,35 @@ $(function() {
             "subtitle": popBoxSubtitle,
             "recid": newGuid()
         };
-        quesSqlite.createTempQuestionnaire(GlobalData, solutionsInfo[solutionTemp].recid, questionnaireJson, function(res) {
+        quesSqlite.checkQuestionnaireByName(GlobalData, popBoxName, function(res) {
             if (res.success == true) {
-                console.log("创建临时调查问卷成功");
-                __setTempQuestionnaire(questionnaireJson, function(res) {
-                    hideCreateQuestionnaire();
-                    window.location.href = "./design.html";
-                });
+                console.log(res.data["count(1)"]);
+                if (res.data["count(1)"] == 0) {
+                    /*该标识唯一*/
+                    quesSqlite.createTempQuestionnaire(GlobalData, solutionsInfo[solutionTemp].recid, questionnaireJson, function(res) {
+                        if (res.success == true) {
+                            console.log("创建临时调查问卷成功");
+                            __setTempQuestionnaire(questionnaireJson, function(res) {
+                                hideCreateQuestionnaire();
+                                window.location.href = "./design.html";
+                            });
 
-            } else {
-                txt = "创建问卷失败，请重新创建";
-                window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
-                return;
+                        } else {
+                            txt = "创建问卷失败，请重新创建";
+                            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+                            return;
+                        }
+                    });
+                }else{
+                    /*该标志不唯一 不予新建*/
+                    txt = "该标识已经存在！";
+                    window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+                    return;
+                }
             }
         });
+
+
     });
     /*新建问卷监听事件end===========================*/
 });
@@ -264,19 +279,23 @@ function showQuestionnaires(solutionRecidIndex, i) {
             if (questionnairesInfo[i].data == null || questionnairesInfo[i].data == "") {
                 /*data为空表示未下载*/
                 syncTd = "未下载";
-                if(onlineStatus==true){
-                    tempItem = `<a href="javascript: getQuestionnaireData('${questionnairesInfo[i].name}', ${row});">下载</a>`;
-                }else{
-                    tempItem = `<span>下载</span>`;
+                if (onlineStatus == true) {
+                    tempItem = `<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData('${questionnairesInfo[i].name}', ${row});">下载</a>`;
+                } else {
+                    tempItem = `<span>编辑</span><span>预览</span><span>下载</span>`;
                 }
             } else if (questionnairesInfo[i].isChanged == "0") {
                 /*data不为空 且 没有修改 表示已同步*/
                 syncTd = "已同步";
-                tempItem = `<a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>`;
+                tempItem = `<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>`;
             } else {
                 /*data不为空 且 已经修改 表示未同步*/
                 syncTd = "未同步";
-                tempItem = `<a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><a href="javascript: setQuestionnaireData('${questionnairesInfo[i].name}');">上传</a>`;
+                if (onlineStatus == true) {
+                    tempItem = `<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><a href="javascript: setQuestionnaireData('${questionnairesInfo[i].name}');">上传</a>`;
+                } else {
+                    tempItem = `<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><span>上传</span>`;
+                }
             }
 
             if (questionnairesInfo[i].editTime == null || questionnairesInfo[i].editTime == "") {
@@ -293,8 +312,6 @@ function showQuestionnaires(solutionRecidIndex, i) {
                     <td class="syncTd">${syncTd}</td>
                     <td class="editTd">${editTd}</td>
                     <td class="operTd">
-                        <a href="javascript: ;">编辑</a>
-                        <a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a>
                         <div style="display:inline">${tempItem}</div>
                     </td>
                 </tr>`);
@@ -502,13 +519,13 @@ function changeSyn(name, row, method) {
         case 1:
             {
                 $(".listBody").eq(listLength - row).find(".syncTd").empty().append("已同步");
-                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: deleteQuestionnaire('${name}', ${row}, function(res){});">删除</a>`);
+                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${name}', ${row}, function(res){});">删除</a>`);
             }
             break;
         case 2:
             {
                 $(".listBody").eq(listLength - row).find(".syncTd").empty().append("未下载");
-                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: getQuestionnaireData('${name}', ${row});">下载</a>`);
+                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData(${name}, ${row});">下载</a>`);
             }
             break;
         case 3:
@@ -806,7 +823,6 @@ function showCreateQuestionnaire() {
     $(".solution").empty();
     $(".solution").append(solutionsInfo[solutionTemp].title);
     $(".popBoxItem input").val("");
-    $("#popBoxSecret .dropBox_inp").empty().append("无秘");
 
     hidebg.style.display = "block"; //显示隐藏层
     document.getElementById("popBox").style.display = "block"; //显示弹出层

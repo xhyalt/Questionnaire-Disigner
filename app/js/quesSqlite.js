@@ -388,6 +388,45 @@ function getQuestionnaireIsRemoteByName(GlobalData, name, cb) {
 }
 
 /**
+ * 根据标识获取某问卷是否存在
+ * @param  {json}     GlobalData 用户基础数据
+ * @param  {string}   name       标识
+ * @param  {Function} cb         回调函数
+ * @return
+ */
+function checkQuestionnaireByName(GlobalData, name, cb) {
+    __checkQuestionnaireByName(GlobalData, name, function(res) {
+        if (res.success == true) {
+            cb({
+                success: true,
+                data: res.data
+            });
+        } else {
+            cb({
+                success: false
+            })
+        }
+    });
+}
+
+function __checkQuestionnaireByName(GlobalData, name, cb) {
+    db.get("select count(1) from QUESTIONNAIRES where user = ? and URL = ? and name = ?", [GlobalData.user, GlobalData.urlRoot, name], function(err, row) {
+        if (err) {
+            console.log("查询问卷失败");
+            cb({
+                success: false,
+                data: err
+            });
+        }
+        console.log("查询问卷成功");
+        cb({
+            success: true,
+            data: row
+        });
+    });
+}
+
+/**
  * 根据标识获取某问卷
  * @param  {json}   GlobalData 用户基础数据
  * @param  {string}   name       标识
@@ -468,6 +507,7 @@ function deleteQuestionnaireIsNew(GlobalData, solutionRecid, cb) {
  */
 function createTempQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
     console.log("正在创建临时调查问卷 createQuestionnaire");
+    questionnaireJson.isRemote = "0";
     __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res) {
         if (res.success == true) {
             cb({
@@ -600,7 +640,7 @@ function __deleteQuestionnaireByName(GlobalData, name, cb) {
  */
 function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
     // console.log("正在添加调查问卷 __insertQuestionnaire");
-    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecd, name, no, reportGroupCode, title, subtitle, recid, isNew) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.no, questionnaireJson.reportGroupCode, questionnaireJson.title, questionnaireJson.subtitle, questionnaireJson.recid, "1"], function(err) {
+    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecid, name, no, reportGroupCode, title, subtitle, recid, isNew, isRemote) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.no, questionnaireJson.reportGroupCode, questionnaireJson.title, questionnaireJson.subtitle, questionnaireJson.recid, "1", questionnaireJson.isRemote], function(err) {
         if (err) {
             console.log(err.message);
             cb({
@@ -650,14 +690,14 @@ function __selectQuestionnaires(GlobalData, cb) {
 function updateQuestionnaireData(GlobalData, name, data, cb) {
     __updateQuestionnaireData(GlobalData, name, data, function(res) {
         if (res.success == true) {
-            __updateQuestionnaireIsChanged(GlobalData, name, "0", function(res2) {
+            __updateQuestionnaireIsChanged(GlobalData, name, "1", function(res2) {
                 if (res2.success == true) {
                     cb({
-                        success: true
+                        success: true,
+                        data: res2.data
                     });
                 }
             });
-
         } else {
             cb({
                 success: false,
@@ -678,7 +718,7 @@ function updateQuestionnaireData(GlobalData, name, data, cb) {
  */
 function __updateQuestionnaireData(GlobalData, name, data, cb) {
     // console.log("正在更新某个调查问卷的表样");
-    db.get("update QUESTIONNAIRES set data = ? where URL = ? and user = ? and name = ?", [data, GlobalData.urlRoot, GlobalData.user, name], function(err) {
+    db.get("update QUESTIONNAIRES set data = ? where URL = ? and user = ? and name = ?", [data, GlobalData.urlRoot, GlobalData.user, name], function(err, row) {
         if (err) {
             cb({
                 success: false,
@@ -686,7 +726,8 @@ function __updateQuestionnaireData(GlobalData, name, data, cb) {
             });
         }
         cb({
-            success: true
+            success: true,
+            data: row
         });
     });
 }
@@ -702,7 +743,7 @@ function __updateQuestionnaireData(GlobalData, name, data, cb) {
  */
 function __updateQuestionnaireIsChanged(GlobalData, name, isChanged, cb) {
     // console.log("正在更新某个调查问卷的是否修改字段");
-    db.get("update QUESTIONNAIRES set isChanged = ? where URL = ? and user = ? and name = ?", [isChanged, GlobalData.urlRoot, GlobalData.user, name], function(err) {
+    db.get("update QUESTIONNAIRES set isChanged = ? where URL = ? and user = ? and name = ?", [isChanged, GlobalData.urlRoot, GlobalData.user, name], function(err, row) {
         if (err) {
             cb({
                 success: false,
@@ -710,7 +751,8 @@ function __updateQuestionnaireIsChanged(GlobalData, name, isChanged, cb) {
             });
         }
         cb({
-            success: true
+            success: true,
+            data: row
         });
     });
 }
@@ -1106,3 +1148,4 @@ exports.getQuestionnaireIsRemoteByName = getQuestionnaireIsRemoteByName;
 exports.deleteQuestionnaireByName = deleteQuestionnaireByName;
 exports.checkUser = checkUser;
 exports.updateQuestionnaireTitle = updateQuestionnaireTitle;
+exports.checkQuestionnaireByName = checkQuestionnaireByName;

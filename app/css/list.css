@@ -345,6 +345,12 @@ body {
     color: #666666;
 }
 
+.operTd span{
+  margin-right: 12px;
+  text-decoration: none;
+  color: #999999;
+}
+
 
 /*遮挡层*/
 
@@ -374,7 +380,7 @@ body {
     display: none;
     z-Index: 110;
     border-radius: 5px;
-    margin-left: -230px;
+    margin-left: -200px;
     margin-top: -150px;
 }
 
