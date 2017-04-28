@@ -340,37 +340,13 @@ function getQuestionnaires(GlobalData, cb) {
 }
 
 /**
- * 根据标识获取某问卷表样
+ * 根据标识获取某问卷的信息
  * @param  {json}     GlobalData 用户基础数据
  * @param  {string}   name       标识
  * @param  {Function} cb         回调函数
  * @return
  */
-function getQuestionnaireDataByName(GlobalData, name, cb) {
-    __selectQuestionnaireByName(GlobalData, name, function(res) {
-        if (res.success == true) {
-            /*选出调查问卷成功*/
-            cb({
-                success: true,
-                data: res.data
-            });
-        } else {
-            cb({
-                success: false,
-                data: "获取某问卷表样失败"
-            });
-        }
-    });
-}
-
-/**
- * 根据标识获取某问卷isRemote字段
- * @param  {json}     GlobalData 用户基础数据
- * @param  {string}   name       标识
- * @param  {Function} cb         回调函数
- * @return
- */
-function getQuestionnaireIsRemoteByName(GlobalData, name, cb) {
+function getQuestionnaireByName(GlobalData, name, cb) {
     __selectQuestionnaireByName(GlobalData, name, function(res) {
         if (res.success == true) {
             /*选出调查问卷成功*/
@@ -1142,9 +1118,8 @@ exports.deleteQuestionnaireIsNew = deleteQuestionnaireIsNew;
 exports.createTempQuestionnaire = createTempQuestionnaire;
 exports.deleteTempQuestionnaire = deleteTempQuestionnaire;
 exports.updateQuestionnaireData = updateQuestionnaireData;
-exports.getQuestionnaireDataByName = getQuestionnaireDataByName;
 exports.updateQuestionnaireIsRemote = updateQuestionnaireIsRemote;
-exports.getQuestionnaireIsRemoteByName = getQuestionnaireIsRemoteByName;
+exports.getQuestionnaireByName = getQuestionnaireByName;
 exports.deleteQuestionnaireByName = deleteQuestionnaireByName;
 exports.checkUser = checkUser;
 exports.updateQuestionnaireTitle = updateQuestionnaireTitle;

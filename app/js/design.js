@@ -23,10 +23,6 @@ var popEditor = false;
 /*各种监听事件*/
 $(function() {
 
-    // document.addEventListener("click", function(event) {
-    //     console.log(event.target);
-    // });
-
     /*获取用户基本信息和在线状态*/
     __getGlobalData(function(res) {
         if (res.success == true) {
@@ -43,13 +39,19 @@ $(function() {
         }
     });
 
-    __getTempQuestionnaire(function(res) {
+    /*获取问卷标识并从数据库拿到相关数据*/
+    __getTempQuestionnaireName(function(res) {
         if (res.success == true) {
-            console.log("获取临时调查问卷信息成功");
-            $("#titleNameTextID").empty().append(tempQuestionnaire.title);
-            $("#headDetailTextID").empty().append(tempQuestionnaire.subtitle);
+            quesSqlite.getQuestionnaireByName(GlobalData, res.data, function(res2) {
+                if (res2.success == true) {
+                    // console.log("获取调查问卷数据成功");
+                    tempQuestionnaire = res2.data[0];
+                    $("#titleNameTextID").empty().append(tempQuestionnaire.title);
+                    $("#headDetailTextID").empty().append(tempQuestionnaire.subtitle);
+                }
+            });
         } else {
-            console.log("获取临时调查问卷信息失败");
+            console.log("获取调查问卷标识失败");
         }
     });
 
@@ -830,7 +832,7 @@ function previewQuestionnaire(cb) {
                 }
             });
         }
-    })
+    });
 }
 
 /**
@@ -1144,23 +1146,23 @@ function __setTempQuestionnaireName(tempQuestionnaireName, cb) {
 }
 
 /**
- * 与主进程通信获取用户基础数据GlobalData
+ * 与主进程通信获取标识
  * @private
  * @return
  */
-function __getTempQuestionnaire(cb) {
+function __getTempQuestionnaireName(cb) {
     try {
-        ipcRenderer.send('asynchronous-get-tempQuestionnaire-message');
-        ipcRenderer.on('asynchronous-get-tempQuestionnaire-reply', (event, arg) => {
-            tempQuestionnaire = arg;
-            console.log("tempQuestionnaire");
+        ipcRenderer.send('asynchronous-get-tempQuestionnaireName-message');
+        ipcRenderer.on('asynchronous-get-tempQuestionnaireName-reply', (event, arg) => {
+            console.log("渲染进程收到tempQuestionnaireName");
             cb({
-                success: true
+                success: true,
+                data: arg
             });
         });
     } catch (err) {
         cb({
-            success: true,
+            success: false,
             data: err.message
         });
     }

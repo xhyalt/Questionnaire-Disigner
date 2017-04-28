@@ -1,6 +1,7 @@
 /*引用JS文件*/
 const restfulUtil = require('./js/restfulUtil.js');
 const quesSqlite = require('./js/quesSqlite.js');
+const save = require('./js/save.js');
 /*与主进程通信的模块*/
 const ipcRenderer = require('electron').ipcRenderer;
 /*用户基础数据*/
@@ -137,7 +138,7 @@ $(function() {
                     quesSqlite.createTempQuestionnaire(GlobalData, solutionsInfo[solutionTemp].recid, questionnaireJson, function(res) {
                         if (res.success == true) {
                             console.log("创建临时调查问卷成功");
-                            __setTempQuestionnaire(questionnaireJson, function(res) {
+                            __setTempQuestionnaireName(questionnaireJson.name, function(res) {
                                 hideCreateQuestionnaire();
                                 window.location.href = "./design.html";
                             });
@@ -189,16 +190,6 @@ function init() {
             });
         }
     });
-}
-
-function __setTempQuestionnaire(tempQuestionnaire, cb) {
-    ipcRenderer.on('asynchronous-set-tempQuestionnaire-reply', (event, arg) => {
-        console.log("主进程收到tempQuestionnaire是否成功 " + arg);
-        cb({
-            success: true
-        });
-    });
-    ipcRenderer.send('asynchronous-set-tempQuestionnaire-message', tempQuestionnaire);
 }
 
 /**
@@ -357,7 +348,7 @@ function deleteQuestionnaire(name, row, cb) {
         });
     } else {
         /*未同步 判断是否远程*/
-        quesSqlite.getQuestionnaireIsRemoteByName(GlobalData, name, function(res) {
+        quesSqlite.getQuestionnaireByName(GlobalData, name, function(res) {
             if (res.success == true) {
                 console.log("修改isRemote字段成功");
                 console.log(res.data);
