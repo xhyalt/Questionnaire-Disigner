@@ -1,5 +1,4 @@
 /*引用JS文件*/
-const restfulUtil = require('./js/restfulUtil.js');
 const quesSqlite = require('./js/quesSqlite.js');
 const save = require('./js/save.js');
 
@@ -9,6 +8,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 /*用户基础数据*/
 var GlobalData = null;
 var tempQuestionnaire = null;
+var onlineStatus = null;
 
 /*弹出框*/
 var popMenu = false;
@@ -27,10 +27,17 @@ $(function() {
     //     console.log(event.target);
     // });
 
-    /*获取用户基本信息*/
+    /*获取用户基本信息和在线状态*/
     __getGlobalData(function(res) {
         if (res.success == true) {
-            console.log("获取用户基本信息成功");
+            // console.log("获取用户基本信息成功");
+            __getOnlineStatus(function(res2) {
+                if (res2.success == true) {
+                    // console.log("获取在线状态成功");
+                }else{
+                    console.log("获取在线状态失败");
+                }
+            });
         } else {
             console.log("获取用户基本信息失败");
         }
@@ -1056,7 +1063,7 @@ function setInitials($tdPP) {
 /**
  * 与主进程通信获取用户基础数据GlobalData
  * @private
- * @return
+ * @param {Function} cb         回调函数
  */
 function __getGlobalData(cb) {
     try {
@@ -1071,6 +1078,29 @@ function __getGlobalData(cb) {
     } catch (err) {
         cb({
             success: true,
+            data: err.message
+        });
+    }
+}
+
+/**
+ * 与主进程通信获取用户基础数据onlineStatus
+ * @private
+ * @param {Function} cb         回调函数
+ */
+function __getOnlineStatus(cb) {
+    try {
+        ipcRenderer.send('asynchronous-get-onlineStatus-message');
+        ipcRenderer.on('asynchronous-get-onlineStatus-reply', (event, arg) => {
+            onlineStatus = arg;
+            console.log("渲染进程收到onlineStatus");
+            cb({
+                success: true
+            });
+        });
+    } catch (err) {
+        cb({
+            success: false,
             data: err.message
         });
     }
@@ -1256,10 +1286,4 @@ function MM_swapImage() {
             if (!x.oSrc) x.oSrc = x.src;
             x.src = a[i + 2];
         }
-}
-
-function getQuestionnairesData() {
-    restfulUtil.getQuestionnairesData(GlobalData, "383FBE73B8F84999F93E5ECC6C45D42A", function(res) {
-        console.log(JSON.stringify(res));
-    });
 }

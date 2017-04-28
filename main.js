@@ -14,6 +14,7 @@ var previewWindow = null;
 var GlobalData = null;
 var tempQuestionnaire = null;
 var tempQuestionnaireName = null;
+var onlineStatus = null;
 
 /*监听渲染进程里发出的message，获取GlobalData*/
 ipcMain.on('asynchronous-set-GlobalData-message', (event, arg) => {
@@ -46,6 +47,17 @@ ipcMain.on('asynchronous-set-tempQuestionnaireName-message', (event, arg) => {
 /*监听渲染进程里发出的message，发送tempQuestionnaireName*/
 ipcMain.on('asynchronous-get-tempQuestionnaireName-message', (event) => {
     event.sender.send('asynchronous-get-tempQuestionnaireName-reply', tempQuestionnaireName);
+});
+
+/*监听渲染进程里发出的message，获取onlineStatus*/
+ipcMain.on('asynchronous-set-onlineStatus-message', (event, arg) => {
+    onlineStatus = arg;
+    event.sender.send('asynchronous-set-onlineStatus-reply', true);
+});
+
+/*监听渲染进程里发出的message，发送onlineStatus*/
+ipcMain.on('asynchronous-get-onlineStatus-message', (event) => {
+    event.sender.send('asynchronous-get-onlineStatus-reply', onlineStatus);
 });
 
 /*监听渲染进程里发出的message，发送当前应用目录*/

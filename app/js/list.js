@@ -5,6 +5,8 @@ const quesSqlite = require('./js/quesSqlite.js');
 const ipcRenderer = require('electron').ipcRenderer;
 /*用户基础数据*/
 var GlobalData = null;
+/*是否在线*/
+var onlineStatus = null;
 /*业务方案数据*/
 var solutionsInfo = null;
 /*调查问卷数据*/
@@ -38,15 +40,20 @@ $(function() {
     /*刷新树图标点击事件 重新获取业务方案和调查问卷 更新树*/
     $("#tree").on("click", "#fresh", function() {
         // showShielder();
-        fresh.changeClassToOn(this);
-        initQuestionnaire(function(res) {
-            if (res.success == true) {
-                initTree();
-                solutionTemp = null;
-                if ($(".listBody").length && $(".listBody").length > 0)
-                    $(".listBody").remove();
-            }
-        });
+        if (onlineStatus == true) {
+            fresh.changeClassToOn(this);
+            initQuestionnaire(function(res) {
+                if (res.success == true) {
+                    initTree();
+                    solutionTemp = null;
+                    if ($(".listBody").length && $(".listBody").length > 0)
+                        $(".listBody").remove();
+                }
+            });
+        } else {
+            txt = "当前为离线模式，无法刷新";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        }
     });
 
     $("#listTable").on("mouseover", ".listBody", function() {
@@ -158,9 +165,13 @@ var fresh = {
  * @return
  */
 function init() {
-    __getGlobalData(function(res0) {
-        if (res0.success == true) {
-            initTree();
+    __getGlobalData(function(res) {
+        if (res.success == true) {
+            __getOnlineStatus(function(res2) {
+                if (res2.success == true) {
+                    initTree();
+                }
+            });
         }
     });
 }
@@ -253,7 +264,11 @@ function showQuestionnaires(solutionRecidIndex, i) {
             if (questionnairesInfo[i].data == null || questionnairesInfo[i].data == "") {
                 /*data为空表示未下载*/
                 syncTd = "未下载";
-                tempItem = `<a href="javascript: getQuestionnaireData('${questionnairesInfo[i].name}', ${row});">下载</a>`;
+                if(onlineStatus==true){
+                    tempItem = `<a href="javascript: getQuestionnaireData('${questionnairesInfo[i].name}', ${row});">下载</a>`;
+                }else{
+                    tempItem = `<span>下载</span>`;
+                }
             } else if (questionnairesInfo[i].isChanged == "0") {
                 /*data不为空 且 没有修改 表示已同步*/
                 syncTd = "已同步";
@@ -658,7 +673,7 @@ function hideShielder() {
 /**
  * 与主进程通信获取用户基础数据GlobalData
  * @private
- * @return
+ * @param {Function} cb         回调函数
  */
 function __getGlobalData(cb) {
     try {
@@ -666,6 +681,29 @@ function __getGlobalData(cb) {
         ipcRenderer.on('asynchronous-get-GlobalData-reply', (event, arg) => {
             GlobalData = arg;
             console.log("渲染进程收到GlobalData");
+            cb({
+                success: true
+            });
+        });
+    } catch (err) {
+        cb({
+            success: false,
+            data: err.message
+        });
+    }
+}
+
+/**
+ * 与主进程通信获取用户基础数据onlineStatus
+ * @private
+ * @param {Function} cb         回调函数
+ */
+function __getOnlineStatus(cb) {
+    try {
+        ipcRenderer.send('asynchronous-get-onlineStatus-message');
+        ipcRenderer.on('asynchronous-get-onlineStatus-reply', (event, arg) => {
+            onlineStatus = arg;
+            console.log("渲染进程收到onlineStatus");
             cb({
                 success: true
             });

@@ -19,10 +19,13 @@ var GlobalData = {
     "src": "000001399FCE11FEA057EFDF592FE408",
     "loginContext": "1"
 };
-var onlineStatus = function() {
-    // window.alert(navigator.onLine ? 'online' : 'offline');
-    return navigator.onLine ? true : false;
-};
+/*是否在线*/
+var onlineStatus = true;
+
+// var onlineStatus = function() {
+//     // window.alert(navigator.onLine ? 'online' : 'offline');
+//     return navigator.onLine ? true : false;
+// };
 
 /**
  * 登录按钮点击事件，处理登录逻辑
@@ -30,7 +33,8 @@ var onlineStatus = function() {
  * @return
  */
 function signIn() {
-    // showShielder();
+    showShielder();
+    onlineStatus = true;
     if (true) {
         var urlValue = document.forms["login"]["url"].value;
         var adminValue = document.forms["login"]["username"].value;
@@ -62,21 +66,24 @@ function signIn() {
                         if (res.data["count(1)"] == 0) {
                             /*用户表中不存在该条数据*/
                             txt = "登录失败，请检查信息是否输入正确";
-                            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+                            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res2) {});
                             hideShielder();
                             return;
                         } else {
                             /*用户表中存在该条数据 询问是否离线*/
-                            window.wxc.xcConfirm("无法连接服务器，是否进入离线模式？", window.wxc.xcConfirm.typeEnum.confirm, function(res) {
-                                if (res.success == true) {
+                            window.wxc.xcConfirm("无法连接服务器，是否进入离线模式？", window.wxc.xcConfirm.typeEnum.confirm, function(res2) {
+                                if (res2.success == true) {
+                                    onlineStatus = false;
                                     /*点击确定*/
-                                    GlobalData.username = body.username;
-                                    GlobalData.token = body.token;
-                                    __setGlobalData(function(res) {
-                                        if (res.success == true) {
-                                            window.location.href = "./list.html";
-                                            hideShielder();
-                                            return;
+                                    __setGlobalData(function(res3) {
+                                        if (res3.success == true) {
+                                            __setOnlineStatus(function(res4) {
+                                                if (res4.success == true) {
+                                                    window.location.href = "./list.html";
+                                                    hideShielder();
+                                                    return;
+                                                }
+                                            });
                                         }
                                     });
                                 } else {
@@ -85,7 +92,6 @@ function signIn() {
                                 }
                             });
                         }
-
                     } else {
                         console.log("用户查询失败");
                         hideShielder();
@@ -100,29 +106,34 @@ function signIn() {
                 GlobalData.username = body.username;
                 GlobalData.token = body.token;
                 /*与主进程通信，发送GlobalData*/
-                __setGlobalData(function(res) {
-                    if (res.success == true) {
+                __setGlobalData(function(res0) {
+                    if (res0.success == true) {
                         console.log("给主进程发送用户信息成功");
-                        /*初始化数据库 quesSqlite.js*/
-                        quesSqlite.initDB(GlobalData, function(res) {
-                            if (res.success == true) {
-                                console.log("数据库用户部分更新成功");
-                                /*获取数据*/
-                                initQuestionnaire(function(res2) {
-                                    if (res2.success == true) {
-                                        console.log("更新数据成功");
-                                        hideShielder();
-                                        window.location.href = "./list.html";
+                        __setOnlineStatus(function(res00) {
+                            if (res00.success == true) {
+                                /*初始化数据库 quesSqlite.js*/
+                                quesSqlite.initDB(GlobalData, function(res) {
+                                    if (res.success == true) {
+                                        console.log("数据库用户部分更新成功");
+                                        /*获取数据*/
+                                        initQuestionnaire(function(res2) {
+                                            if (res2.success == true) {
+                                                console.log("更新数据成功");
+                                                hideShielder();
+                                                window.location.href = "./list.html";
+                                            } else {
+                                                console.log("更新数据失败");
+                                                console.log(res2.data);
+                                            }
+                                        });
                                     } else {
-                                        console.log("更新数据失败");
-                                        console.log(res2.data);
+                                        alert("后台处理出错，error：" + res.data, "提示");
+                                        hideShielder();
                                     }
                                 });
-                            } else {
-                                alert("后台处理出错，error：" + res.data, "提示");
-                                hideShielder();
                             }
                         });
+
                     }
                 });
 
@@ -138,19 +149,24 @@ function signIn() {
                         if (res.data["count(1)"] == 0) {
                             /*用户表中不存在该条数据*/
                             txt = "登录失败，无法离线登录，请检查网络";
-                            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+                            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res2) {});
                             hideShielder();
                             return;
                         } else {
                             /*用户表中存在该条数据 询问是否离线*/
-                            window.wxc.xcConfirm("无法连接服务器，是否进入离线模式？", window.wxc.xcConfirm.typeEnum.confirm, function(res) {
-                                if (res.success == true) {
+                            window.wxc.xcConfirm("无法连接服务器，是否进入离线模式？", window.wxc.xcConfirm.typeEnum.confirm, function(res2) {
+                                if (res2.success == true) {
+                                    onlineStatus = false;
                                     /*点击确定*/
-                                    __setGlobalData(function(res) {
-                                        if (res.success == true) {
-                                            window.location.href = "./list.html";
-                                            hideShielder();
-                                            return;
+                                    __setGlobalData(function(res3) {
+                                        if (res3.success == true) {
+                                            __setOnlineStatus(function(res4) {
+                                                if (res4.success == true) {
+                                                    window.location.href = "./list.html";
+                                                    hideShielder();
+                                                    return;
+                                                }
+                                            });
                                         }
                                     });
                                 } else {
@@ -304,7 +320,7 @@ function hideShielder() {
 /**
  * 发送用户基础数据JSON给主进程
  * @private
- * @return
+ * @param {Function} cb 回调函数
  */
 function __setGlobalData(cb) {
     ipcRenderer.on('asynchronous-set-GlobalData-reply', (event, arg) => {
@@ -314,6 +330,21 @@ function __setGlobalData(cb) {
         });
     });
     ipcRenderer.send('asynchronous-set-GlobalData-message', GlobalData);
+}
+
+/**
+ * 发送是否在线给主进程
+ * @private
+ * @param {Function} cb 回调函数
+ */
+function __setOnlineStatus(cb) {
+    ipcRenderer.on('asynchronous-set-onlineStatus-reply', (event, arg) => {
+        console.log("主进程收到onlineStatus是否成功 " + arg);
+        cb({
+            success: true
+        });
+    });
+    ipcRenderer.send('asynchronous-set-onlineStatus-message', onlineStatus);
 }
 
 /**
