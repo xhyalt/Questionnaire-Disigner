@@ -40,7 +40,7 @@ function signIn() {
         // var i = urlValue.lastIndexOf(':');
         // GlobalData.host = urlValue.substring(0, i);
         // GlobalData.post = urlValue.substr(i);
-        GlobalData.urlRoot = "10.2.20.61:797";
+        GlobalData.urlRoot = "10.2.20.61:9797";
         GlobalData.host = "10.2.20.61";
         GlobalData.post = 9797;
         GlobalData.user = "ci";
@@ -61,9 +61,7 @@ function signIn() {
                     if (res.success == true) {
                         if (res.data["count(1)"] == 0) {
                             /*用户表中不存在该条数据*/
-                            console.log("用户表中不存在该数据");
-                            // alert("连接服务器失败，且无法离线登录");
-                            txt = "连接服务器失败，且无法离线登录";
+                            txt = "登录失败，请检查信息是否输入正确";
                             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
                             hideShielder();
                             return;
@@ -132,9 +130,42 @@ function signIn() {
                 alert(body.error_msg, "提示");
                 hideShielder();
             } else {
-                console.log("是否出现");
-                alert("无法登录，请检查URL，重新登录！", "提示");
-                hideShielder();
+                // console.log("是否出现");
+                // alert("无法登录，请检查URL，重新登录！", "提示");
+                // hideShielder();
+                quesSqlite.checkUser(GlobalData, function(res) {
+                    if (res.success == true) {
+                        if (res.data["count(1)"] == 0) {
+                            /*用户表中不存在该条数据*/
+                            txt = "登录失败，无法离线登录，请检查网络";
+                            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+                            hideShielder();
+                            return;
+                        } else {
+                            /*用户表中存在该条数据 询问是否离线*/
+                            window.wxc.xcConfirm("无法连接服务器，是否进入离线模式？", window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+                                if (res.success == true) {
+                                    /*点击确定*/
+                                    __setGlobalData(function(res) {
+                                        if (res.success == true) {
+                                            window.location.href = "./list.html";
+                                            hideShielder();
+                                            return;
+                                        }
+                                    });
+                                } else {
+                                    hideShielder();
+                                    return;
+                                }
+                            });
+                        }
+
+                    } else {
+                        console.log("用户查询失败");
+                        hideShielder();
+                        return;
+                    }
+                });
             }
         });
     }
