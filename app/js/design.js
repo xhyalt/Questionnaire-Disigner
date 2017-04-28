@@ -34,7 +34,7 @@ $(function() {
             __getOnlineStatus(function(res2) {
                 if (res2.success == true) {
                     // console.log("获取在线状态成功");
-                }else{
+                } else {
                     console.log("获取在线状态失败");
                 }
             });
@@ -600,7 +600,7 @@ $(function() {
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
                 if (res.data == true) {
                     /*调用保存函数*/
-                    saveQuestionnaire(function(res2) {
+                    saveQuestionnairePattern(function(res2) {
                         if (res2.success == true) {
                             window.location.href = "./list.html";
                         }
@@ -814,7 +814,31 @@ $(function() {
     });
 });
 
-function saveQuestionnaire(cb) {
+/**
+ * 预览问卷执行函数
+ * @param  {Function} cb 回调函数
+ * @return
+ */
+function previewQuestionnaire(cb) {
+    saveQuestionnairePattern(function(res) {
+        if (res.success == true) {
+            __setTempQuestionnaireName(tempQuestionnaire.name, function(res2) {
+                if (res2.success == true) {
+                    console.log("给主进程传递参数成功");
+                    /*打开预览界面*/
+                    window.open("./preview.html");
+                }
+            });
+        }
+    })
+}
+
+/**
+ * 保存问卷表样函数
+ * @param  {Function} cb 回调函数
+ * @return
+ */
+function saveQuestionnairePattern(cb) {
     /*保存问卷主标题 副标题*/
     tempQuestionnaire.title = $("#titleNameTextID").eq(0).html();
     tempQuestionnaire.subtitle = $("#headDetailTextID").eq(0).html();
@@ -825,9 +849,11 @@ function saveQuestionnaire(cb) {
     }, function(res0) {
         if (res0.success == true) {
             /*保存问卷表样*/
-            save.saveQuestionnaire(function(res) {
+            save.getPatternJson(function(res) {
                 if (res.success == true) {
-                    quesSqlite.updateQuestionnaireData(GlobalData, tempQuestionnaire.name, res.data, function(res2) {
+                    console.log(res.data);
+                    quesSqlite.updateQuestionnaireData(GlobalData, tempQuestionnaire.name, JSON.stringify(res.data), function(res2) {
+                        console.log(res2.data);
                         if (res2.success == true) {
                             cb({
                                 success: true
@@ -838,10 +864,6 @@ function saveQuestionnaire(cb) {
             });
         }
     });
-
-
-
-
 }
 
 /**
@@ -1104,6 +1126,21 @@ function __getOnlineStatus(cb) {
             data: err.message
         });
     }
+}
+
+/**
+ * 给主进程发送临时问卷的标识
+ * @param tempQuestionnaireName 临时问卷的标识
+ * @param {Function} cb         回调函数
+ */
+function __setTempQuestionnaireName(tempQuestionnaireName, cb) {
+    ipcRenderer.once('asynchronous-set-tempQuestionnaireName-reply', (event, arg) => {
+        console.log("主进程收到tempQuestionnaireName是否成功 " + arg);
+        cb({
+            success: true
+        });
+    });
+    ipcRenderer.send('asynchronous-set-tempQuestionnaireName-message', tempQuestionnaireName);
 }
 
 /**
