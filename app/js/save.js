@@ -1,3 +1,10 @@
+var subjectDiv = {};
+var itemLabelDiv = {};
+
+function decomposeQuestionnaire(tempQuestionnaireJson, cb) {
+    console.log("正在分解表样JSON");
+}
+
 /**
  * 保存问卷
  * @public
@@ -25,31 +32,28 @@ function saveQuestionnaire(tempQuestionnaire, cb) {
 
 /**
  * 获取问卷的JSON
- * @private
+ * @public
  * @param  {Function} cb 回调函数
  * @return
  */
 function getQuestionnaireJson(tempQuestionnaire, cb) {
+    console.log(tempQuestionnaire);
     var mainData = {
-        "title": tempQuestionnaire.title,
-        "readonly": false,
-        "subtitle": tempQuestionnaire.subtitle,
-        "subno": tempQuestionnaire.no,
-        "reportGroupGuid": tempQuestionnaire.reportGroupCode,
-        "solutionName": tempQuestionnaire.solutionRecid,
-        "description": "",
-        "name": tempQuestionnaire.name,
-        "float": "",
-        "dataInfo": {}
+        title: tempQuestionnaire.title,
+        readonly: false,
+        subtitle: tempQuestionnaire.subtitle,
+        subno: tempQuestionnaire.no,
+        reportGroupCode: tempQuestionnaire.reportGroupCode,
+        solutionName: tempQuestionnaire.solutionName,
+        description: "",
+        name: tempQuestionnaire.name,
+        float: false,
+        dataInfo: {}
     };
-    getPatternJson(function(res) {
-        if (res.success == true) {
-            mainData.dataInfo = res.data;
-            cb({
-                success: true,
-                data: mainData
-            })
-        }
+    mainData.dataInfo = eval('(' + tempQuestionnaire.data + ')');
+    cb({
+        success: true,
+        data: mainData
     });
 }
 
@@ -65,15 +69,15 @@ function getPatternJson(cb) {
     var map = {};
 
     var questionnaireData = {
-        "guid": tempQuestionnaire.recid,
-        "title": tempQuestionnaire.title,
-        "autoNo": true,
-        "name": tempQuestionnaire.name,
-        "questions": [],
-        "float": false,
-        "mainBodyGuid": "",
-        "css": ""
-    }
+        guid: tempQuestionnaire.recid,
+        title: tempQuestionnaire.title,
+        autoNo: true,
+        name: tempQuestionnaire.name,
+        questions: [],
+        float: false,
+        mainBodyGuid: "",
+        css: ""
+    };
     Subjects = $("#target .subject, #target .unSubject");
 
     /*遍历题目 为map赋值*/
@@ -120,147 +124,147 @@ function getSubjectJson($td, type) {
 
     if (type == "merge") {
         tempSubject = {
-            "title": $td.children().children(".stemText").html(),
-            "type": "group",
-            "level": "level" + $td.attr("level"),
-            "hidden": false,
-            "description": "",
-            "questions": [],
-            "question": tempGUID,
-            "levelNum": $td.children().children("h4").html()
+            title: $td.children().children(".stemText").html(),
+            type: "group",
+            level: "level" + $td.attr("level"),
+            hidden: false,
+            description: "",
+            questions: [],
+            question: tempGUID,
+            levelNum: $td.children().children("h4").html()
         };
     } else if (type == "radio") {
         tempSubject = {
-            "title": $td.children().children(".stemText").html(),
-            "level": "level" + $td.attr("level"),
-            "zb": "",
-            "zbName": "",
-            "hidden": false,
-            "description": $td.children().children(".descriptionText").html(),
-            "nullable": !subject[connection].forced,
-            "optionlayout": 1,
-            "question": tempGUID,
-            "type": "single",
-            "levelNum": $td.children().children("h4").html(),
-            "options": [],
+            title: $td.children().children(".stemText").html(),
+            level: "level" + $td.attr("level"),
+            zb: "",
+            zbName: "",
+            hidden: false,
+            description: $td.children().children(".descriptionText").html(),
+            nullable: !subject[connection].forced,
+            optionlayout: 1,
+            question: tempGUID,
+            type: "single",
+            levelNum: $td.children().children("h4").html(),
+            options: [],
         };
         var options = $td.children().children(".itemBox").children("li");
         for (var j = 0; j < options.length; j++) {
             var tempOption = {
-                "title": options.eq(j).children(".ItemText").html(),
-                "zbName": "",
-                "optionNum": options.eq(j).children(".initials").html(),
-                "selected": false,
-                "relquestion": [],
-                "inputable": false,
+                title: options.eq(j).children(".ItemText").html(),
+                zbName: "",
+                optionNum: options.eq(j).children(".initials").html(),
+                selected: false,
+                relquestion: [],
+                inputable: false,
             }
             tempSubject.options.push(tempOption);
         }
     } else if (type == "multiple") {
         tempSubject = {
-            "title": $td.children().children(".stemText").html(),
-            "level": "level" + $td.attr("level"),
-            "zb": "",
-            "zbName": "",
-            "hidden": false,
-            "description": $td.children().children(".descriptionText").html(),
-            "nullable": !subject[connection].forced,
-            "type": "multiple",
-            "levelNum": $td.children().children("h4").html(),
-            "maxnum": subject[connection].maxSelectItem,
-            "minnum": subject[connection].minSelectItem,
-            "question": tempGUID,
-            "optionlayout": 1,
-            "options": []
+            title: $td.children().children(".stemText").html(),
+            level: "level" + $td.attr("level"),
+            zb: "",
+            zbName: "",
+            hidden: false,
+            description: $td.children().children(".descriptionText").html(),
+            nullable: !subject[connection].forced,
+            type: "multiple",
+            levelNum: $td.children().children("h4").html(),
+            maxnum: subject[connection].maxSelectItem,
+            minnum: subject[connection].minSelectItem,
+            question: tempGUID,
+            optionlayout: 1,
+            options: []
         };
         var options = $td.children().children(".itemBox").children("li");
         for (var j = 0; j < options.length; j++) {
             var tempOption = {
-                "selected": false,
-                "title": options.eq(j).children(".ItemText").html(),
-                "relquestion": [],
-                "zbName": "",
-                "inputable": false,
-                "optionNum": options.eq(j).children(".initials").html()
+                selected: false,
+                title: options.eq(j).children(".ItemText").html(),
+                relquestion: [],
+                zbName: "",
+                inputable: false,
+                optionNum: options.eq(j).children(".initials").html()
             };
             tempSubject.options.push(tempOption);
         }
     } else if (type == "completion") {
         tempSubject = {
-            "title": $td.children().children(".stemText").html(),
-            "level": "level" + $td.attr("level"),
-            "hidden": false,
-            "description": $td.children().children(".descriptionText").html(),
-            "nullable": !subject[connection].forced,
-            "question": tempGUID,
-            "type": "fillblanks",
-            "levelNum": $td.children().children("h4").html(),
-            "blanks": [],
-            "score": ""
+            title: $td.children().children(".stemText").html(),
+            level: "level" + $td.attr("level"),
+            hidden: false,
+            description: $td.children().children(".descriptionText").html(),
+            nullable: !subject[connection].forced,
+            question: tempGUID,
+            type: "fillblanks",
+            levelNum: $td.children().children("h4").html(),
+            blanks: [],
+            score: ""
         };
     } else if (type == "shortAnswer") {
         tempSubject = {
-            "title": $td.children().children(".stemText").html(),
-            "level": "level" + $td.attr("level"),
-            "hidden": false,
-            "zb": "",
-            "zbName": "",
-            "description": $td.children().children(".descriptionText").html(),
-            "nullable": !subject[connection].forced,
-            "question": tempGUID,
-            "type": "shortanswer",
-            "levelNum": $td.children().children("h4").html(),
-            "width": 800,
-            "hight": 30 * subject[connection].showLine,
-            "maxnum": subject[connection].maxLength,
-            "minnum": subject[connection].minLength
+            title: $td.children().children(".stemText").html(),
+            level: "level" + $td.attr("level"),
+            hidden: false,
+            zb: "",
+            zbName: "",
+            description: $td.children().children(".descriptionText").html(),
+            nullable: !subject[connection].forced,
+            question: tempGUID,
+            type: "shortanswer",
+            levelNum: $td.children().children("h4").html(),
+            width: 800,
+            hight: 30 * subject[connection].showLine,
+            maxnum: subject[connection].maxLength,
+            minnum: subject[connection].minLength
         };
     } else if (type == "sort") {
         tempSubject = {
-            "title": $td.children().children(".stemText").html(),
-            "level": "level" + $td.attr("level"),
-            "hidden": false,
-            "description": $td.children().children(".descriptionText").html(),
-            "nullable": !subject[connection].forced,
-            "question": tempGUID,
-            "type": "order",
-            "levelNum": $td.children().children("h4").html(),
-            "optionlayout": 1,
-            "options": []
+            title: $td.children().children(".stemText").html(),
+            level: "level" + $td.attr("level"),
+            hidden: false,
+            description: $td.children().children(".descriptionText").html(),
+            nullable: !subject[connection].forced,
+            question: tempGUID,
+            type: "order",
+            levelNum: $td.children().children("h4").html(),
+            optionlayout: 1,
+            options: []
         };
         var options = $td.children().children(".itemBox").children("li");
         for (var j = 0; j < options.length; j++) {
             var tempOption = {
-                "selected": false,
-                "title": options.eq(j).children(".ItemText").html(),
-                "relquestion": [],
-                "zbName": "",
-                "inputable": false,
-                "optionNum": options.eq(j).children(".initials").html()
+                selected: false,
+                title: options.eq(j).children(".ItemText").html(),
+                relquestion: [],
+                zbName: "",
+                inputable: false,
+                optionNum: options.eq(j).children(".initials").html()
             };
             tempSubject.options.push(tempOption);
         }
     } else if (type == "description") {
         tempSubject = {
-            "title": $td.children().children(".stemText").html(),
-            "level": "level" + $td.attr("level"),
-            "description": "",
-            "nullable": true,
-            "hidden": false,
-            "question": tempGUID,
-            "type": "static",
-            "levelNum": ""
+            title: $td.children().children(".stemText").html(),
+            level: "level" + $td.attr("level"),
+            description: "",
+            nullable: true,
+            hidden: false,
+            question: tempGUID,
+            type: "static",
+            levelNum: ""
         };
     } else if (type == "dividingLine") {
         tempSubject = {
-            "title": "<hr/>",
-            "level": "level" + $td.attr("level"),
-            "description": "",
-            "nullable": true,
-            "hidden": false,
-            "question": tempGUID,
-            "type": "static",
-            "levelNum": ""
+            title: "<hr/>",
+            level: "level" + $td.attr("level"),
+            description: "",
+            nullable: true,
+            hidden: false,
+            question: tempGUID,
+            type: "static",
+            levelNum: ""
         };
     }
     return tempSubject;
@@ -278,3 +282,5 @@ function hideShielder() {
 
 exports.saveQuestionnaire = saveQuestionnaire;
 exports.getPatternJson = getPatternJson;
+exports.decomposeQuestionnaire = decomposeQuestionnaire;
+exports.getQuestionnaireJson = getQuestionnaireJson;
