@@ -309,6 +309,13 @@ function showQuestionnaires(solutionNameIndex, i) {
     }
 }
 
+/**
+ * 上传问卷表样
+ * @param  name 问卷标识
+ * @param  row  行数
+ * @param  {Function} cb   回调函数
+ * @return
+ */
 function uploadQuestionnaire(name, row, cb) {
     console.log(name);
     quesSqlite.getQuestionnaireByName(GlobalData, name, function(res) {
@@ -332,8 +339,45 @@ function uploadQuestionnaire(name, row, cb) {
     });
 }
 
+/**
+ * 编辑问卷
+ * @param  name 问卷标识
+ * @param  row  行数
+ * @param  {Function} cb   回调函数
+ * @return
+ */
 function decomposeQuestionnaire(name, row, cb) {
-    console.log(name);
+    /*判断问卷是否已经下载*/
+    var listLength = $(".listBody").length;
+    if ($(".listBody").eq(listLength - row).find(".syncTd").html() == "未下载") {
+        /*未下载 下载问卷表样*/
+        showShielder();
+        getQuestionnaireInfo(GlobalData, name, function(res) {
+            if (res.success == true) {
+                /*将下载更换为删除 将未下载改为已同步*/
+                changeSyn(name, row, 1);
+                /*将标识传给主进程*/
+                __setTempQuestionnaireName(name, function(res2) {
+                    if (res2.success == true) {
+                        console.log("给主进程传递参数成功");
+                        /*打开预览界面*/
+                        window.location.href = "./design.html";
+                        hideShielder();
+                    }
+                });
+            }
+        });
+    } else {
+        /*未同步或已同步 直接显示*/
+        __setTempQuestionnaireName(name, function(res2) {
+            if (res2.success == true) {
+                console.log("给主进程传递参数成功");
+                /*打开预览界面*/
+                window.location.href = "./design.html";
+                hideShielder();
+            }
+        });
+    }
 }
 
 /**
@@ -342,10 +386,10 @@ function decomposeQuestionnaire(name, row, cb) {
  * 远程且已同步 提示不能删除所有 删除本地表样
  * 远程且未同步 提示还为同步 删除本地表样
  * 本地且未同步 提示将直接删除所有
- * @param  {[type]}   name [description]
- * @param  {[type]}   row  [description]
- * @param  {Function} cb   [description]
- * @return {[type]}        [description]
+ * @param  name 问卷标识
+ * @param  row  行数
+ * @param  {Function} cb   回调函数
+ * @return
  */
 function deleteQuestionnaire(name, row, cb) {
     var listLength = $(".listBody").length;
