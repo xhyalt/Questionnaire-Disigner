@@ -4,6 +4,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 
 var GlobalData = null;
 var name = null;
+var questionnaireData = null;
 
 $(function() {
     init();
@@ -17,11 +18,10 @@ function init() {
                     console.log(GlobalData);
                     console.log(name);
                     /*根据标识获取问卷表样*/
-                    quesSqlite.getQuestionnaireDataByName(GlobalData, name, function(res3) {
+                    quesSqlite.getQuestionnaireByName(GlobalData, name, function(res3) {
                         if (res3.success == true) {
                             /*显示预览效果*/
-                            var questionnaireData = res3.data[0].data;
-                            // console.log(questionnaireData);
+                            questionnaireData = res3.data[0].data;
                             new Questionnaire($('#main'), JSON.parse(questionnaireData), function() {});
                         }
                     })

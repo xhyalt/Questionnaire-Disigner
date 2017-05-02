@@ -4,6 +4,7 @@ const quesSqlite = require('./js/quesSqlite.js');
 const save = require('./js/save.js');
 /*与主进程通信的模块*/
 const ipcRenderer = require('electron').ipcRenderer;
+const querystring = require('querystring');
 /*用户基础数据*/
 var GlobalData = null;
 /*是否在线*/
@@ -20,8 +21,6 @@ var questionnairesLength = 0;
 var dTreeItemNum = 0;
 /*树*/
 var d = null;
-/*被选中的业务方案下的所有调查问卷*/
-var questionnairesBySolutionsRecid = null;
 /*当前选中的业务方案*/
 var solutionTemp = null;
 
@@ -122,7 +121,7 @@ $(function() {
 
         /*获取信息并存入数据库*/
         questionnaireJson = {
-            "solutionRecid": solutionTemp.recid,
+            "solutionName": solutionTemp.name,
             "name": popBoxName,
             "no": popBoxNo,
             "reportGroupCode": popBoxReportGroupCode,
@@ -135,7 +134,7 @@ $(function() {
                 console.log(res.data["count(1)"]);
                 if (res.data["count(1)"] == 0) {
                     /*该标识唯一*/
-                    quesSqlite.createTempQuestionnaire(GlobalData, solutionsInfo[solutionTemp].recid, questionnaireJson, function(res) {
+                    quesSqlite.createTempQuestionnaire(GlobalData, solutionsInfo[solutionTemp].name, questionnaireJson, function(res) {
                         if (res.success == true) {
                             console.log("创建临时调查问卷成功");
                             __setTempQuestionnaireName(questionnaireJson.name, function(res) {
@@ -149,7 +148,7 @@ $(function() {
                             return;
                         }
                     });
-                }else{
+                } else {
                     /*该标志不唯一 不予新建*/
                     txt = "该标识已经存在！";
                     window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
@@ -249,10 +248,10 @@ function initTree() {
 
 /**
  * 树节点业务方案的点击事件
- * @param  solutionRecidIndex 该业务方案节点的recid
+ * @param  solutionNameIndex 该业务方案节点的标识
  * @return
  */
-function showQuestionnaires(solutionRecidIndex, i) {
+function showQuestionnaires(solutionNameIndex, i) {
     //添加节点点击事件
     var row = 0;
     var syncTd;
@@ -263,7 +262,7 @@ function showQuestionnaires(solutionRecidIndex, i) {
         $(".listBody").remove();
     console.log(questionnairesInfo);
     for (let i = 0; i < questionnairesLength; i++) {
-        if (questionnairesInfo[i].solutionRecid == solutionRecidIndex) {
+        if (questionnairesInfo[i].solutionName == solutionNameIndex) {
             console.log(questionnairesInfo[i].title);
             questionnairesInfo[i].row = ++row;
 
@@ -271,21 +270,21 @@ function showQuestionnaires(solutionRecidIndex, i) {
                 /*data为空表示未下载*/
                 syncTd = "未下载";
                 if (onlineStatus == true) {
-                    tempItem = `<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData('${questionnairesInfo[i].name}', ${row});">下载</a>`;
+                    tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData('${questionnairesInfo[i].name}', ${row});">下载</a>`;
                 } else {
                     tempItem = `<span>编辑</span><span>预览</span><span>下载</span>`;
                 }
             } else if (questionnairesInfo[i].isChanged == "0") {
                 /*data不为空 且 没有修改 表示已同步*/
                 syncTd = "已同步";
-                tempItem = `<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>`;
+                tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>`;
             } else {
                 /*data不为空 且 已经修改 表示未同步*/
                 syncTd = "未同步";
                 if (onlineStatus == true) {
-                    tempItem = `<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><a href="javascript: setQuestionnaireData('${questionnairesInfo[i].name}');">上传</a>`;
+                    tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><a href="javascript: uploadQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">上传</a>`;
                 } else {
-                    tempItem = `<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><span>上传</span>`;
+                    tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><span>上传</span>`;
                 }
             }
 
@@ -308,6 +307,33 @@ function showQuestionnaires(solutionRecidIndex, i) {
                 </tr>`);
         }
     }
+}
+
+function uploadQuestionnaire(name, row, cb) {
+    console.log(name);
+    quesSqlite.getQuestionnaireByName(GlobalData, name, function(res) {
+        if (res.success == true) {
+            // console.log("获取调查问卷数据成功");
+            tempQuestionnaire = res.data[0];
+            save.getQuestionnaireJson(tempQuestionnaire, function(res2) {
+                if (res2.success == true) {
+                    restfulUtil.setQuestionnaire(GlobalData, res2.data, function(res3) {
+                        if (res3.success == true) {
+                            console.log("保存问卷成功");
+                            /*将未同步改为已同步*/
+                            changeSyn(name, row, 1);
+                        } else {
+                            console.log("保存问卷失败");
+                        }
+                    });
+                }
+            })
+        }
+    });
+}
+
+function decomposeQuestionnaire(name, row, cb) {
+    console.log(name);
 }
 
 /**
@@ -504,19 +530,19 @@ function getQuestionnaireInfo(GlobalData, name, cb) {
 }
 
 function changeSyn(name, row, method) {
-    /*1.未下载——已同步 2.已同步——未下载 3.已同步——未同步 4.未同步——已同步 5.未同步——未下载*/
+    /*1.已同步 2.未下载 3.未同步*/
     var listLength = $(".listBody").length;
     switch (method) {
         case 1:
             {
-                $(".listBody").eq(listLength - row).find(".syncTd").empty().append("已同步");
-                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${name}', ${row}, function(res){});">删除</a>`);
+              $(".listBody").eq(listLength - row).find(".syncTd").empty().append("已同步");
+              $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${name}', ${row}, function(res){});">删除</a>`);
             }
             break;
         case 2:
             {
                 $(".listBody").eq(listLength - row).find(".syncTd").empty().append("未下载");
-                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: ;">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData(${name}, ${row});">下载</a>`);
+                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData(${name}, ${row});">下载</a>`);
             }
             break;
         case 3:
@@ -582,7 +608,7 @@ function initQuestionnaire(cb) {
                                         // console.log("该方案包含的问卷个数为" + questionnairesLength);
                                         for (let j = 0; j < questionnairesLength; j++) {
                                             /*更新某业务方案的调查问卷 quesSqlite.js*/
-                                            quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[i].recid, questionnairesInfo[j], function(res4) {
+                                            quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[i].name, questionnairesInfo[j], function(res4) {
                                                 if (res4.success == true) {
                                                     console.log("调查问卷列表写入数据库成功");
                                                     if (++countJ == questionnairesAllLength) {
@@ -747,8 +773,8 @@ function __setTempQuestionnaireName(tempQuestionnaireName, cb) {
 function __addSolutionTreeItem(cb) {
     console.log("正在添加业务方案树节点");
     for (var i = 0; i < solutionsLength; i++) {
-        let temp = solutionsInfo[i].recid;
-        d.add(++dTreeItemNum, 0, solutionsInfo[i].title, `javascript:showQuestionnaires('${temp}', ${i});`, '', solutionsInfo[i].recid, "./images/tree_02_op.png", "./images/tree_02_op.png");
+        let temp = solutionsInfo[i].name;
+        d.add(++dTreeItemNum, 0, solutionsInfo[i].title, `javascript:showQuestionnaires('${temp}', ${i});`, '', solutionsInfo[i].name, "./images/tree_02_op.png", "./images/tree_02_op.png");
         solutionsInfo[i].rowID = dTreeItemNum;
     }
     cb({
@@ -765,7 +791,7 @@ function __addQuestionnaireTreeItem(cb) {
     for (var i = 0; i < questionnairesLength; i++) {
         /*遍历业务方案找到父节点*/
         for (var j = 0; j < solutionsLength; j++) {
-            if (questionnairesInfo[i].solutionRecid == solutionsInfo[j].recid) {
+            if (questionnairesInfo[i].solutionName == solutionsInfo[j].name) {
                 questionnairesInfo[i].parentID = solutionsInfo[j].rowID;
                 d.add(++dTreeItemNum, questionnairesInfo[i].parentID, questionnairesInfo[i].title, "javascript: clickQ();", "", "", "./images/tree_04_q.png", "./images/tree_04_q.png");
                 questionnairesInfo[i].rowID = dTreeItemNum;

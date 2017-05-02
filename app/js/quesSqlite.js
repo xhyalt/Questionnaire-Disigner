@@ -5,7 +5,6 @@
 const fs = require("fs");
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
-// const dbFile = "./app/quesSqlite/quesSqlite.db";
 const dbFile = "./quesSqlite.db";
 const db = new sqlite3.Database(dbFile);
 
@@ -181,18 +180,17 @@ function initSolutions(GlobalData, solutionInfo, cb) {
  * 某条调查问卷基本信息在数据库中的处理逻辑
  * @public
  * @param  GlobalData        [用户基本信息]
- * @param  solutionRecid     [业务方案ID]
+ * @param  solutionName     [业务方案标识]
  * @param  questionnaireJson [调查问卷基本信息]
  * @param  {Function} cb                [回调函数]
  * @return
  */
-function initQuestionnairesList(GlobalData, solutionRecid, questionnaireJson, cb) {
-    __checkQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res) {
+function initQuestionnairesList(GlobalData, solutionName, questionnaireJson, cb) {
+    __checkQuestionnaire(GlobalData, solutionName, questionnaireJson, function(res) {
         if (res.success == true) {
-            // console.log("res.data['count(1)']" + res.data["count(1)"]);
             if (res.data["count(1)"] == 0) {
                 // console.log("不存在该调查问卷 添加调查问卷");
-                __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res2) {
+                __insertQuestionnaire(GlobalData, solutionName, questionnaireJson, function(res2) {
                     if (res2.success == true) {
                         // console.log("添加调查问卷成功");
                         /*将调查问卷的isRemote字段置1*/
@@ -220,7 +218,7 @@ function initQuestionnairesList(GlobalData, solutionRecid, questionnaireJson, cb
                 });
             } else {
                 console.log("存在该调查问卷 更新调查问卷");
-                __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res2) {
+                __updateQuestionnaire(GlobalData, solutionName, questionnaireJson, function(res2) {
                     if (res2.success == true) {
                         // console.log("更新调查问卷成功");
                         __updateQuestionnaireIsRemote(GlobalData, questionnaireJson.name, "1", function(res3) {
@@ -457,9 +455,9 @@ function __updateQustionnaireIsNew(GlobalData, cb) {
  * @param  {Function} cb [回调函数]
  * @return
  */
-function deleteQuestionnaireIsNew(GlobalData, solutionRecid, cb) {
+function deleteQuestionnaireIsNew(GlobalData, solutionName, cb) {
     console.log("正在删除所有isNew字段为0的业务方案");
-    db.get("delete from QUESTIONNAIRES where URL = ? and user = ? and solutionRecid = ? and isNew = ?", [GlobalData.urlRoot, GlobalData.user, solutionRecid, "0"], function(err) {
+    db.get("delete from QUESTIONNAIRES where URL = ? and user = ? and solutionName = ? and isNew = ?", [GlobalData.urlRoot, GlobalData.user, solutionName, "0"], function(err) {
         if (err) {
             cb({
                 success: false,
@@ -475,16 +473,15 @@ function deleteQuestionnaireIsNew(GlobalData, solutionRecid, cb) {
 /**
  * 创建临时调查问卷
  * @public
- * @param  GlobalData        [用户基础数据]
- * @param  solutionRecid     [业务方案的ID]
- * @param  questionnaireJson [调查问卷基本信息]
- * @param  {Function} cb                [回调函数]
- * @return                  [description]
+ * @param  GlobalData        用户基础数据
+ * @param  solutionName      业务方案的标识
+ * @param  questionnaireJson 调查问卷基本信息
+ * @param  {Function} cb                回调函数
  */
-function createTempQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
+function createTempQuestionnaire(GlobalData, solutionName, questionnaireJson, cb) {
     console.log("正在创建临时调查问卷 createQuestionnaire");
     questionnaireJson.isRemote = "0";
-    __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, function(res) {
+    __insertQuestionnaire(GlobalData, solutionName, questionnaireJson, function(res) {
         if (res.success == true) {
             cb({
                 "success": true
@@ -511,15 +508,15 @@ function deleteTempQuestionnaire(GlobalData, tempRecid, cb) {
 /**
  * 更新调查问卷基本信息
  * @private
- * @param  GlobalData        [用户基本数据]
- * @param  solutionRecid     [业务方案ID]
- * @param  questionnaireJson [调查问卷基本信息]
- * @param  {Function} cb                [回调函数]
+ * @param  GlobalData        用户基本数据
+ * @param  solutionName      业务方案ID
+ * @param  questionnaireJson 调查问卷基本信息
+ * @param  {Function} cb                回调函数
  * @return
  */
-function __updateQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
+function __updateQuestionnaire(GlobalData, solutionName, questionnaireJson, cb) {
     // console.log("正在更新调查问卷 __updateQuestionnaire");
-    db.get("update QUESTIONNAIRES set title = ?, name = ?, isNew = ? where URL = ? and user = ? and recid = ? and solutionRecid = ?", [questionnaireJson.title, questionnaireJson.name, "1", GlobalData.urlRoot, GlobalData.user, questionnaireJson.recid, solutionRecid], function(err) {
+    db.get("update QUESTIONNAIRES set title = ?, name = ?, isNew = ? where URL = ? and user = ? and name = ? and solutionName = ?", [questionnaireJson.title, questionnaireJson.name, "1", GlobalData.urlRoot, GlobalData.user, questionnaireJson.name, solutionName], function(err) {
         if (err) {
             cb({
                 success: false,
@@ -608,15 +605,15 @@ function __deleteQuestionnaireByName(GlobalData, name, cb) {
  * 添加某调查问卷
  * 回调函数传回添加是否成功
  * @private
- * @param  GlobalData        [用户基础数据]
- * @param  solutionRecid     [业务方案的ID]
- * @param  questionnaireJson [调查问卷基本信息]
- * @param  {Function} cb                [回调函数]
+ * @param  GlobalData        用户基础数据
+ * @param  solutionName      业务方案的ID
+ * @param  questionnaireJson 调查问卷基本信息
+ * @param  {Function} cb                回调函数
  * @return
  */
-function __insertQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
+function __insertQuestionnaire(GlobalData, solutionName, questionnaireJson, cb) {
     // console.log("正在添加调查问卷 __insertQuestionnaire");
-    db.run("insert into QUESTIONNAIRES(URL, user, solutionRecid, name, no, reportGroupCode, title, subtitle, recid, isNew, isRemote) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionRecid, questionnaireJson.name, questionnaireJson.no, questionnaireJson.reportGroupCode, questionnaireJson.title, questionnaireJson.subtitle, questionnaireJson.recid, "1", questionnaireJson.isRemote], function(err) {
+    db.run("insert into QUESTIONNAIRES(URL, user, solutionName, name, no, reportGroupCode, title, subtitle, recid, isNew, isRemote) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionName, questionnaireJson.name, questionnaireJson.no, questionnaireJson.reportGroupCode, questionnaireJson.title, questionnaireJson.subtitle, questionnaireJson.recid, "1", questionnaireJson.isRemote], function(err) {
         if (err) {
             console.log(err.message);
             cb({
@@ -789,14 +786,14 @@ function __updateQuestionnaireIsRemote(GlobalData, name, isRemote, cb) {
  * 回调函数传回select出的行数
  * @private
  * @param  GlobalData        用户基础数据
- * @param  solutionRecid     业务方案的recid
+ * @param  solutionName     业务方案的标识
  * @param  questionnaireJson 调查问卷基础数据
  * @param  {Function} cb     回调函数
  * @return
  */
-function __checkQuestionnaire(GlobalData, solutionRecid, questionnaireJson, cb) {
+function __checkQuestionnaire(GlobalData, solutionName, questionnaireJson, cb) {
     // console.log("正在检查是否存在该问卷 __checkQuestionnaire");
-    db.get("select count(1) from QUESTIONNAIRES where user = ? and URL = ? and recid = ? and solutionRecid = ?", [GlobalData.user, GlobalData.urlRoot, questionnaireJson.recid, solutionRecid], function(err, row) {
+    db.get("select count(1) from QUESTIONNAIRES where user = ? and URL = ? and recid = ? and solutionName = ?", [GlobalData.user, GlobalData.urlRoot, questionnaireJson.recid, solutionName], function(err, row) {
         if (err) {
             cb({
                 success: false,
@@ -996,7 +993,7 @@ function __createTable(cb) {
 
             db.run("create table SOLUTIONS(URL TEXT, user TEXT, periodType TEXT, name TEXT, minPeriod TEXT, maxPeriod TEXT, title TEXT, recid TEXT, isNew TEXT)");
 
-            db.run("create table QUESTIONNAIRES(URL TEXT, user TEXT, solutionRecid TEXT, name TEXT, no TEXT, reportGroupCode, title TEXT, subtitle TEXT, recid TEXT, isNew TEXT, data TEXT, isChanged TEXT, isRemote TEXT, editTime TEXT)");
+            db.run("create table QUESTIONNAIRES(URL TEXT, user TEXT, solutionName TEXT, name TEXT, no TEXT, reportGroupCode, title TEXT, subtitle TEXT, recid TEXT, isNew TEXT, data TEXT, isChanged TEXT, isRemote TEXT, editTime TEXT)");
             /*表单创建成功*/
             if (cb) {
                 cb({

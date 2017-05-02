@@ -1,8 +1,7 @@
-var fetch = require("node-fetch");
-// var util = require("./util.js");
-var http = require('http');
-var url = require('url');
-var fetch = require("node-fetch");
+const fetch = require("node-fetch");
+const http = require('http');
+const url = require('url');
+const querystring = require("querystring");
 
 /**
  * 登录token请求
@@ -28,7 +27,7 @@ function getToken(GlobalData, cb) {
 }
 
 /**
- * 业务方案请求
+ * 获取业务方案列表的请求
  * @public
  * @param  GlobalData 用户基础数据
  * @param  cb callback
@@ -46,11 +45,11 @@ function getSolutions(GlobalData, cb) {
 }
 
 /**
- * 调查问卷请求
+ * 获取调查问卷列表的请求
  * @public
- * @param  GlobalData [用户基础数据]
- * @param  obj        [业务方案的recid]
- * @param  {Function} cb         [回调函数]
+ * @param  GlobalData 用户基础数据
+ * @param  obj        业务方案的recid
+ * @param  {Function} cb  回调函数
  * @return
  */
 function getQuestionnaires(GlobalData, obj, cb) {
@@ -67,9 +66,9 @@ function getQuestionnaires(GlobalData, obj, cb) {
 /**
  * 某个调查问卷的表样请求
  * @public
- * @param  GlobalData [用户基础数据]
- * @param  obj        [业务方案的recid]
- * @param  {Function} cb         [回调函数]
+ * @param  GlobalData 用户基础数据
+ * @param  obj        业务方案的recid
+ * @param  {Function} cb         回调函数
  * @return
  */
 function getQuestionnaireInfo(GlobalData, obj, cb) {
@@ -84,6 +83,25 @@ function getQuestionnaireInfo(GlobalData, obj, cb) {
 }
 
 /**
+ * 保存问卷的请求
+ * @param GlobalData 用户基础数据
+ * @param obj        生成好的JSON字符串
+ * @param {Function} cb         回调函数
+ */
+function setQuestionnaire(GlobalData, obj, cb) {
+    __getData(4, {
+        url: __setQuestionnaireURL(GlobalData),
+        body: {
+            method: "POST",
+            timeout: 3000,
+            body: querystring.stringify({
+                data: JSON.stringify(obj)
+            })
+        }
+    }, cb);
+}
+
+/**
  * restful请求核心方法
  * @private
  * @param type 请求type和请求的内容对应
@@ -93,7 +111,7 @@ function getQuestionnaireInfo(GlobalData, obj, cb) {
 function __getData(type, obj, cb) {
     // console.log("__getData " + JSON.stringify(obj));
     /**
-     * type 1 业务方案 2 调查问卷 3 某个问卷的表样 4 save
+     * type 1 业务方案 2 调查问卷 3 某个问卷的表样 4 保存问卷
      */
     fetch(obj.url, obj.body).then(function(res) {
         return res.json();
@@ -118,6 +136,17 @@ function __getData(type, obj, cb) {
 }
 
 /**
+ * 合成保存问卷的URL的函数
+ * @private
+ * @param GlobalData 用户基础数据
+ * @return 保存问卷的URL
+ */
+function __setQuestionnaireURL(GlobalData) {
+    var url = `http://${GlobalData.urlRoot}/jqrapi/questionnaire/saveQuestionnaire?user=${GlobalData.user}&src=${GlobalData.src}&devid=${GlobalData.devid}&token=${GlobalData.token}&loginContext=${GlobalData.loginContext}`;
+    return url;
+}
+
+/**
  * 合成获取方案的URL的函数
  * @private
  * @param  GlobalData 用户基础数据
@@ -131,7 +160,7 @@ function __getSolutionsURL(GlobalData) {
 /**
  * 合成获取问卷的URL函数
  * @private
- * @param  GlobalData [用户基础数据]
+ * @param  GlobalData 用户基础数据
  * @return 获取问卷的URL
  */
 function __getQuestionnairesURL(GlobalData) {
@@ -142,7 +171,7 @@ function __getQuestionnairesURL(GlobalData) {
 /**
  * 合成获取问卷列表以及问卷样式的URL函数
  * @private
- * @param  GlobalData [用户基础数据]
+ * @param  GlobalData 用户基础数据
  * @return 获取问卷列表以及问卷样式的URL
  */
 function __getQuestionnaireInfoURL(GlobalData) {
@@ -165,3 +194,4 @@ exports.getToken = getToken;
 exports.getSolutions = getSolutions;
 exports.getQuestionnaires = getQuestionnaires;
 exports.getQuestionnaireInfo = getQuestionnaireInfo;
+exports.setQuestionnaire = setQuestionnaire;

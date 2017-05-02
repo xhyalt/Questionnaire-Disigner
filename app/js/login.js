@@ -240,7 +240,7 @@ function initQuestionnaire(cb) {
                                         for (let j = 0; j < questionnairesLength; j++) {
 
                                             /*更新某业务方案的调查问卷 quesSqlite.js*/
-                                            quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[i].recid, questionnairesInfo[j], function(res4) {
+                                            quesSqlite.initQuestionnairesList(GlobalData, solutionsInfo[i].name, questionnairesInfo[j], function(res4) {
                                                 if (res4.success == true) {
                                                     console.log("调查问卷列表写入数据库成功");
                                                     if (++countJ == questionnairesAllLength) {

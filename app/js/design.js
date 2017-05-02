@@ -855,7 +855,6 @@ function saveQuestionnairePattern(cb) {
                 if (res.success == true) {
                     console.log(res.data);
                     quesSqlite.updateQuestionnaireData(GlobalData, tempQuestionnaire.name, JSON.stringify(res.data), function(res2) {
-                        console.log(res2.data);
                         if (res2.success == true) {
                             cb({
                                 success: true
