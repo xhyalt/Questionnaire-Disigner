@@ -85,5 +85,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-quesSqlite.db
-quesSqlite0.db
+*.db
