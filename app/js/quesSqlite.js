@@ -793,7 +793,7 @@ function __updateQuestionnaireIsRemote(GlobalData, name, isRemote, cb) {
  */
 function __checkQuestionnaire(GlobalData, solutionName, questionnaireJson, cb) {
     // console.log("正在检查是否存在该问卷 __checkQuestionnaire");
-    db.get("select count(1) from QUESTIONNAIRES where user = ? and URL = ? and recid = ? and solutionName = ?", [GlobalData.user, GlobalData.urlRoot, questionnaireJson.recid, solutionName], function(err, row) {
+    db.get("select count(1) from QUESTIONNAIRES where user = ? and URL = ? and name = ? and solutionName = ?", [GlobalData.user, GlobalData.urlRoot, questionnaireJson.name, solutionName], function(err, row) {
         if (err) {
             cb({
                 success: false,
@@ -939,7 +939,7 @@ function __selectSolutions(GlobalData, cb) {
  */
 function __checkSolution(GlobalData, solutionJson, cb) {
     // console.log("正在检查是否存在该业务方案 __checkSolution");
-    db.get("select count(1) from SOLUTIONS where user = ? and URL = ? and recid = ?", [GlobalData.user, GlobalData.urlRoot, solutionJson.recid], function(err, row) {
+    db.get("select count(1) from SOLUTIONS where user = ? and URL = ? and name = ?", [GlobalData.user, GlobalData.urlRoot, solutionJson.name], function(err, row) {
         if (err) {
             cb({
                 success: false,
