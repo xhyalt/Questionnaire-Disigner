@@ -48,6 +48,10 @@ $(function() {
                     tempQuestionnaire = res2.data[0];
                     $("#titleNameTextID").empty().append(tempQuestionnaire.title);
                     $("#headDetailTextID").empty().append(tempQuestionnaire.subtitle);
+                    console.log(tempQuestionnaire.data);
+                    if (tempQuestionnaire.data) {
+                        console.log("问卷不空");
+                    }
                 }
             });
         } else {
@@ -601,24 +605,25 @@ $(function() {
             txt = "您还没有保存问卷，是否保存？";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
                 if (res.data == true) {
-                    /*调用保存函数*/
+                    /*点击确定 调用保存函数*/
                     saveQuestionnairePattern(function(res2) {
                         if (res2.success == true) {
                             window.location.href = "./list.html";
                         }
                     });
                 } else if (res.success == true) {
-                    /*删除库 直接返回*/
-                    console.log(tempQuestionnaire.recid);
-                    quesSqlite.deleteTempQuestionnaire(GlobalData, tempQuestionnaire.recid, function(res2) {
-                        if (res2.success == true) {
-                            window.location.href = "./list.html";
-                        } else {
-                            console.log("删除失败");
-                        }
-                    });
-                } else {
-
+                    /*点击取消 如果问卷内容是空的表示是新建的 删除库再返回*/
+                    if (!tempQuestionnaire.data) {
+                        quesSqlite.deleteTempQuestionnaire(GlobalData, tempQuestionnaire.recid, function(res2) {
+                            if (res2.success == true) {
+                                window.location.href = "./list.html";
+                            } else {
+                                console.log("删除失败");
+                            }
+                        });
+                    }else{
+                        window.location.href = "./list.html";
+                    }
                 }
             });
         } else {
