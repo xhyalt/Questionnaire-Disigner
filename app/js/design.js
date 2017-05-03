@@ -890,6 +890,7 @@ function saveQuestionnairePattern(cb) {
                     console.log(res.data);
                     quesSqlite.updateQuestionnaireData(GlobalData, tempQuestionnaire.name, JSON.stringify(res.data), function(res2) {
                         if (res2.success == true) {
+                            isChanged = false;
                             cb({
                                 success: true
                             });
@@ -969,7 +970,7 @@ function sameLine(checked) {
 }
 
 function setSameLine() {
-  isChanged = true;
+    isChanged = true;
     var stemText = activeSubject.children(".subjectMain").children(".stemText");
     var descriptionText = activeSubject.children(".subjectMain").children(".descriptionText");
     var itemBox = activeSubject.children(".subjectMain").children(".itemBox");

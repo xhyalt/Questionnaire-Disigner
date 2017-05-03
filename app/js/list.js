@@ -266,7 +266,7 @@ function showQuestionnaires(solutionNameIndex, i) {
             console.log(questionnairesInfo[i].title);
             questionnairesInfo[i].row = ++row;
 
-            if (questionnairesInfo[i].data == null || questionnairesInfo[i].data == "") {
+            if (!questionnairesInfo[i].data) {
                 /*data为空表示未下载*/
                 syncTd = "未下载";
                 if (onlineStatus == true) {
@@ -274,7 +274,7 @@ function showQuestionnaires(solutionNameIndex, i) {
                 } else {
                     tempItem = `<span>编辑</span><span>预览</span><span>下载</span>`;
                 }
-            } else if (questionnairesInfo[i].isChanged == "0") {
+            } else if (questionnairesInfo[i].isChanged == "0" && questionnairesInfo[i].data) {
                 /*data不为空 且 没有修改 表示已同步*/
                 syncTd = "已同步";
                 tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>`;
@@ -327,7 +327,7 @@ function uploadQuestionnaire(name, row, cb) {
                         if (res3.success == true) {
                             console.log("保存问卷成功");
                             /*将该问卷的isChanged改为0*/
-                            quesSqlite.updateQuestionnaireIsChanged(GlobalData, name, "0", function(res4){
+                            quesSqlite.updateQuestionnaireIsChanged(GlobalData, name, "0", function(res4) {
                                 console.log("更新isChanged成功");
                                 /*将未同步改为已同步*/
                                 changeSyn(name, row, 1);
@@ -582,8 +582,8 @@ function changeSyn(name, row, method) {
     switch (method) {
         case 1:
             {
-              $(".listBody").eq(listLength - row).find(".syncTd").empty().append("已同步");
-              $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${name}', ${row}, function(res){});">删除</a>`);
+                $(".listBody").eq(listLength - row).find(".syncTd").empty().append("已同步");
+                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${name}', ${row}, function(res){});">删除</a>`);
             }
             break;
         case 2:

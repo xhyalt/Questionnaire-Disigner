@@ -15,6 +15,7 @@ $(document).ready(function() {
 
         $(document).off("mousemove", "body");
         $("body").off("mouseup", ".subject, .unSubject");
+        isChanged = true;
     });
 
     /*题型鼠标落下事件*/
@@ -141,6 +142,7 @@ $(document).ready(function() {
 
                         setOrder();
                         addSubjectJson(current, type);
+                        isChanged = true;
 
                     } else if (bottoms.length > 0) {
                         level = bottoms[0].attributes["level"].nodeValue;
@@ -151,6 +153,7 @@ $(document).ready(function() {
 
                         setOrder();
                         addSubjectJson(current, type);
+                        isChanged = true;
 
                     } else if (mergesTop.length > 0) {
                         level = $(mergesTop[0]).parent().parent().attr["level"];
@@ -161,11 +164,14 @@ $(document).ready(function() {
 
                         setOrder();
                         addSubjectJson(current, type);
+                        isChanged = true;
+
                     } else {
                         $("#target").append($temp.html());
                         setOrder();
                         $("#emptyBox").remove();
                         addSubjectJson($("#target").children(".subject, .unSubject"), type);
+                        isChanged = true;
                     }
                 } else {
                     $("#target .subject, #target .unSubject").css({
