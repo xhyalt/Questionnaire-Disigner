@@ -48,9 +48,9 @@ $(function() {
                     tempQuestionnaire = res2.data[0];
                     $("#titleNameTextID").empty().append(tempQuestionnaire.title);
                     $("#headDetailTextID").empty().append(tempQuestionnaire.subtitle);
-                    console.log(tempQuestionnaire.data);
                     if (tempQuestionnaire.data) {
-                        console.log("问卷不空");
+                        /*表样不空 解析表样*/
+                        console.log("解析问卷");
                     }
                 }
             });
@@ -601,7 +601,7 @@ $(function() {
     /*返回按钮 监听事件*/
     $("#back").on('click', function() {
         /*如果没有保存题型保存*/
-        if (isSave == false) {
+        if (isChanged == true) {
             txt = "您还没有保存问卷，是否保存？";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
                 if (res.data == true) {
@@ -621,7 +621,7 @@ $(function() {
                                 console.log("删除失败");
                             }
                         });
-                    }else{
+                    } else {
                         window.location.href = "./list.html";
                     }
                 }
@@ -854,7 +854,7 @@ function saveQuestionnairePattern(cb) {
         "title": tempQuestionnaire.title,
         "subtitle": tempQuestionnaire.subtitle
     }, function(res0) {
-        if (res0.success == true) {
+        if (res0.success == true && isChanged == true) {
             /*保存问卷表样*/
             save.getPatternJson(function(res) {
                 if (res.success == true) {

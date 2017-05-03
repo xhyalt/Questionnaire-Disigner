@@ -317,7 +317,6 @@ function showQuestionnaires(solutionNameIndex, i) {
  * @return
  */
 function uploadQuestionnaire(name, row, cb) {
-    console.log(name);
     quesSqlite.getQuestionnaireByName(GlobalData, name, function(res) {
         if (res.success == true) {
             // console.log("获取调查问卷数据成功");
@@ -327,8 +326,12 @@ function uploadQuestionnaire(name, row, cb) {
                     restfulUtil.setQuestionnaire(GlobalData, res2.data, function(res3) {
                         if (res3.success == true) {
                             console.log("保存问卷成功");
-                            /*将未同步改为已同步*/
-                            changeSyn(name, row, 1);
+                            /*将该问卷的isChanged改为0*/
+                            quesSqlite.updateQuestionnaireIsChanged(GlobalData, name, "0", function(res4){
+                                console.log("更新isChanged成功");
+                                /*将未同步改为已同步*/
+                                changeSyn(name, row, 1);
+                            });
                         } else {
                             console.log("保存问卷失败");
                         }

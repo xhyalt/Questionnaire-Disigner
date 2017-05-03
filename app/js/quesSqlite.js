@@ -731,6 +731,31 @@ function __updateQuestionnaireIsChanged(GlobalData, name, isChanged, cb) {
 }
 
 /**
+ * 更新问卷的isChanged属性
+ * @public
+ * @param  GlobalData        用户基础数据
+ * @param  name       标识
+ * @param  {Boolean}  isChanged  是否修改的字段
+ * @param  {Function} cb         回调函数
+ * @return
+ */
+function updateQuestionnaireIsChanged(GlobalData, name, isChanged, cb) {
+    console.log("正在更新问卷的isChanged属性");
+    __updateQuestionnaireIsChanged(GlobalData, name, isChanged, function(res) {
+        if (res.success == true) {
+            cb({
+                success: true
+            });
+        } else {
+            cb({
+                success: false,
+                data: res.data
+            });
+        }
+    });
+}
+
+/**
  * 更新某调查问卷是否在远程服务器上
  * @private
  * @param  GlobalData 用户基础数据
@@ -1121,3 +1146,4 @@ exports.deleteQuestionnaireByName = deleteQuestionnaireByName;
 exports.checkUser = checkUser;
 exports.updateQuestionnaireTitle = updateQuestionnaireTitle;
 exports.checkQuestionnaireByName = checkQuestionnaireByName;
+exports.updateQuestionnaireIsChanged = updateQuestionnaireIsChanged;

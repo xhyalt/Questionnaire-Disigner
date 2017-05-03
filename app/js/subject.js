@@ -1,4 +1,4 @@
-var isSave = false;
+var isChanged = false;
 
 /*题号数组*/
 var quesNoArr = new Array(5);
