@@ -308,7 +308,7 @@ function setOrder() {
                         $td.eq(i).find("h4").html("Q" + $td.eq(i).attr("num"));
                         break;
                 }
-            } else if ($td.eq(i).attr("father") - 1 == $prevTd.attr("father") && $td.eq(i).attr("level") - 1 == $prevTd.attr("level")) {
+            } else if ($td.eq(i).attr("level") - 1 == $prevTd.attr("level")) {
                 /*该组第一个节点*/
                 console.log("该层第一个节点");
                 $td.eq(i).attr("num", "1");

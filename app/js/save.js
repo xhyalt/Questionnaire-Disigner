@@ -1,7 +1,6 @@
 var subjectDiv = {};
 var itemLabelDiv = {};
 var tempQuestionnaireJson = {};
-var connection = 0;
 
 /**
  * 分解问卷
@@ -15,7 +14,6 @@ function decomposeQuestionnaire(tempQuestionnaire, cb) {
     tempQuestionnaireJson = eval('(' + tempQuestionnaire + ')');;
     console.log(tempQuestionnaireJson);
     traverse($("#target").eq(0), tempQuestionnaireJson, 0);
-    setOrder();
 }
 
 function traverse($td, node, i) {
@@ -38,15 +36,28 @@ function traverse($td, node, i) {
 }
 
 function setSubjectHtml($td, subjectJson) {
+    var connection = ++subjectTotal;
     type = subjectJson.type;
     /*添加大框架*/
     $td.append(subjectDiv[type]);
     /*确定子层*/
-    $tdSon = $td.children().last(".subject, .unSubject") ? $td.children().last() : $td.children().children().children(".mergeItem").children().last();
+    $tdSon = $td.children().last();
+    $tdSonLength = $td.children(".subject, .unSubject").length;
+    /*添加level和father属性*/
+    if ($td.attr("id") == "target") {
+        $tdSon.attr("father", 0);
+        $tdSon.attr("level", 1);
+        $tdSon.attr("num", $tdSonLength);
+    } else {
+        console.log($td.parent().parent(".subject"));
+        $tdSon.attr("father", $td.parent().parent(".subject").eq(0).attr("num"));
+        $tdSon.attr("level", (parseInt($td.parent().parent(".subject").eq(0).attr("level")) + 1).toString());
+        $tdSon.attr("num", $tdSonLength);
+    }
     /*添加guid属性*/
     $tdSon.attr("guid", subjectJson.question);
     /*添加connection属性*/
-    $tdSon.attr("connection", (++connection).toString());
+    $tdSon.attr("connection", (connection).toString());
     /*添加其他属性*/
     addSubjectJson(connection, type, subjectJson);
 
