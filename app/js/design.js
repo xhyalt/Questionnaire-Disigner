@@ -51,6 +51,11 @@ $(function() {
                     if (tempQuestionnaire.data) {
                         /*表样不空 解析表样*/
                         console.log("解析问卷");
+                        save.decomposeQuestionnaire(tempQuestionnaire.data, function(res) {
+                            if (res.success == true) {
+                                console.log(解析函数跳出);
+                            }
+                        });
                     }
                 }
             });
@@ -166,6 +171,7 @@ $(function() {
             $tdP.remove();
             $prevTdP.remove();
             setOrder();
+            isChanged = true;
         }
     });
 
@@ -192,6 +198,7 @@ $(function() {
             $tdP.remove();
             $nextTdP.remove();
             setOrder();
+            isChanged = true;
         }
     });
 
@@ -207,6 +214,7 @@ $(function() {
             "visibility": "hidden"
         });
         setOrder();
+        isChanged = true;
     });
 
     /*删除题目按钮点击事件*/
@@ -241,6 +249,7 @@ $(function() {
                 if (getSubjectNum() == 0) {
                     $("#target").append(emptyBox);
                 }
+                isChanged = true;
             }
         });
     });
@@ -278,6 +287,8 @@ $(function() {
             $prevTdP.remove();
 
             addSubjectJson($mergeDiv, "merge");
+
+            isChanged = true;
         }
         setOrder();
     });
@@ -299,6 +310,7 @@ $(function() {
             $mergeTdP.after($tdP.prop("outerHTML"));
             $tdP.remove();
             setOrder();
+            isChanged = true;
         } else if (getLevelSubjectNum($tdP) == 2) {
             /*弹窗询问是否保留分组信息*/
             txt = "是否保留分组信息？";
@@ -313,6 +325,7 @@ $(function() {
                     $mergeTdP.after($tdP.prop("outerHTML"));
                     $tdP.remove();
                     setOrder();
+                    isChanged = true;
                 } else if (res.success == true) {
                     /*不保留*/
                     $mergeTdP = $tdP.parent().parent().parent();
@@ -338,6 +351,7 @@ $(function() {
                         $mergeDiv.remove();
                     }
                     setOrder();
+                    isChanged = true;
                 } else {
                     /*关闭 没有动作*/
                     console.log("直接关闭 没有动作");
@@ -352,6 +366,8 @@ $(function() {
             $tdP.attr("father", father);
             $mergeTdP.after($tdP.prop("outerHTML"));
             $mergeDiv.remove();
+            setOrder();
+            isChanged = true;
         }
     });
 
@@ -363,6 +379,7 @@ $(function() {
         $tdP.children().children(".itemBox").append(itemLabelDiv[type]);
         /*重置题目选项的字母*/
         setInitials($tdPP);
+        isChanged = true;
     });
 
     /*删除选项按钮点击事件*/
@@ -374,6 +391,7 @@ $(function() {
             /*重置题目选项的字母*/
             console.log($tdPP);
             setInitials($tdPP);
+            isChanged = true;
         } else {
             txt = "只有一个选项，不能继续删除";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
@@ -403,6 +421,7 @@ $(function() {
             $prevTdP.remove();
             /*重置题目选项的字母*/
             setInitials($tdPP);
+            isChanged = true;
         }
     });
 
@@ -429,6 +448,7 @@ $(function() {
             $nextTdP.remove();
             /*重置题目选项的字母*/
             setInitials($tdPP);
+            isChanged = true;
         }
     });
 
@@ -515,6 +535,7 @@ $(function() {
         quesNoTemp[quesActiveNo] = parseInt($td.attr("queNoType"));
         $drop[0].style.display = 'none';
         $tri.data('active', 'off');
+        isChanged = true;
 
         /*刷新预览*/
         $("#quesNoPreview ul").empty();
@@ -588,13 +609,14 @@ $(function() {
     /*点击关闭或取消的监听事件*/
     $("#popEditorBox").on("click", "#popEditorBoxClose, #popEditorBoxButtonCancel", function() {
         hideEditor();
+        isChanged = true;
     });
 
     /*富文本编辑器弹出框 点击确认事件*/
     $("#popEditorBox").on("click", "#popEditorBoxButtonConfirm", function() {
-        console.log("hahahaha");
         activeDiv.empty().append(editor.$txt.html());
         hideEditor();
+        isChanged = true;
     });
     /*富文本编辑器end=====================*/
 
@@ -657,6 +679,7 @@ $(function() {
             if (newtxt == "") {
                 /*文本为空*/
                 $td.html("空问卷");
+                isChanged = true;
             } else if (newtxt == txt) {
                 /*文本与原来相同*/
                 $td.html(newtxt);
@@ -664,6 +687,7 @@ $(function() {
                 /*文本与原来不同*/
                 /*数据库操作*/
                 $td.html(newtxt);
+                isChanged = true;
             }
         });
     });
@@ -689,6 +713,7 @@ $(function() {
             } else if (newtxt != txt) {
                 /*数据库操作*/
                 $td.html(newtxt);
+                isChanged = true;
             } else {
                 $td.html(newtxt);
             }
@@ -716,6 +741,7 @@ $(function() {
             } else if (newtxt != txt) {
                 /*数据库操作*/
                 $td.html(newtxt);
+                isChanged = true;
             } else {
                 $td.html(newtxt);
             }
@@ -754,6 +780,7 @@ $(function() {
                     if (newtxt != activeTxt) {
                         /*数据库操作*/
                         activeDiv.html(newtxt);
+                        isChanged = true;
                     } else if (newtxt == activeTxt) {
                         activeDiv.html(newtxt);
                     }
@@ -788,6 +815,7 @@ $(function() {
             if (newtxt != txt) {
                 /*数据库操作*/
                 $td.html(newtxt);
+                isChanged = true;
             } else if (newtxt == txt) {
                 $td.html(newtxt);
             }
@@ -814,6 +842,7 @@ $(function() {
             if (newtxt != txt) {
                 /*数据库操作*/
                 $td.html(newtxt);
+                isChanged = true;
             } else if (newtxt == txt) {
                 $td.html(newtxt);
             }
@@ -879,6 +908,7 @@ function saveQuestionnairePattern(cb) {
  */
 function showDesc(checked) {
     var connection = activeSubject.attr("connection");
+    isChanged = true;
     if (checked == true) {
         var type = getType(activeSubject);
         activeSubject.children().children(".stemText").after(descriptionDiv[type]);
@@ -896,6 +926,7 @@ function showDesc(checked) {
  */
 function showForced(checked) {
     var connection = activeSubject.attr("connection");
+    isChanged = true;
     if (checked == true) {
         subject[connection].forced = true;
     } else {
@@ -910,6 +941,7 @@ function showForced(checked) {
  */
 function showQuestionNo(checked) {
     var connection = activeSubject.attr("connection");
+    isChanged = true;
     var classTemp = activeSubject.attr("class");
     if (checked == true) {
         subject[connection].questionNo = true;
@@ -930,12 +962,14 @@ function showQuestionNo(checked) {
  */
 function sameLine(checked) {
     var connection = activeSubject.attr("connection");
+    isChanged = true;
     subject[connection].sameLine = true;
     /*显示同行*/
     // setSameLine();
 }
 
 function setSameLine() {
+  isChanged = true;
     var stemText = activeSubject.children(".subjectMain").children(".stemText");
     var descriptionText = activeSubject.children(".subjectMain").children(".descriptionText");
     var itemBox = activeSubject.children(".subjectMain").children(".itemBox");
@@ -970,6 +1004,7 @@ function setSameLine() {
  */
 function sameLine2(checked) {
     var connection = activeSubject.attr("connection");
+    isChanged = true;
     subject[connection].sameLine = false;
     subject[connection].showEveryLine = parseInt($(".showEveryLine").val());
     /*显示每行显示几个*/
@@ -978,6 +1013,7 @@ function sameLine2(checked) {
 
 function setSameLine2(showEveryLine) {
     console.log(showEveryLine);
+    isChanged = true;
     var itemBox = activeSubject.children(".subjectMain").children(".itemBox");
     var li = itemBox.children("li");
     var everyItem = 100 / getItemNum(itemBox);
@@ -998,6 +1034,7 @@ function setSameLine2(showEveryLine) {
  */
 function setShowEveryLine(value) {
     var connection = activeSubject.attr("connection");
+    isChanged = true;
     subject[connection].showEveryLine = parseInt(value);
     /*显示每行显示几个*/
 }
@@ -1009,6 +1046,7 @@ function setShowEveryLine(value) {
  */
 function setLine(value) {
     var connection = activeSubject.attr("connection");
+    isChanged = true;
     activeSubject.children().children().children().children("textarea").attr("rows", value);
     subject[connection].showLine = parseInt(value);
 }
@@ -1020,6 +1058,7 @@ function setLine(value) {
  */
 function setMinLength(value) {
     var connection = activeSubject.attr("connection");
+    isChanged = true;
     subject[connection].minLength = parseInt(value);
 }
 
@@ -1030,6 +1069,7 @@ function setMinLength(value) {
  */
 function setMaxLength(value) {
     var connection = activeSubject.attr("connection");
+    isChanged = true;
     subject[connection].maxLength = parseInt(value);
 }
 
