@@ -334,7 +334,7 @@ descriptionDiv["sort"] = `
 
 itemLabelDiv["sort"] = `
 <li>
-    <div class="initials">B.</div>
+    <div class="initials"></div>
     <div class="textBox sortItemText ItemText" placeholder="选项"></div>
     <input type="text" />
     <div class="itemMenu">

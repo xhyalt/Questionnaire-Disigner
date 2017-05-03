@@ -1,8 +1,124 @@
 var subjectDiv = {};
 var itemLabelDiv = {};
+var tempQuestionnaireJson = {};
+var connection = 0;
 
-function decomposeQuestionnaire(tempQuestionnaireJson, cb) {
+/**
+ * 分解问卷
+ * @public
+ * @param  tempQuestionnaire 问卷表样JSON字符串
+ * @param  {Function} cb     回调函数
+ * @return
+ */
+function decomposeQuestionnaire(tempQuestionnaire, cb) {
     console.log("正在分解表样JSON");
+    tempQuestionnaireJson = eval('(' + tempQuestionnaire + ')');;
+    console.log(tempQuestionnaireJson);
+    traverse($("#target").eq(0), tempQuestionnaireJson, 0);
+    setOrder();
+}
+
+function traverse($td, node, i) {
+    var children = node.questions;
+    console.log(node.questions);
+    if (children != null && children[i] != null) {
+        $("#emptyBox").remove();
+        console.log(children[i].levelNum);
+        setSubjectHtml($td, children[i]);
+
+        if (children[i].questions != null && children[i].questions[0] != null) {
+            console.log("进入孩子节点");
+            traverse($td.children().children().children(".mergeItem"), children[i], 0);
+        }
+        if (children[i + 1] != null) {
+            console.log("进入兄弟节点");
+            traverse($td, node, i + 1);
+        }
+    }
+}
+
+function setSubjectHtml($td, subjectJson) {
+    type = subjectJson.type;
+    /*添加大框架*/
+    $td.append(subjectDiv[type]);
+    /*确定子层*/
+    $tdSon = $td.children().last(".subject, .unSubject") ? $td.children().last() : $td.children().children().children(".mergeItem").children().last();
+    /*添加guid属性*/
+    $tdSon.attr("guid", subjectJson.question);
+    /*添加connection属性*/
+    $tdSon.attr("connection", (++connection).toString());
+    /*添加其他属性*/
+    addSubjectJson(connection, type, subjectJson);
+
+    /*添加题号*/
+    $tdSon.children().children("h4").html(subjectJson.levelNum);
+    /*添加题干*/
+    $tdSon.children().children(".stemText").html(subjectJson.title);
+    /*添加描述*/
+    if (subjectJson.description) {
+        /*没有描述 去掉描述*/
+        $tdSon.children().children(".descriptionText").remove();
+        subject[(connection).toString()].showDescription = false;
+    } else {
+        /*将文本放入描述*/
+        $tdSon.children().children(".descriptionText").html(subjectJson.description);
+        subject[(connection).toString()].showDescription = true;
+    }
+    /*添加选项*/
+    if (subjectJson.options) {
+        /*选项存在 逐一添加*/
+        for (var i = 0; i < subjectJson.options.length; i++) {
+            $tdSon.children(".subjectMain").children("ul").append(itemLabelDiv[type]);
+            $tdSonOptions = $tdSon.children(".subjectMain").children("ul").children().last();
+            $tdSonOptions.children(".ItemText").html(subjectJson.options[i].title);
+            $tdSonOptions.children(".initials").html(subjectJson.options[i].optionNum);
+        }
+    }
+}
+
+function addSubjectJson(connection, type, subjectJson) {
+    if (type == "single") {
+        subject[(connection).toString()] = {
+            forced: subjectJson.nullable,
+            questionNo: true,
+            showDescription: true,
+            sameLine: 0,
+            showEveryLine: 1
+        };
+    } else if (type == "multiple") {
+        subject[(connection).toString()] = {
+            forced: subjectJson.nullable,
+            questionNo: true,
+            showDescription: true,
+            minSelectItem: subjectJson.minnum,
+            maxSelectItem: subjectJson.maxnum,
+            sameLine: 0,
+            showEveryLine: 1
+        };
+    } else if (type == "fillblanks") {
+        subject[(connection).toString()] = {
+            forced: subjectJson.nullable,
+            questionNo: true,
+            showDescription: true
+        };
+    } else if (type == "shortanswer") {
+        subject[(connection).toString()] = {
+            forced: subjectJson.nullable,
+            questionNo: true,
+            showDescription: true,
+            showLine: subjectJson.hight / 30,
+            minLength: subjectJson.minnum,
+            maxLength: subjectJson.maxnum,
+        };
+    } else if (type == "order") {
+        subject[(connection).toString()] = {
+            forced: subjectJson.nullable,
+            questionNo: true,
+            showDescription: true
+        };
+    } else {
+        subject[(connection).toString()] = {};
+    }
 }
 
 /**
@@ -280,7 +396,178 @@ function hideShielder() {
     hidebg.style.display = "none";
 }
 
+subjectDiv["single"] = `
+<div class="radioDiv subject" level="1" father="0" num="">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+        <img class="merge" src="./images/main_07_merge_off.png" alt="">
+        <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
+    </div>
+    <div class="radioMain subjectMain">
+        <div class="radioStemText textBox stemText" id="radioStemTextID" placeholder="单选题"></div>
+        <div class="radioDescriptionText textBox descriptionText" placeholder="单选题描述"></div>
+        <ul class="radioItem itemBox">
+        </ul>
+        <img class="addItem" src="./images/main_04_add_off.png" alt="">
+    </div>
+</div>`;
+
+itemLabelDiv["single"] = `
+<li>
+    <input type="radio" name="radio1"/>
+    <div class="initials">A.</div>
+    <div class="textBox radioItemText ItemText" placeholder="选项"></div>
+    <div class="itemMenu">
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+    </div>
+    <div class="clear"></div>
+</li>`;
+
+subjectDiv["multiple"] = `
+<div class="multipleDiv subject" level="1" father="0" num="">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+        <img class="merge" src="./images/main_07_merge_off.png" alt="">
+        <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
+    </div>
+    <div class="multipleMain subjectMain">
+        <div class="multipleStemText textBox stemText" id="multipleStemTextID" placeholder="多选题"></div>
+        <div class="multipleDescriptionText textBox descriptionText" placeholder="多选题描述"></div>
+        <ul class="multipleItem itemBox">
+        </ul>
+        <img class="addItem" src="./images/main_04_add_off.png" alt="">
+    </div>
+</div>`;
+
+itemLabelDiv["multiple"] = `
+<li>
+    <input type="checkbox" name="checkbox1"/>
+    <div class="initials">B.</div>
+    <div class="textBox multipleItemText ItemText" placeholder="选项"></div>
+    <div class="itemMenu">
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+    </div>
+    <div class="clear"></div>
+</li>`;
+
+subjectDiv["fillblanks"] = `
+<div class="completionDiv subject" level="1" father="0" num="">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+        <img class="merge" src="./images/main_07_merge_off.png" alt="">
+        <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
+    </div>
+    <div class="completionMain subjectMain">
+        <div class="completionStemText textBox stemText" id="completionStemTextID" placeholder="填空题"></div>
+        <div class="completionDescriptionText textBox descriptionText" placeholder="填空题描述"></div>
+        <ul class="completionItem itemBox">
+            <li>
+                <input type="text" />
+            </li>
+        </ul>
+    </div>
+</div>`;
+
+subjectDiv["shortanswer"] = `
+<div class="shortAnswerDiv subject" level="1" father="0" num="">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+        <img class="merge" src="./images/main_07_merge_off.png" alt="">
+        <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
+    </div>
+    <div class="shortAnswerMain subjectMain">
+        <div class="shortAnswerStemText textBox stemText" id="shortAnswerStemTextID" placeholder="简答题"></div>
+        <div class="shortAnswerDescriptionText textBox descriptionText" placeholder="简答题描述"></div>
+        <ul class="shortAnswerItem itemBox">
+            <li>
+                <textarea rows="5"></textarea>
+            </li>
+        </ul>
+    </div>
+</div>`;
+
+subjectDiv["order"] = `
+<div class="sortDiv subject" level="1" father="0" num="">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+        <img class="merge" src="./images/main_07_merge_off.png" alt="">
+        <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
+    </div>
+    <div class="sortMain subjectMain">
+        <div class="sortStemText textBox stemText" id="sortStemTextID" placeholder="排序题"></div>
+        <div class="sortDescriptionText textBox descriptionText" placeholder="排序题描述"></div>
+        <ul class="sortItem itemBox">
+        </ul>
+        <img class="addItem" src="./images/main_04_add_off.png" alt="">
+    </div>
+</div>`;
+
+itemLabelDiv["order"] = `
+<li>
+    <div class="initials"></div>
+    <div class="textBox sortItemText ItemText" placeholder="选项"></div>
+    <input type="text" />
+    <div class="itemMenu">
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+    </div>
+    <div class="clear"></div>
+</li>`;
+
+subjectDiv["static"] = `
+<div class="descriptionDiv unSubject" level="1" father="0" num="">
+    <div class="leftSetup">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+    </div>
+    <div class="descriptionMain subjectMain">
+        <div class="descriptionStemText textBox stemText" id="descriptionStemTextID" placeholder="描述说明"></div>
+    </div>
+</div>`;
+
+subjectDiv["group"] = `
+<div class="mergeDiv subject" level="1" father="0" num="">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+        <img class="merge" src="./images/main_07_merge_off.png" alt="">
+        <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
+    </div>
+    <div class="mergeMain">
+        <div class="mergeStemText textBox stemText" id="sortStemTextID" placeholder="合并题"></div>
+        <ul class="mergeItem itemBox">
+        </ul>
+    </div>
+</div>`;
+
 exports.saveQuestionnaire = saveQuestionnaire;
 exports.getPatternJson = getPatternJson;
-exports.decomposeQuestionnaire = decomposeQuestionnaire;
 exports.getQuestionnaireJson = getQuestionnaireJson;
+exports.decomposeQuestionnaire = decomposeQuestionnaire;

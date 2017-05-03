@@ -425,7 +425,7 @@ function deleteQuestionnaire(name, row, cb) {
             if (res.success == true) {
                 console.log("修改isRemote字段成功");
                 console.log(res.data);
-                if (res.data.isRemote == "1") {
+                if (res.data[0].isRemote == "1") {
                     /*该调查问卷已存在于服务器上 提示现在还未同步*/
                     var txt = "该问卷尚未同步，是否仍旧删除表样？";
                     window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
