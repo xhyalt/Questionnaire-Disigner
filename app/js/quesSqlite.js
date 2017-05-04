@@ -62,7 +62,7 @@ function initDB(GlobalData, cb) {
             /*已存在数据库，调用查找函数*/
             // console.log("表已存在");
             /*判断表中是否存在该用户数据*/
-            __selectUser(GlobalData, function(res2) {
+            __checkUser(GlobalData, function(res2) {
                 if (res2.success == true) {
                     /*查询用户成功*/
                     if (res2.data["count(1)"] == 0) {
@@ -1043,7 +1043,7 @@ function __createTable(cb) {
  * @return
  */
 function checkUser(GlobalData, cb) {
-    __selectUser(GlobalData, function(res) {
+    __checkUser(GlobalData, function(res) {
         if (res.success == true) {
             cb({
                 success: true,
@@ -1064,8 +1064,8 @@ function checkUser(GlobalData, cb) {
  * @param  cb 回调函数
  * @return
  */
-function __selectUser(GlobalData, cb) {
-    // console.log("正在检查该用户是否存在 __selectUser");
+function __checkUser(GlobalData, cb) {
+    // console.log("正在检查该用户是否存在 __checkUser");
     db.get("select count(1) from USERS where user = ? and URL = ?", [GlobalData.user, GlobalData.urlRoot], function(err, row) {
         if (err) {
             console.log("查询用户失败");
@@ -1075,6 +1075,49 @@ function __selectUser(GlobalData, cb) {
             });
         }
         console.log("查询用户成功");
+        cb({
+            success: true,
+            data: row
+        });
+    });
+}
+
+/**
+ * 获取所有用户
+ * @public
+ * @param  {Function} cb 回调函数
+ * @return
+ */
+function selectUsers(cb) {
+    __selectUsers(function(res) {
+        if (res.success == true) {
+            cb({
+                success: true,
+                data: res.data
+            });
+        } else {
+            cb({
+                success: false,
+                data: res.data
+            });
+        }
+    });
+}
+
+/**
+ * 获取所有用户
+ * @param  {Function} cb 回调函数
+ * @return
+ */
+function __selectUsers(cb) {
+    console.log("正在获取所有库中存在的用户");
+    db.all("select * from USERS", function(err, row) {
+        if (err) {
+            cb({
+                success: false,
+                data: err
+            });
+        }
         cb({
             success: true,
             data: row
@@ -1129,6 +1172,7 @@ function __updateUser(GlobalData, cb) {
 }
 
 exports.initDB = initDB;
+exports.selectUsers = selectUsers;
 exports.initSolutions = initSolutions;
 exports.initQuestionnairesList = initQuestionnairesList;
 exports.getSolutions = getSolutions;

@@ -22,10 +22,13 @@ var GlobalData = {
 /*是否在线*/
 var onlineStatus = true;
 
-// var onlineStatus = function() {
-//     // window.alert(navigator.onLine ? 'online' : 'offline');
-//     return navigator.onLine ? true : false;
-// };
+function showUsers() {
+    quesSqlite.selectUsers(function(res) {
+        if (res.success == true) {
+            console.log(res.data);
+        }
+    });
+}
 
 /**
  * 登录按钮点击事件，处理登录逻辑
