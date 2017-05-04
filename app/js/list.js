@@ -519,7 +519,7 @@ function previewQuestionnaire(name, row, cb) {
                     if (res2.success == true) {
                         console.log("给主进程传递参数成功");
                         /*打开预览界面*/
-                        window.open("./preview.html");
+                        window.open("./preview.html", "预览", "height=800, width=1200");
                         hideShielder();
                     }
                 });
@@ -531,7 +531,7 @@ function previewQuestionnaire(name, row, cb) {
             if (res2.success == true) {
                 console.log("给主进程传递参数成功");
                 /*打开预览界面*/
-                window.open("./preview.html");
+                window.open("./preview.html", "预览", "height=800, width=1200");
                 hideShielder();
             }
         });
@@ -541,7 +541,7 @@ function previewQuestionnaire(name, row, cb) {
             if (res2.success == true) {
                 console.log("给主进程传递参数成功");
                 /*打开预览界面*/
-                window.open("./preview.html");
+                window.open("./preview.html", "预览", "height=800, width=1200");
                 hideShielder();
             }
         });
