@@ -4,7 +4,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 
 var GlobalData = null;
 var name = null;
-var questionnaireData = null;
+var questionnaireDataJson = null;
 
 $(function() {
     init();
@@ -21,8 +21,10 @@ function init() {
                     quesSqlite.getQuestionnaireByName(GlobalData, name, function(res3) {
                         if (res3.success == true) {
                             /*显示预览效果*/
-                            questionnaireData = res3.data[0].data;
-                            new Questionnaire($('#main'), JSON.parse(questionnaireData), function() {});
+                            questionnaireDataJson = JSON.parse(res3.data[0].data);
+                            /*把没有description的补全*/
+                            traverse(questionnaireDataJson, 0);
+                            new Questionnaire($('#main'), questionnaireDataJson, function() {});
                         }
                     })
                 } else {
@@ -36,6 +38,32 @@ function init() {
         }
     });
 
+}
+
+/**
+ * 深度遍历 写入题目的html
+ * @private
+ * @param  $td  父题
+ * @param  node 节点
+ * @param  i    第几个
+ * @return
+ */
+function traverse(node, i) {
+    var children = node.questions;
+    if (children != null && children[i] != null) {
+        if (!children[i].description) {
+            children[i].description = "";
+        }
+
+        if (children[i].questions != null && children[i].questions[0] != null) {
+            // console.log("进入孩子节点");
+            traverse(children[i], 0);
+        }
+        if (children[i + 1] != null) {
+            // console.log("进入兄弟节点");
+            traverse(node, i + 1);
+        }
+    }
 }
 
 /**
