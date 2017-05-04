@@ -45,6 +45,7 @@ $(function() {
             quesSqlite.getQuestionnaireByName(GlobalData, res.data, function(res2) {
                 if (res2.success == true) {
                     // console.log("获取调查问卷数据成功");
+                    console.log(res2.data);
                     tempQuestionnaire = res2.data[0];
                     $("#titleNameTextID").empty().append(tempQuestionnaire.title);
                     $("#headDetailTextID").empty().append(tempQuestionnaire.subtitle);
@@ -888,7 +889,7 @@ function saveQuestionnairePattern(cb) {
             save.getPatternJson(function(res) {
                 if (res.success == true) {
                     console.log(res.data);
-                    quesSqlite.updateQuestionnaireData(GlobalData, tempQuestionnaire.name, JSON.stringify(res.data), function(res2) {
+                    quesSqlite.updateQuestionnaireData(GlobalData, tempQuestionnaire.name, JSON.stringify(res.data), "1", Date.parse(new Date()) / 1000, function(res2) {
                         if (res2.success == true) {
                             isChanged = false;
                             cb({

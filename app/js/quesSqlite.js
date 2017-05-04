@@ -660,10 +660,10 @@ function __selectQuestionnaires(GlobalData, cb) {
  * @param  {Function} cb         回调函数
  * @return
  */
-function updateQuestionnaireData(GlobalData, name, data, cb) {
-    __updateQuestionnaireData(GlobalData, name, data, function(res) {
+function updateQuestionnaireData(GlobalData, name, data, isChanged, editTime, cb) {
+    __updateQuestionnaireData(GlobalData, name, data, editTime, function(res) {
         if (res.success == true) {
-            __updateQuestionnaireIsChanged(GlobalData, name, "1", function(res2) {
+            __updateQuestionnaireIsChanged(GlobalData, name, isChanged, function(res2) {
                 if (res2.success == true) {
                     cb({
                         success: true,
@@ -689,9 +689,9 @@ function updateQuestionnaireData(GlobalData, name, data, cb) {
  * @param  {Function} cb         回调函数
  * @return
  */
-function __updateQuestionnaireData(GlobalData, name, data, cb) {
+function __updateQuestionnaireData(GlobalData, name, data, editTime, cb) {
     // console.log("正在更新某个调查问卷的表样");
-    db.get("update QUESTIONNAIRES set data = ? where URL = ? and user = ? and name = ?", [data, GlobalData.urlRoot, GlobalData.user, name], function(err, row) {
+    db.get("update QUESTIONNAIRES set data = ?, editTime = ? where URL = ? and user = ? and name = ?", [data, editTime, GlobalData.urlRoot, GlobalData.user, name], function(err) {
         if (err) {
             cb({
                 success: false,
@@ -699,8 +699,7 @@ function __updateQuestionnaireData(GlobalData, name, data, cb) {
             });
         }
         cb({
-            success: true,
-            data: row
+            success: true
         });
     });
 }

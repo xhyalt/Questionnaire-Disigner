@@ -288,10 +288,11 @@ function showQuestionnaires(solutionNameIndex, i) {
                 }
             }
 
-            if (questionnairesInfo[i].editTime == null || questionnairesInfo[i].editTime == "") {
-                editTd = "";
+            if (questionnairesInfo[i].editTime) {
+                var second = Date.parse(new Date()) / 1000 - questionnairesInfo[i].editTime;
+                editTd = getTime(second);
             } else {
-                editTd = "待计算";
+                editTd = "";
             }
 
             /*在右边显示出点击的业务方案所包含的所有调查问卷*/
@@ -306,6 +307,25 @@ function showQuestionnaires(solutionNameIndex, i) {
                     </td>
                 </tr>`);
         }
+    }
+}
+
+/**
+ * 计算时间戳差值的最后显示结果
+ * @param  second 时间戳差
+ * @return 显示效果
+ */
+function getTime(second) {
+    if (second < 60) {
+        return "刚刚";
+    } else if (second < 60 * 60) {
+        return parseInt(second / 60).toString() + "分钟前";
+    } else if (second < 60 * 60 * 24) {
+        return parseInt(second / 60 / 60).toString() + "小时前";
+    } else if (second > 0) {
+        return parseInt(second / 60 / 60 / 24).toString() + "天前";
+    } else {
+        return "你穿越了";
     }
 }
 
@@ -328,9 +348,11 @@ function uploadQuestionnaire(name, row, cb) {
                             console.log("保存问卷成功");
                             /*将该问卷的isChanged改为0*/
                             quesSqlite.updateQuestionnaireIsChanged(GlobalData, name, "0", function(res4) {
-                                console.log("更新isChanged成功");
-                                /*将未同步改为已同步*/
-                                changeSyn(name, row, 1);
+                                if (res4.success == true) {
+                                    console.log("更新isChanged成功");
+                                    /*将未同步改为已同步*/
+                                    changeSyn(name, row, 1);
+                                }
                             });
                         } else {
                             console.log("保存问卷失败");
@@ -402,7 +424,7 @@ function deleteQuestionnaire(name, row, cb) {
         window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
             if (res.data == true) {
                 /*点击了确定，删除表样*/
-                quesSqlite.updateQuestionnaireData(GlobalData, name, "", function(res2) {
+                quesSqlite.updateQuestionnaireData(GlobalData, name, "", "0", "", function(res2) {
                     if (res2.success == true) {
                         console.log("更新表样成功");
                         changeSyn(name, row, 2);
@@ -431,7 +453,7 @@ function deleteQuestionnaire(name, row, cb) {
                     window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
                         if (res.data == true) {
                             /*点击确定 删除表样*/
-                            quesSqlite.updateQuestionnaireData(GlobalData, name, "", function(res2) {
+                            quesSqlite.updateQuestionnaireData(GlobalData, name, "", "0", "", function(res2) {
                                 if (res2.success == true) {
                                     console.log("更新表样成功");
                                     changeSyn(name, row, 2);
@@ -558,7 +580,7 @@ function getQuestionnaireInfo(GlobalData, name, cb) {
         if (res.success == true) {
             data = JSON.stringify(res.resJson.dataInfo);
             /*将获取的表样存入数据库*/
-            quesSqlite.updateQuestionnaireData(GlobalData, name, data, function(res) {
+            quesSqlite.updateQuestionnaireData(GlobalData, name, data, "0", "", function(res) {
                 if (res.success == true) {
                     console.log("更新表样成功");
                     cb({
