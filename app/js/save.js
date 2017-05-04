@@ -11,30 +11,41 @@ var tempQuestionnaireJson = {};
  */
 function decomposeQuestionnaire(tempQuestionnaire, cb) {
     console.log("正在分解表样JSON");
-    tempQuestionnaireJson = eval('(' + tempQuestionnaire + ')');;
-    console.log(tempQuestionnaireJson);
+    tempQuestionnaireJson = eval('(' + tempQuestionnaire + ')');
     traverse($("#target").eq(0), tempQuestionnaireJson, 0);
 }
 
+/**
+ * 深度遍历 写入题目的html
+ * @private
+ * @param  $td  父题
+ * @param  node 节点
+ * @param  i    第几个
+ * @return
+ */
 function traverse($td, node, i) {
     var children = node.questions;
-    console.log(node.questions);
     if (children != null && children[i] != null) {
         $("#emptyBox").remove();
-        console.log(children[i].levelNum);
         setSubjectHtml($td, children[i]);
 
         if (children[i].questions != null && children[i].questions[0] != null) {
-            console.log("进入孩子节点");
+            // console.log("进入孩子节点");
             traverse($td.children().children().children(".mergeItem"), children[i], 0);
         }
         if (children[i + 1] != null) {
-            console.log("进入兄弟节点");
+            // console.log("进入兄弟节点");
             traverse($td, node, i + 1);
         }
     }
 }
 
+/**
+ * 设置某题目的HTML
+ * @private
+ * @param $td
+ * @param subjectJson
+ */
 function setSubjectHtml($td, subjectJson) {
     var connection = ++subjectTotal;
     type = subjectJson.type;
@@ -45,14 +56,56 @@ function setSubjectHtml($td, subjectJson) {
     $tdSonLength = $td.children(".subject, .unSubject").length;
     /*添加level和father属性*/
     if ($td.attr("id") == "target") {
-        $tdSon.attr("father", 0);
-        $tdSon.attr("level", 1);
-        $tdSon.attr("num", $tdSonLength);
+        $tdSon.attr("father", "0");
+        $tdSon.attr("level", "1");
+        $tdSon.attr("num", $tdSonLength.toString());
     } else {
-        console.log($td.parent().parent(".subject"));
         $tdSon.attr("father", $td.parent().parent(".subject").eq(0).attr("num"));
         $tdSon.attr("level", (parseInt($td.parent().parent(".subject").eq(0).attr("level")) + 1).toString());
-        $tdSon.attr("num", $tdSonLength);
+        $tdSon.attr("num", $tdSonLength.toString());
+    }
+    /*确定各层级的题号类型*/
+    var flag = new Array(true, true, true, true, true);
+    if (flag[0] == true && $tdSon.attr("level") == 1) {
+        if (subjectJson.levelNum == "一、") {
+
+        }
+    }
+    switch (subjectJson.levelNum) {
+        case "一、":
+            {
+                flag[parseInt($tdSon.attr("level")) - 1] = false;
+                quesNoArr[parseInt($tdSon.attr("level")) - 1] = 0;
+                break;
+            }
+        case "(一)":
+            {
+                flag[parseInt($tdSon.attr("level")) - 1] = false;
+                quesNoArr[parseInt($tdSon.attr("level")) - 1] = 1;
+                break;
+            }
+        case "1.":
+            {
+                flag[parseInt($tdSon.attr("level")) - 1] = false;
+                quesNoArr[parseInt($tdSon.attr("level")) - 1] = 2;
+                break;
+            }
+        case "1)":
+            {
+                flag[parseInt($tdSon.attr("level")) - 1] = false;
+                quesNoArr[parseInt($tdSon.attr("level")) - 1] = 3;
+                break;
+            }
+        case "Q1":
+            {
+                flag[parseInt($tdSon.attr("level")) - 1] = false;
+                quesNoArr[parseInt($tdSon.attr("level")) - 1] = 4;
+                break;
+            }
+        default:
+            {
+
+            }
     }
     /*添加guid属性*/
     $tdSon.attr("guid", subjectJson.question);
@@ -67,13 +120,13 @@ function setSubjectHtml($td, subjectJson) {
     $tdSon.children().children(".stemText").html(subjectJson.title);
     /*添加描述*/
     if (subjectJson.description) {
-        /*没有描述 去掉描述*/
-        $tdSon.children().children(".descriptionText").remove();
-        subject[(connection).toString()].showDescription = false;
-    } else {
         /*将文本放入描述*/
         $tdSon.children().children(".descriptionText").html(subjectJson.description);
         subject[(connection).toString()].showDescription = true;
+    } else {
+        /*没有描述 去掉描述*/
+        $tdSon.children().children(".descriptionText").remove();
+        subject[(connection).toString()].showDescription = false;
     }
     /*添加选项*/
     if (subjectJson.options) {
@@ -85,8 +138,18 @@ function setSubjectHtml($td, subjectJson) {
             $tdSonOptions.children(".initials").html(subjectJson.options[i].optionNum);
         }
     }
+    /*设置简答题的行数*/
+    if (subjectJson.hight) {
+        $tdSon.children(".subjectMain").children("ul").children("li").children("textarea").attr("rows", subjectJson.hight / 30);
+    }
 }
 
+/**
+ * 添加题目的属性
+ * @param connection  第几个
+ * @param type        类型
+ * @param subjectJson 题目JSON
+ */
 function addSubjectJson(connection, type, subjectJson) {
     if (type == "single") {
         subject[(connection).toString()] = {
@@ -342,7 +405,7 @@ function getSubjectJson($td, type) {
             type: "shortanswer",
             levelNum: $td.children().children("h4").html(),
             width: 800,
-            hight: 30 * subject[connection].showLine,
+            hight: subject[connection].showLine * 30,
             maxnum: subject[connection].maxLength,
             minnum: subject[connection].minLength
         };
