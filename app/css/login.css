@@ -424,7 +424,7 @@ body {
     opacity: 0.5;
     /*非IE浏览器下设置透明度为60%*/
     display: none;
-    z-Index: 2;
+    z-Index: 20;
 }
 
 
@@ -436,4 +436,66 @@ form ul a {
     margin-top: 12%;
     line-height: 1.5em;
     color: #fff;
+}
+
+#trianglePop {
+    background: url(../images/trianglePopLeft.png) no-repeat;
+    width: 13px;
+    height: 26px;
+    display: block;
+    position: absolute;
+    z-index: 15;
+    left: -12px;
+}
+
+#popUserBox {
+    z-index: 10;
+    background-color: #fff;
+    border: 1px solid #e2e2e2;
+    color: #666666;
+    line-height: 1.4;
+    font-size: 14px;
+    width: 180px;
+    position: absolute;
+    opacity: 0;
+    border-radius: 5px;
+}
+
+#popUserBox a#popUserClose {
+    float: right;
+    margin: 10px;
+    display: block;
+    /*padding: 15px;*/
+    cursor: pointer;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: url(../images/icons.png) -48px -96px no-repeat;
+}
+
+#popUserBox h4 {
+    font-size: 16px;
+    padding: 15px;
+}
+
+#popUserDetail {
+    border-top: 1px #cccccc solid;
+    width: 180px;
+}
+
+#popUserDetail .detail {
+    margin: 10px;
+    border-bottom: 1px solid #cccccc;
+    cursor: pointer;
+}
+
+.detail li {
+    margin-bottom: 10px;
+    list-style: none;
+}
+
+.detail img {
+    margin-left: 130px;
 }

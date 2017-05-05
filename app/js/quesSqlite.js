@@ -1171,6 +1171,69 @@ function __updateUser(GlobalData, cb) {
     });
 }
 
+function deleteUser(GlobalData, cb) {
+    __deleteQuestionnaire(GlobalData, function(res) {
+        if (res.success == true) {
+            __deleteSolution(GlobalData, function(res2) {
+                if (res2.success == true) {
+                    __deleteUser(GlobalData, function(res3) {
+                        if (res3.success == true) {
+                            cb({
+                                success: true
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+function __deleteUser(GlobalData, cb) {
+    console.log("正在删除用户");
+    db.run("delete from USERS where URL = ? and user = ?", [GlobalData.urlRoot, GlobalData.user], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
+function __deleteQuestionnaire(GlobalData, cb) {
+    console.log("正在删除调查问卷");
+    db.run("delete from QUESTIONNAIRES where URL = ? and user = ?", [GlobalData.urlRoot, GlobalData.user], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
+function __deleteSolution(GlobalData, cb) {
+    console.log("正在删除业务方案");
+    db.run("delete from SOLUTIONS where URL = ? and user = ?", [GlobalData.urlRoot, GlobalData.user], function(err) {
+        if (err) {
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
 exports.initDB = initDB;
 exports.selectUsers = selectUsers;
 exports.initSolutions = initSolutions;
@@ -1190,3 +1253,4 @@ exports.checkUser = checkUser;
 exports.updateQuestionnaireTitle = updateQuestionnaireTitle;
 exports.checkQuestionnaireByName = checkQuestionnaireByName;
 exports.updateQuestionnaireIsChanged = updateQuestionnaireIsChanged;
+exports.deleteUser = deleteUser;

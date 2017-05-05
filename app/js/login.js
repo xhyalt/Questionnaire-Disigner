@@ -21,13 +21,112 @@ var GlobalData = {
 };
 /*是否在线*/
 var onlineStatus = true;
+/*所有用户数据*/
+var users = null;
+/*是否弹出用户框*/
+var popUserBox = false;
+
+$(function() {
+    $("#popUserBox").on("click", ".detail", function() {
+        var $td = $(this);
+        $(".url").attr("value", users[$td.attr("num")].URL);
+        $(".user").attr("value", users[$td.attr("num")].user);
+        $(".password").attr("value", users[$td.attr("num")].pwd);
+    });
+
+    $("#popUserBox").on("click", "img.delete", function() {
+        var $td = $(this);
+        window.wxc.xcConfirm("是否删除该账户的所有数据？", window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+            if (res.data == true) {
+                var tempUser = {
+                    urlRoot: users[$td.parent().attr("num")].URL,
+                    user: users[$td.parent().attr("num")].user
+                };
+                quesSqlite.deleteUser(tempUser, function(res2) {
+                    if (res2.success == true) {
+                        console.log("删除成功");
+                        quesSqlite.selectUsers(function(res3) {
+                            if (res3.success == true) {
+                                users = res3.data;
+                                $td.parent().remove();
+                                if ($(".detail").length == 0) {
+                                    var detail = `<div class="detail">
+                                      <li>没有其他账户</li>
+                                  </div>`;
+                                    $("#popUserDetail").append(detail);
+                                }
+                            }
+                        });
+                    } else {
+                        console.log("删除失败");
+                    }
+                });
+            }
+        });
+    });
+
+    $("#popUserBox").on('click', "#popUserClose", function() {
+        var X = $('#popUserBox').offset().top - 100;
+        $("#trianglePop").css({
+            opacity: "0"
+        });
+        $("#popUserBox").animate({
+            top: `${X}px`,
+            opacity: '0'
+        }, 200, function() {
+            popUserBox = false;
+        });
+    });
+})
 
 function showUsers() {
-    quesSqlite.selectUsers(function(res) {
-        if (res.success == true) {
-            console.log(res.data);
-        }
-    });
+    if (popUserBox == false) {
+        quesSqlite.selectUsers(function(res) {
+            popUserBox = true;
+            if (res.success == true) {
+                users = res.data;
+                console.log(users);
+                var X = $('#more').offset().top - 115;
+                var Y = $('#more').offset().left - $("#popUserBox").width() - 15;
+                var XT = $('#more').offset().top;
+                var YT = $('#more').offset().left - 15;
+
+                $("#popUserDetail").empty();
+                if (users.length > 0) {
+                    for (var i = 0; i < res.data.length; i++) {
+                        var detail = `<div class="detail" num=${i}>
+                        <li>URL&nbsp;&nbsp;&nbsp;${res.data[i].URL}</li>
+                        <li>账户&nbsp;&nbsp;${res.data[i].user}</li>
+                        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+                    </div>`;
+                        $("#popUserDetail").append(detail);
+                    }
+                } else {
+                    var detail = `<div class="detail">
+                    <li>没有其他账户</li>
+                </div>`;
+                    $("#popUserDetail").append(detail);
+                }
+
+                $("#popUserBox").css({
+                    top: `${X}px`,
+                    left: `${Y}px`,
+                    opacity: 0
+                });
+
+                $("#popUserBox").animate({
+                    top: `${X+100}px`,
+                    opacity: '1'
+                }, 200, function() {
+                    $("#trianglePop").css({
+                        top: `${XT}px`,
+                        left: `${YT}px`,
+                        opacity: 1
+                    });
+                });
+            }
+        });
+    }
 }
 
 /**
@@ -42,24 +141,21 @@ function signIn() {
         var urlValue = document.forms["login"]["url"].value;
         var adminValue = document.forms["login"]["username"].value;
         var passwordValue = document.forms["login"]["password"].value;
-        urlValue = doWithRootURL(urlValue);
+
+        console.log(urlValue + " " + adminValue + " " + passwordValue);
+        // urlValue = doWithRootURL(urlValue);
 
         // var i = urlValue.lastIndexOf(':');
         // GlobalData.host = urlValue.substring(0, i);
         // GlobalData.post = urlValue.substr(i);
-        GlobalData.urlRoot = "10.2.20.61:9797";
-        GlobalData.host = "10.2.20.61";
-        GlobalData.post = 9797;
-        GlobalData.user = "ci";
-        GlobalData.pwd = "";
-
-        // if (onlineStatus() == true) {
-        //     console.log("有网");
-        //     return;
-        // } else {
-        //     console.log("没网");
-        //     return;
-        // }
+        // GlobalData.urlRoot = "10.2.20.61:9797";
+        // GlobalData.host = "10.2.20.61";
+        // GlobalData.post = 9797;
+        // GlobalData.user = "ci";
+        // GlobalData.pwd = "";
+        GlobalData.urlRoot = urlValue;
+        GlobalData.user = adminValue;
+        GlobalData.pwd = passwordValue;
 
         /*get请求token restfulUtil.js*/
         restfulUtil.getToken(GlobalData, function(statusCode, chunk) {

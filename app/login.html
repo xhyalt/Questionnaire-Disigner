@@ -2,243 +2,236 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link href="./css/login.css" rel="stylesheet" type="text/css" media="all" />
-	<link rel="stylesheet" href="./css/xcConfirm.css">
-	<title>问卷设计器</title>
-	<script>
-		var __links = document.querySelectorAll('a');
-
-		function __linkClick(e) {
-			parent.window.postMessage(this.href, '*');
-		};
-		for (var i = 0, l = __links.length; i < l; i++) {
-			if (__links[i].getAttribute('data-t') == '_blank') {
-				__links[i].addEventListener('click', __linkClick, false);
-			}
-		}
-	</script>
-	<script src="./js/jquery.min.js"></script>
-	<script src="./js/login.js"></script>
-	<script src="./js/xcConfirm.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="./css/login.css" rel="stylesheet" type="text/css" media="all" />
+    <link rel="stylesheet" href="./css/xcConfirm.css">
+    <title>问卷设计器</title>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/login.js"></script>
+    <script src="./js/xcConfirm.js"></script>
 </head>
 
 <body onkeydown="keySignIn();">
-	<!-- 菜单设置 -->
-	<script>
-		var Menu = require('electron').remote.Menu;
+    <!-- 菜单设置 -->
+    <script>
+        var Menu = require('electron').remote.Menu;
 
-		var template = [{
-				label: '文件',
-				submenu: [{
-						label: "注销",
-						enabled: false,
-						click: function() {
-							window.location.href = "./login.html";
-						}
-					},
-					{
-						label: '退出',
-						enabled: true,
-						accelerator: "CmdOrCtrl+E",
-						role: "close"
-					}
-				]
-			},
-			{
-				label: '编辑',
-				submenu: [{
-						label: '撤销',
-						enabled: true,
-						accelerator: 'CmdOrCtrl+Z',
-						role: 'undo'
-					},
-					{
-						label: '重复',
-						enabled: true,
-						accelerator: 'Shift+CmdOrCtrl+Z',
-						role: 'redo'
-					},
-					{
-						type: 'separator'
-					},
-					{
-						label: '剪切',
-						enabled: true,
-						accelerator: "CmdOrCtrl+X",
-						role: "cut"
-					},
-					{
-						label: '复制',
-						enabled: true,
-						role: "copy",
-						accelerator: "CmdOrCtrl+C"
-					},
-					{
-						label: '粘贴',
-						enabled: true,
-						role: "paste",
-						accelerator: "CmdOrCtrl+V"
-					},
-					{
-						label: '全选',
-						enabled: true,
-						role: "selectall",
-						accelerator: "CmdOrCtrl+A"
-					}
-				]
-			},
-			{
-				label: '查看',
-				submenu: [{
-						label: '重新加载',
-						enabled: true,
-						accelerator: 'CmdOrCtrl+R',
-						// click: function(item, focusedWindow) {
-						// 	if (focusedWindow)
-						// 		focusedWindow.reload();
-						// }
-					},
-					{
-						type: 'separator'
-					},
-					{
-						label: '默认大小',
-						enabled: true
-					},
-					{
-						label: '放大',
-						enabled: true
-					},
-					{
-						label: '缩小',
-						enabled: true
-					},
-					{
-						type: 'separator'
-					},
-					{
-						label: '切换全屏',
-						enabled: true,
-						accelerator: (function() {
-							if (process.platform == 'darwin')
-								return 'Ctrl+Command+F';
-							else
-								return 'F11';
-						})(),
-						click: function(item, focusedWindow) {
-							if (focusedWindow)
-								focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
-						}
-					},
-					{
-						label: '开发者工具',
-						accelerator: (function() {
-							if (process.platform == 'darwin')
-								return 'Alt+Command+I';
-							else
-								return 'Ctrl+Shift+I';
-						})(),
-						click: function(item, focusedWindow) {
-							if (focusedWindow)
-								focusedWindow.toggleDevTools();
-						}
-					}
-				]
-			},
-			{
-				label: '窗口',
-				submenu: [{
-						label: '最小化',
-						enabled: true,
-						accelerator: 'CmdOrCtrl+M',
-						role: 'minimize'
-					},
-					{
-						label: '关闭',
-						enabled: true,
-						accelerator: "CmdOrCtrl+E",
-						role: "close"
-					}
-				]
-			},
-			{
-				label: '帮助',
-				role: "help",
-				submenu: [{
-						label: '了解更多',
-						enabled: true,
-						click: function() {
-							window.location.href = "./404.html";
-						}
-					},
-					{
-						label: '文档',
-						enabled: true,
-						click: function() {
-							window.location.href = "./404.html";
-						}
-					},
-					{
-						label: '社区讨论',
-						enabled: true,
-						click: function() {
-							window.location.href = "./404.html";
-						}
-					},
-					{
-						label: '关于我们',
-						enabled: true,
-						click: function() {
-							window.location.href = "./about.html";
-						}
-					}
-				]
-			}
-		];
-		var menu = Menu.buildFromTemplate(template);
-		Menu.setApplicationMenu(menu);
-	</script>
-
-	<div id="hidebg"></div>
-	<div class="message warning">
-		<div class="contact-form">
-			<div class="logo">
-				<!-- <h1>登&nbsp;&nbsp;&nbsp;&nbsp; 录</h1> -->
-				<h1>问 卷 设 计 器</h1>
-			</div>
-			<!--- 表单 --->
-			<form name="login" class="form" method="post" name="contact_form" novalidate>
-				<ul>
-					<li>
-						<label><img src="images/link.png" alt=""/></label>
-						<input name="url" type="text" class="url" placeholder="url" autocomplete="on"/>
-					</li>
-					<li>
-						<label><img src="images/contact.png" alt=""/></label>
-						<input name="username" type="username" class="text" placeholder="账号" autocomplete="on"/>
-					</li>
-					<li>
-						<label><img src="images/lock.png" alt=""/></label>
-						<input name="password" type="password" name="password" placeholder="密码" autocomplete="on"/>
-					</li>
-					<a class="more" href="javascript: showUsers();">更多账户»</a>
-					<li class="style">
-						<input type="button" id="button1" name="button" value="登    录" onclick="signIn();">
-					</li>
-				</ul>
-				<div class="clear"></div>
-			</form>
-			<!-- 表单结束 -->
-		</div>
-	</div>
-	<div class="clear"></div>
-	<!--- footer --->
-	<div class="footer">
-		<p class="copy_right">copyright &#169; Developed by<a href="#">&nbsp;Yao</a> </p>
-	</div>
+        var template = [{
+                label: '文件',
+                submenu: [{
+                        label: "注销",
+                        enabled: false,
+                        click: function() {
+                            window.location.href = "./login.html";
+                        }
+                    },
+                    {
+                        label: '退出',
+                        enabled: true,
+                        accelerator: "CmdOrCtrl+E",
+                        role: "close"
+                    }
+                ]
+            },
+            {
+                label: '编辑',
+                submenu: [{
+                        label: '撤销',
+                        enabled: true,
+                        accelerator: 'CmdOrCtrl+Z',
+                        role: 'undo'
+                    },
+                    {
+                        label: '重复',
+                        enabled: true,
+                        accelerator: 'Shift+CmdOrCtrl+Z',
+                        role: 'redo'
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: '剪切',
+                        enabled: true,
+                        accelerator: "CmdOrCtrl+X",
+                        role: "cut"
+                    },
+                    {
+                        label: '复制',
+                        enabled: true,
+                        role: "copy",
+                        accelerator: "CmdOrCtrl+C"
+                    },
+                    {
+                        label: '粘贴',
+                        enabled: true,
+                        role: "paste",
+                        accelerator: "CmdOrCtrl+V"
+                    },
+                    {
+                        label: '全选',
+                        enabled: true,
+                        role: "selectall",
+                        accelerator: "CmdOrCtrl+A"
+                    }
+                ]
+            },
+            {
+                label: '查看',
+                submenu: [{
+                        label: '重新加载',
+                        enabled: true,
+                        accelerator: 'CmdOrCtrl+R',
+                        // click: function(item, focusedWindow) {
+                        // 	if (focusedWindow)
+                        // 		focusedWindow.reload();
+                        // }
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: '默认大小',
+                        enabled: true
+                    },
+                    {
+                        label: '放大',
+                        enabled: true
+                    },
+                    {
+                        label: '缩小',
+                        enabled: true
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: '切换全屏',
+                        enabled: true,
+                        accelerator: (function() {
+                            if (process.platform == 'darwin')
+                                return 'Ctrl+Command+F';
+                            else
+                                return 'F11';
+                        })(),
+                        click: function(item, focusedWindow) {
+                            if (focusedWindow)
+                                focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+                        }
+                    },
+                    {
+                        label: '开发者工具',
+                        accelerator: (function() {
+                            if (process.platform == 'darwin')
+                                return 'Alt+Command+I';
+                            else
+                                return 'Ctrl+Shift+I';
+                        })(),
+                        click: function(item, focusedWindow) {
+                            if (focusedWindow)
+                                focusedWindow.toggleDevTools();
+                        }
+                    }
+                ]
+            },
+            {
+                label: '窗口',
+                submenu: [{
+                        label: '最小化',
+                        enabled: true,
+                        accelerator: 'CmdOrCtrl+M',
+                        role: 'minimize'
+                    },
+                    {
+                        label: '关闭',
+                        enabled: true,
+                        accelerator: "CmdOrCtrl+E",
+                        role: "close"
+                    }
+                ]
+            },
+            {
+                label: '帮助',
+                role: "help",
+                submenu: [{
+                        label: '了解更多',
+                        enabled: true,
+                        click: function() {
+                            window.location.href = "./404.html";
+                        }
+                    },
+                    {
+                        label: '文档',
+                        enabled: true,
+                        click: function() {
+                            window.location.href = "./404.html";
+                        }
+                    },
+                    {
+                        label: '社区讨论',
+                        enabled: true,
+                        click: function() {
+                            window.location.href = "./404.html";
+                        }
+                    },
+                    {
+                        label: '关于我们',
+                        enabled: true,
+                        click: function() {
+                            window.location.href = "./about.html";
+                        }
+                    }
+                ]
+            }
+        ];
+        var menu = Menu.buildFromTemplate(template);
+        Menu.setApplicationMenu(menu);
+    </script>
+    <div id="trianglePop"></div>
+    <div id="popUserBox">
+        <h4>更多用户</h4>
+        <a id="popUserClose" href="javascript: ;"></a>
+        <div id="popUserDetail">
+        </div>
+    </div>
+    <div id="hidebg"></div>
+    <div class="message warning">
+        <div class="contact-form">
+            <div class="logo">
+                <h1>问 卷 设 计 器</h1>
+            </div>
+            <!--- 表单 --->
+            <form name="login" class="form" method="post" name="contact_form" novalidate>
+                <ul>
+                    <li>
+                        <label><img src="images/link.png" alt=""/></label>
+                        <input name="url" type="text" class="url" placeholder="url" autocomplete="on" />
+                    </li>
+                    <li>
+                        <label><img src="images/contact.png" alt=""/></label>
+                        <input name="username" type="username" class="user" placeholder="账号" autocomplete="on" />
+                    </li>
+                    <li>
+                        <label><img src="images/lock.png" alt=""/></label>
+                        <input name="password" type="password" class="password" name="password" placeholder="密码" autocomplete="on" />
+                    </li>
+                    <a id="more" href="javascript: showUsers();">更多账户»</a>
+                    <li class="style">
+                        <input type="button" id="button1" name="button" value="登    录" onclick="signIn();">
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </form>
+            <!-- 表单结束 -->
+        </div>
+    </div>
+    <div class="clear"></div>
+    <!--- footer --->
+    <div class="footer">
+        <p class="copy_right">copyright &#169; Developed by<a href="#">&nbsp;Yao</a> </p>
+    </div>
 </body>
 
 </html>
