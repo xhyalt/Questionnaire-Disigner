@@ -27,6 +27,7 @@ var users = null;
 var popUserBox = false;
 
 $(function() {
+
     $("#popUserBox").on("click", ".detail", function() {
         var $td = $(this);
         $(".url").attr("value", users[$td.attr("num")].URL);
@@ -92,7 +93,7 @@ function showUsers() {
                 var YT = $('#more').offset().left - 15;
 
                 $("#popUserDetail").empty();
-                if (users.length > 0) {
+                if (users && users.length > 0) {
                     for (var i = 0; i < res.data.length; i++) {
                         var detail = `<div class="detail" num=${i}>
                         <li>URL&nbsp;&nbsp;&nbsp;${res.data[i].URL}</li>
@@ -143,6 +144,13 @@ function signIn() {
         var passwordValue = document.forms["login"]["password"].value;
 
         console.log(urlValue + " " + adminValue + " " + passwordValue);
+
+        if (!urlValue || !adminValue) {
+            txt = "请填入完整登录信息";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res2) {});
+            hideShielder();
+            return;
+        }
         // urlValue = doWithRootURL(urlValue);
 
         // var i = urlValue.lastIndexOf(':');
@@ -160,43 +168,53 @@ function signIn() {
         /*get请求token restfulUtil.js*/
         restfulUtil.getToken(GlobalData, function(statusCode, chunk) {
             if (statusCode == false) {
-                quesSqlite.checkUser(GlobalData, function(res) {
-                    if (res.success == true) {
-                        if (res.data["count(1)"] == 0) {
-                            /*用户表中不存在该条数据*/
-                            txt = "登录失败，请检查信息是否输入正确";
-                            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res2) {});
-                            hideShielder();
-                            return;
-                        } else {
-                            /*用户表中存在该条数据 询问是否离线*/
-                            window.wxc.xcConfirm("无法连接服务器，是否进入离线模式？", window.wxc.xcConfirm.typeEnum.confirm, function(res2) {
-                                if (res2.success == true) {
-                                    onlineStatus = false;
-                                    /*点击确定*/
-                                    __setGlobalData(function(res3) {
-                                        if (res3.success == true) {
-                                            __setOnlineStatus(function(res4) {
-                                                if (res4.success == true) {
-                                                    window.location.href = "./list.html";
-                                                    hideShielder();
-                                                    return;
-                                                }
-                                            });
-                                        }
-                                    });
-                                } else {
-                                    hideShielder();
-                                    return;
-                                }
-                            });
-                        }
-                    } else {
-                        console.log("用户查询失败");
+                quesSqlite.checkTable(function(res0) {
+                    if (res0.success == false) {
+                        txt = "登录失败，请检查信息是否输入正确";
+                        window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res2) {});
                         hideShielder();
                         return;
+                    } else {
+                        quesSqlite.checkUser(GlobalData, function(res) {
+                            if (res.success == true) {
+                                if (res.data["count(1)"] == 0) {
+                                    /*用户表中不存在该条数据*/
+                                    txt = "登录失败，请检查信息是否输入正确";
+                                    window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res2) {});
+                                    hideShielder();
+                                    return;
+                                } else if (res.data["count(1)"] == 1) {
+                                    /*用户表中存在该条数据 询问是否离线*/
+                                    window.wxc.xcConfirm("无法连接服务器，是否进入离线模式？", window.wxc.xcConfirm.typeEnum.confirm, function(res2) {
+                                        if (res2.success == true) {
+                                            onlineStatus = false;
+                                            /*点击确定*/
+                                            __setGlobalData(function(res3) {
+                                                if (res3.success == true) {
+                                                    __setOnlineStatus(function(res4) {
+                                                        if (res4.success == true) {
+                                                            window.location.href = "./list.html";
+                                                            hideShielder();
+                                                            return;
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            hideShielder();
+                                            return;
+                                        }
+                                    });
+                                }
+                            } else {
+                                console.log("用户查询失败");
+                                hideShielder();
+                                return;
+                            }
+                        });
                     }
                 });
+
 
             } else if (statusCode == 200) {
                 console.log("登录成功");
@@ -237,7 +255,7 @@ function signIn() {
                 });
 
             } else if (statusCode == 401) {
-                alert(body.error_msg, "提示");
+                alert("无法登录，请检查账户信息，重新登录！", "提示");
                 hideShielder();
             } else {
                 // console.log("是否出现");

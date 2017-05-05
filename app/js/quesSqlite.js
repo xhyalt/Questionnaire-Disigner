@@ -16,18 +16,14 @@ const db = new sqlite3.Database(dbFile);
  * @return
  */
 function initDB(GlobalData, cb) {
-
-    // console.log("正在初始化数据库 initDB");
     __checkTable(function(res1) {
         // console.log("检查表是否存在" + res1.success);
         if (res1.success == false) {
             /*不存在数据库，调用建表函数*/
-            // console.log("表不存在，建表");
             __createTable(function(res2) {
                 if (res2.success == true) {
                     /*建表成功*/
                     // console.log("建表成功");
-                    /*插入该条数据*/
                     __insertUser(GlobalData, function(res3) {
                         if (res3.success == false) {
                             /*插入数据失败*/
@@ -979,6 +975,26 @@ function __checkSolution(GlobalData, solutionJson, cb) {
 
 /**
  * 检查表是否存在
+ * @public
+ * @param  {Function} cb 回调函数
+ * @return
+ */
+function checkTable(cb) {
+    __checkTable(function(res) {
+        if (res.success == true) {
+            cb({
+                success: true
+            });
+        } else {
+            cb({
+                success: false
+            });
+        }
+    });
+}
+
+/**
+ * 检查表是否存在
  * 若不存在建表
  * @private
  * @param  cb callback
@@ -1254,3 +1270,4 @@ exports.updateQuestionnaireTitle = updateQuestionnaireTitle;
 exports.checkQuestionnaireByName = checkQuestionnaireByName;
 exports.updateQuestionnaireIsChanged = updateQuestionnaireIsChanged;
 exports.deleteUser = deleteUser;
+exports.checkTable = checkTable;
