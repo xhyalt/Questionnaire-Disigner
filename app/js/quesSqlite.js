@@ -609,7 +609,7 @@ function __deleteQuestionnaireByName(GlobalData, name, cb) {
  */
 function __insertQuestionnaire(GlobalData, solutionName, questionnaireJson, cb) {
     // console.log("正在添加调查问卷 __insertQuestionnaire");
-    db.run("insert into QUESTIONNAIRES(URL, user, solutionName, name, no, reportGroupCode, title, subtitle, recid, isNew, isRemote) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionName, questionnaireJson.name, questionnaireJson.no, questionnaireJson.reportGroupCode, questionnaireJson.title, questionnaireJson.subtitle, questionnaireJson.recid, "1", questionnaireJson.isRemote], function(err) {
+    db.run("insert into QUESTIONNAIRES(URL, user, solutionName, name, no, reportGroupCode, title, subtitle, recid, isNew, isRemote, editTime) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionName, questionnaireJson.name, questionnaireJson.no, questionnaireJson.reportGroupCode, questionnaireJson.title, questionnaireJson.subtitle, questionnaireJson.recid, "1", questionnaireJson.isRemote, "9999999999"], function(err) {
         if (err) {
             console.log(err.message);
             cb({

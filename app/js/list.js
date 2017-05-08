@@ -22,9 +22,21 @@ var dTreeItemNum = 0;
 /*树*/
 var d = null;
 /*当前选中的业务方案*/
-var solutionTemp = null;
+var activeSolution = null;
+/*记录排序的类型*/
+var sortType = true;
 
 $(function() {
+    /*排序图标点击事件*/
+    $(".editTd").on("click", ".icon-move-down, .icon-move-up", function() {
+        $("icon-move-down").css({
+            "content": "\ea46"
+        });
+        $(this).attr("class") == "icon-move-down" ? $(this).attr("class", "icon-move-up") : $(this).attr("class", "icon-move-down");
+        sortType = !sortType;
+        questionnairesInfo.sort(sortBy("editTime", sortType, parseInt));
+        showQuestionnaires(activeSolution);
+    });
 
     /*刷新树图标鼠标移入移出事件*/
     $("#tree").on("mouseover", "#fresh", function() {
@@ -45,7 +57,7 @@ $(function() {
             initQuestionnaire(function(res) {
                 if (res.success == true) {
                     initTree();
-                    solutionTemp = null;
+                    activeSolution = null;
                     if ($(".listBody").length && $(".listBody").length > 0)
                         $(".listBody").remove();
                 }
@@ -121,7 +133,7 @@ $(function() {
 
         /*获取信息并存入数据库*/
         questionnaireJson = {
-            "solutionName": solutionTemp.name,
+            "solutionName": activeSolution.name,
             "name": popBoxName,
             "no": popBoxNo,
             "reportGroupCode": popBoxReportGroupCode,
@@ -134,7 +146,7 @@ $(function() {
                 console.log(res.data["count(1)"]);
                 if (res.data["count(1)"] == 0) {
                     /*该标识唯一*/
-                    quesSqlite.createTempQuestionnaire(GlobalData, solutionsInfo[solutionTemp].name, questionnaireJson, function(res) {
+                    quesSqlite.createTempQuestionnaire(GlobalData, solutionsInfo[activeSolution].name, questionnaireJson, function(res) {
                         if (res.success == true) {
                             console.log("创建临时调查问卷成功");
                             __setTempQuestionnaireName(questionnaireJson.name, function(res) {
@@ -219,6 +231,7 @@ function initTree() {
                             // console.log(JSON.stringify(res2.data));
                             questionnairesLength = res2.data.length;
                             questionnairesInfo = res2.data;
+                            questionnairesInfo.sort(sortBy("editTime", sortType, parseInt));
                             console.log("res2.data.length = " + questionnairesLength);
                             console.log("questionnairesInfo = " + questionnairesInfo);
                             /*添加调查问卷的树结点*/
@@ -246,21 +259,40 @@ function initTree() {
     });
 }
 
+var sortBy = function(filed, rev, primer) {
+    rev = (rev) ? -1 : 1;
+    return function(a, b) {
+        a = a[filed];
+        b = b[filed];
+        if (typeof(primer) != 'undefined') {
+            a = primer(a);
+            b = primer(b);
+        }
+        if (a < b) {
+            return rev * -1;
+        }
+        if (a > b) {
+            return rev * 1;
+        }
+        return 1;
+    }
+};
+
 /**
  * 树节点业务方案的点击事件
  * @param  solutionNameIndex 该业务方案节点的标识
  * @return
  */
-function showQuestionnaires(solutionNameIndex, i) {
+function showQuestionnaires(j) {
     //添加节点点击事件
     var row = 0;
     var syncTd;
     var editTd;
     var tempItem;
-    solutionTemp = i;
+    activeSolution = j;
+    var solutionNameIndex = solutionsInfo[j].name;
     if ($(".listBody").length && $(".listBody").length > 0)
         $(".listBody").remove();
-    console.log(questionnairesInfo);
     for (let i = 0; i < questionnairesLength; i++) {
         if (questionnairesInfo[i].solutionName == solutionNameIndex) {
             console.log(questionnairesInfo[i].title);
@@ -290,7 +322,7 @@ function showQuestionnaires(solutionNameIndex, i) {
 
             if (questionnairesInfo[i].editTime) {
                 var second = Date.parse(new Date()) / 1000 - questionnairesInfo[i].editTime;
-                editTd = getTime(second);
+                editTd = questionnairesInfo[i].editTime == "9999999999" ? "" : getTime(second);
             } else {
                 editTd = "";
             }
@@ -316,7 +348,7 @@ function showQuestionnaires(solutionNameIndex, i) {
  * @return 显示效果
  */
 function getTime(second) {
-    if (second < 60) {
+    if (second < 60 && second >= 0) {
         return "刚刚";
     } else if (second < 60 * 60) {
         return parseInt(second / 60).toString() + "分钟前";
@@ -324,8 +356,8 @@ function getTime(second) {
         return parseInt(second / 60 / 60).toString() + "小时前";
     } else if (second > 0) {
         return parseInt(second / 60 / 60 / 24).toString() + "天前";
-    } else {
-        return "你穿越了";
+    } else if (seccond == 9999999999) {
+        return "";
     }
 }
 
@@ -580,7 +612,7 @@ function getQuestionnaireInfo(GlobalData, name, cb) {
         if (res.success == true) {
             data = JSON.stringify(res.resJson.dataInfo);
             /*将获取的表样存入数据库*/
-            quesSqlite.updateQuestionnaireData(GlobalData, name, data, "0", "", function(res) {
+            quesSqlite.updateQuestionnaireData(GlobalData, name, data, "0", "9999999999", function(res) {
                 if (res.success == true) {
                     console.log("更新表样成功");
                     cb({
@@ -842,8 +874,7 @@ function __setTempQuestionnaireName(tempQuestionnaireName, cb) {
 function __addSolutionTreeItem(cb) {
     console.log("正在添加业务方案树节点");
     for (var i = 0; i < solutionsLength; i++) {
-        let temp = solutionsInfo[i].name;
-        d.add(++dTreeItemNum, 0, solutionsInfo[i].title, `javascript:showQuestionnaires('${temp}', ${i});`, '', solutionsInfo[i].name, "./images/tree_02_op.png", "./images/tree_02_op.png");
+        d.add(++dTreeItemNum, 0, solutionsInfo[i].title, `javascript:showQuestionnaires(${i});`, '', solutionsInfo[i].name, "./images/tree_02_op.png", "./images/tree_02_op.png");
         solutionsInfo[i].rowID = dTreeItemNum;
     }
     cb({
@@ -893,7 +924,7 @@ function __getJsonLength(jsonData) {
  * @return
  */
 function showCreateQuestionnaire() {
-    if (solutionTemp == null) {
+    if (activeSolution == null) {
         txt = "请选择一个业务方案";
         window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         return;
@@ -907,7 +938,7 @@ function showCreateQuestionnaire() {
 
     /*将选中的业务方案填入*/
     $(".solution").empty();
-    $(".solution").append(solutionsInfo[solutionTemp].title);
+    $(".solution").append(solutionsInfo[activeSolution].title);
     $(".popBoxItem input").val("");
 
     hidebg.style.display = "block"; //显示隐藏层
