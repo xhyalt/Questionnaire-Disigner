@@ -102,30 +102,6 @@ $(function() {
 
     /*新建问卷监听事件start===========================*/
 
-    var $dropBox2 = $('#popBox #popBoxSecret .dropBox'),
-        $tri2 = $('.dropBox_tri', $dropBox2),
-        $drop2 = $('div.dropBox_drop', $dropBox2),
-        $inp2 = $('div.dropBox_inp', $dropBox2);
-
-    /*下拉框点击事件*/
-    $tri2.on('click', function(event) {
-        var $el = $(this);
-        if ($el.data('active') !== 'on') {
-            $drop2[0].style.display = 'block';
-            $el.data('active', 'on');
-        } else {
-            $drop2[0].style.display = 'none';
-            $el.data('active', 'off');
-        }
-    });
-
-    $drop2.on("click", "li", function(event) {
-        $td = $(this);
-        $inp2[0].innerHTML = this.innerHTML;
-        $drop2[0].style.display = 'none';
-        $tri2.data('active', 'off');
-    });
-
     /*新建问卷弹出框 点击关闭和取消事件*/
     $("#popBox").on("click", "#popBoxClose, #popBoxButtonCancel", function() {
         hideCreateQuestionnaire();
@@ -966,11 +942,6 @@ function showCreateQuestionnaire() {
         return;
     }
     var hideobj = document.getElementById("hidebg");
-
-    var $dropBox = $('#popBox #popBoxSolution .dropBox'),
-        $tri = $('.dropBox_tri', $dropBox),
-        $drop = $('div.dropBox_drop', $dropBox),
-        $inp = $('div.dropBox_inp', $dropBox);
 
     /*将选中的业务方案填入*/
     $(".solution").empty();
