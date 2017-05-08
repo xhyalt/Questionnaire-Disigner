@@ -24,14 +24,34 @@ var d = null;
 /*当前选中的业务方案*/
 var activeSolution = null;
 /*记录排序的类型*/
-var sortType = true;
+var sortType = false;
 
 $(function() {
+    /*搜索框的实时变化监听*/
+    $("#searchinput").bind('input propertychange', function() {
+        var txt = $(this).val();
+        if (txt) {
+            var row = 0;
+            var syncTd;
+            var editTd;
+            var tempItem;
+            $(".listBody").remove();
+            for (var i = 0; i < questionnairesInfo.length; i++) {
+                if (questionnairesInfo[i].solutionName == solutionsInfo[activeSolution].name) {
+                    if (questionnairesInfo[i].title.indexOf(txt) >= 0 || questionnairesInfo[i].name.indexOf(txt) >= 0) {
+                        questionnairesInfo[i].row = ++row;
+                        addListQuestionnaireItem(i, row);
+                    }
+                }
+            }
+        } else {
+            /*输入为空 将列表恢复显示*/
+            showQuestionnaires(activeSolution);
+        }
+    });
+
     /*排序图标点击事件*/
     $(".editTd").on("click", ".icon-move-down, .icon-move-up", function() {
-        $("icon-move-down").css({
-            "content": "\ea46"
-        });
         $(this).attr("class") == "icon-move-down" ? $(this).attr("class", "icon-move-up") : $(this).attr("class", "icon-move-down");
         sortType = !sortType;
         questionnairesInfo.sort(sortBy("editTime", sortType, parseInt));
@@ -259,6 +279,13 @@ function initTree() {
     });
 }
 
+/**
+ * 为调查问卷JSON排序的函数
+ * @param  filed  排序的基准字段
+ * @param  rev    排序的顺序
+ * @param  primer 类型
+ * @return
+ */
 var sortBy = function(filed, rev, primer) {
     rev = (rev) ? -1 : 1;
     return function(a, b) {
@@ -286,60 +313,69 @@ var sortBy = function(filed, rev, primer) {
 function showQuestionnaires(j) {
     //添加节点点击事件
     var row = 0;
-    var syncTd;
-    var editTd;
-    var tempItem;
+
     activeSolution = j;
     var solutionNameIndex = solutionsInfo[j].name;
     if ($(".listBody").length && $(".listBody").length > 0)
         $(".listBody").remove();
     for (let i = 0; i < questionnairesLength; i++) {
         if (questionnairesInfo[i].solutionName == solutionNameIndex) {
-            console.log(questionnairesInfo[i].title);
             questionnairesInfo[i].row = ++row;
 
-            if (!questionnairesInfo[i].data) {
-                /*data为空表示未下载*/
-                syncTd = "未下载";
-                if (onlineStatus == true) {
-                    tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData('${questionnairesInfo[i].name}', ${row});">下载</a>`;
-                } else {
-                    tempItem = `<span>编辑</span><span>预览</span><span>下载</span>`;
-                }
-            } else if (questionnairesInfo[i].isChanged == "0" && questionnairesInfo[i].data) {
-                /*data不为空 且 没有修改 表示已同步*/
-                syncTd = "已同步";
-                tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>`;
-            } else {
-                /*data不为空 且 已经修改 表示未同步*/
-                syncTd = "未同步";
-                if (onlineStatus == true) {
-                    tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><a href="javascript: uploadQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">上传</a>`;
-                } else {
-                    tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><span>上传</span>`;
-                }
-            }
-
-            if (questionnairesInfo[i].editTime) {
-                var second = Date.parse(new Date()) / 1000 - questionnairesInfo[i].editTime;
-                editTd = questionnairesInfo[i].editTime == "9999999999" ? "" : getTime(second);
-            } else {
-                editTd = "";
-            }
-
-            /*在右边显示出点击的业务方案所包含的所有调查问卷*/
-            $("#listHead").after(`
-                <tr class="listBody">
-                    <td class="titleTd">${questionnairesInfo[i].title}</td>
-                    <td class="codeTd">${questionnairesInfo[i].name}</td>
-                    <td class="syncTd">${syncTd}</td>
-                    <td class="editTd">${editTd}</td>
-                    <td class="operTd">
-                        <div style="display:inline">${tempItem}</div>
-                    </td>
-                </tr>`);
+            addListQuestionnaireItem(i, row);
         }
     }
+}
+
+/**
+ * 根据问卷信息添加列表item
+ * @param i   问卷总列表中的第i个
+ * @param row 行数
+ */
+function addListQuestionnaireItem(i, row) {
+    var syncTd;
+    var editTd;
+    var tempItem;
+    if (!questionnairesInfo[i].data) {
+        /*data为空表示未下载*/
+        syncTd = "未下载";
+        if (onlineStatus == true) {
+            tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData('${questionnairesInfo[i].name}', ${row});">下载</a>`;
+        } else {
+            tempItem = `<span>编辑</span><span>预览</span><span>下载</span>`;
+        }
+    } else if (questionnairesInfo[i].isChanged == "0" && questionnairesInfo[i].data) {
+        /*data不为空 且 没有修改 表示已同步*/
+        syncTd = "已同步";
+        tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>`;
+    } else {
+        /*data不为空 且 已经修改 表示未同步*/
+        syncTd = "未同步";
+        if (onlineStatus == true) {
+            tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><a href="javascript: uploadQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">上传</a>`;
+        } else {
+            tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><span>上传</span>`;
+        }
+    }
+
+    if (questionnairesInfo[i].editTime) {
+        var second = Date.parse(new Date()) / 1000 - questionnairesInfo[i].editTime;
+        editTd = questionnairesInfo[i].editTime == "9999999999" ? "" : getTime(second);
+    } else {
+        editTd = "";
+    }
+
+    /*在右边显示出点击的业务方案所包含的所有调查问卷*/
+    $("#listTable").find("tr").last().after(`
+      <tr class="listBody">
+          <td class="titleTd">${questionnairesInfo[i].title}</td>
+          <td class="codeTd">${questionnairesInfo[i].name}</td>
+          <td class="syncTd">${syncTd}</td>
+          <td class="editTd">${editTd}</td>
+          <td class="operTd">
+              <div style="display:inline">${tempItem}</div>
+          </td>
+      </tr>`);
 }
 
 /**
