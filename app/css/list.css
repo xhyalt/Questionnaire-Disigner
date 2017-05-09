@@ -60,6 +60,7 @@ body {
     background-color: #f3f3f3;
 }
 
+
 /*新建调差问卷按钮*/
 
 #newButton a {
@@ -81,6 +82,33 @@ body {
 #newButton a:hover {
     background-color: #17a085;
     border-color: #17a085;
+}
+
+
+/*导入问卷按钮*/
+
+#importButton a {
+    float: left;
+    margin-left: 20px;
+    height: 32px;
+    line-height: 32px;
+    text-decoration: none;
+    padding-left: 30px;
+    padding-right: 30px;
+    /*背景*/
+    background-color: #fff;
+    border-radius: 3px;
+    /*字体*/
+    font-size: 14px;
+    font-weight: bold;
+    color: #1ABC9C;
+    /*边框*/
+    border: 2px solid #1ABC9C;
+}
+
+#importButton a:hover {
+    background: #1ABC9C;
+    color: #fff;
 }
 
 
@@ -343,9 +371,8 @@ body {
 
 /*新建问卷*/
 
-#popBox {
+#popBoxNew {
     color: #666666;
-    /*position: absolute;*/
     position: fixed;
     left: 50%;
     top: 50%;
@@ -358,7 +385,7 @@ body {
     margin-top: -150px;
 }
 
-#popBoxHead {
+.popBoxHead {
     height: 25px;
     line-height: 25px;
     font-weight: bold;
@@ -366,7 +393,7 @@ body {
     border-bottom: solid 1px #f3f3f3;
 }
 
-#popBoxClose {
+.popBoxClose {
     display: block;
     cursor: pointer;
     width: 12px;
@@ -377,7 +404,7 @@ body {
     background: url(../images/icons.png) -48px -96px no-repeat;
 }
 
-#popBoxMain {
+.popBoxMain {
     margin: 20px;
     margin-left: 30px;
     font-size: 14px;
@@ -396,7 +423,7 @@ body {
     line-height: 2;
 }
 
-#popBox input {
+.popBoxMain input {
     font-size: 14px;
     color: #666666;
     width: 200px;
@@ -405,72 +432,15 @@ body {
     border: solid #cccccc 1px;
 }
 
-#popBox .dropBox {
-    /*float: left;*/
-    margin-left: 70px;
-    height: 26px;
-    line-height: 30px;
-    text-align: left;
-    width: 200px;
-    font-size: 12px;
-    position: relative;
-    background: #fff;
-    margin-right: 10px;
-    z-index: 120;
-}
-
-#popBox .dropBox .dropBox_wrp {
-    overflow: hidden;
-    border: 1px solid #cccccc;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-#popBox .dropBox .dropBox_inp {
-    color: #666666;
-    padding-left: 10px;
-    height: 26px;
-    line-height: 30px;
-    width: 150px;
-    border-right: none;
-    float: left;
-}
-
-#popBox .dropBox a.dropBox_tri:link, #popBox .dropBox a.dropBox_tri:visited {
-    width: 32px;
-    height: 26px;
-    float: left;
-    background: transparent url('../images/triangle.png') no-repeat center center;
-}
-
-#popBox .dropBox .dropBox_drop {
-    background: #fff;
-    width: 200px;
-    border: 1px solid #cccccc;
-    color: #666666;
-    border-radius: 3px;
-}
-
-#popBox .dropBox .dropBox_drop li {
-    padding-left: 10px;
-    width: 187px;
-}
-
-#popBox .dropBox .dropBox_drop li:hover {
-    background: #1ABC9C;
-    color: #fff;
-    cursor: pointer;
-}
-
-#popBoxButtonBox {
+.popBoxButtonBox {
     border-top: solid 1px #eef0f1;
 }
 
-#popBoxButtonGroup {
+.popBoxButtonGroup {
     float: right;
 }
 
-#popBoxButtonCancel {
+.popBoxButtonCancel {
     float: right;
     margin-top: 10px;
     width: 120px;
@@ -478,7 +448,7 @@ body {
     padding-bottom: 15px;
 }
 
-#popBoxButtonCancel a {
+.popBoxButtonCancel a {
     text-decoration: none;
     /*背景*/
     background: #fff;
@@ -498,7 +468,7 @@ body {
     transition: all linear 0.30s;
 }
 
-#popBoxButtonConfirm {
+.popBoxButtonConfirm {
     float: right;
     margin-top: 10px;
     width: 120px;
@@ -506,7 +476,7 @@ body {
     padding-bottom: 15px;
 }
 
-#popBoxButtonConfirm a {
+.popBoxButtonConfirm a {
     text-decoration: none;
     /*背景*/
     background: #1ABC9C;
@@ -524,4 +494,19 @@ body {
     -webkit-transition: all linear 0.30s;
     -moz-transition: all linear 0.30s;
     transition: all linear 0.30s;
+}
+
+/*导入问卷*/
+#popBoxImport {
+    color: #666666;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 350px;
+    background-color: #fff;
+    display: none;
+    z-Index: 110;
+    border-radius: 5px;
+    margin-left: -200px;
+    margin-top: -150px;
 }

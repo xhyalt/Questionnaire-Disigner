@@ -7,6 +7,7 @@ const path = require('path');
 const glob = require('glob');
 /*与渲染进程通信的模块*/
 const ipcMain = require('electron').ipcMain;
+const dialog = require('electron').dialog;
 /*保持其全局引用，不然JS被GC，windows自动关闭*/
 var mainWindow = null;
 var previewWindow = null;
@@ -14,6 +15,20 @@ var previewWindow = null;
 var GlobalData = null;
 var tempQuestionnaireName = null;
 var onlineStatus = null;
+
+ipcMain.on('open-file-dialog', function(event) {
+    dialog.showOpenDialog({
+        title: "打开文件",
+        filters: [{
+            name: 'JSON文件',
+            extensions: ['json']
+        }],
+        properties: ['openFile']
+    }, function(files) {
+        if (files)
+            event.sender.send('selected-directory', files);
+    });
+})
 
 /*监听渲染进程里发出的message，获取GlobalData*/
 ipcMain.on('asynchronous-set-GlobalData-message', (event, arg) => {

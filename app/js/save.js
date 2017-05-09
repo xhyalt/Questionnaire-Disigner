@@ -227,19 +227,20 @@ function saveQuestionnaire(tempQuestionnaire, cb) {
  * @return
  */
 function getQuestionnaireJson(tempQuestionnaire, cb) {
-    console.log(tempQuestionnaire);
     var mainData = {
         title: tempQuestionnaire.title,
         readonly: false,
         subtitle: tempQuestionnaire.subtitle,
         subno: tempQuestionnaire.no,
-        reportGroupCode: tempQuestionnaire.reportGroupCode,
         solutionName: tempQuestionnaire.solutionName,
         description: "",
         name: tempQuestionnaire.name,
         float: false,
         dataInfo: {}
     };
+    if (tempQuestionnaire.reportGroupCode) {
+        mainData.reportGroupCode = tempQuestionnaire.reportGroupCode;
+    }
     mainData.dataInfo = eval('(' + tempQuestionnaire.data + ')');
     cb({
         success: true,

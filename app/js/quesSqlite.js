@@ -570,7 +570,7 @@ function __updateQuestionnaireTitle(GlobalData, questionnaireJson, cb) {
 
 function deleteQuestionnaireByName(GlobalData, name, cb) {
     console.log("正在删除调查问卷");
-    __deleteQuestionnaire(GlobalData, name, function(res) {
+    __deleteQuestionnaireByName(GlobalData, name, function(res) {
         if (res.success == true) {
             cb({
                 success: true
@@ -609,7 +609,8 @@ function __deleteQuestionnaireByName(GlobalData, name, cb) {
  */
 function __insertQuestionnaire(GlobalData, solutionName, questionnaireJson, cb) {
     // console.log("正在添加调查问卷 __insertQuestionnaire");
-    db.run("insert into QUESTIONNAIRES(URL, user, solutionName, name, no, reportGroupCode, title, subtitle, recid, isNew, isRemote, editTime) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionName, questionnaireJson.name, questionnaireJson.no, questionnaireJson.reportGroupCode, questionnaireJson.title, questionnaireJson.subtitle, questionnaireJson.recid, "1", questionnaireJson.isRemote, "9999999999"], function(err) {
+    console.log(questionnaireJson);
+    db.run("insert into QUESTIONNAIRES(URL, user, solutionName, name, no, reportGroupCode, title, subtitle, recid, isNew, isRemote, editTime, data) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [GlobalData.urlRoot, GlobalData.user, solutionName, questionnaireJson.name, questionnaireJson.no, questionnaireJson.reportGroupCode, questionnaireJson.title, questionnaireJson.subtitle, questionnaireJson.recid, "1", questionnaireJson.isRemote, "9999999999", questionnaireJson.data], function(err) {
         if (err) {
             console.log(err.message);
             cb({
@@ -1188,11 +1189,11 @@ function __updateUser(GlobalData, cb) {
 }
 
 function deleteUser(GlobalData, cb) {
-    __deleteQuestionnaire(GlobalData, function(res) {
+    __deleteQuestionnaires(GlobalData, function(res) {
         if (res.success == true) {
-            __deleteSolution(GlobalData, function(res2) {
+            __deleteSolutions(GlobalData, function(res2) {
                 if (res2.success == true) {
-                    __deleteUser(GlobalData, function(res3) {
+                    __deleteUsers(GlobalData, function(res3) {
                         if (res3.success == true) {
                             cb({
                                 success: true
@@ -1205,7 +1206,7 @@ function deleteUser(GlobalData, cb) {
     });
 }
 
-function __deleteUser(GlobalData, cb) {
+function __deleteUsers(GlobalData, cb) {
     console.log("正在删除用户");
     db.run("delete from USERS where URL = ? and user = ?", [GlobalData.urlRoot, GlobalData.user], function(err) {
         if (err) {
@@ -1220,7 +1221,7 @@ function __deleteUser(GlobalData, cb) {
     });
 }
 
-function __deleteQuestionnaire(GlobalData, cb) {
+function __deleteQuestionnaires(GlobalData, cb) {
     console.log("正在删除调查问卷");
     db.run("delete from QUESTIONNAIRES where URL = ? and user = ?", [GlobalData.urlRoot, GlobalData.user], function(err) {
         if (err) {
@@ -1235,7 +1236,7 @@ function __deleteQuestionnaire(GlobalData, cb) {
     });
 }
 
-function __deleteSolution(GlobalData, cb) {
+function __deleteSolutions(GlobalData, cb) {
     console.log("正在删除业务方案");
     db.run("delete from SOLUTIONS where URL = ? and user = ?", [GlobalData.urlRoot, GlobalData.user], function(err) {
         if (err) {

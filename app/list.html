@@ -195,67 +195,103 @@
     </script>
 
     <div id="hidebg"></div>
-    <div id="popBox">
-        <div id="popBoxHead">
+    <div id="popBoxNew">
+        <div class="popBoxHead">
             新建问卷
-            <div id="popBoxClose"></div>
+            <div class="popBoxClose"></div>
         </div>
-        <div id="popBoxMain">
-            <div id="popBoxSolution" class="popBoxItem">
+        <div class="popBoxMain">
+            <div class="popBoxItem popBoxSolution">
                 <label>业务方案：</label>
                 <label class="solution"></label>
                 <div class="clear"></div>
             </div>
-            <div id="popBoxName" class="popBoxItem">
+            <div class="popBoxItem popBoxName">
                 <label>问卷标识：</label>
-                <input type="text" id="popBoxNameText" style="text-transform: uppercase">
+                <input type="text" style="text-transform: uppercase">
                 <div class="clear"></div>
             </div>
-            <div id="popBoxNo" class="popBoxItem">
+            <div class="popBoxItem popBoxNo">
                 <label>问卷编号：</label>
-                <input type="text" id="popBoxNoText">
+                <input type="text">
                 <div class="clear"></div>
             </div>
-            <div id="popBoxReportGroupCode" class="popBoxItem">
+            <div class="popBoxItem popBoxReportGroupCode">
                 <label>问卷分组：</label>
-                <input type="text" id="popBoxNoText">
+                <input type="text">
                 <div class="clear"></div>
             </div>
-            <div id="popBoxTitle" class="popBoxItem">
+            <div class="popBoxItem popBoxTitle">
                 <label>主&nbsp;&nbsp;标&nbsp;&nbsp;题：</label>
-                <input type="text" id="popBoxTitleText">
+                <input type="text">
                 <div class="clear"></div>
             </div>
-            <div id="popBoxSubtitle" class="popBoxItem">
+            <div class="popBoxItem popBoxSubtitle">
                 <label>副&nbsp;&nbsp;标&nbsp;&nbsp;题：</label>
-                <input type="text" id="popBoxTitleText">
+                <input type="text">
                 <div class="clear"></div>
             </div>
-            <!-- <div id="popBoxSecret" class="popBoxItem">
-                <label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</label>
-                <div class="dropBox">
-                    <div class="dropBox_wrp">
-                        <div class="dropBox_inp dropBox_tri">无秘</div>
-                        <a href="javascript: ;" class="dropBox_tri"></a>
-                    </div>
-                    <div class="dropBox_drop" style="display:none">
-                        <ul>
-                            <li>无秘</li>
-                            <li>秘密</li>
-                            <li>机密</li>
-                            <li>绝密</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="clear"></div>
-            </div> -->
         </div>
-        <div id="popBoxButtonBox">
-            <div id="popBoxButtonGroup">
-                <div id="popBoxButtonCancel">
+        <div class="popBoxButtonBox">
+            <div class="popBoxButtonGroup">
+                <div class="popBoxButtonCancel">
                     <a href="javascript: ;">返 回</a>
                 </div>
-                <div id="popBoxButtonConfirm">
+                <div class="popBoxButtonConfirm">
+                    <a href="javascript: ;">确 认</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="popBoxImport">
+        <div class="popBoxHead">
+            导入问卷
+            <div class="popBoxClose"></div>
+        </div>
+        <div class="popBoxMain">
+            <div class="popBoxItem popBoxSolution">
+                <label>业务方案：</label>
+                <label class="solution"></label>
+                <div class="clear"></div>
+            </div>
+            <div class="popBoxItem popBoxFile">
+                <label>文件路径：</label>
+                <input type="text" id="selectFileInput">
+                <button id="selectFile" onclick="selectFile()">选择</button>
+                <div class="clear"></div>
+            </div>
+            <div class="popBoxItem popBoxName">
+                <label>问卷标识：</label>
+                <input type="text" style="text-transform: uppercase">
+                <div class="clear"></div>
+            </div>
+            <div class="popBoxItem popBoxNo">
+                <label>问卷编号：</label>
+                <input type="text">
+                <div class="clear"></div>
+            </div>
+            <div class="popBoxItem popBoxReportGroupCode">
+                <label>问卷分组：</label>
+                <input type="text">
+                <div class="clear"></div>
+            </div>
+            <div class="popBoxItem popBoxTitle">
+                <label>主&nbsp;&nbsp;标&nbsp;&nbsp;题：</label>
+                <input type="text">
+                <div class="clear"></div>
+            </div>
+            <div class="popBoxItem popBoxSubtitle">
+                <label>副&nbsp;&nbsp;标&nbsp;&nbsp;题：</label>
+                <input type="text">
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="popBoxButtonBox">
+            <div class="popBoxButtonGroup">
+                <div class="popBoxButtonCancel">
+                    <a href="javascript: ;">返 回</a>
+                </div>
+                <div class="popBoxButtonConfirm">
                     <a href="javascript: ;">确 认</a>
                 </div>
             </div>
@@ -264,8 +300,10 @@
     <div id="headParent">
         <div id="head">
             <div id="newButton">
-                <a id="back" href="javascript: showCreateQuestionnaire();">新建 +</a>
-                <!-- <a id="back" href="javascript: test();">新建 +</a> -->
+                <a href="javascript: showCreateQuestionnaire();">新建 +</a>
+            </div>
+            <div id="importButton">
+                <a href="javascript: importQuestionnaire();">导入</a>
             </div>
             <div id="searchBar">
                 <form action="#" name="search">

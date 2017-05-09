@@ -27,11 +27,16 @@ var activeSolution = null;
 var sortType = false;
 
 $(function() {
+
+    document.getElementById('selectFile').addEventListener('click', function(event) {
+        ipcRenderer.send('open-file-dialog');
+    });
+
     /*搜索框的实时变化监听*/
     $("#searchinput").bind('input propertychange', function() {
         var txt = $(this).val();
         if (txt) {
-            var row = 0;
+            var row = -1;
             var syncTd;
             var editTd;
             var tempItem;
@@ -76,7 +81,7 @@ $(function() {
             fresh.changeClassToOn(this);
             initQuestionnaire(function(res) {
                 if (res.success == true) {
-                    initTree();
+                    initTree(function(res) {});
                     activeSolution = null;
                     if ($(".listBody").length && $(".listBody").length > 0)
                         $(".listBody").remove();
@@ -101,20 +106,19 @@ $(function() {
     });
 
     /*新建问卷监听事件start===========================*/
-
     /*新建问卷弹出框 点击关闭和取消事件*/
-    $("#popBox").on("click", "#popBoxClose, #popBoxButtonCancel", function() {
+    $("#popBoxNew").on("click", ".popBoxClose, .popBoxButtonCancel", function() {
         hideCreateQuestionnaire();
     });
 
     /*新建问卷弹出框 点击确认事件*/
-    $("#popBox").on("click", "#popBoxButtonConfirm", function() {
+    $("#popBoxNew").on("click", ".popBoxButtonConfirm", function() {
         /*判断是否有数据为空*/
-        var popBoxName = $("#popBoxName input").val();
-        var popBoxNo = $("#popBoxNo input").val();
-        var popBoxReportGroupCode = $("#popBoxReportGroupCode input").val();
-        var popBoxTitle = $("#popBoxTitle input").val();
-        var popBoxSubtitle = $("#popBoxSubtitle input").val();
+        var popBoxName = $("#popBoxNew .popBoxName input").val();
+        var popBoxNo = $("#popBoxNew .popBoxNo input").val();
+        var popBoxReportGroupCode = $("#popBoxNew .popBoxReportGroupCode input").val();
+        var popBoxTitle = $("#popBoxNew .popBoxTitle input").val();
+        var popBoxSubtitle = $("#popBoxNew .popBoxSubtitle input").val();
         if (popBoxName == "") {
             txt = "问卷标识不可为空，请重新填写";
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
@@ -168,7 +172,113 @@ $(function() {
 
     });
     /*新建问卷监听事件end===========================*/
+
+    /*导入问卷监听事件start===========================*/
+    /*导入问卷弹出框 点击关闭和取消事件*/
+    $("#popBoxImport").on("click", ".popBoxClose, .popBoxButtonCancel", function() {
+        document.getElementById("hidebg").style.display = "none";
+        document.getElementById("popBoxImport").style.display = "none";
+    });
+
+    /*导入问卷弹出框 点击确认事件*/
+    $("#popBoxImport").on("click", ".popBoxButtonConfirm", function() {
+        /*判断是否有数据为空*/
+        var popBoxName = $("#popBoxImport .popBoxName input").val();
+        var popBoxNo = $("#popBoxImport .popBoxNo input").val();
+        var popBoxReportGroupCode = $("#popBoxImport .popBoxReportGroupCode input").val();
+        var popBoxTitle = $("#popBoxImport .popBoxTitle input").val();
+        var popBoxSubtitle = $("#popBoxImport .popBoxSubtitle input").val();
+        var popBoxFile = $("#popBoxImport .popBoxFile input").val();
+        var popBoxData = {};
+
+        if (popBoxName == "") {
+            txt = "问卷标识不可为空，请重新填写";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+            return;
+        }
+        if (popBoxTitle == "") {
+            txt = "主标题不可为空，请重新填写";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+            return;
+        }
+
+        quesSqlite.checkQuestionnaireByName(GlobalData, popBoxName, function(res) {
+            if (res.success == true) {
+                if (res.data["count(1)"] == 0) {
+                    /*该标识唯一*/
+                    $.getJSON(popBoxFile, function(data) {
+                        popBoxData = data;
+                        popBoxData.name = popBoxName;
+                        popBoxData.title = popBoxTitle;
+                        /*获取信息并存入数据库*/
+                        questionnaireJson = {
+                            "name": popBoxName,
+                            "no": popBoxNo,
+                            "reportGroupCode": popBoxReportGroupCode,
+                            "title": popBoxTitle,
+                            "subtitle": popBoxSubtitle,
+                            "recid": newGuid(),
+                            "data": JSON.stringify(popBoxData)
+                        };
+
+                        quesSqlite.createTempQuestionnaire(GlobalData, solutionsInfo[activeSolution].name, questionnaireJson, function(res) {
+                            if (res.success == true) {
+                                console.log("创建临时调查问卷成功");
+                                /*导入成功*/
+                                document.getElementById("hidebg").style.display = "none";
+                                document.getElementById("popBoxImport").style.display = "none";
+                                var txt = "导入问卷成功";
+                                window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
+                                    if (res.data == true) {
+                                        /*刷新树 显示列表*/
+                                        initTree(function(res2) {
+                                            if (res2.success == true) {
+                                                $(".listBody").remove();
+                                                showQuestionnaires(activeSolution);
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+                                txt = "创建问卷失败，请重新创建";
+                                window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+                                return;
+                            }
+                        });
+                    });
+                } else {
+                    /*该标志不唯一 不予新建*/
+                    txt = "该标识已经存在！";
+                    window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+                    return;
+                }
+            }
+        });
+    });
+    /*导入问卷监听事件end===========================*/
 });
+
+/**
+ * 获取JSON文件 填写路径
+ * @return
+ */
+function selectFile() {
+    ipcRenderer.on('selected-directory', function(event, path) {
+        $("#popBoxImport .popBoxFile input").val(path);
+        var popBoxData = {};
+
+        /*从文件路径获取JSON*/
+        $.getJSON(path, function(data) {
+            popBoxData = data;
+            if (popBoxData.name) {
+                $("#popBoxImport .popBoxName input").val(popBoxData.name);
+            }
+            if (popBoxData.title) {
+                $("#popBoxImport .popBoxTitle input").val(popBoxData.title);
+            }
+        });
+    });
+}
 
 /**
  * 刷新按钮的旋转操作
@@ -192,7 +302,7 @@ function init() {
         if (res.success == true) {
             __getOnlineStatus(function(res2) {
                 if (res2.success == true) {
-                    initTree();
+                    initTree(function(res) {});
                 }
             });
         }
@@ -203,7 +313,7 @@ function init() {
  * 初始化树
  * @return
  */
-function initTree() {
+function initTree(cb) {
     d = null;
     dTreeItemNum = 0;
     /*处理树*/
@@ -228,14 +338,16 @@ function initTree() {
                             questionnairesLength = res2.data.length;
                             questionnairesInfo = res2.data;
                             questionnairesInfo.sort(sortBy("editTime", sortType, parseInt));
-                            console.log("res2.data.length = " + questionnairesLength);
-                            console.log("questionnairesInfo = " + questionnairesInfo);
+                            console.log(questionnairesInfo);
                             /*添加调查问卷的树结点*/
                             __addQuestionnaireTreeItem(function(res) {
                                 if (res.success == true) {
                                     console.log("添加调查问卷树节点成功");
                                     fresh.changeClassToOff($("#fresh"));
                                     document.getElementById('treeDemo').innerHTML = d;
+                                    cb({
+                                        success: true
+                                    });
                                 }
                             });
                         } else {
@@ -288,7 +400,7 @@ var sortBy = function(filed, rev, primer) {
  */
 function showQuestionnaires(j) {
     //添加节点点击事件
-    var row = 0;
+    var row = -1;
 
     activeSolution = j;
     var solutionNameIndex = solutionsInfo[j].name;
@@ -297,7 +409,6 @@ function showQuestionnaires(j) {
     for (let i = 0; i < questionnairesLength; i++) {
         if (questionnairesInfo[i].solutionName == solutionNameIndex) {
             questionnairesInfo[i].row = ++row;
-
             addListQuestionnaireItem(i, row);
         }
     }
@@ -388,8 +499,8 @@ function uploadQuestionnaire(name, row, cb) {
             save.getQuestionnaireJson(tempQuestionnaire, function(res2) {
                 if (res2.success == true) {
                     restfulUtil.setQuestionnaire(GlobalData, res2.data, function(res3) {
-                        if (res3.success == true) {
-                            console.log("保存问卷成功");
+                        if (res3.success == true && !res3.resJson.error_code) {
+                            console.log("上传问卷成功");
                             /*将该问卷的isChanged改为0*/
                             quesSqlite.updateQuestionnaireIsChanged(GlobalData, name, "0", function(res4) {
                                 if (res4.success == true) {
@@ -417,8 +528,7 @@ function uploadQuestionnaire(name, row, cb) {
  */
 function decomposeQuestionnaire(name, row, cb) {
     /*判断问卷是否已经下载*/
-    var listLength = $(".listBody").length;
-    if ($(".listBody").eq(listLength - row).find(".syncTd").html() == "未下载") {
+    if ($(".listBody").eq(row).find(".syncTd").html() == "未下载") {
         /*未下载 下载问卷表样*/
         showShielder();
         getQuestionnaireInfo(GlobalData, name, function(res) {
@@ -461,10 +571,9 @@ function decomposeQuestionnaire(name, row, cb) {
  * @return
  */
 function deleteQuestionnaire(name, row, cb) {
-    var listLength = $(".listBody").length;
-    if ($(".listBody").eq(listLength - row).find(".syncTd").html() == "已同步") {
+    if ($(".listBody").eq(row).find(".syncTd").html() == "已同步") {
         /*已同步*/
-        var txt = "该调查问卷已经同步，只能删除表样。";
+        var txt = "该调查问卷已经同步，只能删除表样";
         window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
             if (res.data == true) {
                 /*点击了确定，删除表样*/
@@ -516,16 +625,23 @@ function deleteQuestionnaire(name, row, cb) {
                     });
                 } else {
                     /*该调查问卷不存在服务器上*/
-                    var txt = "该问卷尚未同步，是否仍旧删除所有信息？";
+                    var txt = "该问卷尚未同步，是否删除所有信息？";
                     window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.confirm, function(res) {
                         if (res.data == true) {
                             /*点击确定 删除问卷所有信息*/
                             quesSqlite.deleteQuestionnaireByName(GlobalData, name, function(res2) {
                                 if (res2.success == true) {
-                                    $(".listBody").eq(listLength - row).empty();
-                                    cb({
-                                        success: true
+                                    /*刷新树 显示列表*/
+                                    initTree(function(res2) {
+                                        if (res2.success == true) {
+                                            $(".listBody").remove();
+                                            showQuestionnaires(activeSolution);
+                                            cb({
+                                                success: true
+                                            });
+                                        }
                                     });
+
                                 } else {
                                     cb({
                                         success: true,
@@ -550,8 +666,7 @@ function deleteQuestionnaire(name, row, cb) {
  */
 function previewQuestionnaire(name, row, cb) {
     /*判断问卷是否已经下载*/
-    var listLength = $(".listBody").length;
-    if ($(".listBody").eq(listLength - row).find(".syncTd").html() == "未下载") {
+    if ($(".listBody").eq(row).find(".syncTd").html() == "未下载") {
         /*未下载 下载问卷表样*/
         showShielder();
         getQuestionnaireInfo(GlobalData, name, function(res) {
@@ -569,7 +684,7 @@ function previewQuestionnaire(name, row, cb) {
                 });
             }
         });
-    } else if ($(".listBody").eq(listLength - row).find(".syncTd").html() == "已同步") {
+    } else if ($(".listBody").eq(row).find(".syncTd").html() == "已同步") {
         /*已同步 直接显示*/
         __setTempQuestionnaireName(name, function(res2) {
             if (res2.success == true) {
@@ -644,18 +759,17 @@ function getQuestionnaireInfo(GlobalData, name, cb) {
 
 function changeSyn(name, row, method) {
     /*1.已同步 2.未下载 3.未同步*/
-    var listLength = $(".listBody").length;
     switch (method) {
         case 1:
             {
-                $(".listBody").eq(listLength - row).find(".syncTd").empty().append("已同步");
-                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${name}', ${row}, function(res){});">删除</a>`);
+                $(".listBody").eq(row).find(".syncTd").empty().append("已同步");
+                $(".listBody").eq(row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${name}', ${row}, function(res){});">删除</a>`);
             }
             break;
         case 2:
             {
-                $(".listBody").eq(listLength - row).find(".syncTd").empty().append("未下载");
-                $(".listBody").eq(listLength - row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData(${name}, ${row});">下载</a>`);
+                $(".listBody").eq(row).find(".syncTd").empty().append("未下载");
+                $(".listBody").eq(row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData(${name}, ${row});">下载</a>`);
             }
             break;
         case 3:
@@ -949,7 +1063,24 @@ function showCreateQuestionnaire() {
     $(".popBoxItem input").val("");
 
     hidebg.style.display = "block"; //显示隐藏层
-    document.getElementById("popBox").style.display = "block"; //显示弹出层
+    document.getElementById("popBoxNew").style.display = "block"; //显示弹出层
+}
+
+function importQuestionnaire() {
+    if (activeSolution == null) {
+        txt = "请选择一个业务方案";
+        window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        return;
+    }
+    var hideobj = document.getElementById("hidebg");
+
+    /*将选中的业务方案填入*/
+    $(".solution").empty();
+    $(".solution").append(solutionsInfo[activeSolution].title);
+    $(".popBoxItem input").val("");
+
+    hidebg.style.display = "block"; //显示隐藏层
+    document.getElementById("popBoxImport").style.display = "block"; //显示弹出层
 }
 
 /**
@@ -959,13 +1090,5 @@ function showCreateQuestionnaire() {
  */
 function hideCreateQuestionnaire() {
     document.getElementById("hidebg").style.display = "none";
-    document.getElementById("popBox").style.display = "none";
+    document.getElementById("popBoxNew").style.display = "none";
 }
-
-// function test() {
-//     restfulUtil.getQuestionnaireInfo(GlobalData, "ASDASDF", function(res) {
-//         if (res.success == true) {
-//             console.log(JSON.stringify(res.data));
-//         }
-//     });
-// }
