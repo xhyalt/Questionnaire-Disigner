@@ -20,9 +20,14 @@ ipcMain.on('open-file-dialog', function(event) {
     dialog.showOpenDialog({
         title: "打开文件",
         filters: [{
-            name: 'JSON文件',
-            extensions: ['json']
-        }],
+                name: 'JSON文件',
+                extensions: ['json']
+            },
+            {
+                name: "QUES文件",
+                extensions: ["ques"]
+            }
+        ],
         properties: ['openFile']
     }, function(files) {
         if (files)
