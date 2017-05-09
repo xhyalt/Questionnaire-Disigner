@@ -5,6 +5,7 @@ const save = require('./js/save.js');
 /*与主进程通信的模块*/
 const ipcRenderer = require('electron').ipcRenderer;
 const querystring = require('querystring');
+const fs = require('fs');
 /*用户基础数据*/
 var GlobalData = null;
 /*是否在线*/
@@ -432,21 +433,35 @@ function addListQuestionnaireItem(i, row) {
         /*data为空表示未下载*/
         syncTd = "未下载";
         if (onlineStatus == true) {
-            tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData('${questionnairesInfo[i].name}', ${row});">下载</a>`;
+            tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a>
+            <a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a>
+            <a href="javascript: outputQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">导出</a>
+            <a href="javascript: getQuestionnaireData('${questionnairesInfo[i].name}', ${row});">下载</a>`;
         } else {
-            tempItem = `<span>编辑</span><span>预览</span><span>下载</span>`;
+            tempItem = `<span>编辑</span><span>预览</span><span>导出</span><span>下载</span>`;
         }
     } else if (questionnairesInfo[i].isChanged == "0" && questionnairesInfo[i].data) {
         /*data不为空 且 没有修改 表示已同步*/
         syncTd = "已同步";
-        tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>`;
+        tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a>
+        <a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a>
+        <a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>
+        <a href="javascript: outputQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">导出</a>`;
     } else {
         /*data不为空 且 已经修改 表示未同步*/
         syncTd = "未同步";
         if (onlineStatus == true) {
-            tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><a href="javascript: uploadQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">上传</a>`;
+            tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a>
+            <a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a>
+            <a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>
+            <a href="javascript: outputQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">导出</a>
+            <a href="javascript: uploadQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">上传</a>`;
         } else {
-            tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a><span>上传</span>`;
+            tempItem = `<a href="javascript: decomposeQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">编辑</a>
+            <a href="javascript: previewQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">预览</a>
+            <a href="javascript: deleteQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">删除</a>
+            <a href="javascript: outputQuestionnaire('${questionnairesInfo[i].name}', ${row}, function(res){});">导出</a>
+            <span>上传</span>`;
         }
     }
 
@@ -468,6 +483,85 @@ function addListQuestionnaireItem(i, row) {
               <div style="display:inline">${tempItem}</div>
           </td>
       </tr>`);
+}
+
+/**
+ * 导出问卷
+ * @param  name 问卷标识
+ * @param  row  行数
+ * @param  {Function} cb   回调函数
+ * @return
+ */
+function outputQuestionnaire(name, row, cb) {
+    showShielder();
+    if ($(".listBody").eq(row).find(".syncTd").html() == "未下载") {
+        /*未下载 下载问卷表样*/
+        getQuestionnaireInfo(GlobalData, name, function(res) {
+            if (res.success == true) {
+                changeSyn(name, row, 1);
+                quesSqlite.getQuestionnaireByName(GlobalData, name, function(res2) {
+                    console.log(res2.data[0]);
+                    ipcRenderer.once('saved-file', function(event, path) {
+                        if (path) {
+                            console.log(path);
+                            writeFile(path, res2.data[0].data, function(res3) {
+                                if (res3.success == true) {
+                                    hideShielder();
+                                    console.log("导出完毕");
+                                } else {
+                                    hideShielder();
+                                    console.log("导出失败");
+                                }
+                            });
+                        }
+                    });
+                    ipcRenderer.send('save-dialog');
+                });
+            }
+        });
+    } else {
+        console.log("hehe");
+        /*未同步或已同步 直接显示*/
+        quesSqlite.getQuestionnaireByName(GlobalData, name, function(res2) {
+            console.log(res2.data[0]);
+            ipcRenderer.once('saved-file', function(event, path) {
+                if (path) {
+                    console.log(path);
+                    writeFile(path, res2.data[0].data, function(res3) {
+                        if (res3.success == true) {
+                            hideShielder();
+                            console.log("导出完毕");
+                        } else {
+                            hideShielder();
+                            console.log("导出失败");
+                        }
+                    });
+                }
+            });
+            ipcRenderer.send('save-dialog');
+        });
+    }
+}
+
+/**
+ * 写JSON文件函数
+ * @param  path 保存文件路径
+ * @param  data 保存内容
+ * @param  {Function} cb   回调函数
+ * @return
+ */
+function writeFile(path, data, cb) {
+    fs.writeFile(path, data, function(err) {
+        if (err) {
+            throw err;
+            cb({
+                success: false
+            });
+        }
+        cb({
+            success: true
+        });
+    });
 }
 
 /**
@@ -768,13 +862,19 @@ function changeSyn(name, row, method) {
         case 1:
             {
                 $(".listBody").eq(row).find(".syncTd").empty().append("已同步");
-                $(".listBody").eq(row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: deleteQuestionnaire('${name}', ${row}, function(res){});">删除</a>`);
+                $(".listBody").eq(row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a>
+                <a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a>
+                <a href="javascript: deleteQuestionnaire('${name}', ${row}, function(res){});">删除</a>
+                <a href="javascript: outputQuestionnaire('${name}', ${row}, function(res){});">导出</a>`);
             }
             break;
         case 2:
             {
                 $(".listBody").eq(row).find(".syncTd").empty().append("未下载");
-                $(".listBody").eq(row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a><a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a><a href="javascript: getQuestionnaireData(${name}, ${row});">下载</a>`);
+                $(".listBody").eq(row).find(".operTd").find("div").empty().append(`<a href="javascript: decomposeQuestionnaire('${name}', ${row}, function(res){});">编辑</a>
+                <a href="javascript: previewQuestionnaire('${name}', ${row}, function(res){});">预览</a>
+                <a href="javascript: outputQuestionnaire('${name}', ${row}, function(res){});">导出</a>
+                <a href="javascript: getQuestionnaireData(${name}, ${row});">下载</a>`);
             }
             break;
         case 3:

@@ -33,6 +33,19 @@ ipcMain.on('open-file-dialog', function(event) {
         if (files)
             event.sender.send('selected-directory', files);
     });
+});
+
+ipcMain.on('save-dialog', function(event) {
+    const options = {
+        title: '导出问卷',
+        filters: [{
+            name: 'JSON文件',
+            extensions: ['json']
+        }]
+    }
+    dialog.showSaveDialog(options, function(filename) {
+        event.sender.send('saved-file', filename)
+    })
 })
 
 /*监听渲染进程里发出的message，获取GlobalData*/

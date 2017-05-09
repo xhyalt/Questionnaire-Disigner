@@ -238,8 +238,8 @@ body {
 #list {
     margin-left: 310px;
     background-color: #fff;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
     padding-bottom: 15px;
     border-radius: 5px;
     min-width: 600px;
@@ -276,19 +276,19 @@ body {
 .titleTd {
     padding-left: 10px;
     width: 25%;
-    min-width: 180px;
+    min-width: 185px;
 }
 
 .codeTd {
     text-align: left;
-    width: 25%;
-    min-width: 180px;
+    width: 20%;
+    min-width: 150px;
 }
 
 .syncTd {
     text-align: left;
     width: 10%;
-    min-width: 70px;
+    min-width: 74px;
 }
 
 .syncTd .tempImg {
@@ -298,8 +298,25 @@ body {
 }
 
 .editTd {
-    width: 15%;
-    min-width: 110px;
+    width: 13%;
+    min-width: 100px;
+}
+
+.operTd {
+    width: 220px;
+    min-width: 220px;
+}
+
+.operTd a {
+    margin-right: 12px;
+    text-decoration: none;
+    color: #666666;
+}
+
+.operTd span {
+    margin-right: 12px;
+    text-decoration: none;
+    color: #999999;
 }
 
 @font-face {
@@ -334,23 +351,6 @@ body {
     content: "\ea47";
     cursor: pointer;
     color: #666666;
-}
-
-.operTd {
-    width: 200px;
-    min-width: 180px;
-}
-
-.operTd a {
-    margin-right: 12px;
-    text-decoration: none;
-    color: #666666;
-}
-
-.operTd span {
-    margin-right: 12px;
-    text-decoration: none;
-    color: #999999;
 }
 
 
@@ -496,7 +496,9 @@ body {
     transition: all linear 0.30s;
 }
 
+
 /*导入问卷*/
+
 #popBoxImport {
     color: #666666;
     position: fixed;
