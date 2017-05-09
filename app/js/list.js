@@ -1014,10 +1014,6 @@ function initQuestionnaire(cb) {
     });
 }
 
-function clickQ() {
-    alert("qqq");
-}
-
 /**
  * 显示遮蔽层
  * @return
@@ -1124,7 +1120,7 @@ function __addQuestionnaireTreeItem(cb) {
         for (var j = 0; j < solutionsLength; j++) {
             if (questionnairesInfo[i].solutionName == solutionsInfo[j].name) {
                 questionnairesInfo[i].parentID = solutionsInfo[j].rowID;
-                d.add(++dTreeItemNum, questionnairesInfo[i].parentID, questionnairesInfo[i].title, "javascript: clickQ();", "", "", "./images/tree_04_q.png", "./images/tree_04_q.png");
+                d.add(++dTreeItemNum, questionnairesInfo[i].parentID, questionnairesInfo[i].title, "javascript: ;", "", "", "./images/tree_04_q.png", "./images/tree_04_q.png");
                 questionnairesInfo[i].rowID = dTreeItemNum;
                 break;
             }
