@@ -201,6 +201,11 @@ $(function() {
             window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
             return;
         }
+        if (popBoxFile == "") {
+            txt = "问卷路径不可为空，请重新选择";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+            return;
+        }
 
         quesSqlite.checkQuestionnaireByName(GlobalData, popBoxName, function(res) {
             if (res.success == true) {
@@ -264,18 +269,18 @@ $(function() {
  */
 function selectFile() {
     ipcRenderer.on('selected-directory', function(event, path) {
-        $("#popBoxImport .popBoxFile input").val(path);
-        var popBoxData = {};
-
         /*从文件路径获取JSON*/
         $.getJSON(path, function(data) {
-            popBoxData = data;
-            if (popBoxData.name) {
-                $("#popBoxImport .popBoxName input").val(popBoxData.name);
+            $("#popBoxImport .popBoxFile input").val(path);
+            if (data.name) {
+                $("#popBoxImport .popBoxName input").val(data.name);
             }
-            if (popBoxData.title) {
-                $("#popBoxImport .popBoxTitle input").val(popBoxData.title);
+            if (data.title) {
+                $("#popBoxImport .popBoxTitle input").val(data.title);
             }
+        }).error(function(jqXhr, textStatus, error) {
+            txt = "JSON格式有误，请重新选择文件";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         });
     });
 }
