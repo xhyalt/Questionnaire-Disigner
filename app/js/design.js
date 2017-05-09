@@ -751,10 +751,9 @@ $(function() {
 
     /*所有题干 点击编辑*/
     $("#target").on("click", ".stemText", function() {
-        activeDiv = $(this);
-        var type = getType(activeDiv);
-
         if (popMenu == false && popEditor == false && type == "description") {
+            activeDiv = $(this);
+            var type = getType(activeDiv);
             /*描述说明题干的点击事件*/
             activeTxt = activeDiv.html();
             $("#editor-trigger").empty().append(activeTxt);
@@ -762,8 +761,9 @@ $(function() {
 
             showEditor();
         } else if (popMenu == false && popEditor == false) {
+            activeDiv = $(this);
+            var type = getType(activeDiv);
             activeSubject = activeDiv.parent().parent(".subject, .unSubject");
-            /*确定题目类别*/
 
             activeTxt = activeDiv.html();
             activeInput = $(`<div class="stemTextInput" contenteditable="true">` + activeTxt + `</div>`);
