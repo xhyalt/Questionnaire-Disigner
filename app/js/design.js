@@ -649,10 +649,14 @@ $(function() {
                 }
             });
         } else {
-            if (popMenu == true && popEditor == false) {
-                setTimeout(function() {
-                    window.location.href = "./list.html";
-                }, 300);
+            if (!tempQuestionnaire.data) {
+                quesSqlite.deleteTempQuestionnaire(GlobalData, tempQuestionnaire.recid, function(res2) {
+                    if (res2.success == true) {
+                        window.location.href = "./list.html";
+                    } else {
+                        console.log("删除失败");
+                    }
+                });
             } else {
                 window.location.href = "./list.html";
             }
