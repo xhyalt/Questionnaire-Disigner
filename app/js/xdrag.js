@@ -217,7 +217,7 @@ $(document).ready(function() {
         var delayed = setTimeout(function() {
 
             /*判断盒子类型*/
-            $temp = $(`<div class="cloth"></div>`).append($this.parent().parent(".subject, unSubject").clone());
+            $temp = $(`<div class="cloth"></div>`).append($this.parent().parent(".subject, .unSubject").clone());
 
             $("body").append($temp);
 
@@ -246,8 +246,8 @@ $(document).ready(function() {
                 console.log("dadahe");
 
                 /*添加临时盒子 确定题目位置*/
-                $this.parent().parent(".subject, unSubject").before(`<div id="tempBox"></div>`);
-                $this.parent().parent(".subject, unSubject").remove();
+                $this.parent().parent(".subject, .unSubject").before(`<div id="tempBox"></div>`);
+                $this.parent().parent(".subject, .unSubject").remove();
                 if (getSubjectNum() == 0 && $("#emptyBox").length == 0) {
                     $("#target").append(emptyBox);
                 }
