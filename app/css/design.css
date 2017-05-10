@@ -205,10 +205,6 @@ body {
     background-image: url(../images/list_01_plus_on.png);
 }
 
-#imgTitleBoxZB {
-    background-image: url(../images/list_01_plus_on.png);
-}
-
 .menuItemBox {
     display: none;
 }
@@ -259,6 +255,9 @@ body {
     text-decoration: none;
 }
 
+.menuItemBox p#customQuestion{
+    text-indent: 25px;
+}
 
 /*问卷设计主要部分*/
 

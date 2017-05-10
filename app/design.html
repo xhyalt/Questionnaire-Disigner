@@ -339,7 +339,7 @@
             <div class="menuBox">
                 <div id="cytx" class="menuTitleBox">
                     <div class="imgTitleBox" id="imgTitleBoxCYTX"></div>
-                    <p>常用题型</p>
+                    <p>基本题型</p>
                 </div>
                 <div class="menuItemBox" id="cytxItem">
                     <ul>
@@ -367,14 +367,6 @@
                                 <p>填空题</p>
                             </a>
                         </li>
-                        <!-- <li>
-                            <a class="subType multitermCompletionMenuItem" href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Multiterm_Completion','','images/button_05_multiterm_completion_on.png',1)">
-                                <div class="imgSubjectBox">
-                                    <img src="./images/button_05_multiterm_completion_off.png" id="Multiterm_Completion">
-                                </div>
-                                <p>多项填空题</p>
-                            </a>
-                        </li> -->
                         <li>
                             <a class="subType shortAnswerMenuItem" href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Short_Answer','','images/button_17_shortanswer_on.png',1)">
                                 <div class="imgSubjectBox">
@@ -391,14 +383,6 @@
                                 <p>排序题</p>
                             </a>
                         </li>
-                        <!-- <li>
-                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Form','','images/button_16_form_on.png',1)">
-                                <div class="imgSubjectBox">
-                                    <img src="./images/button_16_form_off.png" id="Form">
-                                </div>
-                                <p>表格题</p>
-                            </a>
-                        </li> -->
                         <li>
                             <a class="subType descriptionMenuItem" href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Description','','images/button_11_describe_on.png',1)">
                                 <div class="imgSubjectBox">
@@ -415,14 +399,6 @@
                                 <p>分割线</p>
                             </a>
                         </li>
-                        <li>
-                            <a href="javascript: ;" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Page','','images/button_15_page_on.png',1)">
-                                <div class="imgSubjectBox">
-                                    <img src="./images/button_15_page_off.png" id="Page">
-                                </div>
-                                <p>分页</p>
-                            </a>
-                        </li>
                     </ul>
                 </div>
                 <div id="gdtx" class="menuTitleBox">
@@ -432,33 +408,7 @@
                 <div class="menuItemBox">
                     <ul>
                         <li>
-                            <p>某题型</p>
-                        </li>
-                        <li>
-                            <p>某题型</p>
-                        </li>
-                        <li>
-                            <p>某题型</p>
-                        </li>
-                    </ul>
-                </div>
-                <div id="zb" class="menuTitleBox">
-                    <div class="imgTitleBox" id="imgTitleBoxZB"></div>
-                    <p>指标</p>
-                </div>
-                <div class="menuItemBox">
-                    <ul>
-                        <li>
-                            <div class="imgSubjectBox">
-                                <img src="./images/button_20_target_off.png" alt="" />
-                            </div>
-                            <p>指标映射</p>
-                        </li>
-                        <li>
-                            <div class="imgSubjectBox">
-                                <img src="./images/button_19_formula_off.png" alt="" />
-                            </div>
-                            <p>公式映射</p>
+                            <p id="customQuestion">自定义题型</p>
                         </li>
                     </ul>
                 </div>
@@ -502,7 +452,6 @@
     <script>
         var img_cytx = 1; /*打开*/
         var img_gdtx = 0; /*关闭*/
-        var img_zb = 0; /*关闭*/
         $(function() {
             $("#cytxItem").show();
             $(".menuTitleBox").click(function() {
@@ -512,10 +461,8 @@
                     if (img_cytx == 0) {
                         x[0].style.backgroundImage = "url(./images/list_02_minus_on.png)";
                         x[1].style.backgroundImage = "url(./images/list_01_plus_on.png)";
-                        x[2].style.backgroundImage = "url(./images/list_01_plus_on.png)";
                         img_cytx = 1;
                         img_gdtx = 0;
-                        img_zb = 0;
                     } else {
                         x[0].style.backgroundImage = "url(./images/list_01_plus_on.png)";
                         img_cytx = 0;
@@ -525,26 +472,11 @@
                     if (img_gdtx == 0) {
                         x[0].style.backgroundImage = "url(./images/list_01_plus_on.png)";
                         x[1].style.backgroundImage = "url(./images/list_02_minus_on.png)";
-                        x[2].style.backgroundImage = "url(./images/list_01_plus_on.png)";
                         img_cytx = 0;
                         img_gdtx = 1;
-                        img_zb = 0;
                     } else {
                         x[1].style.backgroundImage = "url(./images/list_01_plus_on.png)";
                         img_gdtx = 0;
-                    }
-                }
-                if ($(this).attr('id') == "zb") {
-                    if (img_zb == 0) {
-                        x[0].style.backgroundImage = "url(./images/list_01_plus_on.png)";
-                        x[1].style.backgroundImage = "url(./images/list_01_plus_on.png)";
-                        x[2].style.backgroundImage = "url(./images/list_02_minus_on.png)";
-                        img_cytx = 0;
-                        img_gdtx = 0;
-                        img_zb = 1;
-                    } else {
-                        x[2].style.backgroundImage = "url(./images/list_01_plus_on.png)";
-                        img_zb = 0;
                     }
                 }
                 $(this).next("div").slideToggle("slow").siblings(".menuItemBox:visible").slideUp("slow");
