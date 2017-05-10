@@ -23,7 +23,7 @@ var dTreeItemNum = 0;
 /*树*/
 var d = null;
 /*当前选中的业务方案*/
-var activeSolution = null;
+var activeSolution = -1;
 /*记录排序的类型*/
 var sortType = false;
 
@@ -36,7 +36,7 @@ $(function() {
     /*搜索框的实时变化监听*/
     $("#searchinput").bind('input propertychange', function() {
         var txt = $(this).val();
-        if (txt) {
+        if (txt && activeSolution >= 0) {
             var row = -1;
             var syncTd;
             var editTd;
@@ -50,7 +50,7 @@ $(function() {
                     }
                 }
             }
-        } else {
+        } else if (activeSolution >= 0) {
             /*输入为空 将列表恢复显示*/
             showQuestionnaires(activeSolution);
         }

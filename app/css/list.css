@@ -130,17 +130,17 @@ body {
 }
 
 .searchinput {
-    padding-left: 3px;
-    padding-top: 8px;
-    width: 200px;
-    font-family: arial;
     float: left;
-    border: 0px;
-    color: #666666;
-    margin-left: 4px;
+    width: 190px;
+    margin-right: 5px;
+    border: none;
+    padding: 0px 8px;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 4px;
     font-size: 14px;
-    vertical-align: middle;
-    margin-right: 3px;
+    outline: none;
+    color: #666666;
 }
 
 .searchaction {
@@ -148,6 +148,7 @@ body {
     float: left;
     height: 20px;
     padding-right: 3px;
+    margin-bottom: 5px;
 }
 
 
