@@ -379,6 +379,7 @@ body {
 
 .subject, .unSubject {
     width: 100%;
+    max-width: 800px;
     background-color: #fff;
     margin-top: 8px;
     margin-bottom: 8px;
