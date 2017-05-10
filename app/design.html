@@ -210,38 +210,36 @@
             问卷设置
             <div id="popBoxClose"></div>
         </div>
-        <div id="popBoxMain">
-            <div id="quesNo">
-                <div id="quesNoGrade">
-                    <p>级别</p>
-                    <ul>
-                        <li id="activeQuesNo">1</li>
-                        <li>2</li>
-                        <li>3</li>
-                        <li>4</li>
-                        <li>5</li>
-                    </ul>
-                </div>
-                <div id="quesNoEx">
-                    <p>编号：</p>
-                    <div id="dropBox">
-                        <div class="dropBox_wrp">
-                            <div class="dropBox_inp dropBox_tri"></div>
-                            <a href="javascript: ;" class="dropBox_tri"></a>
-                        </div>
-                        <div class="dropBox_drop" style="display:none">
-                            <ul>
-                                <!-- 所有题号类型 -->
-                            </ul>
-                        </div>
+        <div id="quesNo">
+            <div id="quesNoGrade">
+                <p>级别</p>
+                <ul>
+                    <li id="activeQuesNo">1</li>
+                    <li>2</li>
+                    <li>3</li>
+                    <li>4</li>
+                    <li>5</li>
+                </ul>
+            </div>
+            <div id="quesNoEx">
+                <p>编号：</p>
+                <div id="dropBox">
+                    <div class="dropBox_wrp">
+                        <div class="dropBox_inp dropBox_tri"></div>
+                        <a href="javascript: ;" class="dropBox_tri"></a>
                     </div>
-                    <fieldset id="quesNoPreview">
-                        <legend>预览</legend>
+                    <div class="dropBox_drop" style="display:none">
                         <ul>
-                            <!-- 所有级别的题号类型显示 -->
+                            <!-- 所有题号类型 -->
                         </ul>
-                    </fieldset>
+                    </div>
                 </div>
+                <fieldset id="quesNoPreview">
+                    <legend>预览</legend>
+                    <ul>
+                        <!-- 所有级别的题号类型显示 -->
+                    </ul>
+                </fieldset>
             </div>
         </div>
         <div id="popBoxButtonBox">
@@ -267,6 +265,34 @@
                     <a href="javascript: ;">返 回</a>
                 </div>
                 <div id="popEditorBoxButtonConfirm">
+                    <a href="javascript: ;">确 认</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="popCustomBox">
+        <div id="popCustomBoxHead">
+            自定义题型
+            <div id="popCustomBoxClose"></div>
+        </div>
+        <div id="popCustomBoxMain">
+            <div id="popCustomBoxStyle">版型：
+                <select id="selectStyle" name="select1" onchange="changeStyle(this.id)">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+            <div id="popCustomBoxName">名称：
+                <input type="text" name="" value="">
+            </div>
+            <div id="popCustomBoxShow"></div>
+        </div>
+        <div id="popCustomBoxButtonBox">
+            <div id="popCustomBoxButtonGroup">
+                <div id="popCustomBoxButtonCancel">
+                    <a href="javascript: ;">返 回</a>
+                </div>
+                <div id="popCustomBoxButtonConfirm">
                     <a href="javascript: ;">确 认</a>
                 </div>
             </div>

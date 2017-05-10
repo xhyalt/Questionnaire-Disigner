@@ -251,6 +251,52 @@ function initQuestionnairesList(GlobalData, solutionName, questionnaireJson, cb)
 }
 
 /**
+ * 添加自定义题型
+ * @public
+ * @param  name 题型名称
+ * @param  data 题型内容
+ * @param  {Function} cb   回调函数
+ * @return
+ */
+function insertCustom(name, data, cb) {
+    __insertCustom(name, data, function(res) {
+        if (res.success == true) {
+            cb({
+                success: true
+            });
+        } else {
+            cb({
+                success: false,
+                data: res.data
+            });
+        }
+    })
+}
+
+/**
+ * 添加自定义题型
+ * @private
+ * @param  name 题型名称
+ * @param  data 题型内容
+ * @param  {Function} cb   回调函数
+ * @return
+ */
+function __insertCustom(name, data, cb) {
+    db.run("insert into CUSTOMS(name, data) values(?, ?)", [name, data], function(err) {
+        if (err) {
+            console.log(err.message);
+            cb({
+                success: false,
+                data: err.message
+            });
+        }
+        cb({
+            success: true
+        });
+    });
+}
+
+/**
  * 将所有业务方案和调查问卷的isNew字段设置为0
  * 回调函数传回更新是否成功
  * @public
@@ -1035,6 +1081,8 @@ function __createTable(cb) {
             db.run("create table SOLUTIONS(URL TEXT, user TEXT, periodType TEXT, name TEXT, minPeriod TEXT, maxPeriod TEXT, title TEXT, recid TEXT, isNew TEXT)");
 
             db.run("create table QUESTIONNAIRES(URL TEXT, user TEXT, solutionName TEXT, name TEXT, no TEXT, reportGroupCode, title TEXT, subtitle TEXT, recid TEXT, isNew TEXT, data TEXT, isChanged TEXT, isRemote TEXT, editTime TEXT)");
+
+            db.run("create table CUSTOMS(name TEXT, data TEXT)");
             /*表单创建成功*/
             if (cb) {
                 cb({
@@ -1272,3 +1320,4 @@ exports.checkQuestionnaireByName = checkQuestionnaireByName;
 exports.updateQuestionnaireIsChanged = updateQuestionnaireIsChanged;
 exports.deleteUser = deleteUser;
 exports.checkTable = checkTable;
+exports.insertCustom = insertCustom;

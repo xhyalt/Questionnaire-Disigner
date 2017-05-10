@@ -67,7 +67,7 @@ $(function() {
     /*鼠标移入移出可编辑条目 变化颜色*/
     $("#middle").on("mouseover", ".textBox", function() {
         var td = $(this);
-        td.css("background-color", "#b4fbef");
+        td.css("background-color", "#c9f8f0");
     }).on("mouseout", ".textBox", function() {
         var td = $(this);
         td.css("background-color", "#fff");
@@ -584,7 +584,6 @@ $(function() {
             /*处理输入框*/
             var newtxt = $(".stemTextInput").html();
             if (newtxt != activeTxt) {
-                /*数据库操作*/
                 activeDiv.html(newtxt);
             } else if (newtxt == activeTxt) {
                 activeDiv.html(newtxt);
@@ -619,6 +618,266 @@ $(function() {
         isChanged = true;
     });
     /*富文本编辑器end=====================*/
+
+    /*自定义题型start=====================*/
+
+    $("#customQuestion").on("click", function() {
+        if (document.getElementById("selectStyle").value == "1") {
+            $("#popCustomBoxShow").empty().append(customDiv["radio"]);
+        } else if (document.getElementById("selectStyle").value == "2") {
+            $("#popCustomBoxShow").empty().append(customDiv["multiple"]);
+        }
+        showCustom();
+    });
+
+    /*自定义题型弹出框 点击关闭和取消事件*/
+    $("#popCustomBox").on("click", "#popCustomBoxClose, #popCustomBoxButtonCancel", function() {
+        hideCustom();
+    });
+
+    /*自定义题型弹出框 点击确认事件*/
+    $("#popCustomBox").on("click", "#popCustomBoxButtonConfirm", function() {
+        /*判断名称是否为空*/
+        var txt = $("#popCustomBoxName input").val();
+        if (!txt) {
+            txt = "名称不可为空";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+            return;
+        }
+        /*根据种类不同添加不同的shell*/
+        var $html = $("popCustomBoxShow").html();
+        var type = document.getElementById("selectStyle").value;
+        if (type == "1") {
+            var $shell = customDiv["shell"];
+            console.log($shell);
+        } else if (type == "2") {
+            $("#popCustomBoxShow").empty().append(customDiv["multiple"]);
+        }
+
+        quesSqlite.insertCustom();
+        hideCustom();
+    });
+
+    /*版型鼠标移入移出事件*/
+    $("#popCustomBoxStyle").on("mouseover", "li", function() {
+        $td = $(this);
+        $td.css({
+            "border": "2px solid #1ABC9C"
+        });
+    }).on("mouseout", "li", function() {
+        $td = $(this);
+        if ($td.css("background-color") != "rgb(26, 188, 156)") {
+            $td.css({
+                "border": "2px solid #f3f3f3"
+            });
+        }
+    });
+
+    /*版型点击事件*/
+    $("#popCustomBoxStyle").on("click", "li", function() {
+        $td = $(this);
+        $tdP = $td.parent();
+        $tdP.find("li").css({
+            "background-color": "#fff",
+            "color": "#666666",
+            "border-color": "#f3f3f3"
+        });
+        $td.css({
+            "background-color": "#1ABC9C",
+            "color": "#fff",
+            "border-color": "#1ABC9C"
+        });
+    });
+
+    /*自定义题型的题干*/
+    $("#popCustomBoxShow").on("click", ".stemText", function() {
+        var $td = $(this);
+        /*确定题目种类*/
+        var type = getType($td);
+
+        var txt = $td.html();
+        var input = $(`<div class="stemTextInput" contenteditable="true">` + txt + `</div>`);
+        $td.html(input);
+
+        input.click(function() {
+            return false;
+        });
+
+        input.trigger("focus");
+        input.blur(function() {
+            var newtxt = $(".stemTextInput").html();
+            if (newtxt != txt) {
+                $td.html(newtxt);
+                isChanged = true;
+            } else if (newtxt == txt) {
+                $td.html(newtxt);
+            }
+        });
+    });
+
+    /*自定义题型的描述*/
+    $("#popCustomBoxShow").on("click", ".descriptionText", function() {
+        var $td = $(this);
+        /*确定题目种类*/
+        var type = getType($td);
+
+        var txt = $td.html();
+        var input = $(`<div class="descriptionTextInput" contenteditable="true">` + txt + `</div>`);
+        $td.html(input);
+
+        input.click(function() {
+            return false;
+        });
+
+        input.trigger("focus");
+        input.blur(function() {
+            var newtxt = $(".descriptionTextInput").html();
+            if (newtxt != txt) {
+                $td.html(newtxt);
+                isChanged = true;
+            } else if (newtxt == txt) {
+                $td.html(newtxt);
+            }
+        });
+    });
+
+    $("#popCustomBoxShow").on("click", ".ItemText", function() {
+        var $td = $(this);
+        /*确定题目种类*/
+        var type = getType($td);
+
+        var txt = $td.html();
+        var input = $(`<div class="itemTextInput" contenteditable="true">` + txt + `</div>`);
+        $td.html(input);
+
+        input.click(function() {
+            return false;
+        });
+
+        input.trigger("focus");
+        input.blur(function() {
+            var newtxt = $(".itemTextInput").html();
+            if (newtxt != txt) {
+                $td.html(newtxt);
+                isChanged = true;
+            } else if (newtxt == txt) {
+                $td.html(newtxt);
+            }
+        });
+    });
+
+    /*鼠标移入移出可编辑条目 变化颜色*/
+    $("#popCustomBoxShow").on("mouseover", ".textBox", function() {
+        var td = $(this);
+        td.css("background-color", "#c9f8f0");
+    }).on("mouseout", ".textBox", function() {
+        var td = $(this);
+        td.css("background-color", "#fff");
+    });
+
+    /*选项菜单中的小图 鼠标移入题目显示 移出隐藏*/
+    $("#popCustomBoxShow").on("mouseover", ".itemBox li", function() {
+        var $td = $(this);
+        $td.find("img").css({
+            "visibility": "visible"
+        });
+    }).on("mouseout", ".itemBox li", function() {
+        var $td = $(this);
+        $td.find("img").css({
+            "visibility": "hidden"
+        });
+    });
+
+    /*添加选项小图 鼠标移入替换为高亮*/
+    $("#popCustomBoxShow").on("mouseover", ".addItem", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_04_add_on.png");
+    }).on("mouseout", ".addItem", function() {
+        var td = $(this);
+        td.attr('src', "./images/main_04_add_off.png");
+    });
+
+    /*删除选项按钮点击事件*/
+    $("#popCustomBoxShow").on("click", ".delete", function() {
+        $tdP = $(this).parent().parent();
+        $tdPP = $tdP.parent();
+        if (getItemNum($tdP.parent()) > 1) {
+            $tdP.remove();
+            /*重置题目选项的字母*/
+            console.log($tdPP);
+            setInitials($tdPP);
+        } else {
+            txt = "只有一个选项，不能继续删除";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        }
+    });
+
+    /*上移选项按钮点击事件*/
+    $("#popCustomBoxShow").on("click", ".up", function() {
+        $tdP = $(this).parent().parent();
+        $tdPP = $(this).parent().parent().parent();
+        /*初始化左侧的图标效果*/
+        $tdP.children().children("img.up").attr('src', "./images/main_01_up_off.png");
+        $tdP.children().children("img").css({
+            "visibility": "hidden"
+        });
+        $prevTdP = $tdP.prev();
+        if ($prevTdP.length == 0) {
+            txt = "已是第一个选项，无法再向上移动";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        } else {
+            /*非第一个选项，向上移动*/
+            $preTempSubject = $prevTdP.prop("outerHTML");
+            $tempSubject = $tdP.prop("outerHTML");
+            $tdP.after($preTempSubject);
+            $tdP.after($tempSubject);
+            $tdP.remove();
+            $prevTdP.remove();
+            /*重置题目选项的字母*/
+            setInitials($tdPP);
+        }
+    });
+
+    /*下移选项按钮点击事件*/
+    $("#popCustomBoxShow").on("click", ".down", function() {
+        $tdP = $(this).parent().parent();
+        $tdPP = $(this).parent().parent().parent();
+        /*初始化左侧的图标效果*/
+        $tdP.children().children("img.down").attr('src', "./images/main_02_down_off.png");
+        $tdP.children().children("img").css({
+            "visibility": "hidden"
+        });
+        $nextTdP = $tdP.next();
+        if ($nextTdP.length == 0) {
+            txt = "已是最后一个选项，无法再向下移动";
+            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+        } else {
+            /*非第一选项，向上移动*/
+            $nextTempSubject = $nextTdP.prop("outerHTML");
+            $tempSubject = $tdP.prop("outerHTML");
+            $tdP.after($tempSubject);
+            $tdP.after($nextTempSubject);
+            $tdP.remove();
+            $nextTdP.remove();
+            /*重置题目选项的字母*/
+            setInitials($tdPP);
+        }
+    });
+
+    /*添加选项按钮点击事件*/
+    $("#popCustomBoxShow").on("click", ".addItem", function() {
+        $tdP = $(this).parent().parent();
+        $tdPP = $tdP.children().children(".itemBox");
+        if (document.getElementById("selectStyle").value == "1") {
+            $tdP.children().children(".itemBox").append(itemLabelDiv["radio"]);
+        } else if (document.getElementById("selectStyle").value == "2") {
+            $tdP.children().children(".itemBox").append(itemLabelDiv["multiple"]);
+        }
+        /*重置题目选项的字母*/
+        setInitials($tdPP);
+    });
+
+    /*自定义题型end=====================*/
 
     /*返回按钮 监听事件*/
     $("#back").on('click', function() {
@@ -689,7 +948,6 @@ $(function() {
                 $td.html(newtxt);
             } else {
                 /*文本与原来不同*/
-                /*数据库操作*/
                 $td.html(newtxt);
                 isChanged = true;
             }
@@ -715,7 +973,6 @@ $(function() {
             if (newtxt == "") {
                 $td.html("欢迎参加本次答题");
             } else if (newtxt != txt) {
-                /*数据库操作*/
                 $td.html(newtxt);
                 isChanged = true;
             } else {
@@ -743,7 +1000,6 @@ $(function() {
             if (newtxt == "") {
                 $td.html("您已完成本次问卷，感谢您的帮助与支持");
             } else if (newtxt != txt) {
-                /*数据库操作*/
                 $td.html(newtxt);
                 isChanged = true;
             } else {
@@ -782,7 +1038,6 @@ $(function() {
                 activeInput.blur(function() {
                     var newtxt = $(".stemTextInput").html();
                     if (newtxt != activeTxt) {
-                        /*数据库操作*/
                         activeDiv.html(newtxt);
                         isChanged = true;
                     } else if (newtxt == activeTxt) {
@@ -817,7 +1072,6 @@ $(function() {
         input.blur(function() {
             var newtxt = $(".descriptionTextInput").html();
             if (newtxt != txt) {
-                /*数据库操作*/
                 $td.html(newtxt);
                 isChanged = true;
             } else if (newtxt == txt) {
@@ -844,7 +1098,6 @@ $(function() {
         input.blur(function() {
             var newtxt = $(".itemTextInput").html();
             if (newtxt != txt) {
-                /*数据库操作*/
                 $td.html(newtxt);
                 isChanged = true;
             } else if (newtxt == txt) {
@@ -853,6 +1106,16 @@ $(function() {
         });
     });
 });
+
+function changeStyle(id) {
+    var $td = document.getElementById(id);
+    if ($td.value == "1") {
+        $("#popCustomBoxShow").empty().append(customDiv["radio"]);
+    } else if ($td.value == "2") {
+        $("#popCustomBoxShow").empty().append(customDiv["multiple"]);
+    }
+
+}
 
 /**
  * 预览问卷执行函数
@@ -1321,10 +1584,8 @@ function hideSetup() {
 }
 
 function showEditor() {
-    hidebg.style.display = "block"; //显示隐藏层
-
+    document.getElementById("hidebg").style.display = "block"; //显示隐藏层
     editor.undestroy();
-
     document.getElementById("popEditorBox").style.display = "block"; //显示弹出层
 }
 
@@ -1333,6 +1594,17 @@ function hideEditor() {
     document.getElementById("popEditorBox").style.display = "none";
     popEditor = false;
     editor.destroy();
+}
+
+function showCustom() {
+    document.getElementById("hidebg").style.display = "block"; //显示隐藏层
+    document.getElementById("popCustomBox").style.display = "block"; //显示弹出层
+}
+
+function hideCustom() {
+    document.getElementById("hidebg").style.display = "none";
+    document.getElementById("popCustomBox").style.display = "none";
+    $("#popCustomBoxShow").empty();
 }
 
 function MM_swapImgRestore() {

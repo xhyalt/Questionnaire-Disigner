@@ -60,6 +60,7 @@ var subjectDiv = {};
 var descriptionDiv = {};
 var itemLabelDiv = {};
 var menuPopDiv = {};
+var customDiv = {};
 
 const emptyBox = `
 <div id="emptyBox">
@@ -601,5 +602,81 @@ menuPopDiv["sort"] = `
                 </li>
             </ul>
         </div>
+    </div>
+</div>`;
+
+customDiv["radio"] = `
+<div class="subjectCustomMain">
+    <div class="radioStemText textBox stemText" id="radioStemTextID" placeholder="单选题"></div>
+    <div class="radioDescriptionText textBox descriptionText" placeholder="单选题描述"></div>
+    <ul class="radioItem itemBox">
+        <li>
+            <input type="radio" name="radio1"/>
+            <div class="initials">A.</div>
+            <div class="textBox radioItemText ItemText" placeholder="选项1"></div>
+            <div class="itemMenu">
+                <img class="up" src="./images/main_01_up_off.png" alt="">
+                <img class="down" src="./images/main_02_down_off.png" alt="">
+                <img class="delete" src="./images/main_03_delete_off.png" alt="">
+            </div>
+            <div class="clear"></div>
+        </li>
+        <li>
+            <input type="radio" name="radio1" />
+            <div class="initials">B.</div>
+            <div class="textBox radioItemText ItemText" placeholder="选项2"></div>
+            <div class="itemMenu">
+                <img class="up" src="./images/main_01_up_off.png" alt="">
+                <img class="down" src="./images/main_02_down_off.png" alt="">
+                <img class="delete" src="./images/main_03_delete_off.png" alt="">
+            </div>
+            <div class="clear"></div>
+        </li>
+    </ul>
+    <img class="addItem" src="./images/main_04_add_off.png" alt="">
+</div>
+`;
+
+customDiv["multiple"]=`
+<div class="subjectCustomMain">
+    <div class="multipleStemText textBox stemText" id="multipleStemTextID" placeholder="多选题"></div>
+    <div class="multipleDescriptionText textBox descriptionText" placeholder="多选题描述"></div>
+    <ul class="multipleItem itemBox">
+        <li>
+            <input type="checkbox" name="checkbox1" />
+            <div class="initials">A.</div>
+            <div class="textBox multipleItemText ItemText" placeholder="选项1"></div>
+            <div class="itemMenu">
+                <img class="up" src="./images/main_01_up_off.png" alt="">
+                <img class="down" src="./images/main_02_down_off.png" alt="">
+                <img class="delete" src="./images/main_03_delete_off.png" alt="">
+            </div>
+            <div class="clear"></div>
+        </li>
+        <li>
+            <input type="checkbox" name="checkbox1"/>
+            <div class="initials">B.</div>
+            <div class="textBox multipleItemText ItemText" placeholder="选项2"></div>
+            <div class="itemMenu">
+                <img class="up" src="./images/main_01_up_off.png" alt="">
+                <img class="down" src="./images/main_02_down_off.png" alt="">
+                <img class="delete" src="./images/main_03_delete_off.png" alt="">
+            </div>
+            <div class="clear"></div>
+        </li>
+    </ul>
+    <img class="addItem" src="./images/main_04_add_off.png" alt="">
+</div>`;
+
+customDiv["shell"] = `
+<div class="radioDiv subject" level="1" father="0" num="">
+    <div class="leftSetup">
+        <h4>Q</h4>
+        <img class="up" src="./images/main_01_up_off.png" alt="">
+        <img class="down" src="./images/main_02_down_off.png" alt="">
+        <img class="copy" src="./images/main_06_copy_off.png" alt="">
+        <img class="delete" src="./images/main_03_delete_off.png" alt="">
+        <img class="merge" src="./images/main_07_merge_off.png" alt="">
+        <img class="unmerge" src="./images/main_08_unmerge_off.png" alt="">
     </div>
 </div>`;
