@@ -44,7 +44,7 @@ $(function() {
             $(".listBody").remove();
             for (var i = 0; i < questionnairesInfo.length; i++) {
                 if (questionnairesInfo[i].solutionName == solutionsInfo[activeSolution].name) {
-                    if (questionnairesInfo[i].title.indexOf(txt) >= 0 || questionnairesInfo[i].name.indexOf(txt) >= 0) {
+                    if (questionnairesInfo[i].title.toLowerCase().indexOf(txt.toLowerCase()) >= 0 || questionnairesInfo[i].name.toLowerCase().indexOf(txt.toLowerCase()) >= 0) {
                         questionnairesInfo[i].row = ++row;
                         addListQuestionnaireItem(i, row);
                     }
