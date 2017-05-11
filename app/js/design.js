@@ -64,6 +64,15 @@ $(function() {
         }
     });
 
+    quesSqlite.selectCustoms(function(res) {
+        if (res.success == true) {
+            for (var i = 0; i < res.data.length; i++) {
+                customSubjectDiv.push(res.data[i].data);
+                $(".customBox ul").append("<li><p class='customType' name=" + (customSubjectDiv.length - 1) + " type=" + res.data[i].type + ">" + res.data[i].name + "</p></li>");
+            }
+        }
+    });
+
     /*鼠标移入移出可编辑条目 变化颜色*/
     $("#middle").on("mouseover", ".textBox", function() {
         var td = $(this);
@@ -640,22 +649,54 @@ $(function() {
         /*判断名称是否为空*/
         var txt = $("#popCustomBoxName input").val();
         if (!txt) {
-            txt = "名称不可为空";
-            window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+            message = "名称不可为空";
+            window.wxc.xcConfirm(message, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
             return;
         }
-        /*根据种类不同添加不同的shell*/
-        var $html = $("popCustomBoxShow").html();
-        var type = document.getElementById("selectStyle").value;
-        if (type == "1") {
-            var $shell = customDiv["shell"];
-            console.log($shell);
-        } else if (type == "2") {
-            $("#popCustomBoxShow").empty().append(customDiv["multiple"]);
-        }
-
-        quesSqlite.insertCustom();
-        hideCustom();
+        quesSqlite.checkCustom(txt, function(res) {
+            if (res.success == true) {
+                if (res.data["count(1)"] == 1) {
+                    message = "名称重复，请重新填写";
+                    window.wxc.xcConfirm(message, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
+                    return;
+                } else {
+                    /*根据种类不同添加不同的shell*/
+                    var $html = $("#popCustomBoxShow").html();
+                    var typeNum = document.getElementById("selectStyle").value;
+                    var $shell;
+                    var type;
+                    if (typeNum == "1") {
+                        $shell = customDiv["shell"];
+                        $("body").append("<div id='customCloth'>" + $shell + "</div>");
+                        $shell = $(".shell").attr("class", "radioDiv subject").hide();
+                        $shell.children(".leftSetup").after($html);
+                        $shell.children(".subjectCustomMain").attr("class", "radioMain subjectMain");
+                        $shell.show();
+                        type = "radio";
+                        console.log($shell);
+                    } else if (typeNum == "2") {
+                        $shell = customDiv["shell"];
+                        $("body").append("<div id='customCloth'>" + $shell + "</div>");
+                        $shell = $(".shell").attr("class", "multipleDiv subject").hide();
+                        $shell.children(".leftSetup").after($html);
+                        $shell.children(".subjectCustomMain").attr("class", "multipleMain subjectMain");
+                        $shell.show();
+                        type = "multiple";
+                        console.log($shell);
+                    }
+                    $html = $("#customCloth").html().toString();
+                    $("#customCloth").remove();
+                    quesSqlite.insertCustom(txt, type, $html, function(res) {
+                        if (res.success == true) {
+                            console.log("添加自定义题型成功");
+                            customSubjectDiv.push($html);
+                            $(".customBox ul").append("<li><p class='customType' name=" + (customSubjectDiv.length - 1) + " type=" + type + ">" + txt + "</p></li>");
+                            hideCustom();
+                        }
+                    });
+                }
+            }
+        });
     });
 
     /*版型鼠标移入移出事件*/

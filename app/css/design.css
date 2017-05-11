@@ -255,7 +255,7 @@ body {
     text-decoration: none;
 }
 
-.menuItemBox p#customQuestion {
+.customBox p {
     text-indent: 25px;
     cursor: pointer;
 }

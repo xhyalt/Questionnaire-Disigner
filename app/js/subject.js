@@ -61,6 +61,7 @@ var descriptionDiv = {};
 var itemLabelDiv = {};
 var menuPopDiv = {};
 var customDiv = {};
+var customSubjectDiv = [];
 
 const emptyBox = `
 <div id="emptyBox">
@@ -669,7 +670,7 @@ customDiv["multiple"]=`
 </div>`;
 
 customDiv["shell"] = `
-<div class="radioDiv subject" level="1" father="0" num="">
+<div class="shell" level="1" father="0" num="">
     <div class="leftSetup">
         <h4>Q</h4>
         <img class="up" src="./images/main_01_up_off.png" alt="">

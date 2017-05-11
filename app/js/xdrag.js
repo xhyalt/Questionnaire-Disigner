@@ -1,7 +1,212 @@
 $(document).ready(function() {
 
+    /*自定义题型鼠标点击事件*/
+    $(".menuItemBox").on("click", ".customType", function(md) {
+        md.preventDefault();
+
+        $this = $(this);
+        var type = $(this).attr("type");
+
+        $("#emptyBox").remove();
+        $("#target").append(customSubjectDiv[parseInt($(this).attr("name"))]);
+        var current = $("#target").children(".subject, .unSubject").last();
+        setOrder();
+        addSubjectJson(current, type);
+
+        $(document).off("mousemove", "body");
+        $("body").off("mouseup", ".subject, .unSubject");
+        isChanged = true;
+    });
+
+    /*题型鼠标落下事件*/
+    $(".menuItemBox").on("mousedown", ".customType", function(md) {
+        md.preventDefault();
+        var tops = [];
+        var mouseX = md.pageX;
+        var mouseY = md.pageY;
+        var $temp;
+        var timeout;
+        var $this = $(this);
+        var delays = {
+            main: 0,
+            form: 120
+        };
+        $this = $(this);
+        var type = $this.attr("type");
+
+        var delayed = setTimeout(function() {
+            console.log(parseInt($this.attr("name")));
+            console.log(customSubjectDiv);
+            console.log(customSubjectDiv[0]);
+            console.log(customSubjectDiv[parseInt($this.attr("name"))]);
+
+            $temp = $(`<div class="cloth"></div>`).append(customSubjectDiv[parseInt($this.attr("name"))]);
+
+            $("body").append($temp);
+
+            $temp.css({
+                "position": "absolute",
+                "top": mouseY - ($temp.height() / 2) + "px",
+                "left": mouseX - ($temp.width() / 2) + "px",
+                "opacity": "0.9"
+            }).hide();
+
+            var half_box_height = ($temp.height() / 2);
+            var half_box_width = ($temp.width() / 2);
+            var $target = $("#target");
+            var tar_pos = $target.position();
+            var $target_subType = $("#target .subject, #target .unSubject");
+            var $mergeTarget_subType = $(".mergeDiv .mergeStemText, .mergeDiv .mergeDescriptionText");
+
+            /*题型 鼠标移动触发事件*/
+            $(document).on("mousemove", "body", function(mm) {
+
+                $temp.show();
+                var mm_mouseX = mm.pageX;
+                var mm_mouseY = mm.pageY;
+
+                /*将盒子位置与鼠标位置关联*/
+                $temp.css({
+                    "top": mm_mouseY - half_box_height + "px",
+                    "left": mm_mouseX - half_box_width + "px"
+                });
+
+                /*鼠标在target范围之内*/
+                if (mm_mouseX > tar_pos.left &&
+                    mm_mouseX < tar_pos.left + $target.width() &&
+                    mm_mouseY > tar_pos.top &&
+                    mm_mouseY < tar_pos.top + $target.height()) {
+                    $target_subType.css({
+                        "border-top": "none",
+                        "border-bottom": "none"
+                    });
+                    tops = $.grep($target_subType.not(".mergeDiv"), function(e) {
+                        return (mm_mouseY - $(e).position().top < $(e).height() / 2 && mm_mouseY - $(e).position().top > 0 && $(e).attr("id") !== "target");
+                    });
+                    bottoms = $.grep($target_subType.not(".mergeDiv"), function(e) {
+                        return (mm_mouseY - $(e).position().top < 2 * $(e).height() / 2 && mm_mouseY - $(e).position().top > $(e).height() / 2 && $(e).attr("id") !== "target");
+                    });
+                    mergesTop = $.grep($mergeTarget_subType, function(e) {
+                        return (mm_mouseY - $(e).position().top < $(e).height() && mm_mouseY - $(e).position().top > 0 && $(e).attr("id") !== "target");
+                    });
+                    // console.log("tops = " + tops);
+                    if (tops.length > 0) {
+                        /*识别位置在上半部分*/
+                        $(tops[0]).css("border-top", "5px solid #1ABC9C");
+                    } else if (bottoms.length > 0) {
+                        /*识别位置在下半部分*/
+                        $(bottoms[0]).css("border-bottom", "5px solid #1ABC9C");
+                    } else if (mergesTop.length > 0) {
+                        $(mergesTop[0]).parent().parent().css("border-top", "5px solid #1ABC9C");
+                    } else {
+                        /*设计区没有题目 空盒上加边界*/
+                        if ($("#emptyBox").length != 0) {
+                            $("#emptyBox").css({
+                                "border-top": "5px solid #1ABC9C",
+                                "border-bottom": "none"
+                            });
+                        }
+                    }
+                } else {
+                    $target_subType.css({
+                        "border-top": "none",
+                        "border-bottom": "none"
+                    });
+                }
+            });
+
+            /*在middle松开鼠标触发事件*/
+            $("body").on("mouseup", ".subject, .unSubject", function(mu) {
+                mu.preventDefault();
+
+                var mu_mouseX = mu.pageX;
+                var mu_mouseY = mu.pageY;
+                var tar_pos = $target.position();
+
+                $("#target .subject, #target .unSubject").css({
+                    "border-top": "none",
+                    "border-bottom": "none"
+                });
+
+                /*鼠标是否进入target范围*/
+                if (mu_mouseX > tar_pos.left &&
+                    mu_mouseX < tar_pos.left + $target.width() &&
+                    mu_mouseY > tar_pos.top &&
+                    mu_mouseY < tar_pos.top + $target.height()
+                ) {
+                    console.log("进入target范围");
+                    $temp.attr("style", null);
+
+                    if (tops.length > 0) {
+                        level = tops[0].attributes["level"].nodeValue;
+                        father = tops[0].attributes["father"].nodeValue;
+                        $temp.html($($temp.html()).attr("level", level));
+                        $temp.html($($temp.html()).attr("father", father));
+                        var current = $($temp.html()).insertBefore(tops[0]);
+
+                        setOrder();
+                        addSubjectJson(current, type);
+                        isChanged = true;
+
+                    } else if (bottoms.length > 0) {
+                        level = bottoms[0].attributes["level"].nodeValue;
+                        father = bottoms[0].attributes["father"].nodeValue;
+                        $temp.html($($temp.html()).attr("level", level));
+                        $temp.html($($temp.html()).attr("father", father));
+                        var current = $($temp.html()).insertAfter(bottoms[0]);
+
+                        setOrder();
+                        addSubjectJson(current, type);
+                        isChanged = true;
+
+                    } else if (mergesTop.length > 0) {
+                        level = $(mergesTop[0]).parent().parent().attr["level"];
+                        father = $(mergesTop[0]).parent().parent().attr["father"];
+                        $temp.html($($temp.html()).attr("level", level));
+                        $temp.html($($temp.html()).attr("father", father));
+                        var current = $($temp.html()).insertBefore($(mergesTop[0]).parent().parent()).eq(0);
+
+                        setOrder();
+                        addSubjectJson(current, type);
+                        isChanged = true;
+
+                    } else {
+                        $("#target").append($temp.html());
+                        setOrder();
+                        $("#emptyBox").remove();
+                        addSubjectJson($("#target").children(".subject, .unSubject"), type);
+                        isChanged = true;
+                    }
+                } else {
+                    $("#target .subject, #target .unSubject").css({
+                        "border-top": "none",
+                        "border-bottom": "none"
+                    });
+                    tops = [];
+                    bottoms = [];
+                    mergesTop = [];
+                }
+
+                $(document).off("mousemove", "body");
+                $("body").off("mouseup", ".subject, .unSubject");
+                $temp.remove();
+            });
+        }, delays["form"]);
+
+        $(document).mouseup(function() {
+            $(".cloth").remove();
+            clearInterval(delayed);
+            return false;
+        });
+        $(this).mouseout(function() {
+            clearInterval(delayed);
+            return false;
+        });
+    });
+
+
     /*题型鼠标点击事件*/
-    $(".menuItemBox").on("click", ".subType, .unSubject", function(md) {
+    $(".menuItemBox").on("click", ".subType", function(md) {
         md.preventDefault();
 
         $this = $(this);

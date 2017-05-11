@@ -251,6 +251,97 @@ function initQuestionnairesList(GlobalData, solutionName, questionnaireJson, cb)
 }
 
 /**
+ * 获取所有自定义题型
+ * @public
+ * @param  {Function} cb 回调函数
+ * @return
+ */
+function selectCustoms(cb) {
+    __selectCustoms(function(res) {
+        if (res.success == true) {
+            cb({
+                success: true,
+                data: res.data
+            });
+        } else {
+            cb({
+                success: true,
+                data: res.data
+            });
+        }
+    });
+}
+
+/**
+ * 获取所有自定义题型
+ * @private
+ * @param  {Function} cb 回调函数
+ * @return
+ */
+function __selectCustoms(cb) {
+    console.log("正在获取所有库中存在的自定义题型");
+    db.all("select * from CUSTOMS", function(err, row) {
+        if (err) {
+            cb({
+                success: false,
+                data: err
+            });
+        }
+        cb({
+            success: true,
+            data: row
+        });
+    });
+}
+
+/**
+ * 查询自定义题型
+ * @public
+ * @param  name 自定义题型的名称
+ * @param  {Function} cb   回调函数
+ * @return
+ */
+function checkCustom(name, cb) {
+    __checkCustom(name, function(res) {
+        if (res.success == true) {
+            cb({
+                success: true,
+                data: res.data
+            });
+        } else {
+            cb({
+                success: false
+            })
+        }
+    });
+}
+
+/**
+ * 查询自定义题型
+ * @private
+ * @param  name 自定义题型的名称
+ * @param  {Function} cb   回调函数
+ * @return
+ */
+function __checkCustom(name, cb) {
+    // console.log("正在检查该自定义题型是否存在 __checkCustom");
+    db.get("select count(1) from CUSTOMS where name = ?", [name], function(err, row) {
+        if (err) {
+            console.log("查询自定义题型失败");
+            cb({
+                success: false,
+                data: err
+            });
+        }
+        console.log("查询自定义题型成功");
+        cb({
+            success: true,
+            data: row
+        });
+    });
+}
+
+/**
  * 添加自定义题型
  * @public
  * @param  name 题型名称
@@ -258,8 +349,8 @@ function initQuestionnairesList(GlobalData, solutionName, questionnaireJson, cb)
  * @param  {Function} cb   回调函数
  * @return
  */
-function insertCustom(name, data, cb) {
-    __insertCustom(name, data, function(res) {
+function insertCustom(name, type, data, cb) {
+    __insertCustom(name, type, data, function(res) {
         if (res.success == true) {
             cb({
                 success: true
@@ -281,8 +372,8 @@ function insertCustom(name, data, cb) {
  * @param  {Function} cb   回调函数
  * @return
  */
-function __insertCustom(name, data, cb) {
-    db.run("insert into CUSTOMS(name, data) values(?, ?)", [name, data], function(err) {
+function __insertCustom(name, type, data, cb) {
+    db.run("insert into CUSTOMS(name, type, data) values(?, ?, ?)", [name, type, data], function(err) {
         if (err) {
             console.log(err.message);
             cb({
@@ -1082,7 +1173,7 @@ function __createTable(cb) {
 
             db.run("create table QUESTIONNAIRES(URL TEXT, user TEXT, solutionName TEXT, name TEXT, no TEXT, reportGroupCode, title TEXT, subtitle TEXT, recid TEXT, isNew TEXT, data TEXT, isChanged TEXT, isRemote TEXT, editTime TEXT)");
 
-            db.run("create table CUSTOMS(name TEXT, data TEXT)");
+            db.run("create table CUSTOMS(name TEXT, type TEXT, data TEXT)");
             /*表单创建成功*/
             if (cb) {
                 cb({
@@ -1321,3 +1412,5 @@ exports.updateQuestionnaireIsChanged = updateQuestionnaireIsChanged;
 exports.deleteUser = deleteUser;
 exports.checkTable = checkTable;
 exports.insertCustom = insertCustom;
+exports.checkCustom = checkCustom;
+exports.selectCustoms = selectCustoms;
