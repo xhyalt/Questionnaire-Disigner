@@ -669,6 +669,17 @@ customDiv["multiple"]=`
     <img class="addItem" src="./images/main_04_add_off.png" alt="">
 </div>`;
 
+customDiv["completion"]=`
+<div class="subjectCustomMain">
+    <div class="completionStemText textBox stemText" id="completionStemTextID" placeholder="填空题"></div>
+    <div class="completionDescriptionText textBox descriptionText" placeholder="填空题描述"></div>
+    <ul class="completionItem itemBox">
+        <li>
+            <input type="text" />
+        </li>
+    </ul>
+</div>`;
+
 customDiv["shell"] = `
 <div class="shell" level="1" father="0" num="">
     <div class="leftSetup">

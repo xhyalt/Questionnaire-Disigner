@@ -673,7 +673,6 @@ $(function() {
                         $shell.children(".subjectCustomMain").attr("class", "radioMain subjectMain");
                         $shell.show();
                         type = "radio";
-                        console.log($shell);
                     } else if (typeNum == "2") {
                         $shell = customDiv["shell"];
                         $("body").append("<div id='customCloth'>" + $shell + "</div>");
@@ -682,7 +681,14 @@ $(function() {
                         $shell.children(".subjectCustomMain").attr("class", "multipleMain subjectMain");
                         $shell.show();
                         type = "multiple";
-                        console.log($shell);
+                    } else if (typeNum == "3") {
+                        $shell = customDiv["shell"];
+                        $("body").append("<div id='customCloth'>" + $shell + "</div>");
+                        $shell = $(".shell").attr("class", "completionDiv subject").hide();
+                        $shell.children(".leftSetup").after($html);
+                        $shell.children(".subjectCustomMain").attr("class", "completionMain subjectMain");
+                        $shell.show();
+                        type = "completion";
                     }
                     $html = $("#customCloth").html().toString();
                     $("#customCloth").remove();
@@ -1154,8 +1160,9 @@ function changeStyle(id) {
         $("#popCustomBoxShow").empty().append(customDiv["radio"]);
     } else if ($td.value == "2") {
         $("#popCustomBoxShow").empty().append(customDiv["multiple"]);
+    } else if ($td.value == "3") {
+        $("#popCustomBoxShow").empty().append(customDiv["completion"]);
     }
-
 }
 
 /**
