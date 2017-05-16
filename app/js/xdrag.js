@@ -35,7 +35,7 @@ $(document).ready(function() {
         var type = $this.attr("type");
 
         var delayed = setTimeout(function() {
-          
+
             $temp = $(`<div class="cloth"></div>`).append(customSubjectDiv[parseInt($this.attr("name"))]);
 
             $("body").append($temp);

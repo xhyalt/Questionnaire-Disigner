@@ -420,21 +420,6 @@ menuPopDiv["radio"] = `
                 </li>
             </ul>
         </div>
-        <div class="detail">
-            <div class="title">选项显示模式</div>
-            <ul>
-                <li>
-                    <input class="sameLine" type="radio" name="radio1"
-                    onchange="sameLine(checked)"/>
-                    <label>与题目同行</label>
-                </li>
-                <li>
-                    <input class="sameLine2" type="radio" name="radio1" checked="true" onchange="sameLine2(checked)" />
-                    <label>每行显示</label>
-                    <input class="showEveryLine" type="number" value="1" defaultValue="1" placeholder="1" min="1" onchange="setShowEveryLine(value)"/>
-                    <label>个</label>
-                </li>
-            </ul>
         </div>
     </div>
 </div>`;
@@ -471,20 +456,6 @@ menuPopDiv["multiple"] = `
                 </li>
             </ul>
         </div>
-        <div class="detail">
-            <div class="title">选项显示模式</div>
-            <ul>
-                <li>
-                    <input class="sameLine" type="radio" />
-                    <label>与题目同行</label>
-                </li>
-                <li>
-                    <input class="sameLine2" type="radio" checked="true" />
-                    <label>每行显示</label>
-                    <input class="showEveryLine" type="number" value="1" defaultValue="1" placeholder="1" min="1" />
-                    <label>个</label>
-                </li>
-            </ul>
         </div>
     </div>
 </div>`;

@@ -1057,18 +1057,19 @@ $(function() {
 
     /*所有题干 点击编辑*/
     $("#target").on("click", ".stemText", function() {
-        if (popMenu == false && popEditor == false && type == "description") {
+        if (popMenu == false && popEditor == false) {
             activeDiv = $(this);
             var type = getType(activeDiv);
-            /*描述说明题干的点击事件*/
-            activeTxt = activeDiv.html();
-            $("#editor-trigger").empty().append(activeTxt);
-            popEditor = true;
 
-            showEditor();
-        } else if (popMenu == false && popEditor == false) {
-            activeDiv = $(this);
-            var type = getType(activeDiv);
+            if (type == "description") {
+                /*描述说明题干的点击事件*/
+                activeTxt = activeDiv.html();
+                $("#editor-trigger").empty().append(activeTxt);
+                popEditor = true;
+
+                showEditor();
+                return;
+            }
             activeSubject = activeDiv.parent().parent(".subject, .unSubject");
 
             activeTxt = activeDiv.html();
@@ -1081,7 +1082,7 @@ $(function() {
             activeInput.trigger("focus");
 
             /*如果是非弹出框题型 直接跳出*/
-            if (type == "merge") {
+            if (type == "merge" || type == "description" || type == "dividingLine") {
                 activeInput.blur(function() {
                     var newtxt = $(".stemTextInput").html();
                     if (newtxt != activeTxt) {
