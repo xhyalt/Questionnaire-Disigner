@@ -1151,7 +1151,7 @@ function __getJsonLength(jsonData) {
  * @return
  */
 function showCreateQuestionnaire() {
-    if (activeSolution == null) {
+    if (activeSolution == -1) {
         txt = "请选择一个业务方案";
         window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         return;
@@ -1168,7 +1168,7 @@ function showCreateQuestionnaire() {
 }
 
 function importQuestionnaire() {
-    if (activeSolution == null) {
+    if (activeSolution == -1) {
         txt = "请选择一个业务方案";
         window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.warning, function(res) {});
         return;
