@@ -76,7 +76,7 @@ $(function() {
     /*鼠标移入移出可编辑条目 变化颜色*/
     $("#middle").on("mouseover", ".textBox", function() {
         var td = $(this);
-        td.css("background-color", "#c9f8f0");
+        td.css("background-color", "#ddf3fe");
     }).on("mouseout", ".textBox", function() {
         var td = $(this);
         td.css("background-color", "#fff");
@@ -481,7 +481,7 @@ $(function() {
             "border-right": "#fff solid 5px"
         });
         $(this).css({
-            "border-right": "#1ABC9C solid 5px"
+            "border-right": "#52a5f5 solid 5px"
         });
     });
 
@@ -495,7 +495,7 @@ $(function() {
     $("#popBox #quesNoGrade").on("mouseover", "li", function() {
         $td = $(this);
         $td.css({
-            "border": "2px solid #1ABC9C"
+            "border": "2px solid #52a5f5"
         });
     }).on("mouseout", "li", function() {
         $td = $(this);
@@ -516,9 +516,9 @@ $(function() {
             "border-color": "#f3f3f3"
         });
         $td.css({
-            "background-color": "#1ABC9C",
+            "background-color": "#52a5f5",
             "color": "#fff",
-            "border-color": "#1ABC9C"
+            "border-color": "#52a5f5"
         });
         quesActiveNo = parseInt($td.html()) - 1;
         /*下拉框显示该层级的题号格式*/
@@ -709,7 +709,7 @@ $(function() {
     $("#popCustomBoxStyle").on("mouseover", "li", function() {
         $td = $(this);
         $td.css({
-            "border": "2px solid #1ABC9C"
+            "border": "2px solid #52a5f5"
         });
     }).on("mouseout", "li", function() {
         $td = $(this);
@@ -730,9 +730,9 @@ $(function() {
             "border-color": "#f3f3f3"
         });
         $td.css({
-            "background-color": "#1ABC9C",
+            "background-color": "#52a5f5",
             "color": "#fff",
-            "border-color": "#1ABC9C"
+            "border-color": "#52a5f5"
         });
     });
 
@@ -816,7 +816,7 @@ $(function() {
     /*鼠标移入移出可编辑条目 变化颜色*/
     $("#popCustomBoxShow").on("mouseover", ".textBox", function() {
         var td = $(this);
-        td.css("background-color", "#c9f8f0");
+        td.css("background-color", "#ddf3fe");
     }).on("mouseout", ".textBox", function() {
         var td = $(this);
         td.css("background-color", "#fff");
@@ -1598,9 +1598,9 @@ function showSetup() {
         "border-color": "#f3f3f3"
     });
     $("#activeQuesNo").css({
-        "background-color": "#1ABC9C",
+        "background-color": "#52a5f5",
         "color": "#fff",
-        "border-color": "#1ABC9C"
+        "border-color": "#52a5f5"
     });
 
     /*初始化下拉框*/

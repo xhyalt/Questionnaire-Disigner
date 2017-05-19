@@ -118,19 +118,19 @@
 }
 
 .xcConfirm .popBox .sgBtn.ok {
-    background-color: #1ABC9C;
+    background-color: #52a5f5;
     color: #fff;
     /*边框*/
     border-style: solid;
     border-width: 2px;
-    border-color: #1ABC9C;
+    border-color: #52a5f5;
 }
 
 .xcConfirm .popBox .sgBtn.cancel {
     background-color: #fff;
-    color: #1ABC9C;
+    color: #52a5f5;
     /*边框*/
     border-style: solid;
     border-width: 2px;
-    border-color: #1ABC9C;
+    border-color: #52a5f5;
 }

@@ -96,8 +96,8 @@ $(function() {
 
     $("#listTable").on("mouseover", ".listBody", function() {
         $(this).css({
-            "background-color": "#c9f8f0",
-            "border-left": "3px solid #1ABC9C"
+            "background-color": "#ddf3fe",
+            "border-left": "3px solid #52a5f5"
         });
     }).on("mouseout", ".listBody", function() {
         $(this).css({

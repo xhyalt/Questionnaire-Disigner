@@ -88,17 +88,17 @@ $(document).ready(function() {
                     // console.log("tops = " + tops);
                     if (tops.length > 0) {
                         /*识别位置在上半部分*/
-                        $(tops[0]).css("border-top", "5px solid #1ABC9C");
+                        $(tops[0]).css("border-top", "5px solid #52a5f5");
                     } else if (bottoms.length > 0) {
                         /*识别位置在下半部分*/
-                        $(bottoms[0]).css("border-bottom", "5px solid #1ABC9C");
+                        $(bottoms[0]).css("border-bottom", "5px solid #52a5f5");
                     } else if (mergesTop.length > 0) {
-                        $(mergesTop[0]).parent().parent().css("border-top", "5px solid #1ABC9C");
+                        $(mergesTop[0]).parent().parent().css("border-top", "5px solid #52a5f5");
                     } else {
                         /*设计区没有题目 空盒上加边界*/
                         if ($("#emptyBox").length != 0) {
                             $("#emptyBox").css({
-                                "border-top": "5px solid #1ABC9C",
+                                "border-top": "5px solid #52a5f5",
                                 "border-bottom": "none"
                             });
                         }
@@ -289,17 +289,17 @@ $(document).ready(function() {
                     // console.log("tops = " + tops);
                     if (tops.length > 0) {
                         /*识别位置在上半部分*/
-                        $(tops[0]).css("border-top", "5px solid #1ABC9C");
+                        $(tops[0]).css("border-top", "5px solid #52a5f5");
                     } else if (bottoms.length > 0) {
                         /*识别位置在下半部分*/
-                        $(bottoms[0]).css("border-bottom", "5px solid #1ABC9C");
+                        $(bottoms[0]).css("border-bottom", "5px solid #52a5f5");
                     } else if (mergesTop.length > 0) {
-                        $(mergesTop[0]).parent().parent().css("border-top", "5px solid #1ABC9C");
+                        $(mergesTop[0]).parent().parent().css("border-top", "5px solid #52a5f5");
                     } else {
                         /*设计区没有题目 空盒上加边界*/
                         if ($("#emptyBox").length != 0) {
                             $("#emptyBox").css({
-                                "border-top": "5px solid #1ABC9C",
+                                "border-top": "5px solid #52a5f5",
                                 "border-bottom": "none"
                             });
                         }
@@ -484,17 +484,17 @@ $(document).ready(function() {
                     // console.log("tops = " + tops);
                     if (tops.length > 0) {
                         /*识别位置在上半部分*/
-                        $(tops[0]).css("border-top", "5px solid #1ABC9C");
+                        $(tops[0]).css("border-top", "5px solid #52a5f5");
                     } else if (bottoms.length > 0) {
                         /*识别位置在下半部分*/
-                        $(bottoms[0]).css("border-bottom", "5px solid #1ABC9C");
+                        $(bottoms[0]).css("border-bottom", "5px solid #52a5f5");
                     } else if (mergesTop.length > 0) {
-                        $(mergesTop[0]).parent().parent().css("border-top", "5px solid #1ABC9C");
+                        $(mergesTop[0]).parent().parent().css("border-top", "5px solid #52a5f5");
                     } else {
                         /*设计区没有题目 空盒上加边界*/
                         if ($("#emptyBox").length != 0) {
                             $("#emptyBox").css({
-                                "border-top": "5px solid #1ABC9C",
+                                "border-top": "5px solid #52a5f5",
                                 "border-bottom": "none"
                             });
                         }
