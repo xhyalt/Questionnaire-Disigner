@@ -202,12 +202,12 @@ body {
     -moz-border-radius: 5px;
     border-radius: 5px;
     outline: none;
-    background: rgba(41, 67, 66, .40);
-    -webkit-box-shadow: inset 0 0 5px #090909;
-    -moz-box-shadow: inset 0 0 5px #090909;
-    box-shadow: inset 0 0 5px #090909;
+    background: rgba(41, 67, 66, .25);
+    -webkit-box-shadow: inset 0 0 5px #444444;
+    -moz-box-shadow: inset 0 0 5px #444444;
+    box-shadow: inset 0 0 5px #444444;
     -o-border-radius: 5px;
-    -o-box-shadow: inset 0 0 5px #090909;
+    -o-box-shadow: inset 0 0 5px #444444;
 }
 
 .form li input {
@@ -239,7 +239,7 @@ body {
     -ms-transition: all .5s ease-out;
     -o-transition: all .5s ease-out;
     transition: all .5s ease-out;
-    color: #c9c8c7;
+    color: #9ea0a2;
 }
 
 .form p a:hover {
