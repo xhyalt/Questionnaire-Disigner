@@ -255,16 +255,16 @@ body {
     -ms-transition: all .5s ease-out;
     -o-transition: all .5s ease-out;
     transition: all .5s ease-out;
-    background: #1bb396;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #1bb396), color-stop(33%, #1aaa8e), color-stop(72%, #19a287), color-stop(100%, #15856f));
+    background: #52a5f5;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #52a5f5), color-stop(33%, #4d9be5), color-stop(72%, #4992d7), color-stop(100%, #468dd0));
     box-shadow: 0 -1px 4px #000;
     float: right;
     width: 120px;
 }
 
 .form li.style:hover {
-    background: #18af91;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #18af91), color-stop(33%, #17a589), color-stop(72%, #159b80), color-stop(100%, #148f76));
+    background: #468dd0;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4d9be5), color-stop(33%, #4992d7), color-stop(72%, #468dd0), color-stop(100%, #4387c7));
 }
 
 .form li.style input {
