@@ -312,8 +312,8 @@ $(function() {
         } else if (getLevelSubjectNum($tdP) > 2) {
             /*不弹窗 保留分组 直接拆解*/
             $mergeTdP = $tdP.parent().parent().parent();
-            level = $mergeDiv.attr("level");
-            father = $mergeDiv.attr("father");
+            level = $mergeTdP.attr("level");
+            father = $mergeTdP.attr("father");
             $tdP.attr("level", level);
             $tdP.attr("father", father);
             $mergeTdP.after($tdP.prop("outerHTML"));
@@ -327,8 +327,8 @@ $(function() {
                 if (res.data == true) {
                     /*保留*/
                     $mergeTdP = $tdP.parent().parent().parent();
-                    level = $mergeDiv.attr("level");
-                    father = $mergeDiv.attr("father");
+                    level = $mergeTdP.attr("level");
+                    father = $mergeTdP.attr("father");
                     $tdP.attr("level", level);
                     $tdP.attr("father", father);
                     $mergeTdP.after($tdP.prop("outerHTML"));
@@ -338,8 +338,8 @@ $(function() {
                 } else if (res.success == true) {
                     /*不保留*/
                     $mergeTdP = $tdP.parent().parent().parent();
-                    level = $mergeDiv.attr("level");
-                    father = $mergeDiv.attr("father");
+                    level = $mergeTdP.attr("level");
+                    father = $mergeTdP.attr("father");
                     if ($tdP.prev()[0]) {
                         /*正在拆解后题*/
                         $tdP.attr("level", level);
@@ -348,7 +348,7 @@ $(function() {
                         $tdP.prev().attr("father", father);
                         $mergeTdP.after($tdP.prop("outerHTML"));
                         $mergeTdP.after($tdP.prev().prop("outerHTML"));
-                        $mergeDiv.remove();
+                        $mergeTdP.remove();
                     } else if ($tdP.next()[0]) {
                         /*正在拆解前题*/
                         $tdP.attr("level", level);
@@ -357,7 +357,7 @@ $(function() {
                         $tdP.next().attr("father", father);
                         $mergeTdP.after($tdP.next().prop("outerHTML"));
                         $mergeTdP.after($tdP.prop("outerHTML"));
-                        $mergeDiv.remove();
+                        $mergeTdP.remove();
                     }
                     setOrder();
                     isChanged = true;
@@ -1206,6 +1206,7 @@ function saveQuestionnairePattern(cb) {
                 if (res.success == true) {
                     console.log(res.data);
                     quesSqlite.updateQuestionnaireData(GlobalData, tempQuestionnaire.name, JSON.stringify(res.data), "1", Date.parse(new Date()) / 1000, function(res2) {
+                        tempQuestionnaire.data = JSON.stringify(res.data);
                         if (res2.success == true) {
                             isChanged = false;
                             cb({
