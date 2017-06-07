@@ -216,12 +216,15 @@ $(function() {
         /*复制题目*/
         $tdP = $(this).parent().parent();
         $tdP.after($tdP.prop("outerHTML"));
-        addSubjectJson($tdP.next(), getType($tdP));
+        $tdPNext = $tdP.next();
+        addSubjectJson($tdPNext, getType($tdP));
         /*初始化左侧的图标效果*/
-        $tdP.next().children().children("img.copy").attr('src', "./images/main_06_copy_off.png");
-        $tdP.next().children().children("img").css({
+        $tdPNext.children().children("img.copy").attr('src', "./images/main_06_copy_off.png");
+        $tdPNext.children().children("img").css({
             "visibility": "hidden"
         });
+        $tdPNext.attr("connection", subjectTotal);
+        $tdPNext.attr("guid", newGuid());
         setOrder();
         isChanged = true;
     });

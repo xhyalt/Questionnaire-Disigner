@@ -309,8 +309,7 @@ function getSubjectJson($td, type) {
     var connection = $td.attr("connection");
     var tempGUID = $td.attr("guid");
     if (tempGUID == "" || tempGUID == null || tempGUID == undefined) {
-        tempGUID = newGuid();
-        $td.attr("guid", tempGUID);
+        $td.attr("guid", newGuid());
     }
 
     if (type == "merge") {
